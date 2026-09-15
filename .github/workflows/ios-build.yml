@@ -1,15 +1,15 @@
-# iOS build. STUB until a Mac exists.
+# iOS build in two stages: Unity exports the Xcode project on Linux (game-ci),
+# then a macOS runner archives it with xcodebuild. Because this repository is
+# public, GitHub-hosted macOS runners are free and unmetered, so no Mac mini is
+# required for CI. If the repository ever goes private, macOS minutes bill at
+# about 10x Linux and a self-hosted Mac becomes the cheaper path: set the
+# repository variable IOS_MAC_RUNNER to that runner's label (for example
+# "gj-ios") to switch; leave it unset to use GitHub's macos-14.
 #
-# Plan: a Mac mini (AUTH pending in the Foreman's M0 batch) registered as a
-# self-hosted runner with labels [self-hosted, macOS, gj-ios] and the pinned
-# Unity editor version installed through Unity Hub. Until then the only job
-# that runs is "status", on Linux, which reports the stub. Switch the real job
-# on by setting the repository variable IOS_RUNNER_READY=true (Owner action).
-# GitHub-hosted macOS runners are not used: their minutes bill at 10x and that
-# spend has no AUTH.
-#
-# Signing: unsigned archive until Apple certificates land in CI secrets at M5
-# (certificates are CI-only; no Bot ever holds them).
+# Preflight skips (green, with a reason) until the Unity project and license
+# secrets exist. Signing: unsigned archive until Apple certificates and an App
+# Store Connect API key land in CI secrets at M5 under their own AUTH (CI-only;
+# no Bot ever holds them). TestFlight upload through fastlane is added at M5.
 name: ios-build
 
 on:
@@ -17,6 +17,7 @@ on:
     branches: [main]
     paths:
       - "unity/**"
+      - "config/movement.json"
       - ".github/workflows/ios-build.yml"
   workflow_dispatch:
 
@@ -24,28 +25,53 @@ permissions:
   contents: read
 
 jobs:
-  status:
-    name: ios runner status
+  preflight:
+    name: preflight
     runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.p.outputs.run }}
+      reason: ${{ steps.p.outputs.reason }}
     steps:
-      - run: |
-          if [ "${{ vars.IOS_RUNNER_READY }}" = "true" ]; then
-            echo "iOS runner enabled (IOS_RUNNER_READY=true); export-xcode will run on the self-hosted Mac"
-          else
-            echo "::notice::iOS build stubbed: no Mac runner yet. After the Mac mini is registered as a self-hosted runner with labels [self-hosted, macOS, gj-ios] and the pinned Unity version is installed, set repository variable IOS_RUNNER_READY=true."
+      - uses: actions/checkout@v4
+      - id: p
+        env:
+          HAS_LICENSE: ${{ secrets.UNITY_LICENSE != '' || (secrets.UNITY_EMAIL != '' && secrets.UNITY_PASSWORD != '' && secrets.UNITY_SERIAL != '') }}
+        run: |
+          set -euo pipefail
+          if [ ! -f unity/ProjectSettings/ProjectVersion.txt ]; then
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "reason=no Unity project yet (ticket M0-UNITY-01)" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
+          if [ "$HAS_LICENSE" != "true" ]; then
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "reason=Unity license secrets not configured (ticket M0-REPO-03)" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "run=true" >> "$GITHUB_OUTPUT"
+          echo "reason=project and license present" >> "$GITHUB_OUTPUT"
+      - run: echo "::notice::ios-build ${{ steps.p.outputs.run == 'true' && 'will run' || format('skipped — {0}', steps.p.outputs.reason) }}"
 
-  export-xcode:
-    name: Unity iOS export + xcodebuild (unsigned)
-    needs: status
-    if: vars.IOS_RUNNER_READY == 'true'
-    runs-on: [self-hosted, macOS, gj-ios]
+  export:
+    name: Unity iOS export (Xcode project, Linux)
+    needs: preflight
+    if: needs.preflight.outputs.run == 'true'
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           lfs: true
-      - name: Unity iOS export (Xcode project)
-        uses: game-ci/unity-builder@v4
+      - name: Free disk space for the Unity image
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android/sdk/ndk /opt/ghc || true
+          df -h /
+      - uses: actions/cache@v4
+        with:
+          path: unity/Library
+          key: Library-ios-${{ hashFiles('unity/Assets/**', 'unity/Packages/**', 'unity/ProjectSettings/**') }}
+          restore-keys: |
+            Library-ios-
+      - uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
@@ -55,14 +81,48 @@ jobs:
           projectPath: unity
           targetPlatform: iOS
           buildName: GiganticJourneys
-      - name: xcodebuild (unsigned; signing arrives at M5 under AUTH)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ios-xcode-project
+          path: build/iOS
+          retention-days: 3
+
+  archive:
+    name: xcodebuild (unsigned archive, macOS)
+    needs: export
+    runs-on: ${{ vars.IOS_MAC_RUNNER || 'macos-14' }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ios-xcode-project
+          path: build/iOS
+      - name: xcodebuild (unsigned; signing and TestFlight upload arrive at M5 under AUTH)
         run: |
           set -euo pipefail
           cd build/iOS/GiganticJourneys
           xcodebuild -project Unity-iPhone.xcodeproj -scheme Unity-iPhone -configuration Release \
-            -sdk iphoneos CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO build
+            -sdk iphoneos -derivedDataPath ../DerivedData \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO build
       - uses: actions/upload-artifact@v4
         with:
-          name: ios-xcode-export
-          path: build/iOS
+          name: ios-unsigned-build
+          path: build/iOS/DerivedData/Build/Products
           retention-days: 7
+          if-no-files-found: warn
+
+  gate:
+    name: ios build gate
+    needs: [preflight, export, archive]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          if [ "${{ needs.preflight.outputs.run }}" != "true" ]; then
+            echo "skipped: ${{ needs.preflight.outputs.reason }}"
+            exit 0
+          fi
+          if [ "${{ needs.export.result }}" != "success" ] || [ "${{ needs.archive.result }}" != "success" ]; then
+            echo "::error::iOS build failed (export=${{ needs.export.result }}, archive=${{ needs.archive.result }})"
+            exit 1
+          fi
+          echo "ios build: OK"

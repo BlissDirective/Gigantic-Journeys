@@ -18,7 +18,9 @@ Numbering is sequential across all types. **Next free number: #003** (the Forema
 |---|---|---|---|---|---|---|---|
 | — | | | (none) | | | | |
 
-Expected next, filed by the Foreman as the M0 batch (M0-FORE-02) from #003: Apple Developer Program ($99/yr), Google Play Console ($25 one-time), Unity account and plan, Luma API, Meshy and/or Tripo (per M0-LEGAL-04), Supabase (staging and production), Vercel, Inngest, `giganticjourneys.com` and `.app` (about $21/yr), USPTO TESS search on "Gigantic Journeys" in classes 9 and 41 with a filing recommendation (kit §9), Mac mini (about $500 one-time) versus a cloud Mac, reference Android device (2023 mid-tier) or device-farm minutes, an App Store Connect record to reserve the name, attorney review of the M0 legal drafts before M5.
+Expected next, filed by the Foreman as the M0 batch (M0-FORE-02) from #003: Google Play Console ($25 one-time; a personal account created after 2023-11-13 must run a closed test with at least 12 testers opted in for 14 continuous days before production access, so the M5 tester cohort doubles as that test; an organization account with a D-U-N-S number is exempt), Unity account and plan, Luma API, Meshy and/or Tripo (per M0-LEGAL-04), Supabase (staging and production), Vercel, Inngest, `giganticjourneys.com` and `.app` (about $21/yr), USPTO TESS search on "Gigantic Journeys" in classes 9 and 41 with a filing recommendation (kit §9), a reference Android device (2023 mid-tier, used Galaxy A54 5G or equivalent, about $150–200, needed by the M1 spike; Samsung Remote Test Lab and Firebase Test Lab bridge until then at $0), an App Store Connect record to reserve the name, attorney review of the M0 legal drafts before M5.
+
+Already held or not needed: the Apple Developer Program (the Owner holds a membership, confirmed 2026-09-15). A Mac mini is **not** required: GitHub-hosted macOS runners are free on this public repository and Unity exports the iOS Xcode project on Linux (`.github/workflows/ios-build.yml`); a Mac is only worth buying for interactive on-device iPhone debugging, or if the repository goes private.
 
 ## Standing limits (kit §7; reminders, not authorizations)
 

@@ -29,4 +29,4 @@ Owner: BlissDirective (SparkForge Labs). Coordinator: Claude Code. Legwork: the 
 
 ## CI
 
-`secret-scan` (gitleaks, repo hygiene) · `lint` (ruff, npm, CSharpier, audits) · `governance` (ticket validation, movement.json sync, AUTH gate on protected paths) · `unity-tests` and `android-build` (skip until the Unity project and license secrets exist) · `ios-build` (stub until a Mac runner exists).
+`secret-scan` (gitleaks, repo hygiene) · `lint` (ruff, npm, CSharpier, audits) · `governance` (ticket validation, movement.json sync, AUTH gate on protected paths) · `unity-tests` and `android-build` (skip until the Unity project and license secrets exist) · `ios-build` (Unity export on Linux, unsigned archive on GitHub's free macOS runner; skips until the Unity project and license exist).

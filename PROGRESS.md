@@ -45,13 +45,18 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 - Scaffold merged to main on the Owner's instruction.
 - Repository stays **public** for now (free Actions minutes and native secret scanning; plan and design docs are world-readable). Revisit before M4 when user data flows.
 - The Foreman's M0 AUTH batch proceeds from #003 once the Foreman exists.
+- The Owner already holds an Apple Developer Program membership; it leaves the AUTH batch.
+- No Mac mini: iOS CI uses Unity's Linux export plus GitHub's free macOS runner (public repo). Revisit only for on-device iPhone debugging or if the repo goes private.
+- Reference Android device: not needed to open the Play Console account; needed by the M1 motion-matching spike (Bible §13) and for ARCore capture testing. Samsung Remote Test Lab (free, real Galaxy devices) and Firebase Test Lab bridge until a used Galaxy A54 5G or equivalent arrives.
+- Google Play: a personal developer account created after 2023-11-13 must run a closed test with 12+ testers for 14 continuous days before production access; the M5 tester cohort covers it (or use an organization account with a D-U-N-S number).
 
 ## Owner actions needed now
 
 1. Create the machine user and PAT (M0-REPO-04), then create the Foreman Bot by pasting the block in `agents/grok/roles/gj-foreman.md`; it will ask you for the token first. Then the eight specialists from the other prompt packs.
 2. Configure branch protection and native secret scanning on main (M0-REPO-02).
-3. Transcribe the four locked design decisions into `design/DESIGN_SYSTEM.md` §1–4 (M0-OWNER-02).
-4. Scan 10 rooms and 5 tabletop builds (M0-OWNER-01) once the corpus intake path exists (M0-CAPT-01).
+3. Transcribe the four locked design decisions into `design/DESIGN_SYSTEM.md` §1–4 (M0-OWNER-02); then the design-lock session for decisions 5–10 with the Coordinator.
+4. Open the Google Play Console account ($25; no device needed) and, before M1, source a used Galaxy A54 5G or equivalent as the reference device.
+5. Scan 10 rooms and 5 tabletop builds (M0-OWNER-01) once the corpus intake path exists (M0-CAPT-01).
 
 ## Risk watch
 
