@@ -7,6 +7,8 @@ Planning documents the Coordinator was given at kickoff (Prompt 1, 2026-09-14). 
 | `GIGANTIC_JOURNEYS_PROMPT_KIT.md` | 0.5 (file header; Prompt 1 refers to it as v0.4) · 2026-09-14 | Authoritative plan: v1 product lock, parties, secrets model, authorization and checkpoint protocols, Bot prompts, phase prompts, budget. `SPEC.md` restates the *what*; the kit remains the source for process. |
 | `DEVELOPMENT_PLAN.md` | 0.1 · 2026-09-12 | Superseded by the kit. Useful history: original milestones, budget lines, risks, repo layout. |
 
+The Bot prompts the Owner pastes when creating each Bot are the prompt packs in `agents/grok/roles/` (the kit's §2 and §3 text, verbatim, plus a Coordinator preamble about GitHub access). The kit text itself is not edited.
+
 The locked design documents live in `design/` (`MOVEMENT_BIBLE.md` v1.0, `Gigantic-Journey-Design-Skills.md` v1.1), also unchanged.
 
 Changing any of these files is a milestone-plan or design change: `AUTH REQUEST` first, then a PR citing `APPROVED #n`.

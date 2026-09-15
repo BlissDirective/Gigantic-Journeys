@@ -7,17 +7,18 @@
 - **Owner** (BlissDirective): authorizes spend, accounts, and changes to `SPEC.md`, ADRs, data schemas, the design system, and the milestone plan. Does physical capture. Replies `APPROVED #n` or `DENIED #n`.
 - **Coordinator** (Claude Code): reviews every PR on GitHub against the ticket's acceptance tests, `SPEC.md`, `governance/REVIEW_RUBRIC.md`, and `governance/SECURITY_CHECKLIST.md`. The only one who merges to `main`. Keeps `PROGRESS.md` and `governance/AUTHORIZATION_LOG.md`.
 - **Foreman** (`gj-foreman`): assigns tickets, runs standups, unblocks, batches AUTH REQUESTs, writes checkpoint reports.
-- **Specialists** (`gj-capture`, `gj-scenegraph`, `gj-gameplay`, `gj-avatar`, `gj-platform`, `gj-design`, `gj-qa-release`, `gj-data`): the work. Role docs in `agents/grok/roles/`.
+- **Specialists** (`gj-capture`, `gj-scenegraph`, `gj-gameplay`, `gj-avatar`, `gj-platform`, `gj-design`, `gj-qa-release`, `gj-data`): the work. Prompt packs in `agents/grok/roles/`: when the Owner creates a Bot, the whole fenced block in that file is the Bot's instructions (the kit prompt plus the Coordinator preamble).
 
 ## 2. Two repositories, one rule about secrets
 
 - VM repo: `~/projects/gigantic-journeys/` on the Bot computer, cloned from GitHub. `.env.local` holds every key and never leaves the VM (gitignored; CI fails any tracked `.env*` except `.env.example`).
 - GitHub repo: `github.com/BlissDirective/Gigantic-Journeys`. Everything except secrets syncs here. The Coordinator sees only this. Work that is not on GitHub does not exist.
 - Never paste a secret into chat, a commit, a ticket, an issue, a PR, a screenshot, a log, or a report. If you did, say so immediately: it gets rotated (SECURITY_CHECKLIST §1.5).
-- Bots authenticate to GitHub as the machine user (AUTH #002), never as the Owner.
+- Bots authenticate to GitHub as the machine user, never as the Owner (AUTH #002, approved 2026-09-15). The Owner personally issues the machine user's token and hands it to the team; see §3 step 0.
 
 ## 3. Session start (every specialist, every session)
 
+0. **GitHub access first.** Check that `GITHUB_TOKEN` in `~/projects/gigantic-journeys/.env.local` is a real token (not `PLACEHOLDER`) and that `git ls-remote https://github.com/BlissDirective/Gigantic-Journeys` succeeds with it. If either fails, stop and ask the Owner (specialists through the Foreman): *"Owner, I need the GitHub PAT for the Bot machine user before I can begin work. Please share it through the Bot credential store; I will write it to .env.local and never paste it anywhere else."* No ticket starts, and no other credential is ever used, until the token is in place. The Foreman asks for it as its very first message.
 1. `git fetch` and pull your branch; read `PROGRESS.md` and your tickets in `tickets/`.
 2. Re-read `projects/skills/<role>/SKILLS.md`. Design and gameplay Bots also re-read Design Skills §3–5 and the Movement Bible sections they touch.
 3. Check the `auth-request` issues for `APPROVED` or `DENIED` on anything you wait on.

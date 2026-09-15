@@ -8,7 +8,7 @@
   "status": "open",
   "priority": "P0",
   "size": "S",
-  "summary": "Create a dedicated GitHub machine user for the Bot VM with a fine-grained personal access token scoped to this repository only, so Bot PRs are distinguishable from the Owner and cannot bypass CODEOWNERS review. AUTH #002 (account) is pending.",
+  "summary": "Create a dedicated GitHub machine user for the Bot VM with a fine-grained personal access token scoped to this repository only, so Bot PRs are distinguishable from the Owner and cannot bypass CODEOWNERS review. AUTH #002 (account) approved 2026-09-15: the Owner creates the machine user and token and hands it to the Bot team; Bots ask for it before any work (agents/grok/README.md §3).",
   "acceptance_tests": [
     {
       "id": "AT-1",
@@ -51,7 +51,7 @@
       "type": "account",
       "what": "GitHub machine user + fine-grained PAT scoped to this repo",
       "auth_id": "AUTH #002",
-      "status": "pending"
+      "status": "approved"
     }
   ],
   "branch": null,
@@ -62,6 +62,11 @@
     {
       "date": "2026-09-15",
       "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "AUTH #002 approved by the Owner; Owner creating the machine user and PAT",
       "by": "coordinator"
     }
   ]

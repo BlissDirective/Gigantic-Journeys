@@ -49,8 +49,8 @@
     },
     {
       "id": "AT-5",
-      "test": "The scaffold PR body cites APPROVED #000 (Prompt 1 kickoff) because it creates protected paths.",
-      "evidence": "PR body",
+      "test": "The scaffold merge commit cites APPROVED #000 (Prompt 1 kickoff) because it creates protected paths.",
+      "evidence": "merge commit message",
       "automated": false
     }
   ],
@@ -71,6 +71,11 @@
     {
       "date": "2026-09-15",
       "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "Owner instructed 'merge all to main'; fast-forward merge by the Coordinator (PR process not yet in force on main)",
       "by": "coordinator"
     }
   ]

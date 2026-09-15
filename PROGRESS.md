@@ -1,6 +1,6 @@
 # PROGRESS.md
 
-Living tracker. Updated by the Coordinator on every merge, AUTH decision, and checkpoint. Last update: **2026-09-15** (Coordinator, scaffold). Ticket table regenerated with `python tickets/validate.py --summary`.
+Living tracker. Updated by the Coordinator on every merge, AUTH decision, and checkpoint. Last update: **2026-09-15** (Coordinator: scaffold merged to main; AUTH #002 approved). Ticket table regenerated with `python tickets/validate.py --summary`.
 
 ## Milestone
 
@@ -29,7 +29,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 
 ## Blockers
 
-- Bots cannot start until the Owner creates the Bot GitHub identity (AUTH #002) and the Foreman Bot is created with kit Prompt 2.
+- Bots cannot start until the Owner hands the Bot machine-user PAT to the team (AUTH #002 approved; Owner creating it) and creates the Foreman Bot from `agents/grok/roles/gj-foreman.md`.
 - Unity CI jobs skip until the Unity project exists (M0-UNITY-01) and license secrets are added (M0-REPO-03, after the Unity account AUTH).
 - M0-DSGN-02 blocked on the Owner transcribing design decisions 1–4 (M0-OWNER-02).
 
@@ -37,20 +37,25 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 
 | # | What | Status |
 |---|---|---|
-| #002 | GitHub machine user + fine-grained PAT for the Bot VM (account, $0) | Waiting on Owner |
 | #003+ | M0 batch (developer accounts, Unity, Luma, Meshy/Tripo, Supabase, Vercel, Inngest, domains, USPTO search, Mac mini, reference device, attorney review) | To be filed by gj-foreman (M0-FORE-02) |
+
+## Owner decisions (2026-09-15)
+
+- AUTH #002 approved: the Owner creates the Bot machine user and PAT and hands it to the Bot team; every Bot asks for it before any work.
+- Scaffold merged to main on the Owner's instruction.
+- Repository stays **public** for now (free Actions minutes and native secret scanning; plan and design docs are world-readable). Revisit before M4 when user data flows.
+- The Foreman's M0 AUTH batch proceeds from #003 once the Foreman exists.
 
 ## Owner actions needed now
 
-1. Reply on AUTH #002 (machine user) and create the Foreman Bot (kit Prompt 2), then the specialists (kit §3).
-2. Merge the scaffold branch `claude/gigantic-journeys-governance-f0wgak` to main (Coordinator can do it on your word), then configure branch protection (M0-REPO-02).
+1. Create the machine user and PAT (M0-REPO-04), then create the Foreman Bot by pasting the block in `agents/grok/roles/gj-foreman.md`; it will ask you for the token first. Then the eight specialists from the other prompt packs.
+2. Configure branch protection and native secret scanning on main (M0-REPO-02).
 3. Transcribe the four locked design decisions into `design/DESIGN_SYSTEM.md` §1–4 (M0-OWNER-02).
 4. Scan 10 rooms and 5 tabletop builds (M0-OWNER-01) once the corpus intake path exists (M0-CAPT-01).
-5. Decide whether the repository stays public (free Actions minutes and secret scanning, but the plan and design docs are world-readable).
 
 ## Risk watch
 
-- Repository is public: every planning document, Bot prompt, and design doc is visible. Going private later costs Actions minutes for the Unity jobs.
+- Repository is public by Owner decision: every planning document, Bot prompt, and design doc is visible. Going private later costs Actions minutes for the Unity jobs.
 - Motion-matching spike (M1-MOVE-01) decides the animation stack; a fail sends locomotion to blend trees.
 
 ## Tickets (M0)
@@ -100,4 +105,4 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 
 | Date | PR | Ticket | Notes |
 |---|---|---|---|
-| — | — | — | Scaffold pending merge |
+| 2026-09-15 | fast-forward of `claude/gigantic-journeys-governance-f0wgak` (no PR; process not yet in force on main) | M0-REPO-01 | Scaffold: governance, CI, tickets, design system v0.1, ADRs; CI green on the branch before merge |
