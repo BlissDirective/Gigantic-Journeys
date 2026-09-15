@@ -1,0 +1,63 @@
+{
+  "id": "M0-UNITY-04",
+  "title": "Debug overlay — the loop-proving ticket (M0 exit test)",
+  "milestone": "M0",
+  "area": "UNITY",
+  "owner": "gj-gameplay",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P0",
+  "size": "S",
+  "summary": "The trivial end-to-end ticket that proves the autonomous loop: a Bot builds a debug overlay, gj-qa-release attaches a screenshot, the Coordinator merges, and no human types anything between ticket creation and merge. The overlay is compiled out of release builds.",
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "Overlay toggles with a three-finger tap on device and F3 in the Editor or on a gamepad; shows fps (1 s average and p99 over 5 s), frame time ms, build version, git short SHA, scene name, device model.",
+      "evidence": "gj-qa-release screenshot in qa/evidence/M0-UNITY-04/",
+      "automated": false
+    },
+    {
+      "id": "AT-2",
+      "test": "Overlay is excluded from release builds via the GJ_DEBUG scripting define; an EditMode test asserts the overlay type is absent when the define is off.",
+      "evidence": "test name",
+      "automated": true
+    },
+    {
+      "id": "AT-3",
+      "test": "Built with UI Toolkit, anchored top-right inside the safe area, no taller than 8 % of the screen in landscape, readable on a bright and a dark scan (scrim behind text).",
+      "evidence": "screenshots on two scans",
+      "automated": false
+    },
+    {
+      "id": "AT-4",
+      "test": "PR timeline shows: ticket assigned by the Foreman → Bot branch and PR → gj-qa-release evidence → Coordinator review and merge, with no human commits or comments.",
+      "evidence": "PR timeline link recorded in governance/CHECKPOINTS/M0.md",
+      "automated": false
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §9.7, §9.8 debug code out of release"
+  ],
+  "design": [
+    "Design Skills rule 21 (HUD top 8 %)",
+    "Design Skills rule 1 (scrim)"
+  ],
+  "depends_on": [
+    "M0-UNITY-01"
+  ],
+  "references": [
+    "kit START M0 exit test",
+    "plan M0 ('add a debug menu')"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

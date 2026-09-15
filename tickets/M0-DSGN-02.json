@@ -1,0 +1,67 @@
+{
+  "id": "M0-DSGN-02",
+  "title": "Design tokens v0 (DTCG JSON) and USS export for the locked decisions",
+  "milestone": "M0",
+  "area": "DSGN",
+  "owner": "gj-design",
+  "qa": null,
+  "status": "blocked",
+  "priority": "P1",
+  "size": "M",
+  "summary": "Encode the locked design system as machine-readable tokens in the Design Tokens Community Group format with a script that exports USS variables for Unity UI Toolkit. Blocked until the Owner transcribes decisions 1–4.",
+  "deliverables": [
+    "design/tokens/tokens.json",
+    "design/tokens/export_uss.py",
+    "unity/Assets/UI/Tokens.uss"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "design/tokens/tokens.json follows the DTCG format with groups: color (roles, light and dark scrim), typography (≤ 5 steps, tabular HUD numerals), spacing (8 pt grid with 4 pt half step), radius, elevation, motion (150–300 ms UI, 400–600 ms transitions, the shrink transition's own budget).",
+      "evidence": "file in PR",
+      "automated": false
+    },
+    {
+      "id": "AT-2",
+      "test": "design/tokens/export_uss.py generates unity/Assets/UI/Tokens.uss deterministically; a test asserts the output matches the committed file.",
+      "evidence": "test names",
+      "automated": true
+    },
+    {
+      "id": "AT-3",
+      "test": "Contrast test in CI: every text token on the three scans' scrims meets 4.5:1 (icons 3:1).",
+      "evidence": "test names",
+      "automated": true
+    },
+    {
+      "id": "AT-4",
+      "test": "Token values match DESIGN_SYSTEM.md decisions 1–4 verbatim; the PR cites the transcription commit.",
+      "evidence": "PR body",
+      "automated": false
+    }
+  ],
+  "design": [
+    "Design Skills #27–29",
+    "DESIGN_SYSTEM.md §1–4"
+  ],
+  "depends_on": [
+    "M0-DSGN-01"
+  ],
+  "blocked_by": [
+    "M0-OWNER-02: decisions 1–4 text not yet transcribed into DESIGN_SYSTEM.md"
+  ],
+  "references": [
+    "Design Skills rule 5–6"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

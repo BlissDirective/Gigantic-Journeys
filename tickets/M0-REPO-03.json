@@ -1,0 +1,53 @@
+{
+  "id": "M0-REPO-03",
+  "title": "Unity license secrets in GitHub Actions",
+  "milestone": "M0",
+  "area": "REPO",
+  "owner": "owner",
+  "qa": null,
+  "status": "blocked",
+  "priority": "P0",
+  "size": "S",
+  "summary": "Owner adds the Unity activation secrets so unity-tests and android-build stop skipping. Depends on the Unity account approved in the Foreman's M0 AUTH batch. Secret values are never pasted anywhere but the GitHub secrets UI.",
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "Repository secrets present: `UNITY_LICENSE` (Personal .ulf contents) or `UNITY_EMAIL` + `UNITY_PASSWORD` + `UNITY_SERIAL` (Pro).",
+      "evidence": "unity-tests preflight step shows run=true",
+      "automated": false
+    },
+    {
+      "id": "AT-2",
+      "test": "unity-tests and android-build preflight report 'project and license present' on the next run after M0-UNITY-01 merges.",
+      "evidence": "Actions run links",
+      "automated": true
+    },
+    {
+      "id": "AT-3",
+      "test": "No secret value appears in any commit, issue, PR, log, or screenshot.",
+      "evidence": "secret-scan green; Coordinator spot check",
+      "automated": true
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §1.3",
+    "SECURITY_CHECKLIST §1.4"
+  ],
+  "depends_on": [
+    "M0-FORE-02"
+  ],
+  "blocked_by": [
+    "Unity account AUTH in the Foreman's M0 batch (M0-FORE-02)"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

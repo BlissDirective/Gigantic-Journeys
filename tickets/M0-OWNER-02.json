@@ -1,0 +1,52 @@
+{
+  "id": "M0-OWNER-02",
+  "title": "Transcribe the four locked design decisions into DESIGN_SYSTEM.md",
+  "milestone": "M0",
+  "area": "OWNER",
+  "owner": "owner",
+  "qa": null,
+  "status": "open",
+  "priority": "P1",
+  "size": "S",
+  "summary": "The Owner locked decisions 1–4 (element language, brand palette and voice, signature transition, avatar presentation) in the 2026-09-14 design session; the Coordinator did not have that transcript. Paste the decision text into the marked slots. First fill is a transcription, not a change, so no AUTH is needed.",
+  "deliverables": [
+    "design/DESIGN_SYSTEM.md §1–4"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "design/DESIGN_SYSTEM.md sections 1–4 each contain the locked decision text replacing the PENDING TRANSCRIPTION block; each is consistent with the binding constraints listed above it.",
+      "evidence": "PR diff",
+      "automated": false
+    },
+    {
+      "id": "AT-2",
+      "test": "The PR body reads 'Transcription of the 2026-09-14 lock (no AUTH required for first fill); Coordinator: cite APPROVED #000' and the Coordinator confirms consistency with Design Skills §3 before merge.",
+      "evidence": "PR body + review",
+      "automated": false
+    },
+    {
+      "id": "AT-3",
+      "test": "gj-design is notified in the PR and M0-DSGN-02 is unblocked (status updated).",
+      "evidence": "ticket diff",
+      "automated": false
+    }
+  ],
+  "depends_on": [],
+  "references": [
+    "DESIGN_SYSTEM.md §0",
+    "Design Skills §5 items 1–4"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    }
+  ],
+  "notes": "If the Owner prefers, paste the text to the Coordinator in chat and the Coordinator opens the PR."
+}

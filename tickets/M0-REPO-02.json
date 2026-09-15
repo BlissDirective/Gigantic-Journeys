@@ -1,0 +1,66 @@
+{
+  "id": "M0-REPO-02",
+  "title": "Branch protection, merge policy, and native secret scanning on main",
+  "milestone": "M0",
+  "area": "REPO",
+  "owner": "owner",
+  "qa": null,
+  "status": "open",
+  "priority": "P0",
+  "size": "S",
+  "summary": "Owner configures the repository so that only the Coordinator (through the Owner's account) can merge to main, every merge needs a PR with green required checks and a Code Owner review, and GitHub's native secret scanning with push protection is on.",
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "main requires a pull request; direct pushes are rejected for everyone including administrators ('Do not allow bypassing the above settings').",
+      "evidence": "settings screenshot in qa/vm-setup/repo-settings.md",
+      "automated": false
+    },
+    {
+      "id": "AT-2",
+      "test": "Required status checks: `gitleaks`, `repo hygiene (env files, keys, raw media, size)`, `lint gate`, `tickets validate`, `movement.json single source of truth`, `protected paths need APPROVED #n`, `unity tests gate`, `android build gate`.",
+      "evidence": "settings screenshot",
+      "automated": false
+    },
+    {
+      "id": "AT-3",
+      "test": "Require review from Code Owners (1 approval); dismiss stale approvals on new pushes; no force pushes; no deletions.",
+      "evidence": "settings screenshot",
+      "automated": false
+    },
+    {
+      "id": "AT-4",
+      "test": "Secret scanning and push protection are enabled (free on a public repository).",
+      "evidence": "settings screenshot",
+      "automated": false
+    },
+    {
+      "id": "AT-5",
+      "test": "A push to main by the Bot machine user is rejected (evidence: the rejected push output, redacted).",
+      "evidence": "qa/vm-setup/foreman.md excerpt",
+      "automated": false
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §1.6",
+    "SECURITY_CHECKLIST §8.2"
+  ],
+  "depends_on": [
+    "M0-REPO-01",
+    "M0-REPO-04"
+  ],
+  "references": [
+    "kit §0 (only the Coordinator merges)"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/BlissDirective/Gigantic-Journeys/tickets/SCHEMA.json",
+  "title": "Gigantic Journeys ticket",
+  "description": "One ticket per file at tickets/<id>.json. The Coordinator and the Foreman create tickets; Bots update status, branch, pr, and history through their PRs. Acceptance tests are the contract and change only with Coordinator sign-off. Changes to this schema need an AUTH (design-change). Validated in CI by tickets/validate.py.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "title",
+    "milestone",
+    "area",
+    "owner",
+    "status",
+    "priority",
+    "summary",
+    "acceptance_tests",
+    "created",
+    "updated"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "M<milestone>-<AREA>-<nn>. Filename must be <id>.json; AREA must equal the area field.",
+      "pattern": "^M[0-6]-[A-Z]{2,8}-[0-9]{2}$"
+    },
+    "title": { "type": "string", "minLength": 8, "maxLength": 120 },
+    "milestone": { "type": "string", "enum": ["M0", "M1", "M2", "M3", "M4", "M5", "M6"] },
+    "area": {
+      "type": "string",
+      "enum": [
+        "REPO",
+        "SKILL",
+        "UNITY",
+        "MOVE",
+        "PIPE",
+        "PLAT",
+        "DATA",
+        "QA",
+        "LEGAL",
+        "DSGN",
+        "CAPT",
+        "SCEN",
+        "AVAT",
+        "GAME",
+        "SEC",
+        "FORE",
+        "OWNER",
+        "RES"
+      ]
+    },
+    "owner": {
+      "type": "string",
+      "description": "Who does the work.",
+      "enum": [
+        "gj-foreman",
+        "gj-capture",
+        "gj-scenegraph",
+        "gj-gameplay",
+        "gj-avatar",
+        "gj-platform",
+        "gj-design",
+        "gj-qa-release",
+        "gj-data",
+        "coordinator",
+        "owner"
+      ]
+    },
+    "qa": {
+      "description": "Bot that attaches visual or functional QA evidence before review, if any.",
+      "type": ["string", "null"],
+      "enum": ["gj-qa-release", "gj-data", "gj-design", "gj-scenegraph", "gj-gameplay", null]
+    },
+    "reviewers": {
+      "description": "Additional Bots that must review before the Coordinator does (cross-ownership changes).",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "gj-foreman",
+          "gj-capture",
+          "gj-scenegraph",
+          "gj-gameplay",
+          "gj-avatar",
+          "gj-platform",
+          "gj-design",
+          "gj-qa-release",
+          "gj-data"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "status": {
+      "type": "string",
+      "description": "open → in-progress → in-review → (changes-requested → in-review)* → merged. blocked from any state. done is for non-PR tickets (Owner actions). cancelled needs a note.",
+      "enum": [
+        "open",
+        "in-progress",
+        "in-review",
+        "changes-requested",
+        "blocked",
+        "merged",
+        "done",
+        "cancelled"
+      ]
+    },
+    "priority": {
+      "type": "string",
+      "description": "P0 blocks the milestone exit test or other tickets; P1 milestone goal; P2 should; P3 could.",
+      "enum": ["P0", "P1", "P2", "P3"]
+    },
+    "size": { "type": "string", "enum": ["S", "M", "L"] },
+    "summary": { "type": "string", "minLength": 20 },
+    "scope_out": {
+      "description": "Explicitly not part of this ticket (send to BACKLOG.md or another ticket).",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "deliverables": {
+      "description": "Repo paths this ticket creates or changes.",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "acceptance_tests": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "test", "evidence"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^AT-[0-9]+$" },
+          "test": { "type": "string", "minLength": 10 },
+          "evidence": {
+            "type": "string",
+            "description": "What must be attached to the PR for the Coordinator to accept this test as passed.",
+            "minLength": 3
+          },
+          "automated": { "type": "boolean" }
+        }
+      }
+    },
+    "security": {
+      "description": "Security checklist items that apply (governance/SECURITY_CHECKLIST.md).",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "design": {
+      "description": "Design rules that apply (Design Skills §3, DESIGN_SYSTEM.md, Movement Bible).",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "depends_on": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^M[0-6]-[A-Z]{2,8}-[0-9]{2}$" },
+      "uniqueItems": true
+    },
+    "blocked_by": {
+      "description": "Free text: what blocks this ticket (an AUTH number, an Owner action, a vendor).",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "auth_required": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type", "what"],
+        "properties": {
+          "type": { "type": "string", "enum": ["spend", "account", "design-change"] },
+          "what": { "type": "string" },
+          "auth_id": { "type": ["string", "null"], "pattern": "^AUTH #[0-9]{3}$" },
+          "status": { "type": "string", "enum": ["pending", "approved", "denied"] }
+        }
+      }
+    },
+    "references": {
+      "description": "Sections of SPEC.md, the kit, the Bible, or Design Skills this ticket implements.",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "branch": {
+      "type": ["string", "null"],
+      "pattern": "^(ticket/M[0-6]-[A-Z]{2,8}-[0-9]{2}-[a-z0-9-]+|setup/[a-z-]+-skills|auth/[0-9]{3}-[a-z0-9-]+|checkpoint/M[0-6]|coordinator/[a-z0-9-]+|claude/[a-z0-9-]+)$"
+    },
+    "pr": { "type": ["string", "null"], "format": "uri" },
+    "created": { "type": "string", "format": "date" },
+    "updated": { "type": "string", "format": "date" },
+    "history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["date", "event"],
+        "properties": {
+          "date": { "type": "string", "format": "date" },
+          "event": { "type": "string" },
+          "by": { "type": "string" }
+        }
+      }
+    },
+    "notes": { "type": "string" }
+  }
+}

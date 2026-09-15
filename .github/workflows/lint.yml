@@ -1,0 +1,139 @@
+# Lint, format, test, and dependency audit for every language tree in the repo.
+# Each language job runs only when files of that kind exist, so the check is
+# green on the bare scaffold and turns strict the moment code lands.
+#   Python:      ruff (lint + format), pinned requirements, pip-audit, pytest
+#   TypeScript:  per package: npm ci, lint, typecheck, test, npm audit (high+)
+#   C#:          CSharpier check over unity/Assets (third-party trees ignored)
+# Branch protection requires the single "lint gate" check.
+name: lint
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  detect:
+    name: detect languages
+    runs-on: ubuntu-latest
+    outputs:
+      python: ${{ steps.d.outputs.python }}
+      node: ${{ steps.d.outputs.node }}
+      csharp: ${{ steps.d.outputs.csharp }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: d
+        run: |
+          set -euo pipefail
+          py=false; node=false; cs=false
+          if git ls-files -- '*.py' | grep -q .; then py=true; fi
+          if git ls-files -- '*package.json' | grep -v node_modules | grep -q .; then node=true; fi
+          if git ls-files -- 'unity/Assets/*.cs' | grep -q .; then cs=true; fi
+          {
+            echo "python=$py"
+            echo "node=$node"
+            echo "csharp=$cs"
+          } >> "$GITHUB_OUTPUT"
+          echo "python=$py node=$node csharp=$cs"
+
+  python:
+    name: python (ruff, pins, pip-audit, pytest)
+    needs: detect
+    if: needs.detect.outputs.python == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned tooling
+        run: pip install ruff==0.16.7 pip-audit==2.10.1 pytest==9.1.1 jsonschema==4.26.0
+      - name: ruff lint
+        run: ruff check .
+      - name: ruff format check
+        run: ruff format --check .
+      - name: Requirements must pin exact versions
+        run: |
+          set -euo pipefail
+          for req in $(git ls-files -- '*requirements*.txt'); do
+            echo "== $req"
+            if ! awk '!/^[[:space:]]*(#|-r|--|$)/ && !/==/ {bad=1; print "unpinned: " $0} END {exit bad}' "$req"; then
+              echo "::error file=$req::every requirement must pin an exact version with =="
+              exit 1
+            fi
+            pip install -q -r "$req"
+          done
+      - name: pip-audit
+        run: pip-audit --strict --progress-spinner off
+      - name: pytest
+        run: |
+          if git ls-files -- '*test_*.py' '*_test.py' | grep -q .; then
+            pytest -q --ignore=unity --ignore=node_modules
+          else
+            echo "no python tests yet"
+          fi
+
+  typescript:
+    name: typescript (per package)
+    needs: detect
+    if: needs.detect.outputs.node == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: lint, typecheck, test, audit every package
+        run: |
+          set -euo pipefail
+          for pkg in $(git ls-files -- '*package.json' | grep -v node_modules); do
+            dir=$(dirname "$pkg")
+            echo "== $dir"
+            if [ ! -f "$dir/package-lock.json" ]; then
+              echo "::error file=$pkg::package-lock.json missing; dependencies must be pinned"
+              exit 1
+            fi
+            (
+              cd "$dir"
+              npm ci --ignore-scripts
+              npm run lint --if-present
+              npm run typecheck --if-present
+              npm test --if-present
+              npm audit --audit-level=high
+            )
+          done
+
+  csharp:
+    name: csharp (CSharpier)
+    needs: detect
+    if: needs.detect.outputs.csharp == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+      - name: Install CSharpier (pinned)
+        run: dotnet tool install --global csharpier --version 1.3.0
+      - name: CSharpier check
+        run: csharpier check unity/Assets
+
+  gate:
+    name: lint gate
+    needs: [detect, python, typescript, csharp]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "python=${{ needs.python.result }} typescript=${{ needs.typescript.result }} csharp=${{ needs.csharp.result }}"
+          for r in "${{ needs.detect.result }}" "${{ needs.python.result }}" "${{ needs.typescript.result }}" "${{ needs.csharp.result }}"; do
+            case "$r" in
+              success|skipped) ;;
+              *) echo "::error::a lint job failed or was cancelled"; exit 1 ;;
+            esac
+          done
+          echo "lint gate: OK"

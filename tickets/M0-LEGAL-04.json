@@ -1,0 +1,55 @@
+{
+  "id": "M0-LEGAL-04",
+  "title": "Meshy and Tripo data-retention and training terms, with a vendor recommendation for M2",
+  "milestone": "M0",
+  "area": "LEGAL",
+  "owner": "gj-avatar",
+  "qa": null,
+  "status": "open",
+  "priority": "P1",
+  "size": "S",
+  "summary": "Same as M0-LEGAL-03 for the two candidate head-generation vendors, plus a comparison that lets the Foreman file the account AUTH for the right one.",
+  "deliverables": [
+    "legal/vendors/meshy.md",
+    "legal/vendors/tripo.md"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "legal/vendors/meshy.md and legal/vendors/tripo.md record retention, deletion path, training-by-default and opt-out, DPA availability, region, with quotes, links, retrieval date.",
+      "evidence": "files in PR",
+      "automated": false
+    },
+    {
+      "id": "AT-2",
+      "test": "A comparison table (realistic-mode quality claims, price per generation, API limits, deletion guarantees, biometric-specific terms) ends with a recommendation and the draft AUTH REQUEST text for the Foreman's batch.",
+      "evidence": "file section",
+      "automated": false
+    },
+    {
+      "id": "AT-3",
+      "test": "Any vendor that trains on customer images by default without an opt-out is marked 'do not use for user data'.",
+      "evidence": "file line",
+      "automated": false
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §6.3"
+  ],
+  "depends_on": [],
+  "references": [
+    "SPEC §3.2",
+    "kit §3.4"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

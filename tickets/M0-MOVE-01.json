@@ -1,0 +1,72 @@
+{
+  "id": "M0-MOVE-01",
+  "title": "movement.json as the shared tuning contract (loaders, schema, CI sync)",
+  "milestone": "M0",
+  "area": "MOVE",
+  "owner": "gj-gameplay",
+  "qa": null,
+  "status": "open",
+  "priority": "P0",
+  "size": "S",
+  "summary": "Make config/movement.json the single source of truth in practice: a JSON Schema, a Unity copy kept byte-identical by CI, and a Python loader in services/traversal that exposes the same constants plus the 85 % margin helper the validator will use.",
+  "reviewers": [
+    "gj-scenegraph"
+  ],
+  "deliverables": [
+    "config/movement.schema.json",
+    "unity/Assets/StreamingAssets/movement.json",
+    "services/traversal/movement.py",
+    "services/traversal/tests/"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "config/movement.schema.json (JSON Schema 2020-12) validates config/movement.json; every key in Bible §10 is required; additionalProperties is false.",
+      "evidence": "schema file + governance job green",
+      "automated": true
+    },
+    {
+      "id": "AT-2",
+      "test": "unity/Assets/StreamingAssets/movement.json is byte-identical to config/movement.json; a documented copy step exists (script or editor menu) and CI movement-sync passes.",
+      "evidence": "governance run link",
+      "automated": true
+    },
+    {
+      "id": "AT-3",
+      "test": "services/traversal/movement.py loads the file into typed dataclasses, exposes `with_margin(value)` = 0.85 × value, and raises on missing or unknown keys; pytest covers load, margin, and error cases.",
+      "evidence": "test names",
+      "automated": true
+    },
+    {
+      "id": "AT-4",
+      "test": "A test asserts the C# and Python loaders agree on every constant (shared fixture of expected values).",
+      "evidence": "test names",
+      "automated": true
+    },
+    {
+      "id": "AT-5",
+      "test": "services/traversal/requirements.txt pins exact versions; pip-audit clean.",
+      "evidence": "lint run link",
+      "automated": true
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §7 dependency pinning and audit"
+  ],
+  "depends_on": [],
+  "references": [
+    "Bible §10",
+    "config/README.md"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

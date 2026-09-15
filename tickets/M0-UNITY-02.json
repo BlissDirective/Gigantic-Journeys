@@ -1,0 +1,74 @@
+{
+  "id": "M0-UNITY-02",
+  "title": "Gaussian splat renderer package integrated with a sample scene",
+  "milestone": "M0",
+  "area": "UNITY",
+  "owner": "gj-capture",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P0",
+  "size": "M",
+  "summary": "Integrate a Unity Gaussian splat renderer (MIT or compatible; aras-p UnityGaussianSplatting lineage as the candidate) pinned by commit, with a small sample splat rendering in a test scene on the reference Android device at 30 fps. The package choice is recorded as an addendum to ADR-0001 through an AUTH (design-change) filed via the Foreman.",
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "Renderer package added to Packages/manifest.json by git URL pinned to a commit SHA; LICENSE file included; license is MIT/BSD/Apache-2.0.",
+      "evidence": "manifest diff + license file",
+      "automated": true
+    },
+    {
+      "id": "AT-2",
+      "test": "A sample splat (≤ 10 MB, self-captured or public domain, no faces or private documents visible) renders in unity/Assets/Capture/Samples/SplatSample.unity in the Editor.",
+      "evidence": "gj-qa-release screenshot",
+      "automated": false
+    },
+    {
+      "id": "AT-3",
+      "test": "The sample scene runs on the reference Android device at ≥ 30 fps p99 over 60 s with the Profiler attached.",
+      "evidence": "Profiler screenshot in qa/evidence/M0-UNITY-02/",
+      "automated": false
+    },
+    {
+      "id": "AT-4",
+      "test": "ADR-0001 addendum names the package, commit, license, and the fallback (textured-mesh visuals on low-end devices); the PR cites the APPROVED #n for that design change.",
+      "evidence": "ADR diff + PR body",
+      "automated": false
+    },
+    {
+      "id": "AT-5",
+      "test": "Splat LOD/culling knobs are exposed in a single ScriptableObject so gj-gameplay can tune them later.",
+      "evidence": "file in PR",
+      "automated": false
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §7 dependency pinning and audit",
+    "SECURITY_CHECKLIST §7.3 license compatibility"
+  ],
+  "depends_on": [
+    "M0-UNITY-01"
+  ],
+  "auth_required": [
+    {
+      "type": "design-change",
+      "what": "ADR-0001 addendum: splat renderer package choice",
+      "auth_id": null,
+      "status": "pending"
+    }
+  ],
+  "references": [
+    "plan §8 (splat performance risk)",
+    "Design Skills #47"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

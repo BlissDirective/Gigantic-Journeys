@@ -1,0 +1,6 @@
+# Third-party and generated C# is never reformatted by the lint job.
+unity/Library/
+unity/Packages/
+unity/Assets/Plugins/
+unity/Assets/ThirdParty/
+**/*.g.cs

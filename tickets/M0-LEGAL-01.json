@@ -1,0 +1,65 @@
+{
+  "id": "M0-LEGAL-01",
+  "title": "BIPA-compliant biometric consent copy and learn-more sheet (draft)",
+  "milestone": "M0",
+  "area": "LEGAL",
+  "owner": "gj-avatar",
+  "qa": null,
+  "status": "open",
+  "priority": "P1",
+  "size": "S",
+  "summary": "Draft the exact consent step the avatar flow will show: one plain sentence plus a learn-more sheet, the fields of the consent record, and the withdrawal path. Draft only; counsel review is an AUTH (spend) before M5.",
+  "reviewers": [
+    "gj-design",
+    "gj-platform"
+  ],
+  "deliverables": [
+    "legal/CONSENT_BIOMETRIC.md"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "legal/CONSENT_BIOMETRIC.md contains the one-sentence consent, the learn-more sheet (what is collected, purpose, vendor processing, retention and deletion, training opt-in as a separate toggle, withdrawal path, minors excluded by the 13+ gate), and the button copy.",
+      "evidence": "file in PR",
+      "automated": false
+    },
+    {
+      "id": "AT-2",
+      "test": "The consent record fields are specified: user_id, policy_version, timestamp, locale, sha256 of the exact consent text shown, stated retention; the record is created before any photo bytes leave the device.",
+      "evidence": "file section",
+      "automated": false
+    },
+    {
+      "id": "AT-3",
+      "test": "Illinois BIPA, Texas CUBI, and Washington My Health My Data requirements are each addressed with a short mapping table; open legal questions are listed for counsel.",
+      "evidence": "file section",
+      "automated": false
+    },
+    {
+      "id": "AT-4",
+      "test": "Copy follows the voice guide constraints (short, warm, verbs first, no jargon) and is marked DRAFT — NOT LEGAL ADVICE pending attorney review.",
+      "evidence": "file header",
+      "automated": false
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §5.1–5.6"
+  ],
+  "depends_on": [],
+  "references": [
+    "SPEC §3.9, §7",
+    "plan §9",
+    "Design Skills rule 10"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "id": "M0-FORE-04",
+  "title": "M0 checkpoint report",
+  "milestone": "M0",
+  "area": "FORE",
+  "owner": "gj-foreman",
+  "qa": null,
+  "status": "open",
+  "priority": "P0",
+  "size": "S",
+  "summary": "At the end of M0 halt feature work, collect the specialists' 5-line summaries, and open the checkpoint PR with the report in the exact template so the Coordinator can run REVIEW M0.",
+  "deliverables": [
+    "governance/CHECKPOINTS/M0.md"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "governance/CHECKPOINTS/M0.md follows the template with every field filled; exit-test evidence links the M0-UNITY-04 PR timeline showing creation → merge with a QA screenshot and no human typing.",
+      "evidence": "file in PR on branch checkpoint/M0",
+      "automated": false
+    },
+    {
+      "id": "AT-2",
+      "test": "Spend this milestone versus budget is itemized from the approved AUTHs; every design decision made cites its AUTH #.",
+      "evidence": "file sections",
+      "automated": false
+    },
+    {
+      "id": "AT-3",
+      "test": "All Bots have stopped feature work (standup states it) and each specialist's 5-line summary is attached under a heading per Bot.",
+      "evidence": "file sections",
+      "automated": false
+    }
+  ],
+  "depends_on": [
+    "M0-UNITY-04",
+    "M0-QA-01",
+    "M0-DATA-01",
+    "M0-PIPE-01",
+    "M0-DSGN-01",
+    "M0-FORE-02",
+    "M0-FORE-03"
+  ],
+  "references": [
+    "kit §0 checkpoint protocol",
+    "kit §6 template"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+# Python lint and format configuration for every Python tree in the repo
+# (services/, tickets/, .github/scripts/, qa/, supabase/scripts/).
+# CI pins ruff==0.16.7 (.github/workflows/lint.yml); pre-commit pins the same.
+line-length = 100
+target-version = "py311"
+extend-exclude = ["unity", "node_modules", ".venv", "context", "design"]
+
+[lint]
+select = ["E", "F", "W", "I", "B", "UP", "S"]
+ignore = [
+  "S101", # assert is fine in tests and validators
+  "S603", # subprocess without shell=True is exactly what we want
+  "S607", # `git` resolved from PATH is fine in CI scripts
+]
+
+[lint.per-file-ignores]
+"**/tests/**" = ["S"]
+"**/test_*.py" = ["S"]
+
+[format]
+quote-style = "double"

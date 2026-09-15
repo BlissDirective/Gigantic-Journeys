@@ -1,0 +1,70 @@
+{
+  "id": "M0-PLAT-01",
+  "title": "Supabase local scaffold and RLS-by-default lint",
+  "milestone": "M0",
+  "area": "PLAT",
+  "owner": "gj-platform",
+  "qa": null,
+  "status": "open",
+  "priority": "P1",
+  "size": "S",
+  "summary": "Initialize supabase/ for local development and add the CI lint that fails any migration creating a table without RLS and a policy. No application tables are created in M0 (table creation is an AUTH-gated data-schema change).",
+  "deliverables": [
+    "supabase/config.toml",
+    "supabase/migrations/",
+    "supabase/scripts/check_rls.py",
+    "supabase/README.md"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "supabase/config.toml and an empty migrations directory exist; `supabase start` works on the VM (log attached, no project keys involved).",
+      "evidence": "qa/reports/M0-PLAT-01.md",
+      "automated": false
+    },
+    {
+      "id": "AT-2",
+      "test": "supabase/scripts/check_rls.py scans migrations and fails when any `create table` lacks `enable row level security` and at least one `create policy` for that table in the same migration.",
+      "evidence": "script + test names",
+      "automated": true
+    },
+    {
+      "id": "AT-3",
+      "test": "Two fixture migrations under supabase/scripts/tests/ (one compliant, one not) prove the pass and fail paths; pytest runs them in the lint workflow.",
+      "evidence": "lint run link",
+      "automated": true
+    },
+    {
+      "id": "AT-4",
+      "test": "supabase/README.md states the RLS-by-default rule, the policy patterns (owner-only, published-read, service-role-only), and that table creation needs an AUTH.",
+      "evidence": "file in PR",
+      "automated": false
+    },
+    {
+      "id": "AT-5",
+      "test": "No Supabase URL, key, or project ref appears anywhere in the PR.",
+      "evidence": "secret-scan green",
+      "automated": true
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §2.1–2.5",
+    "SECURITY_CHECKLIST §1 secret hygiene"
+  ],
+  "depends_on": [],
+  "references": [
+    "SPEC §3.10",
+    "kit §3.5"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

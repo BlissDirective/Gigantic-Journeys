@@ -1,0 +1,89 @@
+{
+  "id": "M0-DATA-01",
+  "title": "Freeze telemetry and correction event schemas v1.0",
+  "milestone": "M0",
+  "area": "DATA",
+  "owner": "gj-platform",
+  "qa": "gj-data",
+  "status": "open",
+  "priority": "P0",
+  "size": "M",
+  "summary": "Define and freeze the event schemas that M1 telemetry, the weekly gj-data reports, and the M6 learning loop depend on. Frozen means: version 1.0.0, validated fixtures, forbidden-field tests, and an AUTH (design-change) approving the freeze; later changes need another AUTH.",
+  "reviewers": [
+    "gj-data",
+    "gj-scenegraph"
+  ],
+  "deliverables": [
+    "data/schemas/telemetry_events.schema.json",
+    "data/schemas/correction_events.schema.json",
+    "data/schemas/fixtures/",
+    "data/schemas/README.md"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "data/schemas/telemetry_events.schema.json (JSON Schema 2020-12) defines a common envelope (schema_version, event_id, pseudonymous user_id, env_id, client_version, platform, ts, scale_multiplier) and the event catalogue: session_start/end, scan_started/completed/failed (quality metrics), avatar_generated/failed (durations only), play_started, fall (tier, height_A), stuck (dwell > 20 s, position in env-local A units), quit, summit_reached, route_started/completed (time, beat reached), vista_found, rating_submitted (four axes), report_submitted (reason enum).",
+      "evidence": "schema file",
+      "automated": true
+    },
+    {
+      "id": "AT-2",
+      "test": "data/schemas/correction_events.schema.json defines correction_submitted: surface id, old label, new label (Bible §4 class enum), env-local position, confidence, training_opt_in flag.",
+      "evidence": "schema file",
+      "automated": true
+    },
+    {
+      "id": "AT-3",
+      "test": "A forbidden-field test fails if any schema admits GPS, latitude/longitude, email, phone, free-text from users, raw media references, or device identifiers beyond a platform enum.",
+      "evidence": "test names",
+      "automated": true
+    },
+    {
+      "id": "AT-4",
+      "test": "At least two fixtures per event validate; one invalid fixture per schema is rejected; pytest runs in CI.",
+      "evidence": "test names + lint run link",
+      "automated": true
+    },
+    {
+      "id": "AT-5",
+      "test": "gj-data reviews the catalogue for the weekly report needs (fall/quit/stuck heatmaps, completion rates, vista discovery, ratings) and signs off in the PR.",
+      "evidence": "gj-data review comment",
+      "automated": false
+    },
+    {
+      "id": "AT-6",
+      "test": "The PR cites APPROVED #n for the freeze; data/schemas/README.md records version 1.0.0 and the change rule.",
+      "evidence": "PR body + README",
+      "automated": false
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §10.1",
+    "SECURITY_CHECKLIST §4.4"
+  ],
+  "depends_on": [],
+  "auth_required": [
+    {
+      "type": "design-change",
+      "what": "Freeze telemetry and correction event schemas v1.0.0",
+      "auth_id": null,
+      "status": "pending"
+    }
+  ],
+  "references": [
+    "SPEC §7",
+    "kit START M0 (schemas frozen)",
+    "plan M0"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

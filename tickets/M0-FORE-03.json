@@ -1,0 +1,50 @@
+{
+  "id": "M0-FORE-03",
+  "title": "Verify every specialist's SKILLS.md is merged",
+  "milestone": "M0",
+  "area": "FORE",
+  "owner": "gj-foreman",
+  "qa": null,
+  "status": "open",
+  "priority": "P1",
+  "size": "S",
+  "summary": "Confirm each of the eight specialists completed the research handbook (M0-SKILL-02..09) and report gaps; M0 cannot close with a missing handbook.",
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "A table (Bot, PR link, merged date, gaps) is posted as a PR comment on the checkpoint PR or a governance PR; every row is merged or has a BLOCKER issue.",
+      "evidence": "table link",
+      "automated": false
+    },
+    {
+      "id": "AT-2",
+      "test": "Any handbook missing a required section (per its ticket) has a follow-up commit on its branch before M0 closes.",
+      "evidence": "PR links",
+      "automated": false
+    }
+  ],
+  "depends_on": [
+    "M0-SKILL-02",
+    "M0-SKILL-03",
+    "M0-SKILL-04",
+    "M0-SKILL-05",
+    "M0-SKILL-06",
+    "M0-SKILL-07",
+    "M0-SKILL-08",
+    "M0-SKILL-09"
+  ],
+  "references": [
+    "kit §2 setup task 4"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

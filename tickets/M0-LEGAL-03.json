@@ -1,0 +1,48 @@
+{
+  "id": "M0-LEGAL-03",
+  "title": "Luma data-retention and training terms on file",
+  "milestone": "M0",
+  "area": "LEGAL",
+  "owner": "gj-capture",
+  "qa": null,
+  "status": "open",
+  "priority": "P1",
+  "size": "S",
+  "summary": "Collect and summarize Luma's terms for uploaded video/images and generated outputs before any user scan goes to Luma (M1 gate SECURITY_CHECKLIST §6.3).",
+  "deliverables": [
+    "legal/vendors/luma.md"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "legal/vendors/luma.md records: retention period for inputs and outputs, deletion API or request path, whether customer data trains models by default and how to opt out, DPA availability, processing region, with quotes, links, and retrieval date.",
+      "evidence": "file in PR",
+      "automated": false
+    },
+    {
+      "id": "AT-2",
+      "test": "A red-flags list and a recommendation (use / use with opt-out / do not use) are stated; open questions are drafted as an email for the Owner to send.",
+      "evidence": "file sections",
+      "automated": false
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §6.3"
+  ],
+  "depends_on": [],
+  "references": [
+    "plan §8 (BIPA/privacy exposure)",
+    "kit START M0 (vendor terms)"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

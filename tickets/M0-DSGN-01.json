@@ -1,0 +1,75 @@
+{
+  "id": "M0-DSGN-01",
+  "title": "Design system proposal for decisions 5–10 (play, capture, create, browse, store, accessibility)",
+  "milestone": "M0",
+  "area": "DSGN",
+  "owner": "gj-design",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P0",
+  "size": "L",
+  "summary": "Propose the six open decisions in design/DESIGN_SYSTEM.md as mockups plus rationale so the Owner can lock them at the M0 checkpoint. Nothing is written into DESIGN_SYSTEM.md by this ticket; the Owner locks by AUTH (M0-OWNER-03).",
+  "deliverables": [
+    "design/proposals/M0-design-system-proposal.md",
+    "design/proposals/mockups/"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "design/proposals/M0-design-system-proposal.md covers decisions 5–10, each with the proposal, the Design Skills §3 rules it satisfies (by number), alternatives considered, and open questions for the Owner.",
+      "evidence": "file in PR",
+      "automated": false
+    },
+    {
+      "id": "AT-2",
+      "test": "HTML mockups under design/proposals/mockups/ for: play HUD and controls (landscape), capture coaching (both modes), create-flow waiting states, browse cards and sort tabs, results and store screens; each rendered on the three test scans (bright room, dark room, cluttered tabletop).",
+      "evidence": "mockup files + screenshots",
+      "automated": false
+    },
+    {
+      "id": "AT-3",
+      "test": "Measured contrast ratios for every text and icon token on the three scans: text ≥ 4.5:1, icons ≥ 3:1; deuteranopia simulation attached for state colors.",
+      "evidence": "table in the proposal",
+      "automated": false
+    },
+    {
+      "id": "AT-4",
+      "test": "Every glass surface has a flat variant; every animation has a Reduce Motion variant; touch targets annotated (≥ 44 pt / 48 dp; play controls ≥ 56).",
+      "evidence": "annotations in mockups",
+      "automated": false
+    },
+    {
+      "id": "AT-5",
+      "test": "The proposal is consistent with the binding constraints of decisions 1–4 and, once transcribed, with their locked text.",
+      "evidence": "Coordinator review",
+      "automated": false
+    },
+    {
+      "id": "AT-6",
+      "test": "An AUTH REQUEST (design-change) 'lock decisions 5–10' is drafted in the proposal for the Foreman to file at checkpoint.",
+      "evidence": "file section",
+      "automated": false
+    }
+  ],
+  "design": [
+    "Design Skills §3 (all rules)",
+    "Design Skills §4 checklist",
+    "DESIGN_SYSTEM.md §5–10 constraints"
+  ],
+  "depends_on": [],
+  "references": [
+    "kit §8",
+    "Design Skills §5"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

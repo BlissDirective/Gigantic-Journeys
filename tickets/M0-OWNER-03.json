@@ -1,0 +1,47 @@
+{
+  "id": "M0-OWNER-03",
+  "title": "Lock design system decisions 5–10 at the M0 checkpoint",
+  "milestone": "M0",
+  "area": "OWNER",
+  "owner": "owner",
+  "qa": null,
+  "status": "open",
+  "priority": "P0",
+  "size": "S",
+  "summary": "Review gj-design's proposal and lock decisions 5–10 into DESIGN_SYSTEM.md by AUTH (design-change). After this, any change to the design system needs an AUTH.",
+  "deliverables": [
+    "design/DESIGN_SYSTEM.md §5–10"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "The Owner replies APPROVED #n (or DENIED with changes) on the 'lock decisions 5–10' auth-request issue filed from M0-DSGN-01.",
+      "evidence": "issue link",
+      "automated": false
+    },
+    {
+      "id": "AT-2",
+      "test": "A PR (by the Coordinator or gj-design) fills DESIGN_SYSTEM.md §5–10 from the approved proposal, cites APPROVED #n, and updates the change log; status line reads LOCKED for all ten decisions.",
+      "evidence": "PR link",
+      "automated": false
+    }
+  ],
+  "depends_on": [
+    "M0-DSGN-01"
+  ],
+  "references": [
+    "kit §8",
+    "kit §3.6"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

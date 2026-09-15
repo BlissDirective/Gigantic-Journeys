@@ -1,0 +1,62 @@
+{
+  "id": "M0-QA-01",
+  "title": "Unity on the QA VM and the scripted editor smoke task",
+  "milestone": "M0",
+  "area": "QA",
+  "owner": "gj-qa-release",
+  "qa": null,
+  "status": "open",
+  "priority": "P0",
+  "size": "M",
+  "summary": "Install the pinned Unity version on the QA Bot's VM and prove one unattended scripted task: open the project, import the sample splat, open the sample scene, capture a screenshot, write a report. This is the QA half of the M0 exit test.",
+  "deliverables": [
+    "qa/scripts/editor_smoke.py",
+    "unity/Assets/Editor/QA/",
+    "qa/reports/M0-editor-smoke.md"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "Installed Unity version equals unity/ProjectSettings/ProjectVersion.txt; Android build support module installed.",
+      "evidence": "qa/reports/M0-editor-smoke.md header",
+      "automated": false
+    },
+    {
+      "id": "AT-2",
+      "test": "qa/scripts/editor_smoke.py runs Unity -batchmode with an editor script under unity/Assets/Editor/QA/ that opens the project, imports the sample splat, opens the sample scene, captures a Game-view screenshot to qa/evidence/M0-QA-01/, and writes qa/reports/M0-editor-smoke.md with timings and versions.",
+      "evidence": "script + report + PNG in PR",
+      "automated": false
+    },
+    {
+      "id": "AT-3",
+      "test": "The task runs end to end unattended twice in a row with identical pass results (two logs attached).",
+      "evidence": "logs in qa/reports/M0-QA-01/",
+      "automated": false
+    },
+    {
+      "id": "AT-4",
+      "test": "Screenshot contains no faces, documents, or personal data (privacy check line in the report).",
+      "evidence": "report line",
+      "automated": false
+    }
+  ],
+  "depends_on": [
+    "M0-UNITY-01",
+    "M0-UNITY-02"
+  ],
+  "references": [
+    "kit START M0 (Unity installed on QA VM, one scripted task proven)",
+    "plan M0"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

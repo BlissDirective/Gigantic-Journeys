@@ -1,0 +1,58 @@
+# Governance checks that make the hard rules mechanical:
+#   tickets        every tickets/*.json validates against tickets/SCHEMA.json
+#   movement-sync  config/movement.json equals Movement Bible §10 and the Unity copy
+#   auth-gate      PRs touching protected paths must cite an APPROVED #n
+# The Coordinator's review is the real gate; this is the first line.
+name: governance
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  tickets:
+    name: tickets validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install jsonschema==4.26.0
+      - run: python tickets/validate.py
+
+  movement-sync:
+    name: movement.json single source of truth
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install jsonschema==4.26.0
+      - run: python .github/scripts/check_movement_sync.py
+
+  auth-gate:
+    name: protected paths need APPROVED #n
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: auth gate
+        env:
+          # Passed through env, never interpolated into the script, so PR text cannot inject shell.
+          PR_BODY: ${{ github.event.pull_request.body }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: python .github/scripts/auth_gate.py

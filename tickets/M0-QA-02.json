@@ -1,0 +1,54 @@
+{
+  "id": "M0-QA-02",
+  "title": "Visual QA procedure and evidence standard",
+  "milestone": "M0",
+  "area": "QA",
+  "owner": "gj-qa-release",
+  "qa": null,
+  "status": "open",
+  "priority": "P0",
+  "size": "S",
+  "summary": "Write the procedure every gameplay, UI, and capture PR goes through before the Coordinator reviews it, and apply it to M0-UNITY-04 as the first live use.",
+  "deliverables": [
+    "qa/VISUAL_QA.md"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "qa/VISUAL_QA.md defines: per-PR-type checklists (gameplay, UI, capture), evidence naming (qa/evidence/<ticket>/<nn>-<what>.png, ≤ 2 MB), clip rules (≤ 30 s, attached to the PR, never committed), the reference-device Profiler screenshot requirement, the Design Skills §4 items QA re-checks, and the DEFECT issue flow with severities S1–S4.",
+      "evidence": "file in PR",
+      "automated": false
+    },
+    {
+      "id": "AT-2",
+      "test": "The procedure is applied on M0-UNITY-04 and the evidence follows the naming rules.",
+      "evidence": "M0-UNITY-04 PR link",
+      "automated": false
+    },
+    {
+      "id": "AT-3",
+      "test": "A privacy line is part of every evidence set: no faces, addresses, documents, or screens with personal data.",
+      "evidence": "checklist item",
+      "automated": false
+    }
+  ],
+  "design": [
+    "Design Skills §4 pre-PR checklist"
+  ],
+  "depends_on": [],
+  "references": [
+    "plan §4 step 3",
+    "kit §3.7"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

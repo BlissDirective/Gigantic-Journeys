@@ -1,0 +1,53 @@
+# Local guard rails for the Bot VM and any human clone. CI runs the same checks;
+# this just fails faster and keeps secrets out of history in the first place.
+#
+# Install once per clone:
+#   pip install pre-commit==4.6.2 && pre-commit install
+# Run on demand:
+#   pre-commit run --all-files
+minimum_pre_commit_version: "3.0.0"
+
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-added-large-files
+        args: ["--maxkb=10240"]
+      - id: detect-private-key
+      - id: check-json
+      - id: check-yaml
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+        exclude: '^(design|context)/'
+      - id: trailing-whitespace
+        exclude: '^(design|context)/|\.md$'
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.7
+    hooks:
+      - id: ruff
+      - id: ruff-format
+
+  - repo: local
+    hooks:
+      - id: forbid-env-files
+        name: refuse to commit .env files (only .env.example is allowed)
+        entry: "bash -c 'echo \"BLOCKED: env files must never be committed: $*\"; exit 1' --"
+        language: system
+        files: '(^|/)\.env(\..+)?$'
+        exclude: '(^|/)\.env\.example$'
+      - id: forbid-raw-media
+        name: refuse to commit raw media or scan files
+        entry: "bash -c 'echo \"BLOCKED: raw media / scan files never enter git: $*\"; exit 1' --"
+        language: system
+        files: '\.(mp4|mov|MOV|m4v|heic|HEIC|ply|splat|spz|ksplat)$'
+      - id: warn-protected-paths
+        name: protected path touched — PR needs an APPROVED AUTH #n (see agents/grok/README.md)
+        entry: "bash -c 'echo \"NOTICE: protected path(s) changed: $* — the PR must cite APPROVED #n or CI will block it\"; exit 0' --"
+        language: system
+        files: '^(SPEC\.md|ADRs/.*\.md|data/schemas/.*|design/(DESIGN_SYSTEM\.md|MOVEMENT_BIBLE\.md|Gigantic-Journey-Design-Skills\.md|tokens/.*)|tickets/SCHEMA\.json|config/movement(\.schema)?\.json)$'

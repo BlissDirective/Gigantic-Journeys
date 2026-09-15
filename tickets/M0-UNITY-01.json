@@ -1,0 +1,74 @@
+{
+  "id": "M0-UNITY-01",
+  "title": "Unity 6 URP project scaffold with test assemblies",
+  "milestone": "M0",
+  "area": "UNITY",
+  "owner": "gj-gameplay",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P0",
+  "size": "M",
+  "summary": "Create the Unity 6 project under unity/ with URP, Android and iOS targets, the bundle id, pinned packages, and EditMode/PlayMode test assemblies with one smoke test each, so CI can run -batchmode tests and builds.",
+  "deliverables": [
+    "unity/",
+    "unity/README.md"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "Unity 6000.x LTS version pinned in unity/ProjectSettings/ProjectVersion.txt and stated in unity/README.md; the same version is what the QA VM (M0-QA-01) installs.",
+      "evidence": "files in PR",
+      "automated": false
+    },
+    {
+      "id": "AT-2",
+      "test": "URP configured with a pipeline asset assigned per quality tier for Android and iOS; Vulkan/Metal graphics APIs; IL2CPP; bundle id com.sparkforgelabs.giganticjourneys.",
+      "evidence": "ProjectSettings diff + editor screenshot",
+      "automated": false
+    },
+    {
+      "id": "AT-3",
+      "test": "Packages/manifest.json and Packages/packages-lock.json committed; every package pinned to an exact version; Input System, Animation Rigging, UI Toolkit, Test Framework present.",
+      "evidence": "files in PR",
+      "automated": true
+    },
+    {
+      "id": "AT-4",
+      "test": "EditMode and PlayMode test assemblies exist with one passing smoke test each; `Unity -batchmode -nographics -runTests -testPlatform EditMode` and `PlayMode` pass locally (log attached) and in CI once M0-REPO-03 lands.",
+      "evidence": "test logs in qa/reports/M0-UNITY-01/, CI links",
+      "automated": true
+    },
+    {
+      "id": "AT-5",
+      "test": "Project opens with zero console errors on the QA VM; `git status` is clean after opening (Library/Temp ignored).",
+      "evidence": "gj-qa-release screenshot in qa/evidence/M0-UNITY-01/",
+      "automated": false
+    },
+    {
+      "id": "AT-6",
+      "test": "lint job (CSharpier) passes on unity/Assets.",
+      "evidence": "CI link",
+      "automated": true
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §7 dependency pinning and audit",
+    "SECURITY_CHECKLIST §9.7 IL2CPP, symbols stripped in release"
+  ],
+  "depends_on": [],
+  "references": [
+    "kit START M0",
+    "plan M0"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

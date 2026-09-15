@@ -1,0 +1,40 @@
+# Gigantic Journeys — gitleaks configuration.
+# Extends the default ruleset and adds project-specific patterns. Runs in CI
+# (.github/workflows/secret-scan.yml, full history, every push and PR) and
+# locally through .pre-commit-config.yaml. Findings are always redacted in logs.
+title = "gigantic-journeys"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "gj-inngest-signing-key"
+description = "Inngest signing key"
+regex = '''signkey-(?:prod|test|branch)-[0-9a-fA-F]{32,}'''
+keywords = ["signkey-"]
+
+[[rules]]
+id = "gj-supabase-service-role"
+description = "Supabase service-role key assigned a literal JWT"
+regex = '''(?i)(supabase[_-]?(staging[_-]?)?service[_-]?role[_-]?key|service_role)\s*[:=]\s*['"]?eyJ[A-Za-z0-9_-]{20,}'''
+keywords = ["service_role", "service-role", "service_role_key"]
+
+[[rules]]
+id = "gj-vendor-api-key-assignment"
+description = "Luma / Meshy / Tripo / RevenueCat API key assigned a literal value"
+regex = '''(?i)(luma|meshy|tripo|revenuecat)[a-z0-9_]*(api)?[_-]?key\s*[:=]\s*['"]?[A-Za-z0-9_\-]{20,}'''
+keywords = ["luma", "meshy", "tripo", "revenuecat"]
+
+[[allowlists]]
+description = "Placeholders, lockfiles, and this config"
+paths = [
+  '''(^|/)\.env\.example$''',
+  '''(^|/)package-lock\.json$''',
+  '''(^|/)packages-lock\.json$''',
+  '''(^|/)\.gitleaks\.toml$''',
+]
+regexes = [
+  '''PLACEHOLDER(_[A-Z0-9]+)*''',
+  '''REPLACE_ME''',
+  '''your-[a-z0-9-]+-here''',
+]

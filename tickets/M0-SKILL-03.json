@@ -1,0 +1,64 @@
+{
+  "id": "M0-SKILL-03",
+  "title": "gj-scenegraph: research handbook (RESOURCES.md + SKILLS.md)",
+  "milestone": "M0",
+  "area": "SKILL",
+  "owner": "gj-scenegraph",
+  "qa": null,
+  "status": "open",
+  "priority": "P1",
+  "size": "M",
+  "summary": "First task before any ticket (kit §3 common block): research the top 100 resources on indoor scene understanding, affordance detection, 3D Gaussian segmentation (Gaussian Grouping lineage), reachability and route search, VR-GS / DecoupledGaussian / 2026 scene-level physics papers, climbing and parkour system design; save an annotated list and distill a working handbook. Re-read SKILLS.md at every session start and update it when you learn something.",
+  "deliverables": [
+    "projects/skills/scenegraph/RESOURCES.md",
+    "projects/skills/scenegraph/SKILLS.md"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "projects/skills/scenegraph/RESOURCES.md lists at least 100 resources, each with title, URL, type (doc / paper / talk / repo / postmortem / vendor guide), and a one-line 'why it matters for GJ', grouped by the role's research focus.",
+      "evidence": "file in PR; Coordinator counts entries",
+      "automated": false
+    },
+    {
+      "id": "AT-2",
+      "test": "projects/skills/scenegraph/SKILLS.md covers: mesh cleanup, surface classification per Bible §4, traversal graph and validator (Bible §10 contract), summit/route/vista generation, Tier 1 pipeline, Tier 2 research method; plus mistakes to avoid and the checklists you run before opening a PR.",
+      "evidence": "file in PR",
+      "automated": false
+    },
+    {
+      "id": "AT-3",
+      "test": "SKILLS.md cites the repo rules it must follow (agents/grok/README.md, REVIEW_RUBRIC.md, SECURITY_CHECKLIST.md) and, where the role touches them, the Movement Bible and Design Skills sections by number.",
+      "evidence": "file in PR",
+      "automated": false
+    },
+    {
+      "id": "AT-4",
+      "test": "SKILLS.md ends with a `## Session log` section (date, what was learned, what changed) that later sessions append to.",
+      "evidence": "file in PR",
+      "automated": false
+    },
+    {
+      "id": "AT-5",
+      "test": "Branch is `setup/scenegraph-skills`, the PR uses the template, secret-scan and lint are green, and no vendor keys or account details appear.",
+      "evidence": "PR + CI links",
+      "automated": true
+    }
+  ],
+  "depends_on": [],
+  "references": [
+    "kit §3 common block",
+    "kit §3 role block"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

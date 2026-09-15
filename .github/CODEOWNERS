@@ -1,0 +1,4 @@
+# Only the Coordinator merges to main, acting through the Owner's GitHub account.
+# With branch protection ("require review from Code Owners"), every PR needs this
+# review before it can merge, and Bot identities cannot self-approve.
+* @BlissDirective

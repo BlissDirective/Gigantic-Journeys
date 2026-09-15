@@ -1,0 +1,74 @@
+{
+  "id": "M0-PIPE-01",
+  "title": "Inngest loop skeleton: scan.submitted → reconstruct → scenegraph → journey → package (stubs)",
+  "milestone": "M0",
+  "area": "PIPE",
+  "owner": "gj-platform",
+  "qa": null,
+  "status": "open",
+  "priority": "P0",
+  "size": "M",
+  "summary": "Stand up the durable workflow that M1 fills in: a TypeScript project under api/ with one Inngest function whose four steps are logged stubs, runnable locally with the Inngest dev server, tested, linted, pinned, with no keys committed and no deploy (Vercel deploy waits for its AUTH).",
+  "deliverables": [
+    "api/"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "api/ is a Node 22 TypeScript project (strict), with eslint and a test runner; `npm run lint`, `npm run typecheck`, `npm test` pass in CI; package-lock.json committed.",
+      "evidence": "lint run link",
+      "automated": true
+    },
+    {
+      "id": "AT-2",
+      "test": "Function `journey/pipeline` handles event `scan.submitted` with steps reconstruct → scenegraph → journey → package; each step is a stub that records a status transition and returns a typed result.",
+      "evidence": "source + test",
+      "automated": true
+    },
+    {
+      "id": "AT-3",
+      "test": "A test proves step ordering and that a thrown error in a step triggers Inngest's retry (using Inngest's test utilities or a direct step-runner harness).",
+      "evidence": "test names",
+      "automated": true
+    },
+    {
+      "id": "AT-4",
+      "test": "`.env.example` at api/ lists INNGEST_EVENT_KEY, INNGEST_SIGNING_KEY, SUPABASE_URL, SUPABASE_ANON_KEY, LUMA_API_KEY with PLACEHOLDER values only; `inngest dev` runs the function end to end locally (log attached).",
+      "evidence": "qa/reports/M0-PIPE-01.md log",
+      "automated": false
+    },
+    {
+      "id": "AT-5",
+      "test": "Steps are idempotent (re-running with the same event id produces no duplicate transitions) and every external call site has a timeout constant.",
+      "evidence": "test names",
+      "automated": true
+    },
+    {
+      "id": "AT-6",
+      "test": "No Vercel deploy in this ticket; the deploy step is documented as blocked on the Vercel and Inngest account AUTHs.",
+      "evidence": "README section",
+      "automated": false
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §1 secret hygiene",
+    "SECURITY_CHECKLIST §7 dependency pinning and audit",
+    "REVIEW_RUBRIC E3 idempotent steps"
+  ],
+  "depends_on": [],
+  "references": [
+    "kit START M0 (Inngest loop skeleton)",
+    "plan §4"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

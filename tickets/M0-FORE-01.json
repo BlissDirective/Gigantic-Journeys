@@ -1,0 +1,60 @@
+{
+  "id": "M0-FORE-01",
+  "title": "VM repo bootstrap and secret-hygiene proof",
+  "milestone": "M0",
+  "area": "FORE",
+  "owner": "gj-foreman",
+  "qa": null,
+  "status": "open",
+  "priority": "P0",
+  "size": "S",
+  "summary": "Clone the repo to the VM, create .env.local from .env.example, prove that secrets cannot reach git, install pre-commit, and record tool versions. Evidence is redacted output only.",
+  "deliverables": [
+    "qa/vm-setup/foreman.md"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "~/projects/gigantic-journeys is a clone of the GitHub repo; .env.local exists with PLACEHOLDER values; `git check-ignore -v .env.local` shows the .gitignore rule; `git ls-files | grep -c '^\\.env'` is 1 (.env.example only).",
+      "evidence": "qa/vm-setup/foreman.md with command output",
+      "automated": false
+    },
+    {
+      "id": "AT-2",
+      "test": "`pre-commit install` done; `pre-commit run --all-files` is green (log excerpt).",
+      "evidence": "log excerpt in qa/vm-setup/foreman.md",
+      "automated": false
+    },
+    {
+      "id": "AT-3",
+      "test": "Unity, Node, Python, git, and Supabase CLI versions on the VM are recorded; Node ≥ 22, Python ≥ 3.11.",
+      "evidence": "table in qa/vm-setup/foreman.md",
+      "automated": false
+    },
+    {
+      "id": "AT-4",
+      "test": "No secret value, hostname of a private service, or account email appears in the PR.",
+      "evidence": "secret-scan green; Coordinator check",
+      "automated": true
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §1 secret hygiene",
+    "SECURITY_CHECKLIST §1.2"
+  ],
+  "depends_on": [],
+  "references": [
+    "kit §2 setup task 1"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

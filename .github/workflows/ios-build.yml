@@ -1,0 +1,68 @@
+# iOS build. STUB until a Mac exists.
+#
+# Plan: a Mac mini (AUTH pending in the Foreman's M0 batch) registered as a
+# self-hosted runner with labels [self-hosted, macOS, gj-ios] and the pinned
+# Unity editor version installed through Unity Hub. Until then the only job
+# that runs is "status", on Linux, which reports the stub. Switch the real job
+# on by setting the repository variable IOS_RUNNER_READY=true (Owner action).
+# GitHub-hosted macOS runners are not used: their minutes bill at 10x and that
+# spend has no AUTH.
+#
+# Signing: unsigned archive until Apple certificates land in CI secrets at M5
+# (certificates are CI-only; no Bot ever holds them).
+name: ios-build
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "unity/**"
+      - ".github/workflows/ios-build.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  status:
+    name: ios runner status
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          if [ "${{ vars.IOS_RUNNER_READY }}" = "true" ]; then
+            echo "iOS runner enabled (IOS_RUNNER_READY=true); export-xcode will run on the self-hosted Mac"
+          else
+            echo "::notice::iOS build stubbed: no Mac runner yet. After the Mac mini is registered as a self-hosted runner with labels [self-hosted, macOS, gj-ios] and the pinned Unity version is installed, set repository variable IOS_RUNNER_READY=true."
+          fi
+
+  export-xcode:
+    name: Unity iOS export + xcodebuild (unsigned)
+    needs: status
+    if: vars.IOS_RUNNER_READY == 'true'
+    runs-on: [self-hosted, macOS, gj-ios]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - name: Unity iOS export (Xcode project)
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+        with:
+          projectPath: unity
+          targetPlatform: iOS
+          buildName: GiganticJourneys
+      - name: xcodebuild (unsigned; signing arrives at M5 under AUTH)
+        run: |
+          set -euo pipefail
+          cd build/iOS/GiganticJourneys
+          xcodebuild -project Unity-iPhone.xcodeproj -scheme Unity-iPhone -configuration Release \
+            -sdk iphoneos CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ios-xcode-export
+          path: build/iOS
+          retention-days: 7

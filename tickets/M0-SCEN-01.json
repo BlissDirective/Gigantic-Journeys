@@ -1,0 +1,58 @@
+{
+  "id": "M0-SCEN-01",
+  "title": "Tier 2 research track charter (no compute spend in M0)",
+  "milestone": "M0",
+  "area": "SCEN",
+  "owner": "gj-scenegraph",
+  "qa": null,
+  "status": "open",
+  "priority": "P1",
+  "size": "S",
+  "summary": "Write the charter for the funded Tier 2 research track so its first prototype can start in M1 with an approved monthly budget: goals, SPEC §5 metrics with measurement procedures, the standing-ticket and report formats, and the reading list.",
+  "deliverables": [
+    "research/tier2/README.md"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "research/tier2/README.md restates SPEC §5 metrics R1–R6 with a concrete measurement procedure for each (corpus subset, device, duration, tester count).",
+      "evidence": "file in PR",
+      "automated": false
+    },
+    {
+      "id": "AT-2",
+      "test": "Standing-ticket format (M<n>-RES-01), monthly compute AUTH REQUEST template (spend; H100/A100 hourly; estimated hours), and the checkpoint report template (per-scan compute cost, mobile frame-time table, plausibility results) are included.",
+      "evidence": "file sections",
+      "automated": false
+    },
+    {
+      "id": "AT-3",
+      "test": "Reading list covers Gaussian Grouping lineage, VR-GS, DecoupledGaussian, tet-embedded Gaussians, XPBD, and 2026 scene-level physics papers, each with a one-line relevance note.",
+      "evidence": "file section",
+      "automated": false
+    },
+    {
+      "id": "AT-4",
+      "test": "An M1 prototype plan with an expected cost estimate is stated; no compute is spent in M0 (statement in the file).",
+      "evidence": "file section",
+      "automated": false
+    }
+  ],
+  "depends_on": [],
+  "references": [
+    "SPEC §5",
+    "kit §3.2",
+    "kit §7"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

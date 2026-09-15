@@ -1,0 +1,13 @@
+# Dependency pinning and audit (governance/SECURITY_CHECKLIST.md §7).
+# npm and pip ecosystems are added by the tickets that introduce the first
+# package.json / requirements.txt (M0-PIPE-01, M0-CAPT-01, M0-PLAT-01); adding
+# them earlier makes Dependabot error on missing directories.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    labels: ["dependencies", "ci"]
+    open-pull-requests-limit: 5

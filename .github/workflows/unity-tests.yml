@@ -1,0 +1,99 @@
+# Unity -batchmode EditMode and PlayMode tests via game-ci.
+# Preflight skips (green, with a reason) until both exist:
+#   1. the Unity project at unity/ProjectSettings/ProjectVersion.txt (M0-UNITY-01)
+#   2. the UNITY_LICENSE secret, or UNITY_EMAIL + UNITY_PASSWORD + UNITY_SERIAL (M0-REPO-03)
+# The "unity tests gate" job always reports, so it can be a required check.
+name: unity-tests
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  preflight:
+    name: preflight
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.p.outputs.run }}
+      reason: ${{ steps.p.outputs.reason }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: p
+        env:
+          HAS_LICENSE: ${{ secrets.UNITY_LICENSE != '' || (secrets.UNITY_EMAIL != '' && secrets.UNITY_PASSWORD != '' && secrets.UNITY_SERIAL != '') }}
+        run: |
+          set -euo pipefail
+          if [ ! -f unity/ProjectSettings/ProjectVersion.txt ]; then
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "reason=no Unity project yet (ticket M0-UNITY-01)" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ "$HAS_LICENSE" != "true" ]; then
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "reason=Unity license secrets not configured (ticket M0-REPO-03)" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "run=true" >> "$GITHUB_OUTPUT"
+          echo "reason=project and license present" >> "$GITHUB_OUTPUT"
+      - run: echo "::notice::unity-tests ${{ steps.p.outputs.run == 'true' && 'will run' || format('skipped — {0}', steps.p.outputs.reason) }}"
+
+  tests:
+    name: ${{ matrix.testMode }}
+    needs: preflight
+    if: needs.preflight.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        testMode: [editmode, playmode]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/cache@v4
+        with:
+          path: unity/Library
+          key: Library-tests-${{ hashFiles('unity/Assets/**', 'unity/Packages/**', 'unity/ProjectSettings/**') }}
+          restore-keys: |
+            Library-tests-
+      - uses: game-ci/unity-test-runner@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+        with:
+          projectPath: unity
+          testMode: ${{ matrix.testMode }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          checkName: unity ${{ matrix.testMode }} results
+          customParameters: -nographics
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unity-test-results-${{ matrix.testMode }}
+          path: artifacts
+          if-no-files-found: ignore
+
+  gate:
+    name: unity tests gate
+    needs: [preflight, tests]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          if [ "${{ needs.preflight.outputs.run }}" != "true" ]; then
+            echo "skipped: ${{ needs.preflight.outputs.reason }}"
+            exit 0
+          fi
+          if [ "${{ needs.tests.result }}" != "success" ]; then
+            echo "::error::Unity tests failed (${{ needs.tests.result }})"
+            exit 1
+          fi
+          echo "unity tests: OK"

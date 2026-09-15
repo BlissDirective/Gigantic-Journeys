@@ -1,0 +1,68 @@
+{
+  "id": "M0-REPO-04",
+  "title": "Bot GitHub identity with least-privilege access",
+  "milestone": "M0",
+  "area": "REPO",
+  "owner": "owner",
+  "qa": null,
+  "status": "open",
+  "priority": "P0",
+  "size": "S",
+  "summary": "Create a dedicated GitHub machine user for the Bot VM with a fine-grained personal access token scoped to this repository only, so Bot PRs are distinguishable from the Owner and cannot bypass CODEOWNERS review. AUTH #002 (account) is pending.",
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "A machine user exists (suggested `gj-bots`) and is a collaborator with Write on this repository only.",
+      "evidence": "collaborators screenshot",
+      "automated": false
+    },
+    {
+      "id": "AT-2",
+      "test": "Its fine-grained PAT grants exactly: Contents RW, Pull requests RW, Issues RW, Metadata R; no Administration, Secrets, Actions, Workflows, or Environments permissions; expiry ≤ 90 days.",
+      "evidence": "token permissions screenshot (token value hidden)",
+      "automated": false
+    },
+    {
+      "id": "AT-3",
+      "test": "The token is stored only in the Bot credential store and `~/projects/gigantic-journeys/.env.local` as `GITHUB_TOKEN`; it never appears in the repo.",
+      "evidence": "secret-scan green; Foreman confirmation in qa/vm-setup/foreman.md",
+      "automated": false
+    },
+    {
+      "id": "AT-4",
+      "test": "A test PR opened from the VM shows the machine user as author and cannot approve itself or merge.",
+      "evidence": "PR link",
+      "automated": false
+    },
+    {
+      "id": "AT-5",
+      "test": "Rotation date recorded in governance/AUTHORIZATION_LOG.md next to AUTH #002.",
+      "evidence": "log row",
+      "automated": false
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §8.1",
+    "SECURITY_CHECKLIST §8.6"
+  ],
+  "depends_on": [],
+  "auth_required": [
+    {
+      "type": "account",
+      "what": "GitHub machine user + fine-grained PAT scoped to this repo",
+      "auth_id": "AUTH #002",
+      "status": "pending"
+    }
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

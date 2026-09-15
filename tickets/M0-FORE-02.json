@@ -1,0 +1,59 @@
+{
+  "id": "M0-FORE-02",
+  "title": "File the M0 AUTH batch (accounts, spend, name protection)",
+  "milestone": "M0",
+  "area": "FORE",
+  "owner": "gj-foreman",
+  "qa": null,
+  "status": "open",
+  "priority": "P0",
+  "size": "M",
+  "summary": "Post every M0 authorization request as a GitHub issue using the AUTH REQUEST template, numbered from #003, and append them as Pending rows to the authorization log so the Owner can approve them together.",
+  "deliverables": [
+    "governance/AUTHORIZATION_LOG.md (Pending rows)"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "One auth-request issue per item, exact format, numbered sequentially from #003: Apple Developer Program ($99/yr), Google Play Console ($25 one-time), Unity account and plan, Luma API, Meshy and/or Tripo (per M0-LEGAL-04), Supabase (staging and production projects), Vercel, Inngest, giganticjourneys.com + .app, Mac mini vs cloud Mac, reference Android device or device-farm minutes, App Store Connect record to reserve the name, attorney review of the M0 legal drafts.",
+      "evidence": "issue links",
+      "automated": false
+    },
+    {
+      "id": "AT-2",
+      "test": "The first request includes the USPTO TESS search result for 'Gigantic Journeys' in classes 9 and 41 and a filing recommendation (kit §9).",
+      "evidence": "issue body",
+      "automated": false
+    },
+    {
+      "id": "AT-3",
+      "test": "A summary table (one-time and monthly totals versus the $750–1,300/month budget) is posted as a comment on the first issue and added to the log PR.",
+      "evidence": "comment + log diff",
+      "automated": false
+    },
+    {
+      "id": "AT-4",
+      "test": "PR on branch auth/003-m0-batch appends the Pending rows to governance/AUTHORIZATION_LOG.md without touching the Decisions table.",
+      "evidence": "PR link",
+      "automated": false
+    }
+  ],
+  "depends_on": [],
+  "references": [
+    "kit §2 setup task 5",
+    "kit §9",
+    "kit §10 step 3",
+    "kit §7"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

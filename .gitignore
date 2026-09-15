@@ -1,0 +1,121 @@
+# ---------------------------------------------------------------------------
+# Secrets: never committed. `.env.example` (names only, no values) is the single
+# allowed exception. CI (secret-scan.yml) fails any PR that tracks another .env*.
+# ---------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+*.pfx
+*.p8
+*.jks
+*.keystore
+*.mobileprovision
+service-account*.json
+google-services.json
+GoogleService-Info.plist
+supabase/.temp/
+supabase/.env
+
+# ---------------------------------------------------------------------------
+# Unity (project lives under unity/)
+# ---------------------------------------------------------------------------
+unity/[Ll]ibrary/
+unity/[Tt]emp/
+unity/[Oo]bj/
+unity/[Bb]uild/
+unity/[Bb]uilds/
+unity/[Ll]ogs/
+unity/[Uu]ser[Ss]ettings/
+unity/[Mm]emoryCaptures/
+unity/[Rr]ecordings/
+unity/Assets/AssetStoreTools*
+unity/Assets/Plugins/Editor/JetBrains*
+unity/.vs/
+unity/.idea/
+unity/.gradle/
+unity/.consulo/
+unity/*.csproj
+unity/*.unityproj
+unity/*.sln
+unity/*.suo
+unity/*.tmp
+unity/*.user
+unity/*.userprefs
+unity/*.pidb
+unity/*.booproj
+unity/*.svd
+unity/*.pdb
+unity/*.mdb
+unity/*.opendb
+unity/*.VC.db
+unity/*.pidb.meta
+unity/*.pdb.meta
+unity/*.mdb.meta
+unity/sysinfo.txt
+unity/crashlytics-build.properties
+*.apk
+*.aab
+*.ipa
+*.xcarchive
+*.unitypackage
+
+# ---------------------------------------------------------------------------
+# Node / TypeScript
+# ---------------------------------------------------------------------------
+node_modules/
+dist/
+.next/
+.vercel/
+.inngest/
+*.tsbuildinfo
+npm-debug.log*
+yarn-error.log*
+
+# ---------------------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+
+# ---------------------------------------------------------------------------
+# Raw media and the scan corpus never enter git (privacy + size). Small PNG
+# evidence under qa/ is fine. Test fixtures under any `fixtures/` folder are
+# re-included below and must stay under 10 MB each.
+# ---------------------------------------------------------------------------
+corpus/
+**/corpus/
+*.mp4
+*.mov
+*.MOV
+*.m4v
+*.heic
+*.HEIC
+*.ply
+*.splat
+*.spz
+*.ksplat
+*.glb
+*.fbx
+*.usdz
+*.zip
+!**/fixtures/**
+
+# ---------------------------------------------------------------------------
+# OS, editors, scratch
+# ---------------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+*.log
+tmp/
+.scratch/
