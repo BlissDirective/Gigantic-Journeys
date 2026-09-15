@@ -23,7 +23,7 @@ jobs:
       run: ${{ steps.p.outputs.run }}
       reason: ${{ steps.p.outputs.reason }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - id: p
         env:
           HAS_LICENSE: ${{ secrets.UNITY_LICENSE != '' || (secrets.UNITY_EMAIL != '' && secrets.UNITY_PASSWORD != '' && secrets.UNITY_SERIAL != '') }}
@@ -53,7 +53,7 @@ jobs:
       matrix:
         testMode: [editmode, playmode]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           lfs: true
       - uses: actions/cache@v4
