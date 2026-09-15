@@ -13,7 +13,7 @@ The app holds two sensitive things: biometric imagery (faces, bodies) and photog
 | 1.1 | Secret scanning in CI on every push and PR (gitleaks, `.gitleaks.toml`), plus a weekly full-history scan; findings fail the check. | B |
 | 1.2 | No `.env*` other than `.env.example` (names only) is ever tracked; `.gitignore`, the `repo-hygiene` job, and pre-commit enforce it. | B |
 | 1.3 | Secrets live only in `~/projects/gigantic-journeys/.env.local` on the Bot VM, the Bot credential store, and GitHub Actions secrets. Never in chat, tickets, issues, PR text, screenshots, logs, reports, or fixtures. | B |
-| 1.4 | Production Supabase service key, Apple certificates and provisioning profiles, the Android release keystore, and payment credentials exist only in CI secrets added by the Owner. No Bot holds them. | B |
+| 1.4 | Production Supabase service key, the App Store Connect API key, Apple certificates and provisioning profiles, the Android release keystore, and payment credentials exist only in CI secrets added by the Owner. No Bot holds them; CI deletes its working copy after each run. | B |
 | 1.5 | Leak procedure: any secret that touched git is compromised; rotate within 1 hour; record in `governance/INCIDENTS.md` (created on first use); rewrite history only with Owner approval. | B |
 | 1.6 | GitHub native secret scanning and push protection enabled on the repository (free on a public repo; Owner action M0-REPO-02). | G (M0) |
 

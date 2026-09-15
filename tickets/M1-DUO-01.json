@@ -1,0 +1,64 @@
+{
+  "id": "M1-DUO-01",
+  "title": "iPhone Duo research spike: posture, Split View, Duo Preview, outer display in Unity 6",
+  "milestone": "M1",
+  "area": "DUO",
+  "owner": "gj-gameplay",
+  "qa": null,
+  "status": "open",
+  "priority": "P2",
+  "size": "S",
+  "summary": "Before any Duo feature is designed, establish what iOS 27 exposes to a Unity app on iPhone Duo and how. Deliverable is a short research report with a feasibility call per selected feature; a throwaway prototype is welcome if a Duo or Xcode simulator is available.",
+  "reviewers": [
+    "gj-design",
+    "gj-avatar"
+  ],
+  "deliverables": [
+    "research/duo/README.md"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "research/duo/README.md answers, with citations and retrieval dates: how iOS 27 exposes fold posture and hinge angle to apps (API names, events, latency); whether Unity 6 surfaces them or a native plugin is needed; how Split View across the two displays behaves for a Unity app (resolution changes, safe areas, orientation callbacks); whether and how an app renders to the outer display while folded (Duo Preview behavior); the Apple Pencil input path in Unity for later.",
+      "evidence": "file in PR",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "A feasibility call per selected feature (M3-DUO-01, M3-DUO-02, M2-DUO-01): feasible in Unity / needs a native plugin / not feasible, each with an effort estimate and the risk that could stop it.",
+      "evidence": "file section",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "A throwaway Unity scene that logs posture changes and Split View resizes on the Duo simulator or device, with a short clip.",
+      "evidence": "clip attached to the PR",
+      "automated": false,
+      "level": "suggested"
+    }
+  ],
+  "design": [
+    "Design Skills rule 27 (no full-screen blur in play)"
+  ],
+  "depends_on": [
+    "M0-UNITY-01"
+  ],
+  "references": [
+    "SPEC §12",
+    "design/proposals/iphone-duo-track.md §3, §4"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (Owner selection of iPhone Duo candidates 1–3 and App Store Connect key confirmation, AUTH #003)",
+      "by": "coordinator"
+    }
+  ],
+  "notes": "Runs early in M1 so M2 and M3 design work has the API facts. Does not gate the M1 exit test."
+}

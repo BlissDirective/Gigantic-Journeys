@@ -1,0 +1,74 @@
+{
+  "id": "M2-DUO-01",
+  "title": "Rear-camera avatar capture with Duo Preview (iPhone Duo, optional)",
+  "milestone": "M2",
+  "area": "DUO",
+  "owner": "gj-avatar",
+  "qa": null,
+  "status": "open",
+  "priority": "P2",
+  "size": "M",
+  "summary": "Owner-selected Duo feature (candidate 3). On an iPhone Duo in tent posture, the avatar capture flow uses the 48 MP rear cameras while the outer display shows framing, countdown, and coaching so the player can self-frame; the three face angles and the full-body shot come from the best cameras. Additive: every other iPhone keeps the standard front-camera flow.",
+  "reviewers": [
+    "gj-design",
+    "gj-capture"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "On a Duo in tent posture (or when the player chooses 'use rear camera' on a Duo), the capture flow drives the rear cameras and shows the framing guide, countdown, and coaching on the outer display; the three face angles and the full-body shot are captured at the highest resolution the avatar pipeline accepts.",
+      "evidence": "clip or screenshots when a device is available; otherwise a design walkthrough in the PR",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "On any other iPhone the flow is unchanged; the same consent gate precedes both paths and no photo bytes leave the device before the consent record exists.",
+      "evidence": "code review against SECURITY_CHECKLIST §5.1",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "Rear-camera captures follow the same GPS/EXIF stripping and deletion path as front-camera captures.",
+      "evidence": "code review against SECURITY_CHECKLIST §4, §6.2",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-4",
+      "test": "Side-by-side head generation from rear-camera and front-camera captures of the Owner, likeness judged by three friends.",
+      "evidence": "comparison images in qa/evidence/M2-DUO-01/",
+      "automated": false,
+      "level": "suggested"
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §5.1",
+    "SECURITY_CHECKLIST §4.1",
+    "SECURITY_CHECKLIST §6.2"
+  ],
+  "design": [
+    "DESIGN_SYSTEM §4 (Duo variant clause)",
+    "Design Skills rule 15"
+  ],
+  "depends_on": [
+    "M1-DUO-01"
+  ],
+  "references": [
+    "design/proposals/iphone-duo-track.md §4 #3",
+    "SPEC §3.2, §12"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (Owner selection of iPhone Duo candidates 1–3 and App Store Connect key confirmation, AUTH #003)",
+      "by": "coordinator"
+    }
+  ],
+  "notes": "Also depends on the M2 avatar capture-flow ticket, created at RESUME M2. Go/no-go at the M3 checkpoint; unfinished work ships in v1.1."
+}

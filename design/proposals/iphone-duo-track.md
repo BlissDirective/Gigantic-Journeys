@@ -1,7 +1,7 @@
 # iPhone Duo — optional feature track (proposal)
 
 `design/proposals/iphone-duo-track.md` · v0.1 · 2026-09-15 · Coordinator, for the Owner's selection.
-Status: **proposal**. AUTH #003 opened the track; nothing here is in scope until the Owner picks candidates and the Coordinator tickets them. Everything here is additive: the app must be complete and equal in value on every iPhone (SPEC §11).
+Status: **selected 2026-09-15**. The Owner chose candidates 1, 2, and 3 (stand-mode console layout, unfold as the signature transition, rear-camera avatar capture). Tickets: M1-DUO-01 (research spike), M3-DUO-01, M3-DUO-02, M2-DUO-01, M5-DUO-01 (featuring nomination and launch video). Candidates 4–9 stay in BACKLOG.md. AUTH #003 covers the track. Everything here is additive: the app must be complete and equal in value on every iPhone (SPEC §11).
 
 ## 1. What the device is (Apple and press, retrieved 2026-09-15)
 

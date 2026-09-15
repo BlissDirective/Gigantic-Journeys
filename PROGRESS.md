@@ -1,6 +1,6 @@
 # PROGRESS.md
 
-Living tracker. Updated by the Coordinator on every merge, AUTH decision, and checkpoint. Last update: **2026-09-15** (Coordinator: AUTH #003 applied: iOS-only v1, tests as suggestions, iPhone Duo track). Ticket table regenerated with `python tickets/validate.py --summary`.
+Living tracker. Updated by the Coordinator on every merge, AUTH decision, and checkpoint. Last update: **2026-09-15** (Coordinator: Duo features selected and ticketed; TestFlight lane added). Ticket table regenerated with `python tickets/validate.py --summary`.
 
 ## Milestone
 
@@ -17,15 +17,15 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 
 | Status | Count |
 |---|---|
-| open | 35 |
+| open | 41 |
 | in-progress | 0 |
 | in-review | 0 |
 | changes-requested | 0 |
 | blocked | 2 |
 | merged | 1 |
-| done | 0 |
+| done | 1 |
 | cancelled | 0 |
-| **total** | **38** |
+| **total** | **45** |
 
 ## Blockers
 
@@ -48,7 +48,8 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 - **AUTH #003: v1 launches on the iOS App Store only.** Android stays a compiling build target (on-demand CI) for a v1.1 release; no Play Console, Android device, or Mac mini in v1.
 - **No minimum device model.** Best-possible graphics and capabilities on the newest iPhones; automatic quality tiers keep older iPhones playable (SPEC §6).
 - **Tests are suggestions, never merge gates.** The Owner tests thoroughly on real iPhones; merge gates are the automated CI checks and the security rules (SPEC §11). Acceptance criteria carry `required` or `suggested` levels.
-- **iPhone Duo optional feature track opened.** Proposal with nine candidates at `design/proposals/iphone-duo-track.md`; the Owner selects.
+- **iPhone Duo features selected:** stand-mode console layout, unfold as the signature transition, rear-camera avatar capture (candidates 1–3 of `design/proposals/iphone-duo-track.md`). Tickets M1-DUO-01 (research spike), M2-DUO-01, M3-DUO-01, M3-DUO-02, M5-DUO-01; go/no-go at the M3 checkpoint.
+- The Owner holds an App Store Connect API key; CI has a TestFlight lane ready behind `TESTFLIGHT_ENABLED` (M0-REPO-05, M0-REPO-06).
 - The Foreman's M0 AUTH batch proceeds from #004 once the Foreman exists.
 
 ## Owner actions needed now
@@ -56,8 +57,8 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 1. Create the machine user and PAT (M0-REPO-04), then create the Foreman Bot by pasting the block in `agents/grok/roles/gj-foreman.md`; it will ask you for the token first. Then the eight specialists from the other prompt packs.
 2. Configure branch protection and native secret scanning on main (M0-REPO-02).
 3. Transcribe the four locked design decisions into `design/DESIGN_SYSTEM.md` §1–4 (M0-OWNER-02); then the design-lock session for decisions 5–10 with the Coordinator.
-4. Pick iPhone Duo candidates from `design/proposals/iphone-duo-track.md` (reply with numbers) and decide whether to acquire a Duo development device.
-5. Generate an App Store Connect API key and prepare signing certificates for CI secrets before M1: TestFlight is the only path to your devices without a Mac (the Foreman's batch lists it).
+4. Add the App Store Connect key to CI (M0-REPO-05): secrets `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_P8_BASE64`; variable `APPLE_TEAM_ID`; create the App Store Connect app record (reserves the name) with an internal TestFlight group on automatic distribution. Set `TESTFLIGHT_ENABLED=true` after M0-UNITY-01 merges.
+5. Decide whether to acquire an iPhone Duo for verifying the three selected features (AUTH spend), or accept adaptive design until one is available.
 6. Scan 10 rooms and 5 tabletop builds (M0-OWNER-01) once the corpus intake path exists (M0-CAPT-01).
 
 ## Risk watch
@@ -68,7 +69,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 - Motion-matching spike (M1-MOVE-01) decides the animation stack; a miss sends locomotion to blend trees.
 - iPhone Duo features depend on iOS 27 posture and Split View APIs reaching Unity; the research spike comes first.
 
-## Tickets (M0)
+## Tickets (M0 and the Duo track)
 
 | ID | Title | Owner | Pri | Status | Depends on | Branch / PR |
 |---|---|---|---|---|---|---|
@@ -87,6 +88,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | M0-REPO-02 | Branch protection, merge policy, and native secret scanning on main | owner | P0 | open | M0-REPO-01, M0-REPO-04 | — |
 | M0-REPO-03 | Unity license secrets in GitHub Actions | owner | P0 | blocked | M0-FORE-02 | — |
 | M0-REPO-04 | Bot GitHub identity with least-privilege access | owner | P0 | open | — | — |
+| M0-REPO-05 | App Store Connect API key and signing secrets in GitHub Actions | owner | P0 | open | — | — |
 | M0-SKILL-01 | gj-foreman: research handbook (RESOURCES.md + SKILLS.md) | gj-foreman | P0 | open | — | — |
 | M0-UNITY-01 | Unity 6 URP project scaffold with test assemblies | gj-gameplay | P0 | open | — | — |
 | M0-UNITY-02 | Gaussian splat renderer package integrated with a sample scene | gj-capture | P0 | open | M0-UNITY-01 | — |
@@ -101,6 +103,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | M0-LEGAL-04 | Meshy and Tripo data-retention and training terms, with a vendor recommendation for M2 | gj-avatar | P1 | open | — | — |
 | M0-OWNER-02 | Transcribe the four locked design decisions into DESIGN_SYSTEM.md | owner | P1 | open | — | — |
 | M0-PLAT-01 | Supabase local scaffold and RLS-by-default lint | gj-platform | P1 | open | — | — |
+| M0-REPO-06 | TestFlight lane in ios-build.yml (cloud-managed signing, fastlane pilot) | coordinator | P1 | done | M0-REPO-05 | — |
 | M0-SCEN-01 | Tier 2 research track charter (no compute spend in M0) | gj-scenegraph | P1 | open | — | — |
 | M0-SKILL-02 | gj-capture: research handbook (RESOURCES.md + SKILLS.md) | gj-capture | P1 | open | — | — |
 | M0-SKILL-03 | gj-scenegraph: research handbook (RESOURCES.md + SKILLS.md) | gj-scenegraph | P1 | open | — | — |
@@ -110,6 +113,11 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | M0-SKILL-07 | gj-design: research handbook (RESOURCES.md + SKILLS.md) | gj-design | P1 | open | — | — |
 | M0-SKILL-08 | gj-qa-release: research handbook (RESOURCES.md + SKILLS.md) | gj-qa-release | P1 | open | — | — |
 | M0-SKILL-09 | gj-data: research handbook (RESOURCES.md + SKILLS.md) | gj-data | P1 | open | — | — |
+| M1-DUO-01 | iPhone Duo research spike: posture, Split View, Duo Preview, outer display in Unity 6 | gj-gameplay | P2 | open | M0-UNITY-01 | — |
+| M2-DUO-01 | Rear-camera avatar capture with Duo Preview (iPhone Duo, optional) | gj-avatar | P2 | open | M1-DUO-01 | — |
+| M3-DUO-01 | Stand-mode console layout (iPhone Duo, optional) | gj-gameplay | P2 | open | M1-DUO-01, M0-OWNER-03 | — |
+| M3-DUO-02 | Unfold triggers the signature transition (iPhone Duo, optional) | gj-gameplay | P2 | open | M1-DUO-01, M0-OWNER-02 | — |
+| M5-DUO-01 | App Store featuring nomination and iPhone Duo launch video | gj-qa-release | P2 | open | M3-DUO-01, M3-DUO-02 | — |
 
 ## Merge log
 

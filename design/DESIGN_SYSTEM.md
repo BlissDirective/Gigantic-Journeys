@@ -1,6 +1,6 @@
 # Gigantic Journeys — Design System
 
-`design/DESIGN_SYSTEM.md` · v0.2 · 2026-09-15 · Status: **LOCKED except by AUTH REQUEST (design-change)**
+`design/DESIGN_SYSTEM.md` · v0.3 · 2026-09-15 · Status: **LOCKED except by AUTH REQUEST (design-change)**
 
 The Owner locks; `gj-design` implements (tokens in `design/tokens/`, Unity UI Toolkit in `unity/Assets/UI`); every UI and gameplay PR is reviewed against this file (REVIEW_RUBRIC §G). Binding constraints come from `Gigantic-Journey-Design-Skills.md` §3 (v1.1), which this file specializes and never contradicts. CI blocks PRs that edit this file without an `APPROVED #n`; appending under §12 Field notes is allowed.
 
@@ -38,6 +38,7 @@ Binding constraints (rules 7, 8, 28; SPEC §3.11):
 - The one hero animation; it has its own budget. Other UI motion is 150–300 ms, screen transitions 400–600 ms.
 - A Reduce Motion equivalent (cross-fade) is required.
 - It is the second beat of the store preview and must make the scale relationship obvious.
+- Optional iPhone Duo variant (AUTH #003, ticket M3-DUO-02): the physical unfold triggers the same transition, spanning the outer-to-inner display change; one implementation, two triggers; the Reduce Motion variant applies to both.
 
 > **Locked decision text: PENDING TRANSCRIPTION by the Owner (M0-OWNER-02).** Paste: what the camera does, duration, easing, sound, the HUD's state during it, the Reduce Motion variant.
 
@@ -47,6 +48,7 @@ Binding constraints (rules 15, 16, 20; SPEC §3.2):
 - Realistic proportions of about 7 heads, stylized grounded materials, rim light plus contact shadow.
 - Likeness confirmation: the head turning beside the source photo, "Is this you?", Retake or Tweak (skin tone, hair, glasses, build); no slider editor.
 - Default wardrobe roughly matches the photo; the store appears only after the first win.
+- Optional iPhone Duo variant (AUTH #003, ticket M2-DUO-01): tent-posture capture with the rear cameras while the outer display shows framing, countdown, and coaching; the same consent gate and deletion path as the standard flow.
 
 > **Locked decision text: PENDING TRANSCRIPTION by the Owner (M0-OWNER-02).** Paste: the default wardrobe set (names, count), material treatment references, rim and contact values, the confirmation screen layout.
 
@@ -92,6 +94,7 @@ Binding constraints: assist options (Bible §10 assist block), colorblind palett
 |---|---|---|---|
 | 0.1 | 2026-09-15 | File created; decisions 1–4 recorded as locked with their binding constraints, text pending transcription; 5–10 open | AUTH #000 |
 | 0.2 | 2026-09-15 | §5 gains the optional iPhone Duo layout variants | AUTH #003 |
+| 0.3 | 2026-09-15 | §3 and §4 gain the optional iPhone Duo variants for the Owner's selected features | AUTH #003 (Owner selection) |
 
 ## 12. Field notes
 

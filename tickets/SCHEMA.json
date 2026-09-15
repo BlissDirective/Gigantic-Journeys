@@ -46,7 +46,8 @@
         "SEC",
         "FORE",
         "OWNER",
-        "RES"
+        "RES",
+        "DUO"
       ]
     },
     "owner": {

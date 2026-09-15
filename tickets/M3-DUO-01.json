@@ -1,0 +1,81 @@
+{
+  "id": "M3-DUO-01",
+  "title": "Stand-mode console layout (iPhone Duo, optional)",
+  "milestone": "M3",
+  "area": "DUO",
+  "owner": "gj-gameplay",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P2",
+  "size": "M",
+  "summary": "Owner-selected Duo feature (candidate 1). Folded at about 90 degrees, the upper display half is 100 % photograph with no HUD overlay at all; the lower half holds the floating stick, jump, the contextual action, the diorama minimap with summit beacon, route lines, and vista markers, and the timer. Reads like a handheld console. Additive: non-foldable iPhones keep the standard two-thumb layout.",
+  "reviewers": [
+    "gj-design"
+  ],
+  "scope_out": [
+    "tent-mode play",
+    "iPad layouts",
+    "Split View ghost races (candidate 5, not selected)"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "gj-design's mockup of the console layout is reviewed against DESIGN_SYSTEM §5 (Duo variant clause) and Design Skills rules 1, 18, and 21 before implementation starts.",
+      "evidence": "mockup in design/proposals/mockups/duo-stand/ and the review comment",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "When the device reports the stand posture, the play view moves to the upper half with no HUD overlay; the lower half holds stick, jump, contextual action, minimap, and timer; controls at least 56 pt; layout built from design/tokens.",
+      "evidence": "clip or screenshots when a device or simulator is available; otherwise a design walkthrough in the PR",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "Leaving the stand posture returns to the standard layout within one frame with an inertialized camera; no gameplay state is lost.",
+      "evidence": "code review; clip suggested",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-4",
+      "test": "On non-foldable iPhones nothing changes (an EditMode test asserting the layout selector defaults to standard is suggested).",
+      "evidence": "code review",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-5",
+      "test": "Frame time in stand mode stays within the SPEC §6 targets on a Duo.",
+      "evidence": "debug overlay report",
+      "automated": false,
+      "level": "suggested"
+    }
+  ],
+  "design": [
+    "DESIGN_SYSTEM §5 Duo variant",
+    "Design Skills rules 1, 18, 21"
+  ],
+  "depends_on": [
+    "M1-DUO-01",
+    "M0-OWNER-03"
+  ],
+  "references": [
+    "design/proposals/iphone-duo-track.md §4 #1",
+    "SPEC §12"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-15",
+  "updated": "2026-09-15",
+  "history": [
+    {
+      "date": "2026-09-15",
+      "event": "created by the Coordinator (Owner selection of iPhone Duo candidates 1–3 and App Store Connect key confirmation, AUTH #003)",
+      "by": "coordinator"
+    }
+  ],
+  "notes": "Go/no-go at the M3 checkpoint; unfinished work ships in v1.1."
+}
