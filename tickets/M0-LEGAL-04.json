@@ -18,19 +18,22 @@
       "id": "AT-1",
       "test": "legal/vendors/meshy.md and legal/vendors/tripo.md record retention, deletion path, training-by-default and opt-out, DPA availability, region, with quotes, links, retrieval date.",
       "evidence": "files in PR",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-2",
       "test": "A comparison table (realistic-mode quality claims, price per generation, API limits, deletion guarantees, biometric-specific terms) ends with a recommendation and the draft AUTH REQUEST text for the Foreman's batch.",
       "evidence": "file section",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-3",
       "test": "Any vendor that trains on customer images by default without an opt-out is marked 'do not use for user data'.",
       "evidence": "file line",
-      "automated": false
+      "automated": false,
+      "level": "required"
     }
   ],
   "security": [
@@ -49,6 +52,11 @@
     {
       "date": "2026-09-15",
       "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
     }
   ]

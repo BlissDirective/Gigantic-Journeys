@@ -17,13 +17,15 @@
       "id": "AT-1",
       "test": "legal/vendors/luma.md records: retention period for inputs and outputs, deletion API or request path, whether customer data trains models by default and how to opt out, DPA availability, processing region, with quotes, links, and retrieval date.",
       "evidence": "file in PR",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-2",
       "test": "A red-flags list and a recommendation (use / use with opt-out / do not use) are stated; open questions are drafted as an email for the Owner to send.",
       "evidence": "file sections",
-      "automated": false
+      "automated": false,
+      "level": "required"
     }
   ],
   "security": [
@@ -42,6 +44,11 @@
     {
       "date": "2026-09-15",
       "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
     }
   ]

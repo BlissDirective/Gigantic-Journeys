@@ -17,19 +17,22 @@
       "id": "AT-1",
       "test": "qa/VISUAL_QA.md defines: per-PR-type checklists (gameplay, UI, capture), evidence naming (qa/evidence/<ticket>/<nn>-<what>.png, ≤ 2 MB), clip rules (≤ 30 s, attached to the PR, never committed), the reference-device Profiler screenshot requirement, the Design Skills §4 items QA re-checks, and the DEFECT issue flow with severities S1–S4.",
       "evidence": "file in PR",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-2",
       "test": "The procedure is applied on M0-UNITY-04 and the evidence follows the naming rules.",
       "evidence": "M0-UNITY-04 PR link",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-3",
       "test": "A privacy line is part of every evidence set: no faces, addresses, documents, or screens with personal data.",
       "evidence": "checklist item",
-      "automated": false
+      "automated": false,
+      "level": "required"
     }
   ],
   "design": [
@@ -48,6 +51,11 @@
     {
       "date": "2026-09-15",
       "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
     }
   ]

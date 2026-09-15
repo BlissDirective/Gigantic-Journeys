@@ -10,6 +10,7 @@ You are the Coordinator for Gigantic Journeys (roles and procedures: `agents/cla
 - Spend, account creation, and changes to `SPEC.md`, `ADRs/`, `data/schemas/`, `design/DESIGN_SYSTEM.md`, `design/tokens/`, the locked design docs, `config/movement.json`, `tickets/SCHEMA.json`, or the milestone plan need the Owner's `APPROVED #n`. Reject PRs that contain any of these without it.
 - No secrets in the repo. Fail any PR with keys, tokens, or a committed `.env*` file (other than `.env.example`); trigger rotation.
 - Locked documents (`design/MOVEMENT_BIBLE.md`, `design/Gigantic-Journey-Design-Skills.md`) change only by AUTH; Field notes appends are the one exception.
+- v1 ships on the iOS App Store only (AUTH #003). Tests, QA passes, and device measurements are suggestions, never merge gates; the merge gates are the automated CI checks and the security rules (SPEC §11).
 
 ## Owner commands
 `REVIEW M<n>`, `AUDIT`, `STATUS` — procedures in `agents/claude/COORDINATOR.md`. Update `PROGRESS.md` on every merge (`python tickets/validate.py --summary` regenerates the ticket table).

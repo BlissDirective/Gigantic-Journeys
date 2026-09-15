@@ -14,31 +14,36 @@
       "id": "AT-1",
       "test": "main requires a pull request; direct pushes are rejected for everyone including administrators ('Do not allow bypassing the above settings').",
       "evidence": "settings screenshot in qa/vm-setup/repo-settings.md",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-2",
-      "test": "Required status checks: `gitleaks`, `repo hygiene (env files, keys, raw media, size)`, `lint gate`, `tickets validate`, `movement.json single source of truth`, `protected paths need APPROVED #n`, `unity tests gate`, `android build gate`.",
+      "test": "Required status checks: `gitleaks`, `repo hygiene (env files, keys, raw media, size)`, `lint gate`, `tickets validate`, `movement.json single source of truth`, `protected paths need APPROVED #n`, `unity tests gate`.",
       "evidence": "settings screenshot",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-3",
       "test": "Require review from Code Owners (1 approval); dismiss stale approvals on new pushes; no force pushes; no deletions.",
       "evidence": "settings screenshot",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-4",
       "test": "Secret scanning and push protection are enabled (free on a public repository).",
       "evidence": "settings screenshot",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-5",
       "test": "A push to main by the Bot machine user is rejected (evidence: the rejected push output, redacted).",
       "evidence": "qa/vm-setup/foreman.md excerpt",
-      "automated": false
+      "automated": false,
+      "level": "required"
     }
   ],
   "security": [
@@ -60,6 +65,11 @@
     {
       "date": "2026-09-15",
       "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
     }
   ]

@@ -1,6 +1,12 @@
 # Working with this repository: rules for Grok Bots
 
-`agents/grok/README.md` · v1.0 · 2026-09-15 · Every Bot reads this at every session start. The Foreman enforces it; the Coordinator rejects PRs that break it.
+`agents/grok/README.md` · v1.1 · 2026-09-15 · Every Bot reads this at every session start. The Foreman enforces it; the Coordinator rejects PRs that break it.
+
+## 0. Platform and testing policy (AUTH #003)
+
+- v1 ships on the iOS App Store only. Android stays a compiling build target, not a release target; no Android-specific work.
+- No minimum device model: build for the best graphics and capabilities on the newest iPhones, with automatic quality tiers for older ones.
+- Tests, QA passes, performance measurements, and device checks are suggestions that never block a merge; the Owner tests on real iPhones throughout. The merge gates are the automated CI checks and the security rules. Acceptance criteria carry `required` or `suggested` levels (`SPEC.md` §11).
 
 ## 1. Who is who
 
@@ -38,7 +44,7 @@
 
 - Use `.github/PULL_REQUEST_TEMPLATE.md` in full: ticket, what changed, acceptance-test table with evidence, visual evidence, security considerations, authorization, performance, QA.
 - Evidence is an artifact in the PR or CI: a test name, a CI job link, a PNG under `qa/evidence/<ticket>/`, a report under `qa/reports/` or `data/reports/`. A sentence is not evidence.
-- Gameplay, UI, and capture PRs: request the `gj-qa-release` visual pass and attach the reference-device Profiler screenshot (Design Skills §4).
+- Gameplay, UI, and capture PRs: a `gj-qa-release` visual pass and a performance readout from one of the Owner's iPhones are welcome when available; they are suggestions, not gates (AUTH #003).
 - A PR is rejected outright when it: contains a secret or `.env*` file; touches a protected path without `APPROVED #n` (the CI `auth-gate` fails it first); adds spend or an account; edits its own acceptance tests; ignores a previous review; contains raw media.
 - Address every review comment or reply why not, then re-request review. Do not open a second PR for the same ticket.
 - Changes to a path another Bot owns need that Bot's review first (`reviewers` in the ticket).
@@ -95,4 +101,4 @@ Before any ticket: research the top 100 resources for your role (kit §3), save 
 
 ## 10. What the Coordinator checks (so you can check first)
 
-Ticket acceptance tests with evidence → `SPEC.md` conformance → REVIEW_RUBRIC rows A–H → SECURITY_CHECKLIST rows → CI green (secret-scan, lint, governance, unity-tests, android-build) → QA evidence → AUTH references. If any would fail, fix it before opening the PR.
+Required-level acceptance criteria with evidence → `SPEC.md` conformance → REVIEW_RUBRIC rows A–H → SECURITY_CHECKLIST rows → CI green (secret-scan, lint, governance, unity-tests) → suggested-level evidence when offered → AUTH references. If any would fail, fix it before opening the PR.

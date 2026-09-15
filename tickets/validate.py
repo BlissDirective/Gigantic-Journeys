@@ -93,6 +93,9 @@ def check(schema: dict, tickets: dict[str, dict], errors: list[str]) -> None:
         at_ids = [a.get("id") for a in t.get("acceptance_tests", []) if isinstance(a, dict)]
         if len(at_ids) != len(set(at_ids)):
             errors.append(f"{name}: duplicate acceptance test ids")
+        for a in t.get("acceptance_tests", []):
+            if isinstance(a, dict) and not a.get("level"):
+                errors.append(f"{name}: {a.get('id')} needs a level (required | suggested)")
 
     graph = {
         t["id"]: t.get("depends_on", []) for t in tickets.values() if isinstance(t.get("id"), str)

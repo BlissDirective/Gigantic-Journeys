@@ -14,31 +14,36 @@
       "id": "AT-1",
       "test": "A machine user exists (suggested `gj-bots`) and is a collaborator with Write on this repository only.",
       "evidence": "collaborators screenshot",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-2",
       "test": "Its fine-grained PAT grants exactly: Contents RW, Pull requests RW, Issues RW, Metadata R; no Administration, Secrets, Actions, Workflows, or Environments permissions; expiry ≤ 90 days.",
       "evidence": "token permissions screenshot (token value hidden)",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-3",
       "test": "The token is stored only in the Bot credential store and `~/projects/gigantic-journeys/.env.local` as `GITHUB_TOKEN`; it never appears in the repo.",
       "evidence": "secret-scan green; Foreman confirmation in qa/vm-setup/foreman.md",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-4",
       "test": "A test PR opened from the VM shows the machine user as author and cannot approve itself or merge.",
       "evidence": "PR link",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-5",
       "test": "Rotation date recorded in governance/AUTHORIZATION_LOG.md next to AUTH #002.",
       "evidence": "log row",
-      "automated": false
+      "automated": false,
+      "level": "required"
     }
   ],
   "security": [
@@ -67,6 +72,11 @@
     {
       "date": "2026-09-15",
       "event": "AUTH #002 approved by the Owner; Owner creating the machine user and PAT",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
     }
   ]

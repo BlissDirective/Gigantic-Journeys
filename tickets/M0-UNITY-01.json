@@ -8,7 +8,7 @@
   "status": "open",
   "priority": "P0",
   "size": "M",
-  "summary": "Create the Unity 6 project under unity/ with URP, Android and iOS targets, the bundle id, pinned packages, and EditMode/PlayMode test assemblies with one smoke test each, so CI can run -batchmode tests and builds.",
+  "summary": "Create the Unity 6 project under unity/ with URP, the iOS target (Android stays buildable but is not shipped in v1), the bundle id, pinned packages, and EditMode/PlayMode test assemblies with one smoke test each, so CI can run -batchmode tests and builds.",
   "deliverables": [
     "unity/",
     "unity/README.md"
@@ -18,37 +18,43 @@
       "id": "AT-1",
       "test": "Unity 6000.x LTS version pinned in unity/ProjectSettings/ProjectVersion.txt and stated in unity/README.md; the same version is what the QA VM (M0-QA-01) installs.",
       "evidence": "files in PR",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-2",
-      "test": "URP configured with a pipeline asset assigned per quality tier for Android and iOS; Vulkan/Metal graphics APIs; IL2CPP; bundle id com.sparkforgelabs.giganticjourneys.",
+      "test": "URP configured with pipeline assets per quality tier for iOS (Metal, IL2CPP); bundle id com.sparkforgelabs.giganticjourneys; the Android build target stays available but off by default (v1 ships iOS only, AUTH #003).",
       "evidence": "ProjectSettings diff + editor screenshot",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-3",
       "test": "Packages/manifest.json and Packages/packages-lock.json committed; every package pinned to an exact version; Input System, Animation Rigging, UI Toolkit, Test Framework present.",
       "evidence": "files in PR",
-      "automated": true
+      "automated": true,
+      "level": "required"
     },
     {
       "id": "AT-4",
       "test": "EditMode and PlayMode test assemblies exist with one passing smoke test each; `Unity -batchmode -nographics -runTests -testPlatform EditMode` and `PlayMode` pass locally (log attached) and in CI once M0-REPO-03 lands.",
       "evidence": "test logs in qa/reports/M0-UNITY-01/, CI links",
-      "automated": true
+      "automated": true,
+      "level": "suggested"
     },
     {
       "id": "AT-5",
       "test": "Project opens with zero console errors on the QA VM; `git status` is clean after opening (Library/Temp ignored).",
       "evidence": "gj-qa-release screenshot in qa/evidence/M0-UNITY-01/",
-      "automated": false
+      "automated": false,
+      "level": "suggested"
     },
     {
       "id": "AT-6",
       "test": "lint job (CSharpier) passes on unity/Assets.",
       "evidence": "CI link",
-      "automated": true
+      "automated": true,
+      "level": "required"
     }
   ],
   "security": [
@@ -68,6 +74,11 @@
     {
       "date": "2026-09-15",
       "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
     }
   ]

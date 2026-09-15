@@ -21,25 +21,29 @@
       "id": "AT-1",
       "test": "legal/CONSENT_BIOMETRIC.md contains the one-sentence consent, the learn-more sheet (what is collected, purpose, vendor processing, retention and deletion, training opt-in as a separate toggle, withdrawal path, minors excluded by the 13+ gate), and the button copy.",
       "evidence": "file in PR",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-2",
       "test": "The consent record fields are specified: user_id, policy_version, timestamp, locale, sha256 of the exact consent text shown, stated retention; the record is created before any photo bytes leave the device.",
       "evidence": "file section",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-3",
       "test": "Illinois BIPA, Texas CUBI, and Washington My Health My Data requirements are each addressed with a short mapping table; open legal questions are listed for counsel.",
       "evidence": "file section",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-4",
       "test": "Copy follows the voice guide constraints (short, warm, verbs first, no jargon) and is marked DRAFT — NOT LEGAL ADVICE pending attorney review.",
       "evidence": "file header",
-      "automated": false
+      "automated": false,
+      "level": "required"
     }
   ],
   "security": [
@@ -59,6 +63,11 @@
     {
       "date": "2026-09-15",
       "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
     }
   ]

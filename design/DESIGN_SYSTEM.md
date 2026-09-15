@@ -1,6 +1,6 @@
 # Gigantic Journeys — Design System
 
-`design/DESIGN_SYSTEM.md` · v0.1 · 2026-09-15 · Status: **LOCKED except by AUTH REQUEST (design-change)**
+`design/DESIGN_SYSTEM.md` · v0.2 · 2026-09-15 · Status: **LOCKED except by AUTH REQUEST (design-change)**
 
 The Owner locks; `gj-design` implements (tokens in `design/tokens/`, Unity UI Toolkit in `unity/Assets/UI`); every UI and gameplay PR is reviewed against this file (REVIEW_RUBRIC §G). Binding constraints come from `Gigantic-Journey-Design-Skills.md` §3 (v1.1), which this file specializes and never contradicts. CI blocks PRs that edit this file without an `APPROVED #n`; appending under §12 Field notes is allowed.
 
@@ -52,7 +52,7 @@ Binding constraints (rules 15, 16, 20; SPEC §3.2):
 
 ## 5. Play layout — OPEN (proposal M0-DSGN-01; lock M0-OWNER-03)
 
-Binding constraints: two-thumb landscape; floating stick anywhere in the left third; jump is the largest right-thumb target; one contextual action button that appears only when relevant; controls repositionable and resizable; play controls ≥ 56; HUD in the top 8 %; controller support from day one; camera per Bible §8.
+Binding constraints: two-thumb landscape; floating stick anywhere in the left third; jump is the largest right-thumb target; one contextual action button that appears only when relevant; controls repositionable and resizable; play controls ≥ 56; HUD in the top 8 %; controller support from day one; camera per Bible §8; optional iPhone Duo variants: the 7.6-inch near-square inner display and a stand-mode layout with the photograph on the upper half and every control on the lower half (`design/proposals/iphone-duo-track.md`, AUTH #003).
 
 > Proposal slot.
 
@@ -91,6 +91,7 @@ Binding constraints: assist options (Bible §10 assist block), colorblind palett
 | Version | Date | Change | Authorization |
 |---|---|---|---|
 | 0.1 | 2026-09-15 | File created; decisions 1–4 recorded as locked with their binding constraints, text pending transcription; 5–10 open | AUTH #000 |
+| 0.2 | 2026-09-15 | §5 gains the optional iPhone Duo layout variants | AUTH #003 |
 
 ## 12. Field notes
 

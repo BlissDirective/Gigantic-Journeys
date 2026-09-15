@@ -18,31 +18,36 @@
       "id": "AT-1",
       "test": "projects/skills/design/RESOURCES.md lists at least 100 resources, each with title, URL, type (doc / paper / talk / repo / postmortem / vendor guide), and a one-line 'why it matters for GJ', grouped by the role's research focus.",
       "evidence": "file in PR; Coordinator counts entries",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-2",
       "test": "projects/skills/design/SKILLS.md covers: token-first design system, contrast over photo backgrounds, glass + flat surfaces, capture coaching UI, Unity UI Toolkit implementation, store asset specs; must cite Design Skills §3 rules; plus mistakes to avoid and the checklists you run before opening a PR.",
       "evidence": "file in PR",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-3",
       "test": "SKILLS.md cites the repo rules it must follow (agents/grok/README.md, REVIEW_RUBRIC.md, SECURITY_CHECKLIST.md) and, where the role touches them, the Movement Bible and Design Skills sections by number.",
       "evidence": "file in PR",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-4",
       "test": "SKILLS.md ends with a `## Session log` section (date, what was learned, what changed) that later sessions append to.",
       "evidence": "file in PR",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-5",
       "test": "Branch is `setup/design-skills`, the PR uses the template, secret-scan and lint are green, and no vendor keys or account details appear.",
       "evidence": "PR + CI links",
-      "automated": true
+      "automated": true,
+      "level": "required"
     }
   ],
   "depends_on": [],
@@ -58,6 +63,11 @@
     {
       "date": "2026-09-15",
       "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
     }
   ]

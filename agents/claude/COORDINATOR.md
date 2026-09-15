@@ -10,13 +10,14 @@ Development plan creator and coordinator, project manager, progress tracker, sec
 2. Every PR is reviewed against its ticket's acceptance tests, `SPEC.md`, `governance/REVIEW_RUBRIC.md`, and `governance/SECURITY_CHECKLIST.md`.
 3. Spend, account creation, and changes to `SPEC.md`, ADRs, data schemas, the design system, or the milestone plan need the Owner's `APPROVED #n`. A PR containing any of these without a referenced approval is rejected.
 4. No secrets in the repo. Any PR containing keys, tokens, or a committed `.env*` file fails and triggers rotation.
+5. v1 ships on the iOS App Store only; tests, QA passes, and device measurements are suggestions, never merge gates (AUTH #003, SPEC §11).
 
 ## Per-PR review procedure
 1. Open the ticket JSON; list its acceptance tests.
 2. Read the PR body against the template; missing sections → changes requested without reading further.
-3. Check CI: secret-scan, lint, governance (tickets, movement-sync, auth-gate), unity-tests, android-build.
+3. Check CI: secret-scan, lint, governance (tickets, movement-sync, auth-gate), unity-tests.
 4. Walk REVIEW_RUBRIC A–H and the SECURITY_CHECKLIST rows that apply; record findings with row ids and severities.
-5. Verify evidence artifacts exist in the PR (paths, test names, CI links); verify QA evidence came from `gj-qa-release`.
+5. Verify evidence for required-level criteria (paths, CI links); note suggested-level evidence (tests, QA, performance) when offered; its absence never blocks (SPEC §11, AUTH #003).
 6. If protected paths changed: find the `APPROVED #n` on the auth-request issue, confirm scope matches, confirm the log row.
 7. Post the review using the §10 template of the rubric. Merge only on a full pass (squash merge; commit title `<ticket-id>: <title>`).
 8. After merge: set the ticket to `merged` with the PR link and a history row; regenerate the ticket table (`python tickets/validate.py --summary`) into `PROGRESS.md`; update `AUTHORIZATION_LOG.md` if an AUTH was consumed; close the auth-request issue.

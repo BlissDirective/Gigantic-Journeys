@@ -19,25 +19,29 @@
       "id": "AT-1",
       "test": "design/tokens/tokens.json follows the DTCG format with groups: color (roles, light and dark scrim), typography (≤ 5 steps, tabular HUD numerals), spacing (8 pt grid with 4 pt half step), radius, elevation, motion (150–300 ms UI, 400–600 ms transitions, the shrink transition's own budget).",
       "evidence": "file in PR",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-2",
-      "test": "design/tokens/export_uss.py generates unity/Assets/UI/Tokens.uss deterministically; a test asserts the output matches the committed file.",
+      "test": "design/tokens/export_uss.py generates unity/Assets/UI/Tokens.uss deterministically (a test asserting the output matches the committed file is suggested).",
       "evidence": "test names",
-      "automated": true
+      "automated": true,
+      "level": "required"
     },
     {
       "id": "AT-3",
       "test": "Contrast test in CI: every text token on the three scans' scrims meets 4.5:1 (icons 3:1).",
       "evidence": "test names",
-      "automated": true
+      "automated": true,
+      "level": "suggested"
     },
     {
       "id": "AT-4",
       "test": "Token values match DESIGN_SYSTEM.md decisions 1–4 verbatim; the PR cites the transcription commit.",
       "evidence": "PR body",
-      "automated": false
+      "automated": false,
+      "level": "required"
     }
   ],
   "design": [
@@ -61,6 +65,11 @@
     {
       "date": "2026-09-15",
       "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
     }
   ]

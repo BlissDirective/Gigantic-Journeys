@@ -14,13 +14,15 @@
       "id": "AT-1",
       "test": "A table (Bot, PR link, merged date, gaps) is posted as a PR comment on the checkpoint PR or a governance PR; every row is merged or has a BLOCKER issue.",
       "evidence": "table link",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-2",
       "test": "Any handbook missing a required section (per its ticket) has a follow-up commit on its branch before M0 closes.",
       "evidence": "PR links",
-      "automated": false
+      "automated": false,
+      "level": "required"
     }
   ],
   "depends_on": [
@@ -44,6 +46,11 @@
     {
       "date": "2026-09-15",
       "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
     }
   ]

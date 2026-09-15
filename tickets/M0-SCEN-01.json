@@ -17,25 +17,29 @@
       "id": "AT-1",
       "test": "research/tier2/README.md restates SPEC §5 metrics R1–R6 with a concrete measurement procedure for each (corpus subset, device, duration, tester count).",
       "evidence": "file in PR",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-2",
       "test": "Standing-ticket format (M<n>-RES-01), monthly compute AUTH REQUEST template (spend; H100/A100 hourly; estimated hours), and the checkpoint report template (per-scan compute cost, mobile frame-time table, plausibility results) are included.",
       "evidence": "file sections",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-3",
       "test": "Reading list covers Gaussian Grouping lineage, VR-GS, DecoupledGaussian, tet-embedded Gaussians, XPBD, and 2026 scene-level physics papers, each with a one-line relevance note.",
       "evidence": "file section",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-4",
       "test": "An M1 prototype plan with an expected cost estimate is stated; no compute is spent in M0 (statement in the file).",
       "evidence": "file section",
-      "automated": false
+      "automated": false,
+      "level": "required"
     }
   ],
   "depends_on": [],
@@ -52,6 +56,11 @@
     {
       "date": "2026-09-15",
       "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
     }
   ]

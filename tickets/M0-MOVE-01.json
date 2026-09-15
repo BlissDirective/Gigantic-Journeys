@@ -23,31 +23,36 @@
       "id": "AT-1",
       "test": "config/movement.schema.json (JSON Schema 2020-12) validates config/movement.json; every key in Bible §10 is required; additionalProperties is false.",
       "evidence": "schema file + governance job green",
-      "automated": true
+      "automated": true,
+      "level": "required"
     },
     {
       "id": "AT-2",
       "test": "unity/Assets/StreamingAssets/movement.json is byte-identical to config/movement.json; a documented copy step exists (script or editor menu) and CI movement-sync passes.",
       "evidence": "governance run link",
-      "automated": true
+      "automated": true,
+      "level": "required"
     },
     {
       "id": "AT-3",
-      "test": "services/traversal/movement.py loads the file into typed dataclasses, exposes `with_margin(value)` = 0.85 × value, and raises on missing or unknown keys; pytest covers load, margin, and error cases.",
+      "test": "services/traversal/movement.py loads the file into typed dataclasses, exposes `with_margin(value)` = 0.85 × value, and raises on missing or unknown keys (pytest coverage of load, margin, and error cases is suggested).",
       "evidence": "test names",
-      "automated": true
+      "automated": true,
+      "level": "required"
     },
     {
       "id": "AT-4",
       "test": "A test asserts the C# and Python loaders agree on every constant (shared fixture of expected values).",
       "evidence": "test names",
-      "automated": true
+      "automated": true,
+      "level": "suggested"
     },
     {
       "id": "AT-5",
       "test": "services/traversal/requirements.txt pins exact versions; pip-audit clean.",
       "evidence": "lint run link",
-      "automated": true
+      "automated": true,
+      "level": "required"
     }
   ],
   "security": [
@@ -66,6 +71,11 @@
     {
       "date": "2026-09-15",
       "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
     }
   ]

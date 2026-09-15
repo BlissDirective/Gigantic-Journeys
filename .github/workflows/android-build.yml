@@ -1,18 +1,11 @@
 # Headless Android build (debug APK) via game-ci/unity-builder.
-# Runs on pushes to main, on PRs that touch the Unity project or movement
-# constants, and on demand. Preflight skips (green, with a reason) until the
+# v1 ships on the iOS App Store only (AUTH #003). This job runs ON DEMAND only,
+# as a portability check that keeps the Android target compiling for v1.1. Preflight skips (green, with a reason) until the
 # Unity project and license secrets exist. Release signing (keystore secrets)
 # is added at M5 under its own AUTH; until then the build is debug-signed.
 name: android-build
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    paths:
-      - "unity/**"
-      - "config/movement.json"
-      - ".github/workflows/android-build.yml"
   workflow_dispatch:
 
 permissions:

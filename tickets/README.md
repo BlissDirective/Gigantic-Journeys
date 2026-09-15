@@ -22,7 +22,7 @@ Status flow: `open → in-progress → in-review → (changes-requested → in-r
 ## Rules
 
 - Branch name is `ticket/<id>-<slug>` (exceptions: `setup/<role>-skills`, `auth/<nnn>-<slug>`, `checkpoint/M<n>`).
-- Every acceptance test needs evidence in the PR (`evidence` says what). No evidence, no merge.
+- Every acceptance criterion has a `level`: `required` (deliverables, security, governance, automated CI checks; these can block a merge) or `suggested` (tests, QA passes, performance and device measurements; reviewed when evidence is offered, never blocking; AUTH #003). Required criteria need evidence in the PR (`evidence` says what).
 - A ticket that turns out to need spend, an account, or a change to a protected path stops and files an AUTH REQUEST; record it in `auth_required`.
 - Scope creep goes to `BACKLOG.md`, not into the ticket.
 - Run `python tickets/validate.py` before pushing; `python tickets/validate.py --summary` prints the table the Coordinator pastes into `PROGRESS.md`.

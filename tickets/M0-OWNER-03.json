@@ -17,13 +17,15 @@
       "id": "AT-1",
       "test": "The Owner replies APPROVED #n (or DENIED with changes) on the 'lock decisions 5–10' auth-request issue filed from M0-DSGN-01.",
       "evidence": "issue link",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-2",
       "test": "A PR (by the Coordinator or gj-design) fills DESIGN_SYSTEM.md §5–10 from the approved proposal, cites APPROVED #n, and updates the change log; status line reads LOCKED for all ten decisions.",
       "evidence": "PR link",
-      "automated": false
+      "automated": false,
+      "level": "required"
     }
   ],
   "depends_on": [
@@ -41,6 +43,11 @@
     {
       "date": "2026-09-15",
       "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
     }
   ]

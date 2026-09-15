@@ -12,27 +12,31 @@
   "acceptance_tests": [
     {
       "id": "AT-1",
-      "test": "Overlay toggles with a three-finger tap on device and F3 in the Editor or on a gamepad; shows fps (1 s average and p99 over 5 s), frame time ms, build version, git short SHA, scene name, device model.",
+      "test": "Overlay toggles with a three-finger tap on device and F3 in the Editor or on a gamepad; shows fps (1 s average and p99 over 5 s), frame time ms, build version, git short SHA, scene name, device model. It also has a 'save performance report' action that writes fps p50/p99 over the last 60 s, device model, and build to the app's Documents folder and the share sheet, so the Owner's device measurements are one tap.",
       "evidence": "gj-qa-release screenshot in qa/evidence/M0-UNITY-04/",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-2",
-      "test": "Overlay is excluded from release builds via the GJ_DEBUG scripting define; an EditMode test asserts the overlay type is absent when the define is off.",
+      "test": "Overlay is excluded from release builds via the GJ_DEBUG scripting define (an EditMode test asserting the type is absent in release is suggested).",
       "evidence": "test name",
-      "automated": true
+      "automated": true,
+      "level": "required"
     },
     {
       "id": "AT-3",
       "test": "Built with UI Toolkit, anchored top-right inside the safe area, no taller than 8 % of the screen in landscape, readable on a bright and a dark scan (scrim behind text).",
       "evidence": "screenshots on two scans",
-      "automated": false
+      "automated": false,
+      "level": "suggested"
     },
     {
       "id": "AT-4",
       "test": "PR timeline shows: ticket assigned by the Foreman → Bot branch and PR → gj-qa-release evidence → Coordinator review and merge, with no human commits or comments.",
       "evidence": "PR timeline link recorded in governance/CHECKPOINTS/M0.md",
-      "automated": false
+      "automated": false,
+      "level": "required"
     }
   ],
   "security": [
@@ -57,6 +61,11 @@
     {
       "date": "2026-09-15",
       "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
     }
   ]

@@ -20,31 +20,36 @@
       "id": "AT-1",
       "test": "supabase/config.toml and an empty migrations directory exist; `supabase start` works on the VM (log attached, no project keys involved).",
       "evidence": "qa/reports/M0-PLAT-01.md",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-2",
       "test": "supabase/scripts/check_rls.py scans migrations and fails when any `create table` lacks `enable row level security` and at least one `create policy` for that table in the same migration.",
       "evidence": "script + test names",
-      "automated": true
+      "automated": true,
+      "level": "required"
     },
     {
       "id": "AT-3",
       "test": "Two fixture migrations under supabase/scripts/tests/ (one compliant, one not) prove the pass and fail paths; pytest runs them in the lint workflow.",
       "evidence": "lint run link",
-      "automated": true
+      "automated": true,
+      "level": "suggested"
     },
     {
       "id": "AT-4",
       "test": "supabase/README.md states the RLS-by-default rule, the policy patterns (owner-only, published-read, service-role-only), and that table creation needs an AUTH.",
       "evidence": "file in PR",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-5",
       "test": "No Supabase URL, key, or project ref appears anywhere in the PR.",
       "evidence": "secret-scan green",
-      "automated": true
+      "automated": true,
+      "level": "required"
     }
   ],
   "security": [
@@ -64,6 +69,11 @@
     {
       "date": "2026-09-15",
       "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
     }
   ]

@@ -1,6 +1,6 @@
 # Security Checklist
 
-`governance/SECURITY_CHECKLIST.md` · v1.0 · 2026-09-15 · Applied to every PR by the Coordinator and audited weekly (AUDIT). Rows are numbered for citation in reviews. **B** rows block a merge; **G** rows are milestone gates (§12).
+`governance/SECURITY_CHECKLIST.md` · v1.0 · 2026-09-15 · Applied to every PR by the Coordinator and audited weekly (AUDIT). Rows are numbered for citation in reviews. **B** rows block a merge; **G** rows are milestone gates (§12); **S** rows are suggested and never block. Where a row mentions a test, the test is a suggestion (AUTH #003) and the control itself is what the row requires.
 
 ## 0. Threat model in one paragraph
 
@@ -22,7 +22,7 @@ The app holds two sensitive things: biometric imagery (faces, bodies) and photog
 | # | Control | |
 |---|---|---|
 | 2.1 | Every table created in a migration has `enable row level security` and at least one `create policy` in the same migration; `supabase/scripts/check_rls.py` fails CI otherwise. | B |
-| 2.2 | Policy patterns: owner-only (`user_id = auth.uid()`), published-read (published and moderation cleared), service-role-only (no client policy). Each policy has a test with two users plus anon. | B |
+| 2.2 | Policy patterns: owner-only (`user_id = auth.uid()`), published-read (published and moderation cleared), service-role-only (no client policy). A test per policy (two users plus anon) is suggested. | B |
 | 2.3 | The client uses only the anon key; the service-role key is used only from Inngest or edge functions on the server. | B |
 | 2.4 | Storage buckets are private by default; object paths include the owner id; bucket policies are reviewed like table policies. | B |
 | 2.5 | Schema changes are AUTH-gated (`data/schemas/`; migrations creating tables cite an `APPROVED #n`). | B |
@@ -42,7 +42,7 @@ The app holds two sensitive things: biometric imagery (faces, bodies) and photog
 |---|---|---|
 | 4.1 | Every image or video leaving the device has GPS, EXIF, XMP, and container location metadata (JPEG/HEIC EXIF, MP4/MOV QuickTime location atoms) removed on device before upload. | B |
 | 4.2 | The server verifies and strips again; an upload still carrying location is rejected and counted. | B |
-| 4.3 | Fixture tests cover JPEG, HEIC, MP4, and MOV with synthetically injected GPS. | B |
+| 4.3 | Fixture tests covering JPEG, HEIC, MP4, and MOV with synthetically injected GPS. | S |
 | 4.4 | Environment packages and thumbnails carry no location data and no capture metadata beyond what the schema allows. | B |
 
 ## 5. Biometric consent gate (BIPA and peers)
@@ -63,7 +63,7 @@ The app holds two sensitive things: biometric imagery (faces, bodies) and photog
 | 6.1 | Raw scan video, poses, and depth are deleted from storage automatically when derived assets exist; failed jobs are deleted within 7 days. | B |
 | 6.2 | Face and body photos are deleted on device, in storage, and at the vendor immediately after avatar generation; a deletion receipt (job id, timestamp, vendor response) is logged without the media. | B |
 | 6.3 | Vendor retention and deletion terms (Luma; Meshy or Tripo) are on file in `legal/vendors/` before the vendor touches user data; a vendor that trains on customer data by default is not used without an opt-out in place. | G (M1, M2) |
-| 6.4 | Per-user delete-all removes every data class in `SPEC.md` §7 and is tested end to end on staging. | G (M5) |
+| 6.4 | Per-user delete-all removes every data class in `SPEC.md` §7; an end-to-end run on staging is suggested. | G (M5) |
 | 6.5 | Bots never handle raw user photos or video; the test corpus is Owner-supplied and consented. | B |
 
 ## 7. Dependency pinning and audit
@@ -105,7 +105,7 @@ The app holds two sensitive things: biometric imagery (faces, bodies) and photog
 
 | # | Control | |
 |---|---|---|
-| 10.1 | Telemetry events validate against the frozen schema; forbidden-field tests (no GPS, email, raw media references, user free text). | B |
+| 10.1 | Telemetry events validate against the frozen schema, which admits no GPS, email, raw media references, or user free text (a forbidden-field test is suggested). | B |
 | 10.2 | Ratings and reports are rate-limited per user and device; the ranking has anti-gaming rules and passes a rate-spam test (M4 exit). | G (M4) |
 | 10.3 | Leaderboard times are validated against route length and movement constants; impossible times are rejected. | G (M4) |
 | 10.4 | The moderation queue shows an "Under review" state, escalates to the Owner, and gives Bots no raw media beyond the published thumbnail and package. | G (M4) |
@@ -123,4 +123,4 @@ Contain (rotate, unpublish), record in `governance/INCIDENTS.md`, notify the Own
 | M2 | 5.1–5.4, 6.2, 6.3 (Meshy or Tripo) |
 | M3 | 9.7, 9.8 (release flags) |
 | M4 | 2.1–2.5, 3.1–3.4, 10.1–10.4 |
-| M5 | 5.5, 5.6, 6.4, 8.4, 9.1–9.10, accurate privacy labels and data safety form |
+| M5 | 5.5, 5.6, 6.4, 8.4, 9.1–9.10, accurate App Store privacy labels |

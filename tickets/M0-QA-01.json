@@ -17,27 +17,31 @@
   "acceptance_tests": [
     {
       "id": "AT-1",
-      "test": "Installed Unity version equals unity/ProjectSettings/ProjectVersion.txt; Android build support module installed.",
+      "test": "Installed Unity version equals unity/ProjectSettings/ProjectVersion.txt; iOS build support module installed.",
       "evidence": "qa/reports/M0-editor-smoke.md header",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-2",
       "test": "qa/scripts/editor_smoke.py runs Unity -batchmode with an editor script under unity/Assets/Editor/QA/ that opens the project, imports the sample splat, opens the sample scene, captures a Game-view screenshot to qa/evidence/M0-QA-01/, and writes qa/reports/M0-editor-smoke.md with timings and versions.",
       "evidence": "script + report + PNG in PR",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-3",
       "test": "The task runs end to end unattended twice in a row with identical pass results (two logs attached).",
       "evidence": "logs in qa/reports/M0-QA-01/",
-      "automated": false
+      "automated": false,
+      "level": "suggested"
     },
     {
       "id": "AT-4",
       "test": "Screenshot contains no faces, documents, or personal data (privacy check line in the report).",
       "evidence": "report line",
-      "automated": false
+      "automated": false,
+      "level": "required"
     }
   ],
   "depends_on": [
@@ -56,6 +60,11 @@
     {
       "date": "2026-09-15",
       "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
     }
   ]

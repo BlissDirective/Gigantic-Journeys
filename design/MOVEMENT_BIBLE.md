@@ -315,3 +315,5 @@ Capture and cleanup: Rokoko Vision docs; Move.ai iPhone quickstart; Cascadeur Ba
 ## 16. Field notes
 
 (Bots append contradictions, measured values, and clip-name corrections here; Owner reviews at each checkpoint.)
+
+- 2026-09-15 (Coordinator, AUTH #003): v1 ships on the iOS App Store only. The §2 reference device (2023 mid-tier Android, 30 fps floor) and the §13 pass/fail thresholds are read as targets measured on the Owner's iPhones, never as merge gates; quality tiers scale per device. SPEC.md §11 governs.

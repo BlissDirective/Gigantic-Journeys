@@ -14,19 +14,22 @@
       "id": "AT-1",
       "test": "10 room walkthrough videos (1–3 min each, chest-height arc, good light) and 5 tabletop orbital videos (slow circle at two heights), phone camera app, handed over per services/reconstruction/corpus/README.md.",
       "evidence": "manifest rows in services/reconstruction/corpus/manifest.json",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-2",
       "test": "At least 3 rooms include the Bible §1 furniture classes (couch, coffee table, dining chair, bookshelf) and at least 2 tabletops are Lego builds.",
       "evidence": "manifest object-class fields",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-3",
       "test": "No faces, documents, screens with personal data, or addresses are visible; GPS off during capture.",
       "evidence": "Owner confirmation line in the manifest PR",
-      "automated": false
+      "automated": false,
+      "level": "required"
     }
   ],
   "security": [
@@ -47,6 +50,11 @@
     {
       "date": "2026-09-15",
       "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
     }
   ]

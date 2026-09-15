@@ -183,3 +183,7 @@ Each rule ends with **GJ:** the concrete application.
 - Owner or `gj-design` appends new sources with a one-line "why" and re-numbers only at major versions.
 - When a rule changes via ADR, update Section 3 and add the ADR number in brackets.
 - Bots record contradictions they hit in the field under a `## Field notes` heading at the bottom; the Owner reviews them at each checkpoint.
+
+## Field notes
+
+- 2026-09-15 (Coordinator, AUTH #003): v1 ships on the iOS App Store only; Android baseline references (Material 3, dp targets, Play assets) apply when Android ships. Rule 27's "30 fps minimum on a 2023 mid-tier Android" is read as a 30 fps target on older iPhones and 60 fps on current ones, with automatic quality tiers. The §4 checklist items are suggestions, not merge gates (SPEC.md §11).

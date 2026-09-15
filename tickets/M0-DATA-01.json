@@ -24,37 +24,43 @@
       "id": "AT-1",
       "test": "data/schemas/telemetry_events.schema.json (JSON Schema 2020-12) defines a common envelope (schema_version, event_id, pseudonymous user_id, env_id, client_version, platform, ts, scale_multiplier) and the event catalogue: session_start/end, scan_started/completed/failed (quality metrics), avatar_generated/failed (durations only), play_started, fall (tier, height_A), stuck (dwell > 20 s, position in env-local A units), quit, summit_reached, route_started/completed (time, beat reached), vista_found, rating_submitted (four axes), report_submitted (reason enum).",
       "evidence": "schema file",
-      "automated": true
+      "automated": true,
+      "level": "required"
     },
     {
       "id": "AT-2",
       "test": "data/schemas/correction_events.schema.json defines correction_submitted: surface id, old label, new label (Bible §4 class enum), env-local position, confidence, training_opt_in flag.",
       "evidence": "schema file",
-      "automated": true
+      "automated": true,
+      "level": "required"
     },
     {
       "id": "AT-3",
       "test": "A forbidden-field test fails if any schema admits GPS, latitude/longitude, email, phone, free-text from users, raw media references, or device identifiers beyond a platform enum.",
       "evidence": "test names",
-      "automated": true
+      "automated": true,
+      "level": "suggested"
     },
     {
       "id": "AT-4",
       "test": "At least two fixtures per event validate; one invalid fixture per schema is rejected; pytest runs in CI.",
       "evidence": "test names + lint run link",
-      "automated": true
+      "automated": true,
+      "level": "suggested"
     },
     {
       "id": "AT-5",
       "test": "gj-data reviews the catalogue for the weekly report needs (fall/quit/stuck heatmaps, completion rates, vista discovery, ratings) and signs off in the PR.",
       "evidence": "gj-data review comment",
-      "automated": false
+      "automated": false,
+      "level": "suggested"
     },
     {
       "id": "AT-6",
       "test": "The PR cites APPROVED #n for the freeze; data/schemas/README.md records version 1.0.0 and the change rule.",
       "evidence": "PR body + README",
-      "automated": false
+      "automated": false,
+      "level": "required"
     }
   ],
   "security": [
@@ -83,6 +89,11 @@
     {
       "date": "2026-09-15",
       "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
     }
   ]

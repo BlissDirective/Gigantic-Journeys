@@ -21,3 +21,7 @@ Deferred scope and ideas, each with a one-line rationale. Nothing here is schedu
 - SHA-pin third-party GitHub Actions (planned M4, SECURITY_CHECKLIST §7.1).
 - Certificate pinning decision (M5 ADR).
 - Self-hosted reconstruction path (documented as a fallback in ADR-0003; not built).
+
+## Deferred by AUTH #003 (platform)
+- Android release (v1.1): the Unity project keeps the target compiling on demand; open the Play Console early because a personal account needs a 12-tester, 14-day closed test before production access; Material 3 shell work; Android device QA.
+- iPhone Duo candidates the Owner does not select (`design/proposals/iphone-duo-track.md`).

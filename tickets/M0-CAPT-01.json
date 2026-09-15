@@ -19,25 +19,29 @@
       "id": "AT-1",
       "test": "services/reconstruction/corpus/README.md explains handover (Owner → gj-capture), the VM path, the staging-bucket path once Supabase exists, and the rule that raw media never enters git (CI repo-hygiene enforces it).",
       "evidence": "file in PR",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-2",
       "test": "services/reconstruction/corpus/manifest.schema.json and manifest.json describe each capture: id, mode (room/tabletop), lighting, duration, device, object classes present (Bible §1 examples), notes; no GPS, addresses, or people.",
       "evidence": "files in PR; validate in test",
-      "automated": true
+      "automated": true,
+      "level": "required"
     },
     {
       "id": "AT-3",
-      "test": "services/reconstruction/tools/strip_metadata.py removes EXIF/GPS/XMP from JPEG and HEIC and location atoms from MP4/MOV; tests inject synthetic GPS into small generated fixtures and assert removal for all four formats.",
+      "test": "services/reconstruction/tools/strip_metadata.py removes EXIF/GPS/XMP from JPEG and HEIC and location atoms from MP4/MOV (tests that inject synthetic GPS into generated fixtures and assert removal for all four formats are suggested).",
       "evidence": "test names",
-      "automated": true
+      "automated": true,
+      "level": "required"
     },
     {
       "id": "AT-4",
       "test": "requirements.txt pinned; pip-audit clean; lint green.",
       "evidence": "lint run link",
-      "automated": true
+      "automated": true,
+      "level": "required"
     }
   ],
   "security": [
@@ -58,6 +62,11 @@
     {
       "date": "2026-09-15",
       "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
     }
   ]

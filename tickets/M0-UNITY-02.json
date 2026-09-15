@@ -14,31 +14,36 @@
       "id": "AT-1",
       "test": "Renderer package added to Packages/manifest.json by git URL pinned to a commit SHA; LICENSE file included; license is MIT/BSD/Apache-2.0.",
       "evidence": "manifest diff + license file",
-      "automated": true
+      "automated": true,
+      "level": "required"
     },
     {
       "id": "AT-2",
       "test": "A sample splat (≤ 10 MB, self-captured or public domain, no faces or private documents visible) renders in unity/Assets/Capture/Samples/SplatSample.unity in the Editor.",
       "evidence": "gj-qa-release screenshot",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-3",
-      "test": "The sample scene runs on the reference Android device at ≥ 30 fps p99 over 60 s with the Profiler attached.",
+      "test": "The sample scene meets the SPEC §6 targets on the Owner's iPhones (60 fps on a current model, 30 fps on an older one), measured with the debug overlay or Profiler when a device and a TestFlight build are available (suggested).",
       "evidence": "Profiler screenshot in qa/evidence/M0-UNITY-02/",
-      "automated": false
+      "automated": false,
+      "level": "suggested"
     },
     {
       "id": "AT-4",
       "test": "ADR-0001 addendum names the package, commit, license, and the fallback (textured-mesh visuals on low-end devices); the PR cites the APPROVED #n for that design change.",
       "evidence": "ADR diff + PR body",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-5",
       "test": "Splat LOD/culling knobs are exposed in a single ScriptableObject so gj-gameplay can tune them later.",
       "evidence": "file in PR",
-      "automated": false
+      "automated": false,
+      "level": "required"
     }
   ],
   "security": [
@@ -68,6 +73,11 @@
     {
       "date": "2026-09-15",
       "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
     }
   ]

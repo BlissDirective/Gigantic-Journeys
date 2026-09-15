@@ -8,34 +8,38 @@
   "status": "open",
   "priority": "P0",
   "size": "M",
-  "summary": "Post every M0 authorization request as a GitHub issue using the AUTH REQUEST template, numbered from #003, and append them as Pending rows to the authorization log so the Owner can approve them together.",
+  "summary": "Post every M0 authorization request as a GitHub issue using the AUTH REQUEST template, numbered from #004, and append them as Pending rows to the authorization log so the Owner can approve them together.",
   "deliverables": [
     "governance/AUTHORIZATION_LOG.md (Pending rows)"
   ],
   "acceptance_tests": [
     {
       "id": "AT-1",
-      "test": "One auth-request issue per item, exact format, numbered sequentially from #003: Google Play Console ($25 one-time; note the 12-testers-for-14-days closed-test rule for personal accounts, or an organization account with D-U-N-S), Unity account and plan, Luma API, Meshy and/or Tripo (per M0-LEGAL-04), Supabase (staging and production projects), Vercel, Inngest, giganticjourneys.com + .app, reference Android device (used Galaxy A54 5G or equivalent) with Samsung Remote Test Lab / Firebase Test Lab as the free bridge, App Store Connect record to reserve the name, attorney review of the M0 legal drafts. Not in the batch: Apple Developer Program (Owner already holds it) and a Mac mini (not required; GitHub-hosted macOS runners are free on this public repo).",
+      "test": "One auth-request issue per item, exact format, numbered sequentially from #004: Unity account and plan, Luma API, Meshy and/or Tripo (per M0-LEGAL-04), Supabase (staging and production projects), Vercel, Inngest, giganticjourneys.com + .app, App Store Connect record to reserve the name, App Store Connect API key and signing certificates as CI secrets (TestFlight from M1), attorney review of the M0 legal drafts, and, only if the Owner selects iPhone Duo features and wants on-device verification, an iPhone Duo development device. Not in the batch (AUTH #003): Apple Developer Program (already held), Google Play Console, an Android device, a Mac mini.",
       "evidence": "issue links",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-2",
       "test": "The first request includes the USPTO TESS search result for 'Gigantic Journeys' in classes 9 and 41 and a filing recommendation (kit §9).",
       "evidence": "issue body",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-3",
       "test": "A summary table (one-time and monthly totals versus the $750–1,300/month budget) is posted as a comment on the first issue and added to the log PR.",
       "evidence": "comment + log diff",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-4",
       "test": "PR on branch auth/003-m0-batch appends the Pending rows to governance/AUTHORIZATION_LOG.md without touching the Decisions table.",
       "evidence": "PR link",
-      "automated": false
+      "automated": false,
+      "level": "required"
     }
   ],
   "depends_on": [],
@@ -58,6 +62,11 @@
     {
       "date": "2026-09-15",
       "event": "batch list updated: Apple Developer Program already held; Mac mini optional; Android device and Play closed-test rule added",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
     }
   ]

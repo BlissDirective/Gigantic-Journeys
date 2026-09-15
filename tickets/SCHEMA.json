@@ -136,7 +136,12 @@
             "description": "What must be attached to the PR for the Coordinator to accept this test as passed.",
             "minLength": 3
           },
-          "automated": { "type": "boolean" }
+          "automated": { "type": "boolean" },
+          "level": {
+            "type": "string",
+            "description": "required: deliverables, security, governance, automated CI checks (can block a merge). suggested: tests, QA passes, performance and device measurements, coverage (reviewed when evidence is offered; never block; AUTH #003).",
+            "enum": ["required", "suggested"]
+          }
         }
       }
     },

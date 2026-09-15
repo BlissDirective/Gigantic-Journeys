@@ -1,6 +1,6 @@
 # Gigantic Journeys
 
-A mobile game (iOS and Android, Unity 6) in which a near-photorealistic 1:12 avatar of the player journeys through the real environments they capture: indoor rooms and tabletop builds in v1. The environment is the content; the avatar is the piece; traversal is the product. No synthetic game objects in v1.
+A mobile game (Unity 6; v1 ships on the iOS App Store, Android later) in which a near-photorealistic 1:12 avatar of the player journeys through the real environments they capture: indoor rooms and tabletop builds in v1. The environment is the content; the avatar is the piece; traversal is the product. No synthetic game objects in v1.
 
 Owner: BlissDirective (SparkForge Labs). Coordinator: Claude Code. Legwork: the Grok Bot team.
 
@@ -29,4 +29,4 @@ Owner: BlissDirective (SparkForge Labs). Coordinator: Claude Code. Legwork: the 
 
 ## CI
 
-`secret-scan` (gitleaks, repo hygiene) · `lint` (ruff, npm, CSharpier, audits) · `governance` (ticket validation, movement.json sync, AUTH gate on protected paths) · `unity-tests` and `android-build` (skip until the Unity project and license secrets exist) · `ios-build` (Unity export on Linux, unsigned archive on GitHub's free macOS runner; skips until the Unity project and license exist).
+`secret-scan` (gitleaks, repo hygiene) · `lint` (ruff, npm, CSharpier, audits) · `governance` (ticket validation, movement.json sync, AUTH gate on protected paths) · `unity-tests` (skips until the Unity project and license secrets exist) · `android-build` (on demand only; keeps the Android target compiling for v1.1) · `ios-build` (Unity export on Linux, unsigned archive on GitHub's free macOS runner; skips until the Unity project and license exist).

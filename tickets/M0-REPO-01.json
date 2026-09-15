@@ -27,31 +27,36 @@
       "id": "AT-1",
       "test": "All six workflows (secret-scan, lint, governance, unity-tests, android-build, ios-build) complete green on main after merge; the Unity, Android, and iOS jobs report 'skipped: <reason>' rather than failing.",
       "evidence": "Actions run links on main",
-      "automated": true
+      "automated": true,
+      "level": "required"
     },
     {
       "id": "AT-2",
       "test": "`git ls-files` contains no `.env*` file except `.env.example`; gitleaks passes on the full history.",
       "evidence": "secret-scan run link",
-      "automated": true
+      "automated": true,
+      "level": "required"
     },
     {
       "id": "AT-3",
       "test": "`python tickets/validate.py` passes and `--summary` output matches PROGRESS.md.",
       "evidence": "governance run link",
-      "automated": true
+      "automated": true,
+      "level": "required"
     },
     {
       "id": "AT-4",
       "test": "design/MOVEMENT_BIBLE.md and design/Gigantic-Journey-Design-Skills.md are byte-identical to the Owner's originals (sha256 recorded in the merge commit message or PROGRESS.md).",
       "evidence": "sha256 lines",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-5",
       "test": "The scaffold merge commit cites APPROVED #000 (Prompt 1 kickoff) because it creates protected paths.",
       "evidence": "merge commit message",
-      "automated": false
+      "automated": false,
+      "level": "required"
     }
   ],
   "security": [
@@ -81,6 +86,11 @@
     {
       "date": "2026-09-15",
       "event": "merged to main (fd4d44b); all six workflows green on main: secret-scan 34969075133, lint 34969075156, governance 34969075116, unity-tests 34969075042 (skipped: no project), android-build 34969075303 (skipped: no project), ios-build 34969075139 (stub)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
     }
   ]

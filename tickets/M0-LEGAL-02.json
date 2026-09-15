@@ -18,25 +18,29 @@
       "id": "AT-1",
       "test": "legal/RETENTION_SCHEDULE.md has one row per data class in SPEC §7: retention period, deletion trigger, storage location, who can access, and the vendor involved.",
       "evidence": "file in PR",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-2",
       "test": "Raw scan media is deleted on successful derivation and no later than 24 h; failed jobs within 7 days; face and body photos immediately after avatar generation on device, in storage, and at the vendor.",
       "evidence": "file rows",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-3",
       "test": "legal/DELETION_FLOW.md specifies delete-all: entry point in settings, steps per data class, vendor deletion calls and receipts, 30-day completion, what the user sees, and how it is tested on staging.",
       "evidence": "file in PR",
-      "automated": false
+      "automated": false,
+      "level": "required"
     },
     {
       "id": "AT-4",
       "test": "Both files marked DRAFT pending attorney review and cross-referenced from SPEC §7 wording (no SPEC edit needed).",
       "evidence": "file headers",
-      "automated": false
+      "automated": false,
+      "level": "required"
     }
   ],
   "security": [
@@ -55,6 +59,11 @@
     {
       "date": "2026-09-15",
       "event": "created by the Coordinator (M0 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
     }
   ]

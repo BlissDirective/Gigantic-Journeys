@@ -1,6 +1,6 @@
 # PROGRESS.md
 
-Living tracker. Updated by the Coordinator on every merge, AUTH decision, and checkpoint. Last update: **2026-09-15** (Coordinator: scaffold merged to main; AUTH #002 approved). Ticket table regenerated with `python tickets/validate.py --summary`.
+Living tracker. Updated by the Coordinator on every merge, AUTH decision, and checkpoint. Last update: **2026-09-15** (Coordinator: AUTH #003 applied: iOS-only v1, tests as suggestions, iPhone Duo track). Ticket table regenerated with `python tickets/validate.py --summary`.
 
 ## Milestone
 
@@ -43,25 +43,30 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 
 - AUTH #002 approved: the Owner creates the Bot machine user and PAT and hands it to the Bot team; every Bot asks for it before any work.
 - Scaffold merged to main on the Owner's instruction.
-- Repository stays **public** for now (free Actions minutes and native secret scanning; plan and design docs are world-readable). Revisit before M4 when user data flows.
-- The Foreman's M0 AUTH batch proceeds from #003 once the Foreman exists.
-- The Owner already holds an Apple Developer Program membership; it leaves the AUTH batch.
-- No Mac mini: iOS CI uses Unity's Linux export plus GitHub's free macOS runner (public repo). Revisit only for on-device iPhone debugging or if the repo goes private.
-- Reference Android device: not needed to open the Play Console account; needed by the M1 motion-matching spike (Bible §13) and for ARCore capture testing. Samsung Remote Test Lab (free, real Galaxy devices) and Firebase Test Lab bridge until a used Galaxy A54 5G or equivalent arrives.
-- Google Play: a personal developer account created after 2023-11-13 must run a closed test with 12+ testers for 14 continuous days before production access; the M5 tester cohort covers it (or use an organization account with a D-U-N-S number).
+- Repository stays **public** for now (free Actions minutes, free macOS runners, native secret scanning; plan and design docs are world-readable). Revisit before M4 when user data flows.
+- The Owner already holds an Apple Developer Program membership.
+- **AUTH #003: v1 launches on the iOS App Store only.** Android stays a compiling build target (on-demand CI) for a v1.1 release; no Play Console, Android device, or Mac mini in v1.
+- **No minimum device model.** Best-possible graphics and capabilities on the newest iPhones; automatic quality tiers keep older iPhones playable (SPEC §6).
+- **Tests are suggestions, never merge gates.** The Owner tests thoroughly on real iPhones; merge gates are the automated CI checks and the security rules (SPEC §11). Acceptance criteria carry `required` or `suggested` levels.
+- **iPhone Duo optional feature track opened.** Proposal with nine candidates at `design/proposals/iphone-duo-track.md`; the Owner selects.
+- The Foreman's M0 AUTH batch proceeds from #004 once the Foreman exists.
 
 ## Owner actions needed now
 
 1. Create the machine user and PAT (M0-REPO-04), then create the Foreman Bot by pasting the block in `agents/grok/roles/gj-foreman.md`; it will ask you for the token first. Then the eight specialists from the other prompt packs.
 2. Configure branch protection and native secret scanning on main (M0-REPO-02).
 3. Transcribe the four locked design decisions into `design/DESIGN_SYSTEM.md` §1–4 (M0-OWNER-02); then the design-lock session for decisions 5–10 with the Coordinator.
-4. Open the Google Play Console account ($25; no device needed) and, before M1, source a used Galaxy A54 5G or equivalent as the reference device.
-5. Scan 10 rooms and 5 tabletop builds (M0-OWNER-01) once the corpus intake path exists (M0-CAPT-01).
+4. Pick iPhone Duo candidates from `design/proposals/iphone-duo-track.md` (reply with numbers) and decide whether to acquire a Duo development device.
+5. Generate an App Store Connect API key and prepare signing certificates for CI secrets before M1: TestFlight is the only path to your devices without a Mac (the Foreman's batch lists it).
+6. Scan 10 rooms and 5 tabletop builds (M0-OWNER-01) once the corpus intake path exists (M0-CAPT-01).
 
 ## Risk watch
 
-- Repository is public by Owner decision: every planning document, Bot prompt, and design doc is visible. Going private later costs Actions minutes for the Unity jobs.
-- Motion-matching spike (M1-MOVE-01) decides the animation stack; a fail sends locomotion to blend trees.
+- Repository is public by Owner decision: every planning document, Bot prompt, and design doc is visible.
+- Tests are suggestions, so regressions surface at the Owner's device sessions rather than in PRs; mitigation: a weekly TestFlight build from M1 and the debug overlay's one-tap performance report (M0-UNITY-04).
+- The Owner is the only on-device tester until TestFlight external testers arrive; a paid iOS device farm is the fallback if that becomes a bottleneck.
+- Motion-matching spike (M1-MOVE-01) decides the animation stack; a miss sends locomotion to blend trees.
+- iPhone Duo features depend on iOS 27 posture and Split View APIs reaching Unity; the research spike comes first.
 
 ## Tickets (M0)
 
