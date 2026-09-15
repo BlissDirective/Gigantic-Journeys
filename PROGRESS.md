@@ -18,11 +18,11 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | Status | Count |
 |---|---|
 | open | 35 |
-| in-progress | 1 |
+| in-progress | 0 |
 | in-review | 0 |
 | changes-requested | 0 |
 | blocked | 2 |
-| merged | 0 |
+| merged | 1 |
 | done | 0 |
 | cancelled | 0 |
 | **total** | **38** |
@@ -73,7 +73,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | M0-PIPE-01 | Inngest loop skeleton: scan.submitted → reconstruct → scenegraph → journey → package (stubs) | gj-platform | P0 | open | — | — |
 | M0-QA-01 | Unity on the QA VM and the scripted editor smoke task | gj-qa-release | P0 | open | M0-UNITY-01, M0-UNITY-02 | — |
 | M0-QA-02 | Visual QA procedure and evidence standard | gj-qa-release | P0 | open | — | — |
-| M0-REPO-01 | Repository scaffold and CI harness green on main | coordinator | P0 | in-progress | — | claude/gigantic-journeys-governance-f0wgak |
+| M0-REPO-01 | Repository scaffold and CI harness green on main | coordinator | P0 | merged | — | https://github.com/BlissDirective/Gigantic-Journeys/commit/fd4d44b291bc2ec626bde4d54c2039416334beea |
 | M0-REPO-02 | Branch protection, merge policy, and native secret scanning on main | owner | P0 | open | M0-REPO-01, M0-REPO-04 | — |
 | M0-REPO-03 | Unity license secrets in GitHub Actions | owner | P0 | blocked | M0-FORE-02 | — |
 | M0-REPO-04 | Bot GitHub identity with least-privilege access | owner | P0 | open | — | — |
@@ -105,4 +105,4 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 
 | Date | PR | Ticket | Notes |
 |---|---|---|---|
-| 2026-09-15 | fast-forward of `claude/gigantic-journeys-governance-f0wgak` (no PR; process not yet in force on main) | M0-REPO-01 | Scaffold: governance, CI, tickets, design system v0.1, ADRs; CI green on the branch before merge |
+| 2026-09-15 | fast-forward of `claude/gigantic-journeys-governance-f0wgak` (no PR; process not yet in force on main) | M0-REPO-01 | Scaffold: governance, CI, tickets, design system v0.1, ADRs; CI green on the branch before merge and on main afterwards ([actions](https://github.com/BlissDirective/Gigantic-Journeys/actions?query=branch%3Amain)) |

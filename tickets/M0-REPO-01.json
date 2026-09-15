@@ -5,7 +5,7 @@
   "area": "REPO",
   "owner": "coordinator",
   "qa": null,
-  "status": "in-progress",
+  "status": "merged",
   "priority": "P0",
   "size": "L",
   "summary": "Governance layout, SPEC.md, ticket schema, review rubric, security checklist, six GitHub Actions workflows, Bot rules, PROGRESS.md, design system file, and the authorization log, created by the Coordinator under Prompt 1 and merged to main.",
@@ -64,7 +64,7 @@
     "plan §3"
   ],
   "branch": "claude/gigantic-journeys-governance-f0wgak",
-  "pr": null,
+  "pr": "https://github.com/BlissDirective/Gigantic-Journeys/commit/fd4d44b291bc2ec626bde4d54c2039416334beea",
   "created": "2026-09-15",
   "updated": "2026-09-15",
   "history": [
@@ -76,6 +76,11 @@
     {
       "date": "2026-09-15",
       "event": "Owner instructed 'merge all to main'; fast-forward merge by the Coordinator (PR process not yet in force on main)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "merged to main (fd4d44b); all six workflows green on main: secret-scan 34969075133, lint 34969075156, governance 34969075116, unity-tests 34969075042 (skipped: no project), android-build 34969075303 (skipped: no project), ios-build 34969075139 (stub)",
       "by": "coordinator"
     }
   ]
