@@ -1,0 +1,75 @@
+{
+  "id": "M1-DATA-01",
+  "title": "Freeze scene-graph, traversal-graph, and environment-spec schemas v1.0",
+  "milestone": "M1",
+  "area": "DATA",
+  "owner": "gj-scenegraph",
+  "qa": "gj-data",
+  "status": "open",
+  "priority": "P0",
+  "size": "M",
+  "summary": "Define and freeze the three data contracts the scene-graph service produces and the Unity runtime and validator consume. Freeze needs an AUTH (design-change); later changes need another.",
+  "reviewers": [
+    "gj-gameplay",
+    "gj-platform"
+  ],
+  "deliverables": [
+    "data/schemas/scene_graph.json",
+    "data/schemas/traversal_graph.json",
+    "data/schemas/environment_spec.json"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "data/schemas/scene_graph.json, traversal_graph.json, and environment_spec.json (JSON Schema 2020-12) define surfaces (Bible §4 classes), measurements in A units, the scale multiplier, edges (which surface reaches which by which verb at what difficulty), and the summit/routes/vistas spec with a per-segment beat.",
+      "evidence": "schema files",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "Fixtures validate; at least one invalid fixture per schema is rejected; the validator and a Unity loader both parse the same fixture.",
+      "evidence": "test names + CI",
+      "automated": true,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "The PR cites APPROVED #n for the freeze; data/schemas/README.md records version 1.0.0 and the change rule.",
+      "evidence": "PR body + README",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-4",
+      "test": "Reviewed by gj-gameplay (runtime consumer) and gj-platform (packaging).",
+      "evidence": "review comments",
+      "automated": false,
+      "level": "required"
+    }
+  ],
+  "depends_on": [],
+  "auth_required": [
+    {
+      "type": "design-change",
+      "what": "Freeze scene_graph / traversal_graph / environment_spec schemas v1.0.0",
+      "auth_id": null,
+      "status": "pending"
+    }
+  ],
+  "references": [
+    "SPEC §3.3, §3.4",
+    "kit §3.2"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-16",
+  "updated": "2026-09-16",
+  "history": [
+    {
+      "date": "2026-09-16",
+      "event": "created by the Coordinator (M1 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

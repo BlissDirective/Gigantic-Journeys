@@ -1,0 +1,62 @@
+{
+  "id": "M1-FORE-01",
+  "title": "M1 checkpoint report",
+  "milestone": "M1",
+  "area": "FORE",
+  "owner": "gj-foreman",
+  "qa": null,
+  "status": "open",
+  "priority": "P0",
+  "size": "S",
+  "summary": "At the end of M1 halt feature work, collect the specialists' 5-line summaries, and open the checkpoint PR with the report so the Coordinator can run REVIEW M1.",
+  "deliverables": [
+    "governance/CHECKPOINTS/M1.md"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "governance/CHECKPOINTS/M1.md follows the template with every field filled; the exit-test result links qa/reports/M1-exit.md.",
+      "evidence": "file on branch checkpoint/M1",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "Spend this milestone vs budget is itemized; the motion-matching decision (M1-MOVE-01) and any schema-freeze AUTH are recorded.",
+      "evidence": "file sections",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "Each specialist's 5-line summary is attached; all Bots have stopped feature work.",
+      "evidence": "file sections",
+      "automated": false,
+      "level": "required"
+    }
+  ],
+  "depends_on": [
+    "M1-QA-01",
+    "M1-GAME-02",
+    "M1-GAME-03",
+    "M1-CAPT-02",
+    "M1-SCEN-04",
+    "M1-PIPE-01",
+    "M1-MOVE-01",
+    "M1-DATA-01"
+  ],
+  "references": [
+    "kit §6 template"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-16",
+  "updated": "2026-09-16",
+  "history": [
+    {
+      "date": "2026-09-16",
+      "event": "created by the Coordinator (M1 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

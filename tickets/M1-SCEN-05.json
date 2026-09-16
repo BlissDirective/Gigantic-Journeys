@@ -1,0 +1,70 @@
+{
+  "id": "M1-SCEN-05",
+  "title": "Deterministic reachability validator against movement.json",
+  "milestone": "M1",
+  "area": "SCEN",
+  "owner": "gj-scenegraph",
+  "qa": "gj-scenegraph",
+  "status": "open",
+  "priority": "P0",
+  "size": "L",
+  "summary": "The validator every generated route must pass: a deterministic reachability search that accepts a route segment only if each transition is achievable under config/movement.json with a 15% margin (85% of max reach and distance). Shared movement contract with the controller.",
+  "reviewers": [
+    "gj-gameplay"
+  ],
+  "deliverables": [
+    "services/traversal"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "Given a traversal graph and a proposed route, the validator returns valid/invalid per segment, using only config/movement.json constants at an 85% margin; identical input yields identical output.",
+      "evidence": "test names showing determinism",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "Property tests cover unreachable summit, a gap just over 85% of max distance (rejected) and just under (accepted), and the beat-1 verb restriction.",
+      "evidence": "test names",
+      "automated": true,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "The validator loads the shared constants via services/traversal/movement.py (M0-MOVE-01); no movement number is duplicated.",
+      "evidence": "code reference",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-4",
+      "test": "Reviewed by gj-gameplay so the validator and the controller agree on the constants.",
+      "evidence": "review comment",
+      "automated": false,
+      "level": "required"
+    }
+  ],
+  "design": [
+    "Bible §10 validator contract"
+  ],
+  "depends_on": [
+    "M0-MOVE-01",
+    "M1-SCEN-03"
+  ],
+  "references": [
+    "SPEC §3.4",
+    "config/README.md"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-16",
+  "updated": "2026-09-16",
+  "history": [
+    {
+      "date": "2026-09-16",
+      "event": "created by the Coordinator (M1 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

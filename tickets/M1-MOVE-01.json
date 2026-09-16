@@ -1,0 +1,68 @@
+{
+  "id": "M1-MOVE-01",
+  "title": "Motion-matching vs blend-tree spike (Movement Bible §13)",
+  "milestone": "M1",
+  "area": "MOVE",
+  "owner": "gj-gameplay",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P0",
+  "size": "L",
+  "summary": "Build the ~110-clip motion database with the open motion matcher, deploy to a current and an older iPhone, and measure over 5 minutes of scripted play. The Bible §13 thresholds are v1 targets (AUTH #003), not merge gates; the deliverable is the built database, the measurements, and a locked recommendation. Motion Warping (AUTH #001) is purchased under this ticket.",
+  "deliverables": [
+    "unity/Assets/Gameplay",
+    "qa/motion-db-report.md"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "The ~110-clip database (Bible §11 whitelist) is built with the open MIT matcher and runs on device with inertialized blending; the motion-db size and animation CPU are reported.",
+      "evidence": "qa/motion-db-report.md",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "A recommendation is recorded (motion matching if the targets hold on device, else blend trees with inertialization) with the measurements behind it; ADR-0004 is updated by AUTH if the fallback is chosen.",
+      "evidence": "report + ADR note",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "Motion Warping: Climb & Interact (AUTH #001) is imported and recorded in the Unity package list with its version and license.",
+      "evidence": "manifest + license note",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-4",
+      "test": "Over 5 minutes of scripted play (run loops, 20 mantles, 10 falls) the Bible §13 targets (≥30 fps p99, ≤4 ms animation, ≤60 MB) are met on the reference iPhones; warp lands hands within 0.05 A on the test edges.",
+      "evidence": "qa/motion-db-report.md with numbers",
+      "automated": false,
+      "level": "suggested"
+    }
+  ],
+  "design": [
+    "Bible §2, §11, §12, §13"
+  ],
+  "depends_on": [
+    "M0-UNITY-03",
+    "M0-MOVE-01"
+  ],
+  "references": [
+    "ADR-0004",
+    "AUTH #001"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-16",
+  "updated": "2026-09-16",
+  "history": [
+    {
+      "date": "2026-09-16",
+      "event": "created by the Coordinator (M1 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

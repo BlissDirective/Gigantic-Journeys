@@ -1,0 +1,83 @@
+{
+  "id": "M1-CAPT-02",
+  "title": "Upload → Luma reconstruction → splat + collision mesh stored",
+  "milestone": "M1",
+  "area": "CAPT",
+  "owner": "gj-platform",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P0",
+  "size": "L",
+  "summary": "Wire the upload bundle to the Luma API through the Inngest pipeline: submit the reconstruction job, poll, store the Gaussian splat and collision mesh in staging storage behind signed URLs, track per-job cost, and halt at the daily cap. Blocked until Luma retention terms are on file.",
+  "deliverables": [
+    "services/reconstruction",
+    "api"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "A capture bundle submitted through the pipeline returns a stored Gaussian splat and a collision mesh in staging, retrievable only through a signed, short-lived URL.",
+      "evidence": "pipeline run log + storage listing (no secrets)",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "Per-job cost is recorded; the pipeline halts new jobs at the $50/day cap and resumes the next day.",
+      "evidence": "cost sheet + a cap-halt test",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "Luma retention and training terms are on file in legal/vendors/luma.md before any user (non-corpus) scan is sent; corpus scans are Owner-supplied and consented.",
+      "evidence": "legal/vendors/luma.md link",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-4",
+      "test": "No Luma key or storage credential appears in the repo; the key lives only in .env.local / CI.",
+      "evidence": "secret-scan green",
+      "automated": true,
+      "level": "required"
+    },
+    {
+      "id": "AT-5",
+      "test": "Ten corpus rooms reconstruct end to end; failure modes are logged with the input that caused them.",
+      "evidence": "qa/reports/M1-recon.md",
+      "automated": false,
+      "level": "suggested"
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §1 secret hygiene",
+    "SECURITY_CHECKLIST §3 signed URLs",
+    "SECURITY_CHECKLIST §6.1 source media deletion",
+    "SECURITY_CHECKLIST §6.3"
+  ],
+  "depends_on": [
+    "M1-CAPT-01",
+    "M1-PIPE-01",
+    "M0-LEGAL-03"
+  ],
+  "blocked_by": [
+    "Luma account AUTH (Foreman M0 batch)",
+    "Luma retention terms (M0-LEGAL-03)"
+  ],
+  "references": [
+    "ADR-0003",
+    "kit RESUME M1"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-16",
+  "updated": "2026-09-16",
+  "history": [
+    {
+      "date": "2026-09-16",
+      "event": "created by the Coordinator (M1 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

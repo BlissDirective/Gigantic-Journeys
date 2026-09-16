@@ -1,0 +1,61 @@
+{
+  "id": "M1-GAME-01",
+  "title": "Unity loads splat + collision mesh + environment spec",
+  "milestone": "M1",
+  "area": "GAME",
+  "owner": "gj-gameplay",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P0",
+  "size": "L",
+  "summary": "The runtime loads a reconstructed environment: render the splat, load the collision mesh, parse environment_spec.json, and place the summit beacon, route markers, and vista sparkles per DESIGN_SYSTEM §1.",
+  "deliverables": [
+    "unity/Assets/Environment"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "Given a corpus environment package, Unity renders the splat, loads the collision mesh, and parses environment_spec.json with no console errors.",
+      "evidence": "clip on 2 environments",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "The summit beacon, route markers (when a route is selected), and vista sparkles render per DESIGN_SYSTEM §1 and stay drawn on top with depth-fade.",
+      "evidence": "screenshots on a bright and a dark scan",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "Meets the SPEC §6 quality targets on a current and an older iPhone with the debug-overlay report.",
+      "evidence": "overlay reports",
+      "automated": false,
+      "level": "suggested"
+    }
+  ],
+  "design": [
+    "DESIGN_SYSTEM §1",
+    "Bible §8"
+  ],
+  "depends_on": [
+    "M0-UNITY-02",
+    "M1-DATA-01",
+    "M1-CAPT-02"
+  ],
+  "references": [
+    "SPEC §3.3, §3.4"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-16",
+  "updated": "2026-09-16",
+  "history": [
+    {
+      "date": "2026-09-16",
+      "event": "created by the Coordinator (M1 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

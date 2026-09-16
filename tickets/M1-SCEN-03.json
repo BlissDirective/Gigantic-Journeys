@@ -1,0 +1,59 @@
+{
+  "id": "M1-SCEN-03",
+  "title": "Affordance library and traversal-graph export",
+  "milestone": "M1",
+  "area": "SCEN",
+  "owner": "gj-scenegraph",
+  "qa": "gj-scenegraph",
+  "status": "open",
+  "priority": "P0",
+  "size": "M",
+  "summary": "Map surface classes to traversal verbs (the affordance library) and export the traversal graph: which surfaces reach which, by which verb, at what difficulty.",
+  "deliverables": [
+    "services/scenegraph",
+    "services/traversal"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "The affordance library maps each Bible §4 class to its enabled verbs (Bible §4 matrix); the traversal graph exports nodes and verb-tagged edges into traversal_graph.json.",
+      "evidence": "sample traversal_graph.json + the affordance table",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "Schema-validates; a test confirms every edge's verb is enabled for the source surface class.",
+      "evidence": "test names",
+      "automated": true,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "The affordance mapping lives in one place, consumed by both the graph export and the validator.",
+      "evidence": "code reference",
+      "automated": false,
+      "level": "required"
+    }
+  ],
+  "design": [
+    "Bible §4"
+  ],
+  "depends_on": [
+    "M1-SCEN-02"
+  ],
+  "references": [
+    "SPEC §3.3"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-16",
+  "updated": "2026-09-16",
+  "history": [
+    {
+      "date": "2026-09-16",
+      "event": "created by the Coordinator (M1 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

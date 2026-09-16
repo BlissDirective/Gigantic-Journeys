@@ -1,0 +1,58 @@
+{
+  "id": "M1-QA-01",
+  "title": "M1 exit-test harness: 10 fresh scans to reachable summit + two routes",
+  "milestone": "M1",
+  "area": "QA",
+  "owner": "gj-qa-release",
+  "qa": null,
+  "status": "open",
+  "priority": "P0",
+  "size": "M",
+  "summary": "The measurement behind the M1 milestone exit test: run 10 fresh room scans (not in the training corpus) end to end and report, per scan, whether a reachable summit and at least two validator-approved routes were produced with no manual fixes. The Owner judges the milestone at the checkpoint; this harness supplies the evidence.",
+  "deliverables": [
+    "qa/reports"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "qa/scripts run 10 fresh scans through the full pipeline and produce qa/reports/M1-exit.md with a per-scan pass/fail on 'reachable summit + two valid routes, no manual fixes'.",
+      "evidence": "qa/reports/M1-exit.md",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "Each pass links its environment_spec.json and the validator output; failures link the input and the failure reason.",
+      "evidence": "report links",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "The result (target: 8 of 10) is summarized for the Owner's milestone judgment; under 6 of 10 triggers the re-plan AUTH per the kit.",
+      "evidence": "report summary",
+      "automated": false,
+      "level": "suggested"
+    }
+  ],
+  "depends_on": [
+    "M1-GAME-02",
+    "M1-SCEN-04",
+    "M1-CAPT-01"
+  ],
+  "references": [
+    "kit RESUME M1 exit test",
+    "SPEC §8"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-16",
+  "updated": "2026-09-16",
+  "history": [
+    {
+      "date": "2026-09-16",
+      "event": "created by the Coordinator (M1 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

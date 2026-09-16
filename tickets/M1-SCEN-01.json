@@ -1,0 +1,58 @@
+{
+  "id": "M1-SCEN-01",
+  "title": "Mesh cleanup: hole fill, ceiling cap, floater removal",
+  "milestone": "M1",
+  "area": "SCEN",
+  "owner": "gj-scenegraph",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P0",
+  "size": "M",
+  "summary": "First scene-graph stage: clean the reconstruction mesh into a watertight collision mesh suitable for traversal.",
+  "deliverables": [
+    "services/scenegraph"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "Given a corpus reconstruction, the service outputs a cleaned collision mesh with holes filled, the ceiling capped, and floaters removed.",
+      "evidence": "before/after renders on 3 corpus rooms",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "Unit tests cover hole fill, cap, and floater removal on synthetic meshes.",
+      "evidence": "test names",
+      "automated": true,
+      "level": "suggested"
+    },
+    {
+      "id": "AT-3",
+      "test": "requirements.txt pins exact versions; pip-audit clean.",
+      "evidence": "lint run link",
+      "automated": false,
+      "level": "required"
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §7 dependency pinning and audit"
+  ],
+  "depends_on": [
+    "M1-CAPT-02"
+  ],
+  "references": [
+    "SPEC §3.3"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-16",
+  "updated": "2026-09-16",
+  "history": [
+    {
+      "date": "2026-09-16",
+      "event": "created by the Coordinator (M1 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

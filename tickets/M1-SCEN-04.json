@@ -1,0 +1,71 @@
+{
+  "id": "M1-SCEN-04",
+  "title": "Summit designation, route generation, vista selection",
+  "milestone": "M1",
+  "area": "SCEN",
+  "owner": "gj-scenegraph",
+  "qa": "gj-scenegraph",
+  "status": "open",
+  "priority": "P0",
+  "size": "L",
+  "summary": "Generate the goals: designate the highest reachable point as the summit, generate two or three routes of rising difficulty structured introduce→develop→twist→resolve, and pick three vistas for view.",
+  "reviewers": [
+    "gj-gameplay"
+  ],
+  "deliverables": [
+    "services/traversal"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "For a corpus environment the service designates a reachable summit, generates 2–3 routes with a per-segment beat, and selects 3 vistas, all written to environment_spec.json.",
+      "evidence": "sample environment_spec.json on 5 rooms",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "Beat 1 of every route uses only walk, jog, run, jump, step-up, hop-over, and mantle (Bible §10); three generation retries then a template fallback.",
+      "evidence": "validator report (M1-SCEN-05)",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "On 10 corpus rooms, a reachable summit and at least two valid routes are produced with no manual fixes on 8 or more.",
+      "evidence": "qa/reports/M1-journeys.md",
+      "automated": false,
+      "level": "suggested"
+    },
+    {
+      "id": "AT-4",
+      "test": "Output schema-validates against environment_spec.json.",
+      "evidence": "test names",
+      "automated": true,
+      "level": "required"
+    }
+  ],
+  "design": [
+    "Design Skills rule 22",
+    "Bible §10"
+  ],
+  "depends_on": [
+    "M1-SCEN-03",
+    "M1-SCEN-05"
+  ],
+  "references": [
+    "SPEC §3.4",
+    "kit RESUME M1"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-16",
+  "updated": "2026-09-16",
+  "history": [
+    {
+      "date": "2026-09-16",
+      "event": "created by the Coordinator (M1 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

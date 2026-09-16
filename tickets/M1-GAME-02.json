@@ -1,0 +1,72 @@
+{
+  "id": "M1-GAME-02",
+  "title": "Placeholder capsule journeys to the summit",
+  "milestone": "M1",
+  "area": "GAME",
+  "owner": "gj-gameplay",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P0",
+  "size": "L",
+  "summary": "Extend the M0 controller scaffold with the contact verbs M1 needs and prove a completable journey: a placeholder capsule runs, jumps, mantles, and climbs ledges and rungs to the summit and plants the flag, driven by the environment spec.",
+  "scope_out": [
+    "stud/free/pole/overhang climb, slide, full landing tiers (M3)",
+    "tabletop mode (M3)"
+  ],
+  "deliverables": [
+    "unity/Assets/Player",
+    "unity/Assets/Gameplay"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "On a corpus environment the capsule reaches the designated summit using run, jump, mantle, and ledge/rung climb, and plants the flag; the route it takes matches a validator-approved route.",
+      "evidence": "clip on 2 environments",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "Contact verbs (mantle, vault, hop-over, ledge hang/climb, rung climb) use motion warping to land on the real edges; all thresholds come from config/movement.json.",
+      "evidence": "clip + grep showing no hard-coded constants",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "A scripted playthrough completes on 8 of 10 corpus environments with no manual fixes.",
+      "evidence": "qa/reports/M1-playable.md",
+      "automated": false,
+      "level": "suggested"
+    },
+    {
+      "id": "AT-4",
+      "test": "Holds the SPEC §6 targets on the reference iPhones.",
+      "evidence": "overlay report",
+      "automated": false,
+      "level": "suggested"
+    }
+  ],
+  "design": [
+    "Bible §3, §5, §6"
+  ],
+  "depends_on": [
+    "M1-GAME-01",
+    "M1-SCEN-05",
+    "M1-MOVE-01"
+  ],
+  "references": [
+    "kit RESUME M1 exit test"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-16",
+  "updated": "2026-09-16",
+  "history": [
+    {
+      "date": "2026-09-16",
+      "event": "created by the Coordinator (M1 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

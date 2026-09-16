@@ -1,0 +1,81 @@
+{
+  "id": "M1-CAPT-01",
+  "title": "In-app guided room capture (ARKit poses + depth, coverage, blur, quality gate)",
+  "milestone": "M1",
+  "area": "CAPT",
+  "owner": "gj-capture",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P0",
+  "size": "L",
+  "summary": "Room walkthrough capture in the app: record video with ARKit camera poses and depth, live coverage and speed coaching, blur rejection, and a pre-upload quality gate, producing an upload bundle for reconstruction. Coaching UI follows DESIGN_SYSTEM §6 once locked.",
+  "deliverables": [
+    "unity/Assets/Capture",
+    "services/reconstruction"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "A capture session records video plus per-frame ARKit poses and available depth into a bundle matching the upload contract in services/reconstruction; a session over a real room produces a valid bundle.",
+      "evidence": "clip + a sample bundle manifest in the PR",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "Coverage feedback, a speed meter, blur rejection, and a pre-upload 'missed corner' hint are present and driven by the capture, per DESIGN_SYSTEM §6.",
+      "evidence": "clip on two rooms",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "A quality gate blocks upload on too-dark or too-fast captures with a kind, actionable message; the player can retake; nothing hard-crashes.",
+      "evidence": "clip of the gate firing",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-4",
+      "test": "GPS and EXIF are stripped on device before the bundle is written; the bundle carries no location metadata.",
+      "evidence": "code path + a stripped-bundle check",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-5",
+      "test": "Active capture stays under 90 s on a normal room; measured on the Owner's iPhone.",
+      "evidence": "debug overlay / timing note",
+      "automated": false,
+      "level": "suggested"
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §4.1 GPS/EXIF on device",
+    "SECURITY_CHECKLIST §6.5"
+  ],
+  "design": [
+    "DESIGN_SYSTEM §6",
+    "Design Skills §3.5"
+  ],
+  "depends_on": [
+    "M0-UNITY-01",
+    "M0-CAPT-01",
+    "M0-OWNER-03"
+  ],
+  "references": [
+    "kit RESUME M1",
+    "SPEC §3.1"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-16",
+  "updated": "2026-09-16",
+  "history": [
+    {
+      "date": "2026-09-16",
+      "event": "created by the Coordinator (M1 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

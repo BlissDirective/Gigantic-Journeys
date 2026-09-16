@@ -1,0 +1,67 @@
+{
+  "id": "M1-SCEN-02",
+  "title": "Surface classification, measurement, scale inference, material and semantic labels",
+  "milestone": "M1",
+  "area": "SCEN",
+  "owner": "gj-scenegraph",
+  "qa": "gj-scenegraph",
+  "status": "open",
+  "priority": "P0",
+  "size": "L",
+  "summary": "Classify every surface into the Bible §4 classes, measure heights/gaps/edges in metres and in A units, infer the per-environment scale multiplier (default 1:12), and attach material and semantic labels via a vision pass.",
+  "deliverables": [
+    "services/scenegraph"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "The service labels surfaces with the Bible §4 classes and emits measurements and a scale multiplier into scene_graph.json (M1-DATA-01).",
+      "evidence": "labelled render on 5 corpus rooms",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "Material and semantic labels are attached; the vision pass carries no PII and no location data.",
+      "evidence": "sample scene_graph.json",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "On the corpus, classification is inspected against the Bible §4 examples (couch=walkable-soft, table edge=ledge, chair back=rung, etc.); disagreements are logged to the Bible Field notes.",
+      "evidence": "qa/reports/M1-classify.md",
+      "automated": false,
+      "level": "suggested"
+    },
+    {
+      "id": "AT-4",
+      "test": "Schema-validates against scene_graph.json; unit tests cover measurement and A-unit conversion.",
+      "evidence": "test names",
+      "automated": true,
+      "level": "required"
+    }
+  ],
+  "design": [
+    "Bible §1, §4"
+  ],
+  "depends_on": [
+    "M1-SCEN-01",
+    "M1-DATA-01"
+  ],
+  "references": [
+    "SPEC §3.3",
+    "kit §3.2"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-16",
+  "updated": "2026-09-16",
+  "history": [
+    {
+      "date": "2026-09-16",
+      "event": "created by the Coordinator (M1 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

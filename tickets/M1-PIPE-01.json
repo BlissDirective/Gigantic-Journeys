@@ -1,0 +1,61 @@
+{
+  "id": "M1-PIPE-01",
+  "title": "Inngest pipeline: real steps for reconstruct → scenegraph → journey → package",
+  "milestone": "M1",
+  "area": "PIPE",
+  "owner": "gj-platform",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P0",
+  "size": "L",
+  "summary": "Replace the M0 stub steps with the real durable workflow: reconstruct (Luma), scene graph, journey generation, and package assembly, each idempotent and retry-safe with timeouts and classified errors.",
+  "deliverables": [
+    "api"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "scan.submitted drives reconstruct → scenegraph → journey → package to a stored environment package; each step is idempotent (same event id, no duplicate work) and retries on vendor failure.",
+      "evidence": "pipeline run log + retry test",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "Tests cover step ordering, idempotency, and error classification; npm run lint/typecheck/test green; package-lock committed.",
+      "evidence": "CI link",
+      "automated": true,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "No secret in the repo; every vendor call site has a timeout constant.",
+      "evidence": "secret-scan green + code reference",
+      "automated": false,
+      "level": "required"
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §1 secret hygiene",
+    "SECURITY_CHECKLIST §7 dependency pinning and audit",
+    "REVIEW_RUBRIC E3"
+  ],
+  "depends_on": [
+    "M0-PIPE-01"
+  ],
+  "references": [
+    "SPEC §3.10",
+    "kit §4"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-16",
+  "updated": "2026-09-16",
+  "history": [
+    {
+      "date": "2026-09-16",
+      "event": "created by the Coordinator (M1 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

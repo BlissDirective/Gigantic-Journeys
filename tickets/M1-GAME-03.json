@@ -1,0 +1,58 @@
+{
+  "id": "M1-GAME-03",
+  "title": "Tier 0 material feedback wired",
+  "milestone": "M1",
+  "area": "GAME",
+  "owner": "gj-gameplay",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P1",
+  "size": "M",
+  "summary": "Wire the Tier 0 feedback matrix: material-keyed footstep, landing, grab, and slide audio, particles, haptics, and camera shake, scaled by the environment scale multiplier.",
+  "deliverables": [
+    "unity/Assets/Gameplay"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "Contacts produce the Bible §9 sound/particle/haptic/camera response keyed to the surface material; feedback scales with the scale multiplier.",
+      "evidence": "clip with audio on 2 materials",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "Camera shake fires only on hard/recover landings and the flag plant; haptics follow the Bible §9 weights.",
+      "evidence": "clip",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "No frame-time regression beyond the SPEC §6 targets with feedback on.",
+      "evidence": "overlay report",
+      "automated": false,
+      "level": "suggested"
+    }
+  ],
+  "design": [
+    "Bible §9"
+  ],
+  "depends_on": [
+    "M1-GAME-02"
+  ],
+  "references": [
+    "SPEC §3.6"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-16",
+  "updated": "2026-09-16",
+  "history": [
+    {
+      "date": "2026-09-16",
+      "event": "created by the Coordinator (M1 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}

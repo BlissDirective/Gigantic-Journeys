@@ -17,15 +17,15 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 
 | Status | Count |
 |---|---|
-| open | 41 |
+| open | 56 |
 | in-progress | 0 |
 | in-review | 0 |
 | changes-requested | 0 |
-| blocked | 1 |
+| blocked | 2 |
 | merged | 1 |
 | done | 2 |
 | cancelled | 0 |
-| **total** | **45** |
+| **total** | **61** |
 
 ## Blockers
 
@@ -69,7 +69,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 - Motion-matching spike (M1-MOVE-01) decides the animation stack; a miss sends locomotion to blend trees.
 - iPhone Duo features depend on iOS 27 posture and Split View APIs reaching Unity; the research spike comes first.
 
-## Tickets (M0 and the Duo track)
+## Tickets (M0, M1, and the Duo track)
 
 | ID | Title | Owner | Pri | Status | Depends on | Branch / PR |
 |---|---|---|---|---|---|---|
@@ -94,6 +94,20 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | M0-UNITY-02 | Gaussian splat renderer package integrated with a sample scene | gj-capture | P0 | open | M0-UNITY-01 | — |
 | M0-UNITY-03 | Traversal controller scaffold: five assemblies, movement.json loader, capsule locomotion and jump | gj-gameplay | P0 | open | M0-UNITY-01, M0-MOVE-01 | — |
 | M0-UNITY-04 | Debug overlay — the loop-proving ticket (M0 exit test) | gj-gameplay | P0 | open | M0-UNITY-01 | — |
+| M1-CAPT-01 | In-app guided room capture (ARKit poses + depth, coverage, blur, quality gate) | gj-capture | P0 | open | M0-UNITY-01, M0-CAPT-01, M0-OWNER-03 | — |
+| M1-CAPT-02 | Upload → Luma reconstruction → splat + collision mesh stored | gj-platform | P0 | open | M1-CAPT-01, M1-PIPE-01, M0-LEGAL-03 | — |
+| M1-DATA-01 | Freeze scene-graph, traversal-graph, and environment-spec schemas v1.0 | gj-scenegraph | P0 | open | — | — |
+| M1-FORE-01 | M1 checkpoint report | gj-foreman | P0 | open | M1-QA-01, M1-GAME-02, M1-GAME-03, M1-CAPT-02, M1-SCEN-04, M1-PIPE-01, M1-MOVE-01, M1-DATA-01 | — |
+| M1-GAME-01 | Unity loads splat + collision mesh + environment spec | gj-gameplay | P0 | open | M0-UNITY-02, M1-DATA-01, M1-CAPT-02 | — |
+| M1-GAME-02 | Placeholder capsule journeys to the summit | gj-gameplay | P0 | open | M1-GAME-01, M1-SCEN-05, M1-MOVE-01 | — |
+| M1-MOVE-01 | Motion-matching vs blend-tree spike (Movement Bible §13) | gj-gameplay | P0 | open | M0-UNITY-03, M0-MOVE-01 | — |
+| M1-PIPE-01 | Inngest pipeline: real steps for reconstruct → scenegraph → journey → package | gj-platform | P0 | open | M0-PIPE-01 | — |
+| M1-QA-01 | M1 exit-test harness: 10 fresh scans to reachable summit + two routes | gj-qa-release | P0 | open | M1-GAME-02, M1-SCEN-04, M1-CAPT-01 | — |
+| M1-SCEN-01 | Mesh cleanup: hole fill, ceiling cap, floater removal | gj-scenegraph | P0 | open | M1-CAPT-02 | — |
+| M1-SCEN-02 | Surface classification, measurement, scale inference, material and semantic labels | gj-scenegraph | P0 | open | M1-SCEN-01, M1-DATA-01 | — |
+| M1-SCEN-03 | Affordance library and traversal-graph export | gj-scenegraph | P0 | open | M1-SCEN-02 | — |
+| M1-SCEN-04 | Summit designation, route generation, vista selection | gj-scenegraph | P0 | open | M1-SCEN-03, M1-SCEN-05 | — |
+| M1-SCEN-05 | Deterministic reachability validator against movement.json | gj-scenegraph | P0 | open | M0-MOVE-01, M1-SCEN-03 | — |
 | M0-CAPT-01 | Corpus intake: manifest schema, metadata stripping tool, storage rules | gj-capture | P1 | open | — | — |
 | M0-DSGN-02 | Design tokens v0 (DTCG JSON) and USS export for the locked decisions | gj-design | P1 | open | M0-DSGN-01 | — |
 | M0-FORE-03 | Verify every specialist's SKILLS.md is merged | gj-foreman | P1 | open | M0-SKILL-02, M0-SKILL-03, M0-SKILL-04, M0-SKILL-05, M0-SKILL-06, M0-SKILL-07, M0-SKILL-08, M0-SKILL-09 | — |
@@ -113,7 +127,9 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | M0-SKILL-07 | gj-design: research handbook (RESOURCES.md + SKILLS.md) | gj-design | P1 | open | — | — |
 | M0-SKILL-08 | gj-qa-release: research handbook (RESOURCES.md + SKILLS.md) | gj-qa-release | P1 | open | — | — |
 | M0-SKILL-09 | gj-data: research handbook (RESOURCES.md + SKILLS.md) | gj-data | P1 | open | — | — |
+| M1-GAME-03 | Tier 0 material feedback wired | gj-gameplay | P1 | open | M1-GAME-02 | — |
 | M1-DUO-01 | iPhone Duo research spike: posture, Split View, Duo Preview, outer display in Unity 6 | gj-gameplay | P2 | open | M0-UNITY-01 | — |
+| M1-RES-01 | Tier 2 research prototype — month 1 (segment, embed, simulate on the corpus) | gj-scenegraph | P2 | blocked | — | — |
 | M2-DUO-01 | Rear-camera avatar capture with Duo Preview (iPhone Duo, optional) | gj-avatar | P2 | open | M1-DUO-01 | — |
 | M3-DUO-01 | Stand-mode console layout (iPhone Duo, optional) | gj-gameplay | P2 | open | M1-DUO-01, M0-OWNER-03 | — |
 | M3-DUO-02 | Unfold triggers the signature transition (iPhone Duo, optional) | gj-gameplay | P2 | open | M1-DUO-01, M0-OWNER-02 | — |

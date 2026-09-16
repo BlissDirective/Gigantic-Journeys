@@ -1,0 +1,66 @@
+{
+  "id": "M1-RES-01",
+  "title": "Tier 2 research prototype — month 1 (segment, embed, simulate on the corpus)",
+  "milestone": "M1",
+  "area": "RES",
+  "owner": "gj-scenegraph",
+  "qa": null,
+  "status": "blocked",
+  "priority": "P2",
+  "size": "L",
+  "summary": "First Tier 2 research spike per the research/tier2 charter: on the corpus only, segment objects from the splat, embed them for simulation, and simulate at least three object classes, reporting per-scan compute cost and mobile frame-time against the SPEC §5 metrics. Monthly compute AUTH required before any GPU spend.",
+  "deliverables": [
+    "research/tier2"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "research/tier2 report covers the SPEC §5 metrics R1–R6 with measured values on a corpus subset; no user data is used.",
+      "evidence": "research/tier2 report for month 1",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "Per-scan preprocessing cost and added mobile frame-time are measured on the reference iPhone against R2 and R3.",
+      "evidence": "report table",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "Runs only after the month's compute AUTH is approved; spend stays within the approved line and is paused on the Owner's word.",
+      "evidence": "AUTH reference + spend note",
+      "automated": false,
+      "level": "required"
+    }
+  ],
+  "depends_on": [],
+  "blocked_by": [
+    "Monthly Tier 2 compute AUTH (spend) not yet requested"
+  ],
+  "auth_required": [
+    {
+      "type": "spend",
+      "what": "Tier 2 research GPU compute, month 1 ($400–1,000)",
+      "auth_id": null,
+      "status": "pending"
+    }
+  ],
+  "references": [
+    "SPEC §5",
+    "research/tier2/README.md",
+    "kit §7"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-16",
+  "updated": "2026-09-16",
+  "history": [
+    {
+      "date": "2026-09-16",
+      "event": "created by the Coordinator (M1 decomposition)",
+      "by": "coordinator"
+    }
+  ]
+}
