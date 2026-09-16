@@ -1,6 +1,6 @@
 # Decision 5 — Play layout: options for the Owner's lock
 
-`design/proposals/decision-5-play-layout-options.md` · 2026-09-16 · Coordinator. Binding constraints are in `DESIGN_SYSTEM.md` §5 (two-thumb landscape; floating stick in the left third; jump the largest right-thumb target; one contextual action; repositionable and resizable; play controls ≥ 56 pt; HUD in the top 8 %; controller support from day one; camera per Bible §8; iPhone Duo variants). Pick one option per question. Reply `APPROVED #004: decision 5 = recommended package`, or list the letters that differ. The Coordinator then writes §5 and `gj-design` implements.
+`design/proposals/decision-5-play-layout-options.md` · 2026-09-16 · Coordinator. Binding constraints are in `DESIGN_SYSTEM.md` §5 (two-thumb landscape; floating stick in the left third; jump the largest right-thumb target; one contextual action; repositionable and resizable; play controls ≥ 56 pt; HUD in the top 8 %; controller support from day one; camera per Bible §8; iPhone Duo variants). Pick one option per question. Reply `APPROVED: decision 5 = recommended package`, or list the letters that differ; the Coordinator assigns the AUTH number when logging, writes §5, and `gj-design` implements.
 
 ## 5a. Right-thumb cluster
 
