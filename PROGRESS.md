@@ -17,13 +17,13 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 
 | Status | Count |
 |---|---|
-| open | 56 |
+| open | 55 |
 | in-progress | 0 |
 | in-review | 0 |
 | changes-requested | 0 |
 | blocked | 2 |
 | merged | 1 |
-| done | 2 |
+| done | 3 |
 | cancelled | 0 |
 | **total** | **61** |
 
@@ -80,7 +80,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | M0-FORE-04 | M0 checkpoint report | gj-foreman | P0 | open | M0-UNITY-04, M0-QA-01, M0-DATA-01, M0-PIPE-01, M0-DSGN-01, M0-FORE-02, M0-FORE-03 | — |
 | M0-MOVE-01 | movement.json as the shared tuning contract (loaders, schema, CI sync) | gj-gameplay | P0 | open | — | — |
 | M0-OWNER-01 | Capture the day-one corpus: 10 rooms and 5 tabletop builds | owner | P0 | open | M0-CAPT-01 | — |
-| M0-OWNER-03 | Lock design system decisions 5–10 at the M0 checkpoint | owner | P0 | open | M0-DSGN-01 | — |
+| M0-OWNER-03 | Lock design system decisions 5–10 at the M0 checkpoint | owner | P0 | done | M0-DSGN-01 | — |
 | M0-PIPE-01 | Inngest loop skeleton: scan.submitted → reconstruct → scenegraph → journey → package (stubs) | gj-platform | P0 | open | — | — |
 | M0-QA-01 | Unity on the QA VM and the scripted editor smoke task | gj-qa-release | P0 | open | M0-UNITY-01, M0-UNITY-02 | — |
 | M0-QA-02 | Visual QA procedure and evidence standard | gj-qa-release | P0 | open | — | — |

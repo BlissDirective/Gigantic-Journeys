@@ -5,7 +5,7 @@
   "area": "OWNER",
   "owner": "owner",
   "qa": null,
-  "status": "open",
+  "status": "done",
   "priority": "P0",
   "size": "S",
   "summary": "Review gj-design's proposal and lock decisions 5–10 into DESIGN_SYSTEM.md by AUTH (design-change). After this, any change to the design system needs an AUTH.",
@@ -38,7 +38,7 @@
   "branch": null,
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-15",
+  "updated": "2026-09-16",
   "history": [
     {
       "date": "2026-09-15",
@@ -48,6 +48,11 @@
     {
       "date": "2026-09-15",
       "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-16",
+      "event": "Owner locked decisions 5–10 (all recommended packages) from the Coordinator's option sets; DESIGN_SYSTEM v0.6, AUTH #005; the design system is fully locked ahead of the Bots",
       "by": "coordinator"
     }
   ]

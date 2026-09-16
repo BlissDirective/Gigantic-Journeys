@@ -8,7 +8,7 @@
   "status": "open",
   "priority": "P1",
   "size": "M",
-  "summary": "Encode the locked design system as machine-readable tokens in the Design Tokens Community Group format with a script that exports USS variables for Unity UI Toolkit. Blocked until the Owner transcribes decisions 1–4.",
+  "summary": "Encode the locked design system as machine-readable tokens in the Design Tokens Community Group format with a script that exports USS variables for Unity UI Toolkit. All ten decisions are locked (AUTH #005); tokens cover the full system.",
   "deliverables": [
     "design/tokens/tokens.json",
     "design/tokens/export_uss.py",
@@ -38,7 +38,7 @@
     },
     {
       "id": "AT-4",
-      "test": "Token values match DESIGN_SYSTEM.md decisions 1–4 verbatim; the PR cites the transcription commit.",
+      "test": "Token values match DESIGN_SYSTEM decisions 1–10 verbatim; the PR cites the locked version (v0.6+).",
       "evidence": "PR body",
       "automated": false,
       "level": "required"
@@ -72,6 +72,11 @@
     {
       "date": "2026-09-16",
       "event": "unblocked: decisions 1–4 transcribed (M0-OWNER-02 done); token work must honor the §12 contrast findings (derived muted-text tokens)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-16",
+      "event": "all ten design decisions locked (AUTH #005); tokens now cover the full system",
       "by": "coordinator"
     }
   ]

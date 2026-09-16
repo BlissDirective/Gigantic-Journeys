@@ -8,7 +8,7 @@
   "status": "open",
   "priority": "P0",
   "size": "L",
-  "summary": "Propose the six open decisions in design/DESIGN_SYSTEM.md as mockups plus rationale so the Owner can lock them at the M0 checkpoint. Nothing is written into DESIGN_SYSTEM.md by this ticket; the Owner locks by AUTH (M0-OWNER-03).",
+  "summary": "Decisions 5–10 were locked by the Owner on 2026-09-16 (AUTH #005) from the Coordinator's option sets, so this ticket no longer proposes them. It now produces the implementation-ready mockups for the locked play, capture, create-flow, browse, results/store, and accessibility screens and runs the contrast and colorblind verification on the three test scans, so gj-gameplay and gj-platform can build against pixels, not prose.",
   "deliverables": [
     "design/proposals/M0-design-system-proposal.md",
     "design/proposals/mockups/"
@@ -16,43 +16,36 @@
   "acceptance_tests": [
     {
       "id": "AT-1",
-      "test": "design/proposals/M0-design-system-proposal.md covers decisions 5–10, each with the proposal, the Design Skills §3 rules it satisfies (by number), alternatives considered, and open questions for the Owner.",
-      "evidence": "file in PR",
+      "test": "HTML or Figma mockups under design/proposals/mockups/ for the play HUD and controls (landscape and Duo stand mode), both capture-coaching modes, the create-flow waiting states, browse cards and sort tabs, results and store screens, and the consent and age-gate screens, each faithful to the locked DESIGN_SYSTEM §5–§10.",
+      "evidence": "mockup files",
       "automated": false,
       "level": "required"
     },
     {
       "id": "AT-2",
-      "test": "HTML mockups under design/proposals/mockups/ for: play HUD and controls (landscape), capture coaching (both modes), create-flow waiting states, browse cards and sort tabs, results and store screens; each rendered on the three test scans (bright room, dark room, cluttered tabletop). An iPhone Duo stand-mode variant of the play layout is an optional extra (design/proposals/iphone-duo-track.md).",
-      "evidence": "mockup files + screenshots",
+      "test": "Each screen is rendered on the three test scans (bright room, dark room, cluttered tabletop) with measured contrast for every text and icon token (text ≥ 4.5:1, icons ≥ 3:1), using the derived muted-text tokens from DESIGN_SYSTEM §2/§12 where cream surfaces are involved.",
+      "evidence": "contrast table + screenshots",
       "automated": false,
       "level": "required"
     },
     {
       "id": "AT-3",
-      "test": "Measured contrast ratios for every text and icon token on the three scans: text ≥ 4.5:1, icons ≥ 3:1; deuteranopia simulation attached for state colors.",
-      "evidence": "table in the proposal",
+      "test": "A deuteranopia simulation is attached for every state color, and every glass surface shows its flat variant.",
+      "evidence": "simulation images",
       "automated": false,
       "level": "suggested"
     },
     {
       "id": "AT-4",
-      "test": "Every glass surface has a flat variant; every animation has a Reduce Motion variant; touch targets annotated (≥ 44 pt / 48 dp; play controls ≥ 56).",
-      "evidence": "annotations in mockups",
+      "test": "Touch targets annotated (≥ 44 pt; play controls ≥ 56); safe-zone insets shown on a notched device and on the Duo.",
+      "evidence": "annotations",
       "automated": false,
       "level": "required"
     },
     {
       "id": "AT-5",
-      "test": "The proposal is consistent with the binding constraints of decisions 1–4 and, once transcribed, with their locked text.",
+      "test": "Copy on every screen follows the decision-2 voice and vocabulary (environment/journey/summit/route/vista; never level/map/goal/user).",
       "evidence": "Coordinator review",
-      "automated": false,
-      "level": "required"
-    },
-    {
-      "id": "AT-6",
-      "test": "An AUTH REQUEST (design-change) 'lock decisions 5–10' is drafted in the proposal for the Foreman to file at checkpoint.",
-      "evidence": "file section",
       "automated": false,
       "level": "required"
     }
@@ -70,7 +63,7 @@
   "branch": null,
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-15",
+  "updated": "2026-09-16",
   "history": [
     {
       "date": "2026-09-15",
@@ -80,6 +73,11 @@
     {
       "date": "2026-09-15",
       "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-16",
+      "event": "decisions 5–10 locked via AUTH #005 from the Coordinator's option sets; ticket narrowed from 'propose 5–10' to 'mockups + contrast/colorblind verification of the locked screens'",
       "by": "coordinator"
     }
   ]
