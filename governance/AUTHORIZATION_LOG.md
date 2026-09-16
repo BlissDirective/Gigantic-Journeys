@@ -29,6 +29,10 @@ Already held or not needed: the Apple Developer Program and an App Store Connect
 - Tier 1 segmentation about $0.02–0.10 per scan. Tier 2 research compute is a separate line ($400–1,000/month), approved per month, paused whenever the core build needs the budget.
 - Unity Pro seat becomes mandatory once revenue exists.
 
+## Transcriptions and consistency fixes (no authorization consumed)
+
+- 2026-09-16: `design/DESIGN_SYSTEM.md` §1–4 transcribed from the Owner's 2026-09-14 lock (ticket M0-OWNER-02); `SPEC.md` v1.2 aligns its capture wording to decision 4; Coordinator input on decision 3 filed at `design/proposals/decision-3-transition-input.md` and decision 5 options at `design/proposals/decision-5-play-layout-options.md`, both awaiting the Owner's AUTH.
+
 ## How to use this log
 
 - Bots never edit the Decisions table. The Foreman may add Pending rows in an `auth/<nnn>-<slug>` PR when filing a batch; the Coordinator moves rows to Decisions when the Owner replies on the issue.

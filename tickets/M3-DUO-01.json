@@ -8,7 +8,7 @@
   "status": "open",
   "priority": "P2",
   "size": "M",
-  "summary": "Owner-selected Duo feature (candidate 1). Folded at about 90 degrees, the upper display half is 100 % photograph with no HUD overlay at all; the lower half holds the floating stick, jump, the contextual action, the diorama minimap with summit beacon, route lines, and vista markers, and the timer. Reads like a handheld console. Additive: non-foldable iPhones keep the standard two-thumb layout.",
+  "summary": "Owner-selected Duo feature (candidate 1). Folded at about 90 degrees, the upper display half is 100 % photograph with no HUD overlay at all; the lower half holds the floating stick, jump, the contextual action, the diorama overview (summit beacon, route lines, vista markers at diorama scale), and the timer. Reads like a handheld console. Additive: non-foldable iPhones keep the standard two-thumb layout.",
   "reviewers": [
     "gj-design"
   ],
@@ -27,7 +27,7 @@
     },
     {
       "id": "AT-2",
-      "test": "When the device reports the stand posture, the play view moves to the upper half with no HUD overlay; the lower half holds stick, jump, contextual action, minimap, and timer; controls at least 56 pt; layout built from design/tokens.",
+      "test": "When the device reports the stand posture, the play view moves to the upper half with no HUD overlay; the lower half holds stick, jump, contextual action, diorama overview, and timer; controls at least 56 pt; layout built from design/tokens.",
       "evidence": "clip or screenshots when a device or simulator is available; otherwise a design walkthrough in the PR",
       "automated": false,
       "level": "required"
@@ -69,11 +69,16 @@
   "branch": null,
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-15",
+  "updated": "2026-09-16",
   "history": [
     {
       "date": "2026-09-15",
       "event": "created by the Coordinator (Owner selection of iPhone Duo candidates 1–3 and App Store Connect key confirmation, AUTH #003)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-16",
+      "event": "vocabulary: 'minimap' replaced by 'diorama overview' (decision 2 forbids 'map')",
       "by": "coordinator"
     }
   ],

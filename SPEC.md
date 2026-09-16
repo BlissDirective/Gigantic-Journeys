@@ -1,6 +1,6 @@
 # Gigantic Journeys — SPEC.md
 
-Version 1.1 · 2026-09-15 · Owner: BlissDirective (SparkForge Labs) · Maintainer: Coordinator (Claude Code)
+Version 1.2 · 2026-09-16 · Owner: BlissDirective (SparkForge Labs) · Maintainer: Coordinator (Claude Code)
 
 **Authority.** This file is the only authority on *what* v1 is. Below it rank `design/MOVEMENT_BIBLE.md` v1.0 (how the avatar moves), `design/Gigantic-Journey-Design-Skills.md` v1.1 with `design/DESIGN_SYSTEM.md` (how it looks and feels), then `ADRs/` (how it is built). Where documents disagree, this file wins until an authorized change says otherwise.
 
@@ -22,7 +22,7 @@ Identity: name "Gigantic Journeys"; bundle id `com.sparkforgelabs.giganticjourne
 
 1. **Install → play in 60 s.** A pre-scanned demo environment lets the player run, jump, and mantle before scanning anything (Design Skills rule 9: play first, scan second). First playable moment under 3 minutes, first summit under 5.
 2. **Scan.** One illustrated toggle chooses room walkthrough or tabletop orbital; guided capture with live coverage, speed, blur, and light coaching; a quality gate before upload; under 90 seconds of active capture.
-3. **Become the avatar.** A separate, explicit biometric consent step; three face photos plus one full-body photo; head from image-to-3D realistic mode, body from a parametric fit; "Is this you?" with Retake or four coarse tweaks; under 2 minutes; source photos deleted afterwards.
+3. **Become the avatar.** A separate, explicit biometric consent step; a full-body shot with a 360° rotation, then a face close-up with rotation; head from image-to-3D realistic mode, body from a parametric fit; "Is this you?" with Retake or four coarse tweaks; under 2 minutes; source photos deleted afterwards.
 4. **Journey.** The environment resolves progressively while the player waits (never a blank spinner). Then: the summit beacon visible from the start; two or three generated routes of rising difficulty plus player-recorded challenge routes; three vistas rewarded with photo mode; the flag plant at the summit.
 5. **Publish and browse.** Opt-in publish (GPS stripped, moderation pass); browse by place; rate on four axes; race per-route time trials; see creator stats. A friend plays it from a link within five minutes.
 6. **Return.** New scans, other people's environments, the diorama view for sharing clips, the cosmetic wardrobe after a win.
@@ -39,7 +39,7 @@ Identity: name "Gigantic Journeys"; bundle id `com.sparkforgelabs.giganticjourne
 
 ### 3.2 Avatar: realistic, 1:12
 - Consent gate first: a separate, explicit, versioned biometric consent record must exist before any face bytes leave the device (§7, SECURITY_CHECKLIST §5).
-- Capture: front, left, and right face plus full body, with lighting guidance.
+- Capture (DESIGN_SYSTEM decision 4): a full-body shot with a 360° body rotation, then a face close-up with rotation, with lighting guidance and retakes.
 - Realistic proportions (about 7 heads), stylized "grounded" materials, a unified shader with an environment probe from the splat, a subtle rim light and contact shadow so the avatar pops off the photoreal floor (Design Skills rule 20).
 - Head via image-to-3D realistic mode (Meshy or Tripo; vendor fixed by ADR at M2 after the M0 vendor-terms review) with a fixed material prompt. Body via parametric fit with a small default wardrobe roughly matching the photo.
 - Merge, retopo to a fixed budget, bake, auto-rig to the **shared GJ humanoid skeleton**, retarget the shared animation set. Validation checklist (bone count, T-pose, eye height, texture seams) with automatic retry.
@@ -225,3 +225,4 @@ Apple's first foldable iPhone ships October 23, 2026 (7.6-inch inner display, 5.
 |---|---|---|---|
 | 1.0 | 2026-09-15 | Initial spec from the kit v0.5 product lock, plan v0.1, Movement Bible v1.0, Design Skills v1.1 | AUTH #000 (Prompt 1 kickoff) |
 | 1.1 | 2026-09-15 | v1 on the iOS App Store only; no minimum device model with automatic quality tiers (§6); tests, QA, and device measurements are suggestions, never merge gates (§11); iPhone Duo optional track (§12); Android deferred to v1.1 | AUTH #003 (Owner instruction) |
+| 1.2 | 2026-09-16 | §2 and §3.2 capture wording aligned to the locked design decision 4 (rotation capture instead of three stills) | Transcription of the 2026-09-14 lock (M0-OWNER-02); no AUTH consumed |

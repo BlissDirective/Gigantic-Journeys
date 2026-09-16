@@ -5,7 +5,7 @@
   "area": "OWNER",
   "owner": "owner",
   "qa": null,
-  "status": "open",
+  "status": "done",
   "priority": "P1",
   "size": "S",
   "summary": "The Owner locked decisions 1–4 (element language, brand palette and voice, signature transition, avatar presentation) in the 2026-09-14 design session; the Coordinator did not have that transcript. Paste the decision text into the marked slots. First fill is a transcription, not a change, so no AUTH is needed.",
@@ -43,7 +43,7 @@
   "branch": null,
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-15",
+  "updated": "2026-09-16",
   "history": [
     {
       "date": "2026-09-15",
@@ -53,6 +53,11 @@
     {
       "date": "2026-09-15",
       "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-16",
+      "event": "Owner pasted the four decisions in chat; Coordinator transcribed them into DESIGN_SYSTEM.md v0.4 and confirmed consistency with Design Skills §3 (contrast findings recorded in §12); committed directly to main",
       "by": "coordinator"
     }
   ],

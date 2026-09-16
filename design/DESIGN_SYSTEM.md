@@ -1,16 +1,16 @@
 # Gigantic Journeys — Design System
 
-`design/DESIGN_SYSTEM.md` · v0.3 · 2026-09-15 · Status: **LOCKED except by AUTH REQUEST (design-change)**
+`design/DESIGN_SYSTEM.md` · v0.4 · 2026-09-16 · Status: **LOCKED except by AUTH REQUEST (design-change)**
 
 The Owner locks; `gj-design` implements (tokens in `design/tokens/`, Unity UI Toolkit in `unity/Assets/UI`); every UI and gameplay PR is reviewed against this file (REVIEW_RUBRIC §G). Binding constraints come from `Gigantic-Journey-Design-Skills.md` §3 (v1.1), which this file specializes and never contradicts. CI blocks PRs that edit this file without an `APPROVED #n`; appending under §12 Field notes is allowed.
 
 ## 0. How to read this file
 
-Decisions 1–4 were **locked by the Owner in the design session of 2026-09-14**. The Coordinator did not have that session's transcript when this file was created, so each of those sections carries (a) the binding constraints already in force from the Design Skills, which Bots implement now, and (b) a marked slot for the locked decision text, which the Owner transcribes (ticket M0-OWNER-02). Filling that slot for the first time is a transcription, not a change: no AUTH needed. Any later edit is a change: AUTH needed.
+Decisions 1–4 were **locked by the Owner in the design session of 2026-09-14** and transcribed by the Owner on 2026-09-16 (ticket M0-OWNER-02). Each section carries the binding constraints from the Design Skills, the locked decision text, and a Coordinator consistency note. The locked text changes only by AUTH. Decision 3 carries Coordinator input requested by the Owner (`design/proposals/decision-3-transition-input.md`); adopting any of it is an AUTH.
 
 Decisions 5–10 are open until the M0 checkpoint: `gj-design` proposes (ticket M0-DSGN-01, under `design/proposals/`), the Owner locks by AUTH (ticket M0-OWNER-03).
 
-## 1. Non-photo element language — LOCKED 2026-09-14
+## 1. Non-photo element language — LOCKED 2026-09-14 (transcribed 2026-09-16)
 
 Scope: avatar treatment, summit beacon, route markers, vista markers, the flag-planting moment, the HUD's non-photo chrome.
 
@@ -20,9 +20,15 @@ Binding constraints (Design Skills rules 1, 2, 20, 21; Bible §8):
 - The avatar is the only rendered solid, set off by a subtle rim light and contact shadow; real objects stay photoreal, untouched except for Tier 1 displacement.
 - Nothing encodes state by hue alone; nothing new enters the play viewport without an ADR.
 
-> **Locked decision text: PENDING TRANSCRIPTION by the Owner (M0-OWNER-02).** Paste the exact treatment decided on 2026-09-14: beacon form and behavior, route marker form, vista marker form, the flag-plant moment, avatar rim and contact-shadow values or references.
+**Locked decision text (Owner, transcribed 2026-09-16):**
+- Avatar: warm rim light plus contact shadow; the only rendered solid.
+- Summit: thin beam of light visible through geometry, toggle in settings, resolves into a flag on plant.
+- Routes: faint footprints that fade behind you; shown only when a route is selected; off by default for explorers.
+- Vistas: small lens-flare sparkle at the vantage point; reaching it opens photo mode.
 
-## 2. Brand: palette, scrim strategy, wordmark, iconography, voice — LOCKED 2026-09-14
+Coordinator consistency note: matches rules 1, 2, 20, 21 and Bible §8. The beam is on by default; the settings toggle is read as a player preference (turning it off is the player's choice, and the beam still ignites in the signature transition so orientation is never lost at entry). A different default would be an AUTH.
+
+## 2. Brand: palette, scrim strategy, wordmark, iconography, voice — LOCKED 2026-09-14 (transcribed 2026-09-16)
 
 Binding constraints (rules 1, 3, 5, 23; §4 checklist):
 - Every scan is an unknown full-color background: text and controls sit on a translucent scrim auto-picked per scan; contrast computed at runtime; text ≥ 4.5:1, icons ≥ 3:1; deuteranopia-safe state colors.
@@ -30,9 +36,17 @@ Binding constraints (rules 1, 3, 5, 23; §4 checklist):
 - Type scale of at most 5 steps on the platform body size (17 pt iOS, 16 sp Android); HUD numerals tabular; line length 45–75 characters.
 - Voice: short, warm, verbs first, no jargon; permissions asked in context; errors framed as help.
 
-> **Locked decision text: PENDING TRANSCRIPTION by the Owner (M0-OWNER-02).** Paste: palette (hex values and roles, light and dark scrims), wordmark description or file reference, iconography style, the voice guide with three example lines.
+**Locked decision text (Owner, transcribed 2026-09-16):**
+- Accent: `accent.amber` #F2A93B; `accent.amberLight` #FFD27A (rim light, beacon core, flag highlight).
+- Neutrals: `ink.charcoal` #1C1F26, `surface.charcoal` #2A2E37, `paper.cream` #F5EFE6, `surface.cream` #EDE5D8, `text.muted` #8A8F99.
+- Cool anchor: `semantic.teal` #00585E (capture-state and progress only). Success `semantic.sage` #7A8F7B, error `semantic.terracotta` #C9573D, both muted.
+- Rules: amber never body text on cream; scrims picked per scan (charcoal over bright rooms, cream over dark), text always ≥ 4.5:1; amber under 10 % of any screen.
+- Wordmark: "Gigantic Journeys" in a clean geometric sans, the "i" in Gigantic dotted with a tiny avatar silhouette. Icon: summit beam rising from a tiny isometric room, amber on charcoal.
+- Voice: short, warm, second person, verbs first. Vocabulary: environment / journey / summit / route / vista, never level / map / goal / user.
 
-## 3. Signature transition: the shrink / diorama moment — LOCKED 2026-09-14
+Coordinator consistency note (WCAG 2.x, measured 2026-09-16; full table in §12): ink on cream 14.4:1 and paper on charcoal 14.4:1 pass. `text.muted` fails body text on cream (2.8:1) and surface.cream (2.6:1) and is borderline on surface.charcoal (4.2:1). `semantic.sage` (3.0:1) and `semantic.terracotta` (3.7:1) on cream are icon and fill colors, not text; `semantic.teal` fails on charcoal (2.0:1). Token guidance for gj-design, which adds derived tokens without changing the locked palette: muted text on cream surfaces uses a darker derived token (`#63676E` reaches 4.5:1 on surface.cream) or sizes ≥ 18 pt; muted text on charcoal uses `#90959F`; semantic colors are never body text and pair with ink or paper text; amber and teal are used only on the surfaces they pass on. The vocabulary rule applies to every player-facing string, including the Duo "diorama overview" (never "map").
+
+## 3. Signature transition: the shrink / diorama moment — LOCKED 2026-09-14 (transcribed 2026-09-16)
 
 Binding constraints (rules 7, 8, 28; SPEC §3.11):
 - The one hero animation; it has its own budget. Other UI motion is 150–300 ms, screen transitions 400–600 ms.
@@ -40,9 +54,14 @@ Binding constraints (rules 7, 8, 28; SPEC §3.11):
 - It is the second beat of the store preview and must make the scale relationship obvious.
 - Optional iPhone Duo variant (AUTH #003, ticket M3-DUO-02): the physical unfold triggers the same transition, spanning the outer-to-inner display change; one implementation, two triggers; the Reduce Motion variant applies to both.
 
-> **Locked decision text: PENDING TRANSCRIPTION by the Owner (M0-OWNER-02).** Paste: what the camera does, duration, easing, sound, the HUD's state during it, the Reduce Motion variant.
+**Locked decision text (Owner, transcribed 2026-09-16):**
+- Continuous 2.5 s pull-back-and-up; room edges soften into a floating diorama over a soft-blurred version of the room itself; avatar drops in with a dust puff; beam ignites at the summit; camera settles into play framing.
+- Auto-plays on first entry to an environment, tap-to-skip on repeats. Reduce Motion: cross-fade over the blurred room, beam ignition kept.
+- The blurred backdrop is a low-res splat render blurred once and cached, not a live blur.
 
-## 4. Avatar presentation — LOCKED 2026-09-14
+Coordinator consistency note: matches rules 7, 8, 27, 28 (own budget; Reduce Motion cross-fade; no live full-screen blur; the diorama as the hero shot). The Owner requested input on visual improvement and retention on 2026-09-16: `design/proposals/decision-3-transition-input.md`. Adopting any item is an AUTH (design-change).
+
+## 4. Avatar presentation — LOCKED 2026-09-14 (transcribed 2026-09-16)
 
 Binding constraints (rules 15, 16, 20; SPEC §3.2):
 - Realistic proportions of about 7 heads, stylized grounded materials, rim light plus contact shadow.
@@ -50,7 +69,13 @@ Binding constraints (rules 15, 16, 20; SPEC §3.2):
 - Default wardrobe roughly matches the photo; the store appears only after the first win.
 - Optional iPhone Duo variant (AUTH #003, ticket M2-DUO-01): tent-posture capture with the rear cameras while the outer display shows framing, countdown, and coaching; the same consent gate and deletion path as the standard flow.
 
-> **Locked decision text: PENDING TRANSCRIPTION by the Owner (M0-OWNER-02).** Paste: the default wardrobe set (names, count), material treatment references, rim and contact values, the confirmation screen layout.
+**Locked decision text (Owner, transcribed 2026-09-16):**
+- Default wardrobe generated to match the user's photo, normalized onto four rig-clean silhouettes (casual, athletic, layered, dressed); more items as later DLC.
+- Capture flow: full-body shot with 360° body rotation, then face close-up with rotation; retakes for better capture.
+- Likeness confirmation: generated head turning beside the source photo; Yes / Retake / Tweak, where Tweak exposes four coarse controls (skin tone, hair, glasses, build).
+- In-world: warm rim light and contact shadow; reactive idle (avatar reacts to the environment per Movement Bible Section 7).
+
+Coordinator consistency note: matches rules 15, 16, 20 and Bible §7. SPEC §3.2 and §2 capture wording is aligned to this decision (SPEC v1.2). Player-facing copy says "your photo", never "user" (decision 2 vocabulary).
 
 ## 5. Play layout — OPEN (proposal M0-DSGN-01; lock M0-OWNER-03)
 
@@ -95,7 +120,10 @@ Binding constraints: assist options (Bible §10 assist block), colorblind palett
 | 0.1 | 2026-09-15 | File created; decisions 1–4 recorded as locked with their binding constraints, text pending transcription; 5–10 open | AUTH #000 |
 | 0.2 | 2026-09-15 | §5 gains the optional iPhone Duo layout variants | AUTH #003 |
 | 0.3 | 2026-09-15 | §3 and §4 gain the optional iPhone Duo variants for the Owner's selected features | AUTH #003 (Owner selection) |
+| 0.4 | 2026-09-16 | Decisions 1–4 transcribed from the Owner's 2026-09-14 lock; consistency notes and palette contrast measurements added; §5 vocabulary fix (diorama overview) | Transcription, M0-OWNER-02 (no AUTH consumed) |
 
 ## 12. Field notes
 
 (Bots append contradictions and measured values here; the Owner reviews them at each checkpoint.)
+
+- 2026-09-16 (Coordinator): WCAG 2.x contrast of the decision 2 palette. Pass for body text (≥ 4.5:1): ink.charcoal on paper.cream 14.4, ink.charcoal on surface.cream 13.2, paper.cream on ink.charcoal 14.4, paper.cream on surface.charcoal 11.9, accent.amber on ink.charcoal 8.3, accent.amber on surface.charcoal 6.8, accent.amberLight on ink.charcoal 11.6, ink.charcoal on accent.amber 8.3, semantic.teal on paper.cream 7.2, paper.cream on semantic.teal 7.2, text.muted on ink.charcoal 5.1, semantic.sage on ink.charcoal 4.8. UI or large text only (3:1 to 4.5:1): text.muted on surface.charcoal 4.2, semantic.terracotta on ink.charcoal 3.9, semantic.terracotta on paper.cream 3.7, paper.cream on semantic.terracotta 3.7, semantic.sage on paper.cream 3.0. Fail (< 3:1): text.muted on paper.cream 2.8, text.muted on surface.cream 2.6, semantic.teal on ink.charcoal 2.0, accent.amber on paper.cream 1.8 (already forbidden by the rule). Derived tokens that pass: muted-on-cream `#63676E` (4.5:1 on surface.cream), muted-on-charcoal `#90959F` (4.5:1 on surface.charcoal).

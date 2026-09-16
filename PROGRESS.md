@@ -1,6 +1,6 @@
 # PROGRESS.md
 
-Living tracker. Updated by the Coordinator on every merge, AUTH decision, and checkpoint. Last update: **2026-09-15** (Coordinator: Duo features selected and ticketed; TestFlight lane added). Ticket table regenerated with `python tickets/validate.py --summary`.
+Living tracker. Updated by the Coordinator on every merge, AUTH decision, and checkpoint. Last update: **2026-09-16** (Coordinator: decisions 1–4 transcribed; decision 3 input and decision 5 options filed). Ticket table regenerated with `python tickets/validate.py --summary`.
 
 ## Milestone
 
@@ -21,9 +21,9 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | in-progress | 0 |
 | in-review | 0 |
 | changes-requested | 0 |
-| blocked | 2 |
+| blocked | 1 |
 | merged | 1 |
-| done | 1 |
+| done | 2 |
 | cancelled | 0 |
 | **total** | **45** |
 
@@ -31,7 +31,6 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 
 - Bots cannot start until the Owner hands the Bot machine-user PAT to the team (AUTH #002 approved; Owner creating it) and creates the Foreman Bot from `agents/grok/roles/gj-foreman.md`.
 - Unity CI jobs skip until the Unity project exists (M0-UNITY-01) and license secrets are added (M0-REPO-03, after the Unity account AUTH).
-- M0-DSGN-02 blocked on the Owner transcribing design decisions 1–4 (M0-OWNER-02).
 
 ## Pending AUTH REQUESTs
 
@@ -50,13 +49,14 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 - **Tests are suggestions, never merge gates.** The Owner tests thoroughly on real iPhones; merge gates are the automated CI checks and the security rules (SPEC §11). Acceptance criteria carry `required` or `suggested` levels.
 - **iPhone Duo features selected:** stand-mode console layout, unfold as the signature transition, rear-camera avatar capture (candidates 1–3 of `design/proposals/iphone-duo-track.md`). Tickets M1-DUO-01 (research spike), M2-DUO-01, M3-DUO-01, M3-DUO-02, M5-DUO-01; go/no-go at the M3 checkpoint.
 - The Owner holds an App Store Connect API key; CI has a TestFlight lane ready behind `TESTFLIGHT_ENABLED` (M0-REPO-05, M0-REPO-06).
+- 2026-09-16: design decisions 1–4 transcribed into DESIGN_SYSTEM.md v0.4 (M0-OWNER-02 done; M0-DSGN-02 unblocked). Palette contrast measured: `text.muted` and the semantic colors need derived tokens (DESIGN_SYSTEM §12). Coordinator input on decision 3 and options for decision 5 filed under `design/proposals/`, awaiting the Owner's AUTH #004.
 - The Foreman's M0 AUTH batch proceeds from #004 once the Foreman exists.
 
 ## Owner actions needed now
 
 1. Create the machine user and PAT (M0-REPO-04), then create the Foreman Bot by pasting the block in `agents/grok/roles/gj-foreman.md`; it will ask you for the token first. Then the eight specialists from the other prompt packs.
 2. Configure branch protection and native secret scanning on main (M0-REPO-02).
-3. Transcribe the four locked design decisions into `design/DESIGN_SYSTEM.md` §1–4 (M0-OWNER-02); then the design-lock session for decisions 5–10 with the Coordinator.
+3. Lock decision 5: reply `APPROVED #004: decision 5 = recommended package` (or the letters that differ) against `design/proposals/decision-5-play-layout-options.md`; optionally adopt items from `decision-3-transition-input.md` in the same reply. Then decisions 6–10.
 4. Add the App Store Connect key to CI (M0-REPO-05): secrets `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_P8_BASE64`; variable `APPLE_TEAM_ID`; create the App Store Connect app record (reserves the name) with an internal TestFlight group on automatic distribution. Set `TESTFLIGHT_ENABLED=true` after M0-UNITY-01 merges.
 5. Decide whether to acquire an iPhone Duo for verifying the three selected features (AUTH spend), or accept adaptive design until one is available.
 6. Scan 10 rooms and 5 tabletop builds (M0-OWNER-01) once the corpus intake path exists (M0-CAPT-01).
@@ -95,13 +95,13 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | M0-UNITY-03 | Traversal controller scaffold: five assemblies, movement.json loader, capsule locomotion and jump | gj-gameplay | P0 | open | M0-UNITY-01, M0-MOVE-01 | — |
 | M0-UNITY-04 | Debug overlay — the loop-proving ticket (M0 exit test) | gj-gameplay | P0 | open | M0-UNITY-01 | — |
 | M0-CAPT-01 | Corpus intake: manifest schema, metadata stripping tool, storage rules | gj-capture | P1 | open | — | — |
-| M0-DSGN-02 | Design tokens v0 (DTCG JSON) and USS export for the locked decisions | gj-design | P1 | blocked | M0-DSGN-01 | — |
+| M0-DSGN-02 | Design tokens v0 (DTCG JSON) and USS export for the locked decisions | gj-design | P1 | open | M0-DSGN-01 | — |
 | M0-FORE-03 | Verify every specialist's SKILLS.md is merged | gj-foreman | P1 | open | M0-SKILL-02, M0-SKILL-03, M0-SKILL-04, M0-SKILL-05, M0-SKILL-06, M0-SKILL-07, M0-SKILL-08, M0-SKILL-09 | — |
 | M0-LEGAL-01 | BIPA-compliant biometric consent copy and learn-more sheet (draft) | gj-avatar | P1 | open | — | — |
 | M0-LEGAL-02 | Retention schedule and deletion flow specification (draft) | gj-platform | P1 | open | — | — |
 | M0-LEGAL-03 | Luma data-retention and training terms on file | gj-capture | P1 | open | — | — |
 | M0-LEGAL-04 | Meshy and Tripo data-retention and training terms, with a vendor recommendation for M2 | gj-avatar | P1 | open | — | — |
-| M0-OWNER-02 | Transcribe the four locked design decisions into DESIGN_SYSTEM.md | owner | P1 | open | — | — |
+| M0-OWNER-02 | Transcribe the four locked design decisions into DESIGN_SYSTEM.md | owner | P1 | done | — | — |
 | M0-PLAT-01 | Supabase local scaffold and RLS-by-default lint | gj-platform | P1 | open | — | — |
 | M0-REPO-06 | TestFlight lane in ios-build.yml (cloud-managed signing, fastlane pilot) | coordinator | P1 | done | M0-REPO-05 | — |
 | M0-SCEN-01 | Tier 2 research track charter (no compute spend in M0) | gj-scenegraph | P1 | open | — | — |

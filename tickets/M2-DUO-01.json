@@ -8,7 +8,7 @@
   "status": "open",
   "priority": "P2",
   "size": "M",
-  "summary": "Owner-selected Duo feature (candidate 3). On an iPhone Duo in tent posture, the avatar capture flow uses the 48 MP rear cameras while the outer display shows framing, countdown, and coaching so the player can self-frame; the three face angles and the full-body shot come from the best cameras. Additive: every other iPhone keeps the standard front-camera flow.",
+  "summary": "Owner-selected Duo feature (candidate 3). On an iPhone Duo in tent posture, the avatar capture flow uses the 48 MP rear cameras while the outer display shows framing, countdown, and coaching so the player can self-frame; the full-body rotation and the face close-up rotation come from the best cameras. Additive: every other iPhone keeps the standard front-camera flow.",
   "reviewers": [
     "gj-design",
     "gj-capture"
@@ -16,7 +16,7 @@
   "acceptance_tests": [
     {
       "id": "AT-1",
-      "test": "On a Duo in tent posture (or when the player chooses 'use rear camera' on a Duo), the capture flow drives the rear cameras and shows the framing guide, countdown, and coaching on the outer display; the three face angles and the full-body shot are captured at the highest resolution the avatar pipeline accepts.",
+      "test": "On a Duo in tent posture (or when the player chooses 'use rear camera' on a Duo), the capture flow drives the rear cameras and shows the framing guide, countdown, and coaching on the outer display; the full-body rotation and the face close-up rotation are captured at the highest resolution the avatar pipeline accepts.",
       "evidence": "clip or screenshots when a device is available; otherwise a design walkthrough in the PR",
       "automated": false,
       "level": "required"
@@ -62,11 +62,16 @@
   "branch": null,
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-15",
+  "updated": "2026-09-16",
   "history": [
     {
       "date": "2026-09-15",
       "event": "created by the Coordinator (Owner selection of iPhone Duo candidates 1–3 and App Store Connect key confirmation, AUTH #003)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-16",
+      "event": "capture wording aligned to decision 4 (rotation capture)",
       "by": "coordinator"
     }
   ],
