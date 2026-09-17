@@ -1,6 +1,6 @@
 # PROGRESS.md
 
-Living tracker. Updated by the Coordinator on every merge, AUTH decision, and checkpoint. Last update: **2026-09-17** (M0 AUTH batch #008–#017 **approved**; #016 legal review is in-house at $0 (no external spend); M0-REPO-03 unblocked; M0 legal drafts in `legal/` for the Owner's in-house team; Meshy selected as head vendor (Tripo dropped); launch checklist triaged with priority + delegability tags). Ticket table regenerated with `python tickets/validate.py --summary`.
+Living tracker. Updated by the Coordinator on every merge, AUTH decision, and checkpoint. Last update: **2026-09-17** (M0 AUTH batch #008–#017 **approved**; #016 legal review is in-house at $0 (no external spend); M0-REPO-03 unblocked; M0 legal drafts in `legal/` for the Owner's in-house team; Meshy selected as head vendor (Tripo dropped); vendor research landed (`research/vendors/`) with two flags — Meshy needs Enterprise+DPA for biometric, Luma reconstruction/train concerns may re-open that vendor; launch checklist triaged with priority + delegability tags). Ticket table regenerated with `python tickets/validate.py --summary`.
 
 ## Milestone
 
@@ -64,8 +64,10 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 4. Add the App Store Connect key to CI (M0-REPO-05): secrets `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_P8_BASE64`; variable `APPLE_TEAM_ID`; create the App Store Connect app record (reserves the name) with an internal TestFlight group on automatic distribution. Set `TESTFLIGHT_ENABLED=true` after M0-UNITY-01 merges.
 5. Decide whether to acquire an iPhone Duo for verifying the three selected features (AUTH spend), or accept adaptive design until one is available.
 6. Scan 10 rooms and 5 tabletop builds (M0-OWNER-01) once the corpus intake path exists (M0-CAPT-01).
-7. **Create/enable the approved accounts (#008–#017).** Bot-prep once the Grok Bot arrives (it drives signup; you accept ToS/payment and move production keys to CI). Priority order: Unity (unblocks M0-REPO-03), Supabase, Luma. Near-term real spend is only domains (#014, ~$25–55/yr) and metered Luma usage (#009, under the $50/day cap).
+7. **Create/enable the approved accounts (#008–#017).** Bot-prep once the Grok Bot arrives (it drives signup; you accept ToS/payment and move production keys to CI). Priority order: Unity (unblocks M0-REPO-03), Supabase. (**Luma is on hold** pending item 9.) Near-term real spend is only domains (#014, ~$25–55/yr).
 8. **In-house legal review** of the drafts in `legal/` (privacy policy, BIPA consent copy, retention schedule, ToS, vendor template + DPA checklist). No external legal spend (#016 = $0). The consent-text hash is frozen only after their sign-off (SECURITY_CHECKLIST §5.5).
+9. **Reconstruction vendor — decision needed (from vendor research).** `research/vendors/luma.md` finds Luma appears to have **deprecated programmatic reconstruction** and **trains on inputs by default** (Enterprise-only no-train). Before creating the Luma account (#009) or relying on ADR-0002, decide: confirm a Luma reconstruction path + Enterprise no-train, **or re-open the vendor choice** (Polycam, Scaniverse/Niantic, self-hosted 3D Gaussian Splatting / COLMAP). Architectural — ADR-0002 / SPEC §3.10 are AUTH-gated.
+10. **Meshy for biometric — Enterprise + DPA required.** `research/vendors/meshy.md`: Meshy's standard terms train on inputs and ban identifiable-person photos, so face data needs a negotiated **Enterprise agreement + DPA** (no-train, immediate source-photo deletion, PII carve-out; a paid tier — Free is CC BY 4.0). Have your legal team pursue this; run a recognizability blind test at M2.
 
 ## Risk watch
 
@@ -74,6 +76,8 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 - The Owner is the only on-device tester until TestFlight external testers arrive; a paid iOS device farm is the fallback if that becomes a bottleneck.
 - Motion-matching spike (M1-MOVE-01) decides the animation stack; a miss sends locomotion to blend trees.
 - iPhone Duo features depend on iOS 27 posture and Split View APIs reaching Unity; the research spike comes first.
+- **Reconstruction vendor risk (NEW, 2026-09-17):** vendor research indicates Luma has likely exited supported programmatic reconstruction and trains on inputs by default — the ADR-0002 assumption is at risk. Mitigation: confirm directly with Luma and/or re-open the vendor choice (see Owner action 9); a splat/mesh alternative (Polycam, Scaniverse/Niantic, self-hosted 3DGS) keeps M1 on track.
+- **Biometric vendor terms (NEW, 2026-09-17):** Meshy (and Luma) train on inputs on default terms; both need Enterprise + DPA before real user data. Mitigation: legal-team-negotiated agreements (Owner actions 9–10); do not send real face/scan data until terms are contractually in place (SECURITY_CHECKLIST §6.3).
 
 ## Tickets (M0, M1, and the Duo track)
 

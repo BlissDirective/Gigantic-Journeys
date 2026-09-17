@@ -62,6 +62,11 @@
       "date": "2026-09-17",
       "event": "Owner selected Meshy as the head vendor (already holds an account); Tripo dropped. Scope reduced to a Meshy terms dossier; deliverables and acceptance tests updated to Meshy-only.",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-17",
+      "event": "Meshy dossier landed (legal/vendors/meshy.md + research/vendors/meshy.md). Red flags: trains on non-Enterprise inputs by default; ToS bans identifiable-person photos; Free output is CC BY 4.0. Decision: USABLE WITH CONDITIONS (Enterprise + DPA + no-train + immediate source-photo deletion + PII carve-out; paid tier). Vendor-confirmed terms still required (§6.3) — status stays open.",
+      "by": "coordinator"
     }
   ]
 }

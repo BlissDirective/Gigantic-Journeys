@@ -39,7 +39,7 @@
   "branch": null,
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-15",
+  "updated": "2026-09-17",
   "history": [
     {
       "date": "2026-09-15",
@@ -49,6 +49,11 @@
     {
       "date": "2026-09-15",
       "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-17",
+      "event": "Public-terms research landed (legal/vendors/luma.md + research/vendors/luma.md). Red flags: trains on inputs by default (Enterprise-only no-train) and programmatic reconstruction appears deprecated. Recommendation: NOT usable on default terms; re-open the reconstruction vendor. Vendor-confirmed DPA still required (§6.3) — status stays open.",
       "by": "coordinator"
     }
   ]
