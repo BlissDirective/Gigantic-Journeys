@@ -2,7 +2,7 @@
 
 `governance/AUTHORIZATION_LOG.md` · Maintained by the Coordinator. The only record of what the Owner has authorized. A PR that touches a protected path cites `APPROVED #n` from this log; CI (`auth-gate`) checks the reference and the Coordinator checks the substance.
 
-Numbering is sequential across all types. **Next free number: #008**. The Coordinator assigns numbers when logging; the Owner may reply `APPROVED: <what>` without a number. The Foreman's M0 batch takes the next free numbers when filed (M0-FORE-02).
+Numbering is sequential across all types. **Next free number: #018**. The Coordinator assigns numbers when logging; the Owner may reply `APPROVED: <what>` without a number. The **M0 AUTH batch (#008–#017) is filed as Pending** — ready-to-approve request blocks are in `governance/auth-requests/M0-batch.md` (M0-FORE-02, drafted by the Coordinator). Reply `APPROVED #NNN` (chat or issue) per line to unblock.
 
 ## Decisions
 
@@ -19,11 +19,20 @@ Numbering is sequential across all types. **Next free number: #008**. The Coordi
 
 ## Pending
 
-| # | Filed | Type | What | Cost | Requested by | Blocks | Status |
+| # | Filed | Type | What | Cost (est.) | Requested by | Blocks | Status |
 |---|---|---|---|---|---|---|---|
-| — | | | (none) | | | | |
+| #008 | 2026-09-17 | account | Unity account + Personal plan | $0 (Pro at revenue) | Coordinator (M0-FORE-02) | build/CI, M0-REPO-03 | **Awaiting Owner** |
+| #009 | 2026-09-17 | account + spend | Luma reconstruction API | usage-based, under $50/day cap | Coordinator (M0-FORE-02) | capture, M0-LEGAL-03 | **Awaiting Owner** |
+| #010 | 2026-09-17 | account + spend | Meshy + Tripo trial accounts (M2 comparison) | free/trial | Coordinator (M0-FORE-02) | avatar, M0-LEGAL-04 | **Awaiting Owner** |
+| #011 | 2026-09-17 | account | Supabase (staging + production) | $0 now; ~$25/mo/project later | Coordinator (M0-FORE-02) | all backend/data | **Awaiting Owner** |
+| #012 | 2026-09-17 | account | Vercel (API hosting) | $0 (Hobby) | Coordinator (M0-FORE-02) | API | **Awaiting Owner** |
+| #013 | 2026-09-17 | account | Inngest (durable workflows) | $0 (free tier) | Coordinator (M0-FORE-02) | scan→package pipeline | **Awaiting Owner** |
+| #014 | 2026-09-17 | spend | Domains `giganticjourneys.com` + `.app` | ~$25–55/yr | Coordinator (M0-FORE-02) | privacy-policy URL, landing | **Awaiting Owner** |
+| #015 | 2026-09-17 | spend | USPTO TESS search (+ filing decision) | $0 search; filing deferred | Coordinator (M0-FORE-02) | name protection | **Awaiting Owner** |
+| #016 | 2026-09-17 | spend | Attorney engagement (consent + privacy review) | ~$1–4k est. (confirm on quote) | Coordinator (M0-FORE-02) | M2 consent sign-off, M5 gate | **Awaiting Owner** |
+| #017 | 2026-09-17 | account | Crash reporting (Sentry or Firebase) | $0 (free tier) | Coordinator (M0-FORE-02) | crash-free tracking | **Awaiting Owner** |
 
-Expected next, filed by the Foreman as the M0 batch (M0-FORE-02) from the next free number: Unity account and plan, Luma API, Meshy and/or Tripo (per M0-LEGAL-04), Supabase (staging and production), Vercel, Inngest, `giganticjourneys.com` and `.app` (about $21/yr), USPTO TESS search on "Gigantic Journeys" in classes 9 and 41 with a filing recommendation (kit §9), an App Store Connect record to reserve the name, attorney review of the M0 legal drafts before M5, and, only if the Owner selects iPhone Duo features and wants on-device verification, an iPhone Duo development device ($1,999 to $3,199).
+Request blocks and full detail: `governance/auth-requests/M0-batch.md`. Deferred (file when needed): trademark filing in classes 9 and 41 (~$250–350/class, after traction); an iPhone Duo development device ($1,999–3,199, only if on-device Duo verification is wanted); Tier 2 GPU compute ($400–1,000/mo, monthly line from M1). The App Store Connect app record that reserves the name needs no AUTH — it runs on the already-held Apple Developer account (checklist §0).
 
 Already held or not needed: the Apple Developer Program and an App Store Connect API key (the Owner holds both, confirmed 2026-09-15; the key goes into CI secrets under ticket M0-REPO-05 and never onto the Bot VM). Not needed for v1 (AUTH #003): Google Play Console, a reference Android device, a Mac mini (GitHub-hosted macOS runners are free on this public repository and Unity exports the iOS Xcode project on Linux, `.github/workflows/ios-build.yml`). When Android is scheduled (v1.1), open the Play Console early: a personal account created after 2023-11-13 must run a closed test with at least 12 testers for 14 continuous days before production access.
 
