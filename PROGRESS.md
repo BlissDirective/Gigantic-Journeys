@@ -1,6 +1,6 @@
 # PROGRESS.md
 
-Living tracker. Updated by the Coordinator on every merge, AUTH decision, and checkpoint. Last update: **2026-09-17** (M0 legal drafts landed — privacy policy, BIPA consent, retention schedule, ToS, vendor templates; M0 AUTH batch #008–#017 filed for approval; launch checklist triaged with priority + delegability tags; all agents may self-merge on green CI, AUTH #007 extension). Ticket table regenerated with `python tickets/validate.py --summary`.
+Living tracker. Updated by the Coordinator on every merge, AUTH decision, and checkpoint. Last update: **2026-09-17** (M0 AUTH batch #008–#017 **approved**; #016 legal review is in-house at $0 (no external spend); M0-REPO-03 unblocked; M0 legal drafts in `legal/` for the Owner's in-house team; launch checklist triaged with priority + delegability tags). Ticket table regenerated with `python tickets/validate.py --summary`.
 
 ## Milestone
 
@@ -17,11 +17,11 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 
 | Status | Count |
 |---|---|
-| open | 55 |
+| open | 56 |
 | in-progress | 0 |
 | in-review | 0 |
 | changes-requested | 0 |
-| blocked | 2 |
+| blocked | 1 |
 | merged | 1 |
 | done | 3 |
 | cancelled | 0 |
@@ -30,13 +30,13 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 ## Blockers
 
 - Bots cannot start until the Owner hands the Bot machine-user PAT to the team (AUTH #002 approved; Owner creating it) and creates the Foreman Bot from `agents/grok/roles/gj-foreman.md`.
-- Unity CI jobs skip until the Unity project exists (M0-UNITY-01) and license secrets are added (M0-REPO-03, after the Unity account AUTH).
+- Unity CI jobs skip until the Unity project exists (M0-UNITY-01) and license secrets are added (M0-REPO-03). The Unity account AUTH is now approved (#008); M0-REPO-03 is unblocked and awaits the Owner creating the Unity account and adding the secrets.
 
 ## Pending AUTH REQUESTs
 
 | # | What | Status |
 |---|---|---|
-| #008–#017 | M0 batch: Unity, Luma, Meshy+Tripo, Supabase, Vercel, Inngest, domains, USPTO search, attorney engagement, crash reporting | **Filed — awaiting Owner** (`governance/auth-requests/M0-batch.md`; reply `APPROVED #NNN` per line) |
+| #008–#017 | M0 batch: Unity, Luma, Meshy+Tripo, Supabase, Vercel, Inngest, domains, USPTO search, legal review, crash reporting | **APPROVED 2026-09-17** (Decisions #008–#017; #016 = $0 in-house legal review). No AUTHs pending. |
 
 ## Owner decisions (2026-09-15)
 
@@ -64,8 +64,8 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 4. Add the App Store Connect key to CI (M0-REPO-05): secrets `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_P8_BASE64`; variable `APPLE_TEAM_ID`; create the App Store Connect app record (reserves the name) with an internal TestFlight group on automatic distribution. Set `TESTFLIGHT_ENABLED=true` after M0-UNITY-01 merges.
 5. Decide whether to acquire an iPhone Duo for verifying the three selected features (AUTH spend), or accept adaptive design until one is available.
 6. Scan 10 rooms and 5 tabletop builds (M0-OWNER-01) once the corpus intake path exists (M0-CAPT-01).
-7. **Approve the M0 AUTH batch (#008–#017)** in `governance/auth-requests/M0-batch.md` — reply `APPROVED #NNN` per line; unblocks Unity, Luma, Supabase, and the rest. Most cost $0 or trivial; #016 (attorney) and #014 (domains) are the real spend.
-8. Review the M0 **legal drafts** in `legal/` (privacy policy, BIPA consent copy, retention schedule, ToS, vendor request template + DPA checklist) before sending them to counsel under AUTH #016.
+7. **Create/enable the approved accounts (#008–#017).** Bot-prep once the Grok Bot arrives (it drives signup; you accept ToS/payment and move production keys to CI). Priority order: Unity (unblocks M0-REPO-03), Supabase, Luma. Near-term real spend is only domains (#014, ~$25–55/yr) and metered Luma usage (#009, under the $50/day cap).
+8. **In-house legal review** of the drafts in `legal/` (privacy policy, BIPA consent copy, retention schedule, ToS, vendor template + DPA checklist). No external legal spend (#016 = $0). The consent-text hash is frozen only after their sign-off (SECURITY_CHECKLIST §5.5).
 
 ## Risk watch
 
@@ -92,7 +92,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | M0-QA-02 | Visual QA procedure and evidence standard | gj-qa-release | P0 | open | — | — |
 | M0-REPO-01 | Repository scaffold and CI harness green on main | coordinator | P0 | merged | — | https://github.com/BlissDirective/Gigantic-Journeys/commit/fd4d44b291bc2ec626bde4d54c2039416334beea |
 | M0-REPO-02 | Branch protection, merge policy, and native secret scanning on main | owner | P0 | open | M0-REPO-01, M0-REPO-04 | — |
-| M0-REPO-03 | Unity license secrets in GitHub Actions | owner | P0 | blocked | M0-FORE-02 | — |
+| M0-REPO-03 | Unity license secrets in GitHub Actions | owner | P0 | open | M0-FORE-02 | — |
 | M0-REPO-04 | Bot GitHub identity with least-privilege access | owner | P0 | open | — | — |
 | M0-REPO-05 | App Store Connect API key and signing secrets in GitHub Actions | owner | P0 | open | — | — |
 | M0-SKILL-01 | gj-foreman: research handbook (RESOURCES.md + SKILLS.md) | gj-foreman | P0 | open | — | — |

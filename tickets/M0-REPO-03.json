@@ -5,7 +5,7 @@
   "area": "REPO",
   "owner": "owner",
   "qa": null,
-  "status": "blocked",
+  "status": "open",
   "priority": "P0",
   "size": "S",
   "summary": "Owner adds the Unity activation secrets so unity-tests and ios-build stop skipping. Depends on the Unity account approved in the Foreman's M0 AUTH batch. Secret values are never pasted anywhere but the GitHub secrets UI.",
@@ -39,13 +39,10 @@
   "depends_on": [
     "M0-FORE-02"
   ],
-  "blocked_by": [
-    "Unity account AUTH in the Foreman's M0 batch (M0-FORE-02)"
-  ],
   "branch": null,
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-15",
+  "updated": "2026-09-17",
   "history": [
     {
       "date": "2026-09-15",
@@ -55,6 +52,11 @@
     {
       "date": "2026-09-15",
       "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-17",
+      "event": "unblocked: Unity account approved (AUTH #008, M0 batch). Owner adds the license secrets once the Unity account exists.",
       "by": "coordinator"
     }
   ]

@@ -2,7 +2,7 @@
 
 Owner: gj-avatar (consent), gj-platform (retention/deletion), gj-capture and gj-avatar (vendor terms)
 
-Privacy policy, BIPA consent copy, retention schedule, vendor data-retention terms. Drafts in M0 (M0-LEGAL-01..04); **attorney review is an AUTH (spend) before M5** — every file here is an engineering draft, not legal advice.
+Privacy policy, BIPA consent copy, retention schedule, vendor data-retention terms. Drafts in M0 (M0-LEGAL-01..04); **the Owner's in-house legal team reviews these before M5** (no external legal spend; Owner decision 2026-09-17, AUTH #016 amended to $0) — every file here is an engineering draft, not legal advice.
 
 ## Files
 | File | What | Ticket |

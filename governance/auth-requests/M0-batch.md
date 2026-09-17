@@ -1,6 +1,8 @@
 # M0 AUTH batch — accounts, spend, name protection
 
-**Drafted by the Coordinator · 2026-09-17 · satisfies ticket M0-FORE-02 (the M0 AUTH batch).** These are **ready to approve**. Reply in chat or on the matching GitHub issue with `APPROVED #NNN` (or `DENIED #NNN — reason`) per line; the Coordinator moves each to the Decisions table in `governance/AUTHORIZATION_LOG.md` and unblocks its tickets. You can approve some and hold others.
+> **STATUS: APPROVED 2026-09-17.** The Owner approved #008–#017. **#016 amended to $0** — the Owner's in-house legal team reviews the drafts; no external attorney engagement. All decisions are logged in `governance/AUTHORIZATION_LOG.md` (Decisions #008–#017). This file is kept as the request record.
+
+**Drafted by the Coordinator · 2026-09-17 · satisfies ticket M0-FORE-02 (the M0 AUTH batch).** Reply in chat or on the matching GitHub issue with `APPROVED #NNN` (or `DENIED #NNN — reason`) per line; the Coordinator moves each to the Decisions table in `governance/AUTHORIZATION_LOG.md` and unblocks its tickets. You can approve some and hold others.
 
 Costs are **estimates** confirmed at account creation; all spend stays under the **$50/day** agent+API cap and the **$750–1,300/month** steady-state range (kit §7). Credentials rule: the Bot holds **staging** creds only; **production keys, signing, and payment credentials are CI-only** (`SECURITY_CHECKLIST §1.4`).
 
@@ -16,7 +18,7 @@ Costs are **estimates** confirmed at account creation; all spend stays under the
 | #013 | account | Inngest (durable workflows) | $0 (free tier) | yes | scan→package pipeline |
 | #014 | spend | Domains `giganticjourneys.com` + `.app` | ~$25–55/yr | yes | privacy-policy URL, landing |
 | #015 | spend | USPTO TESS search (+ filing decision) | $0 search; filing deferred | yes | name protection |
-| #016 | spend | Attorney engagement (consent + privacy review) | ~$[1–4k] est., confirm on quote | n/a | M2 face processing, M5 gate |
+| #016 | ~~spend~~ → $0 | Legal review of the drafts — **in-house legal team** (no external engagement) | **$0** | n/a | M2 face processing, M5 gate |
 | #017 | account | Crash reporting (Sentry or Firebase) | $0 (free tier) | yes | M5 crash-free tracking |
 
 ---
@@ -112,15 +114,15 @@ Waiting on: Owner
 **Blocks:** name-protection decision; safe to build under the name.
 
 ```
-AUTH REQUEST #016
-Type: spend
-What: Engage counsel to review the biometric consent copy, privacy policy, retention schedule, and ToS drafted in legal/.
-Why: Biometric processing (BIPA/CUBI/MHMDA) is the project's largest legal exposure; sign-off gates M2 face processing and is an M5 gate (SECURITY_CHECKLIST §5.5). Drafts in legal/ reduce billable time.
-Cost: ~$[1,000–4,000] estimate for a scoped review; confirm on the attorney's quote before proceeding.
-Reversible: n/a (professional services)
-Waiting on: Owner
+AUTH REQUEST #016  — AMENDED 2026-09-17: $0, in-house review
+Type: (was spend) → no external spend
+What: Legal review of the biometric consent copy, privacy policy, retention schedule, and ToS drafted in legal/.
+Why: Biometric processing (BIPA/CUBI/MHMDA) is the project's largest legal exposure; sign-off gates M2 face processing and is an M5 gate (SECURITY_CHECKLIST §5.5).
+Cost: $0 — the Owner's in-house legal team performs the review; no external attorney is engaged (Owner decision, 2026-09-17).
+Reversible: n/a
+Waiting on: Owner's in-house legal team review (drafts ready in legal/)
 ```
-**Blocks:** M2 consent go-live sign-off, M5 legal gate.
+**Blocks:** M2 consent go-live sign-off, M5 legal gate. The counsel-review gate (SECURITY_CHECKLIST §5.5) is satisfied by the in-house team; the consent-text hash is frozen only after their sign-off.
 
 ```
 AUTH REQUEST #017
