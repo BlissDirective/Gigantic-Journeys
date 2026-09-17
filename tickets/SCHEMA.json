@@ -64,7 +64,9 @@
         "gj-qa-release",
         "gj-data",
         "coordinator",
-        "owner"
+        "owner",
+        "claude-builder",
+        "gj-operator"
       ]
     },
     "qa": {

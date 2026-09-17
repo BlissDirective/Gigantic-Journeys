@@ -2,7 +2,7 @@
 
 A mobile game (Unity 6; v1 ships on the iOS App Store, Android later) in which a near-photorealistic 1:12 avatar of the player journeys through the real environments they capture: indoor rooms and tabletop builds in v1. The environment is the content; the avatar is the piece; traversal is the product. No synthetic game objects in v1.
 
-Owner: BlissDirective (SparkForge Labs). Coordinator: Claude Code. Legwork: the Grok Bot team.
+Owner: BlissDirective (SparkForge Labs). Software: a Claude Code Builder writes it, the Coordinator reviews and merges. Computer use and long-running ops: one Grok Bot Operator. Model: `governance/AGENT_GOVERNANCE.md`.
 
 ## Start here
 
@@ -16,6 +16,7 @@ Owner: BlissDirective (SparkForge Labs). Coordinator: Claude Code. Legwork: the 
 | Rules for Bots: branches, PRs, AUTH REQUEST, CHECKPOINT | `agents/grok/README.md` |
 | How PRs are judged | `governance/REVIEW_RUBRIC.md`, `governance/SECURITY_CHECKLIST.md` |
 | What the Owner has authorized | `governance/AUTHORIZATION_LOG.md` |
+| The agent operating model and usage rules | `governance/AGENT_GOVERNANCE.md`, `agents/claude/SELF_GOVERNANCE.md` |
 | Work items | `tickets/` (schema, validator, one JSON per ticket) |
 | Architecture decisions | `ADRs/` |
 | Movement constants (single source of truth) | `config/movement.json` |

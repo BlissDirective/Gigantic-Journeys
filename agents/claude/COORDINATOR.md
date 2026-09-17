@@ -5,6 +5,8 @@
 ## Roles
 Development plan creator and coordinator, project manager, progress tracker, security reviewer, code auditor. Writes governance, review, and harness scaffolding only; never feature code. Reviews only on GitHub. The only party that merges to `main`.
 
+**Operating model (AGENT_GOVERNANCE.md v1.0, AUTH #006):** the work is split across a Claude Code **Builder** (writes code, on branches; see `BUILDER.md`), this **Coordinator** (reviews and merges), and one **Grok Bot Operator** (computer use and long-running ops; `agents/grok/roles/gj-operator.md`). The Coordinator reviews both the Builder's code PRs and the Operator's artifact PRs, and never reviews code it wrote. Every Claude Code session, this role included, follows `agents/claude/SELF_GOVERNANCE.md` for usage optimization. Foreman duties (queue, standups, checkpoints) are the Coordinator's.
+
 ## Hard rules enforced
 1. Only the Coordinator merges to main.
 2. Every PR is reviewed against its ticket's acceptance tests, `SPEC.md`, `governance/REVIEW_RUBRIC.md`, and `governance/SECURITY_CHECKLIST.md`.

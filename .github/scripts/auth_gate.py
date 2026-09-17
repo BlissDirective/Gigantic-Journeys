@@ -27,6 +27,8 @@ PROTECTED: list[tuple[re.Pattern[str], str]] = [
     (re.compile(r"^design/tokens/"), "design tokens (locked design system)"),
     (re.compile(r"^tickets/SCHEMA\.json$"), "ticket schema"),
     (re.compile(r"^config/movement(\.schema)?\.json$"), "movement constants (Bible §10)"),
+    (re.compile(r"^governance/AGENT_GOVERNANCE\.md$"), "agent governance"),
+    (re.compile(r"^agents/claude/SELF_GOVERNANCE\.md$"), "Claude self-governance"),
 ]
 FIELD_NOTES_OK = {
     "design/MOVEMENT_BIBLE.md",

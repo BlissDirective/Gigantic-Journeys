@@ -1,6 +1,6 @@
 # PROGRESS.md
 
-Living tracker. Updated by the Coordinator on every merge, AUTH decision, and checkpoint. Last update: **2026-09-16** (Coordinator: decisions 1–4 transcribed; decision 3 input and decision 5 options filed). Ticket table regenerated with `python tickets/validate.py --summary`.
+Living tracker. Updated by the Coordinator on every merge, AUTH decision, and checkpoint. Last update: **2026-09-17** (Coordinator: agent operating model set, AUTH #006; design system fully locked; M1 decomposed). Ticket table regenerated with `python tickets/validate.py --summary`.
 
 ## Milestone
 
@@ -39,6 +39,8 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | #003+ | M0 batch (developer accounts, Unity, Luma, Meshy/Tripo, Supabase, Vercel, Inngest, domains, USPTO search, Mac mini, reference device, attorney review) | To be filed by gj-foreman (M0-FORE-02) |
 
 ## Owner decisions (2026-09-15)
+
+- **AUTH #006 (2026-09-17): agent operating model.** Claude Code Builder writes code, the Coordinator reviews and merges, one Grok Bot Operator does computer use and long-running ops (skill hats). Cursor retired from the loop. Single-threaded writes, bounded bursts by exception. Docs: `governance/AGENT_GOVERNANCE.md`, `agents/claude/SELF_GOVERNANCE.md`, `agents/claude/BUILDER.md`, `agents/grok/roles/gj-operator.md`.
 
 - AUTH #002 approved: the Owner creates the Bot machine user and PAT and hands it to the Bot team; every Bot asks for it before any work.
 - Scaffold merged to main on the Owner's instruction.

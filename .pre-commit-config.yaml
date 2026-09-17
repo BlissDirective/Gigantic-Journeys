@@ -50,4 +50,4 @@ repos:
         name: protected path touched — PR needs an APPROVED AUTH #n (see agents/grok/README.md)
         entry: "bash -c 'echo \"NOTICE: protected path(s) changed: $* — the PR must cite APPROVED #n or CI will block it\"; exit 0' --"
         language: system
-        files: '^(SPEC\.md|ADRs/.*\.md|data/schemas/.*|design/(DESIGN_SYSTEM\.md|MOVEMENT_BIBLE\.md|Gigantic-Journey-Design-Skills\.md|tokens/.*)|tickets/SCHEMA\.json|config/movement(\.schema)?\.json)$'
+        files: '^(SPEC\.md|ADRs/.*\.md|data/schemas/.*|design/(DESIGN_SYSTEM\.md|MOVEMENT_BIBLE\.md|Gigantic-Journey-Design-Skills\.md|tokens/.*)|tickets/SCHEMA\.json|config/movement(\.schema)?\.json|governance/AGENT_GOVERNANCE\.md|agents/claude/SELF_GOVERNANCE\.md)$'
