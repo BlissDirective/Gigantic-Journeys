@@ -80,7 +80,7 @@ The app holds two sensitive things: biometric imagery (faces, bodies) and photog
 | # | Control | |
 |---|---|---|
 | 8.1 | Bots authenticate to GitHub as a dedicated machine user with a fine-grained PAT scoped to this repository: Contents RW, Pull requests RW, Issues RW, Metadata R; no Administration, Secrets, Actions, Workflows, or Environments; expiry 90 days or less; rotated each milestone (AUTH #002). | G (M0) |
-| 8.2 | Merges to main require every required CI check green (no merge on red CI). The Builder self-reviews and merges its own code; the Grok Operator never self-merges. Independent secondary review is periodic and covers 100% of security-sensitive merges (auth, RLS, secrets, signed URLs, consent, payments); the Builder flags these `secondary-review: required` (AUTH #007). | G (M0) |
+| 8.2 | Merges to main require every required CI check green (no merge on red CI). The Builder self-reviews and merges its own code, and every agent may merge its own reviewed work on green CI (the Grok Operator only its own artifact PRs, never code; AUTH #007 extension). Independent secondary review is periodic and covers 100% of security-sensitive merges (auth, RLS, secrets, signed URLs, consent, payments); the Builder flags these `secondary-review: required` (AUTH #007). | G (M0) |
 | 8.3 | Bots hold only staging credentials (Supabase staging, vendor sandboxes where available), never production keys. | B |
 | 8.4 | gj-qa-release uses a separate ops account for TestFlight and Play Console with no production secrets. | G (M5) |
 | 8.5 | Vendor API keys carry per-key daily spend caps where supported; the pipeline halts at the $50/day cap (kit §7). | B |

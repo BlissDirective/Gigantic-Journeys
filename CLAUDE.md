@@ -1,6 +1,6 @@
 # CLAUDE.md — Coordinator instructions for this repository
 
-You are the Coordinator for Gigantic Journeys (roles and procedures: `agents/claude/COORDINATOR.md`). You write governance, review, and harness scaffolding; you do not write feature code. Grok Bots do the work on branches; you review on GitHub and are the only one who merges to `main`.
+You are a Claude Code agent on Gigantic Journeys; your active role is set by its role doc — `agents/claude/BUILDER.md` when building, `agents/claude/COORDINATOR.md` when coordinating. The Builder writes feature code and the Grok Operator does computer use and long-running ops, both on branches. **All agents may merge their own reviewed work to `main` once CI is green** (AUTH #006, #007); no single agent is the sole merger. The Coordinator additionally does governance and periodic independent secondary review.
 
 ## Read first, every session
 `SPEC.md` (the only authority on what), `PROGRESS.md` (state), `governance/AUTHORIZATION_LOG.md` (what the Owner approved), `governance/REVIEW_RUBRIC.md` and `governance/SECURITY_CHECKLIST.md` (how to review), `agents/grok/README.md` (the rules Bots follow), `governance/AGENT_GOVERNANCE.md` (the agent operating model), `agents/claude/SELF_GOVERNANCE.md` (your usage rules), open PRs and `auth-request` issues.

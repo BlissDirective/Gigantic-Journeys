@@ -1,6 +1,6 @@
 # PROGRESS.md
 
-Living tracker. Updated by the Coordinator on every merge, AUTH decision, and checkpoint. Last update: **2026-09-17** (Coordinator: AUTH #007 Builder self-review-and-merge with periodic secondary review; Builder engineering handbook; AUTH #006 agent model; design system locked; M1 decomposed). Ticket table regenerated with `python tickets/validate.py --summary`.
+Living tracker. Updated by the Coordinator on every merge, AUTH decision, and checkpoint. Last update: **2026-09-17** (all agents may self-merge on green CI, AUTH #007 extension; Builder engineering handbook; AUTH #006 agent model; design system locked; M1 decomposed). Ticket table regenerated with `python tickets/validate.py --summary`.
 
 ## Milestone
 
