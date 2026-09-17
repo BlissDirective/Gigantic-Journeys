@@ -17,6 +17,7 @@ Owner: BlissDirective (SparkForge Labs). Software: a Claude Code Builder writes 
 | How PRs are judged | `governance/REVIEW_RUBRIC.md`, `governance/SECURITY_CHECKLIST.md` |
 | What the Owner has authorized | `governance/AUTHORIZATION_LOG.md` |
 | The agent operating model and usage rules | `governance/AGENT_GOVERNANCE.md`, `agents/claude/SELF_GOVERNANCE.md` |
+| Everything the Owner must do through launch | `governance/OWNER_LAUNCH_CHECKLIST.md` |
 | Work items | `tickets/` (schema, validator, one JSON per ticket) |
 | Architecture decisions | `ADRs/` |
 | Movement constants (single source of truth) | `config/movement.json` |
