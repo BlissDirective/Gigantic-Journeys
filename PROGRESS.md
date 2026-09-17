@@ -1,6 +1,6 @@
 # PROGRESS.md
 
-Living tracker. Updated by the Coordinator on every merge, AUTH decision, and checkpoint. Last update: **2026-09-17** (M0 AUTH batch #008–#017 **approved**; #016 legal review is in-house at $0 (no external spend); M0-REPO-03 unblocked; M0 legal drafts in `legal/` for the Owner's in-house team; launch checklist triaged with priority + delegability tags). Ticket table regenerated with `python tickets/validate.py --summary`.
+Living tracker. Updated by the Coordinator on every merge, AUTH decision, and checkpoint. Last update: **2026-09-17** (M0 AUTH batch #008–#017 **approved**; #016 legal review is in-house at $0 (no external spend); M0-REPO-03 unblocked; M0 legal drafts in `legal/` for the Owner's in-house team; Meshy selected as head vendor (Tripo dropped); launch checklist triaged with priority + delegability tags). Ticket table regenerated with `python tickets/validate.py --summary`.
 
 ## Milestone
 
@@ -54,7 +54,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 - **iPhone Duo features selected:** stand-mode console layout, unfold as the signature transition, rear-camera avatar capture (candidates 1–3 of `design/proposals/iphone-duo-track.md`). Tickets M1-DUO-01 (research spike), M2-DUO-01, M3-DUO-01, M3-DUO-02, M5-DUO-01; go/no-go at the M3 checkpoint.
 - The Owner holds an App Store Connect API key; CI has a TestFlight lane ready behind `TESTFLIGHT_ENABLED` (M0-REPO-05, M0-REPO-06).
 - 2026-09-16: design decisions 1–4 transcribed into DESIGN_SYSTEM.md v0.4 (M0-OWNER-02 done; M0-DSGN-02 unblocked). Palette contrast measured: `text.muted` and the semantic colors need derived tokens (DESIGN_SYSTEM §12). Coordinator input on decision 3 and options for decision 5 filed under `design/proposals/`, awaiting the Owner's AUTH #004.
-- The M0 AUTH batch is filed as #008–#017 by the Coordinator (M0-FORE-02); reply `APPROVED #NNN` per line in `governance/auth-requests/M0-batch.md`. M0 legal drafts (consent, retention, privacy, ToS, vendor templates) are in `legal/` for counsel review (AUTH #016).
+- The M0 AUTH batch #008–#017 is **approved** (2026-09-17); #016 legal review is in-house ($0, no external spend). **Meshy selected as the head-generation vendor** (Owner holds an account); Tripo dropped (AUTH #010 amended; M0-LEGAL-04 reduced to a Meshy dossier). M0 legal drafts in `legal/` for the Owner's in-house legal team. Vendor research (Meshy terms, Luma terms, IAP, crash reporting) in progress → `research/`.
 
 ## Owner actions needed now
 

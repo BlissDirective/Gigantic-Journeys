@@ -1,6 +1,6 @@
 {
   "id": "M0-LEGAL-04",
-  "title": "Meshy and Tripo data-retention and training terms, with a vendor recommendation for M2",
+  "title": "Meshy data-retention and training terms (head vendor selected for M2)",
   "milestone": "M0",
   "area": "LEGAL",
   "owner": "gj-avatar",
@@ -8,22 +8,21 @@
   "status": "open",
   "priority": "P1",
   "size": "S",
-  "summary": "Same as M0-LEGAL-03 for the two candidate head-generation vendors, plus a comparison that lets the Foreman file the account AUTH for the right one.",
+  "summary": "Collect Meshy's data-retention, training, deletion, and DPA terms and confirm fit for M2. The Owner selected Meshy as the head vendor on 2026-09-17 (already holds an account); Tripo is dropped, so the bake-off is replaced by a Meshy dossier.",
   "deliverables": [
-    "legal/vendors/meshy.md",
-    "legal/vendors/tripo.md"
+    "legal/vendors/meshy.md"
   ],
   "acceptance_tests": [
     {
       "id": "AT-1",
-      "test": "legal/vendors/meshy.md and legal/vendors/tripo.md record retention, deletion path, training-by-default and opt-out, DPA availability, region, with quotes, links, retrieval date.",
+      "test": "legal/vendors/meshy.md records retention, deletion path, training-by-default and opt-out, DPA availability, region, with quotes, links, retrieval date.",
       "evidence": "files in PR",
       "automated": false,
       "level": "required"
     },
     {
       "id": "AT-2",
-      "test": "A comparison table (realistic-mode quality claims, price per generation, API limits, deletion guarantees, biometric-specific terms) ends with a recommendation and the draft AUTH REQUEST text for the Foreman's batch.",
+      "test": "A Meshy dossier (realistic-mode quality claims, price per generation, API limits, deletion guarantees, biometric-specific terms) confirms fit for M2; the head vendor is Meshy (Owner-selected 2026-09-17).",
       "evidence": "file section",
       "automated": false,
       "level": "required"
@@ -47,7 +46,7 @@
   "branch": null,
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-15",
+  "updated": "2026-09-17",
   "history": [
     {
       "date": "2026-09-15",
@@ -57,6 +56,11 @@
     {
       "date": "2026-09-15",
       "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-17",
+      "event": "Owner selected Meshy as the head vendor (already holds an account); Tripo dropped. Scope reduced to a Meshy terms dossier; deliverables and acceptance tests updated to Meshy-only.",
       "by": "coordinator"
     }
   ]
