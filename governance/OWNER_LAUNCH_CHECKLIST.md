@@ -1,23 +1,21 @@
 # Owner Launch Checklist
 
-`governance/OWNER_LAUNCH_CHECKLIST.md` · v1.0 · 2026-09-17 · Maintained by the Coordinator, actioned by the Owner. Every task here is **Owner-level**: something only you can do (accounts, spend and AUTH approvals, credentials, physical capture, devices, repo settings, legal sign-off, testers, store submission, marketing, business). The agents do everything else. Order is roughly chronological; cross-cutting tracks run throughout. Check items off as you go; the Coordinator updates status at each checkpoint.
+`governance/OWNER_LAUNCH_CHECKLIST.md` · v1.1 · 2026-09-17 · Maintained by the Coordinator, actioned by the Owner. Every task here is **Owner-level**: something only you can do (accounts, spend and AUTH approvals, credentials, physical capture, devices, repo settings, legal sign-off, testers, store submission, marketing, business). The agents do everything else. **Part 1** is the sequenced path (roughly chronological); **Part 2** is the cross-cutting tracks that run throughout. Check items off as you go; the Coordinator updates status at each checkpoint.
 
-Legend: ☐ to do · ▶ in progress · ✅ done. AUTH numbers reference `governance/AUTHORIZATION_LOG.md`.
+Legend: ☐ to do · ▶ in progress · ✅ done. AUTH numbers reference `governance/AUTHORIZATION_LOG.md`; ticket IDs reference `tickets/`.
 
-## 0. Immediate — before `START M0`
+# Part 1 — The sequenced path
+
+## 0. Now — before you say `START M0`
 
 - ☐ **Create the Bot GitHub machine user + fine-grained PAT** (AUTH #002, approved), scoped to this repo (Contents RW, Pull requests RW, Issues RW, Metadata R; ≤90-day expiry). Store in the Bot credential store and `.env.local`. Ticket M0-REPO-04.
-- ☐ **Configure branch protection + native secret scanning on `main`** (M0-REPO-02, revised by AUTH #007): require a PR and green required checks, no force-push, no deletion, push protection on; per-PR Code Owner review is NOT required; the Builder's identity can merge on green CI.
+- ☐ **Set branch protection + native secret scanning on `main`** (M0-REPO-02, revised by AUTH #007): require a PR and green required checks, no force-push, no deletion, push protection on; per-PR Code Owner review is NOT required; agents can merge on green CI.
 - ☐ **Add the App Store Connect API key to CI secrets** (M0-REPO-05): `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_P8_BASE64`; repository variable `APPLE_TEAM_ID`. Create the App Store Connect app record for `com.sparkforgelabs.giganticjourneys` (this reserves the name) with an internal TestFlight group on automatic distribution.
-- ☐ **Create the one Grok Bot** (`gj-operator`) by pasting `agents/grok/roles/gj-operator.md`; hand it the PAT when it asks.
-- ☐ **Start the Claude Code Builder session** (separate from this Coordinator session) so it can work the queue and merge on green CI.
-- ☐ **Approve the M0 AUTH batch** (#008 onward): Unity account and plan, Luma API, Meshy and/or Tripo, Supabase (staging + production), Vercel, Inngest, `giganticjourneys.com` + `.app`, USPTO TESS search, attorney engagement.
-- ☐ **Buy Motion Warping: Climb & Interact** ($19.99, AUTH #001) on the Unity account.
-- ☐ **Register the domains** `giganticjourneys.com` and `.app`.
-- ☐ **Scan the day-one corpus** (M0-OWNER-01): 10 rooms + 5 tabletop builds with your phone camera; hand off through the corpus intake path; no faces, documents, or addresses; GPS off.
-- ☐ **Film the movement reference captures** (Movement Bible §7): the 8 Rokoko Vision reaction takes (~40 min) and the Move.ai hero clips (flag plant, running jump, hard landing, roll).
-- ☐ **List the iPhones you own** (model + year) so the Coordinator sets the quality-tier reference points (newest + oldest).
-- ☐ **Decide on an iPhone Duo dev device** for verifying the three Duo features: buy one (AUTH spend, $1,999+) or accept adaptive design until one is available.
+- ☐ **Create the one Grok Bot** (`gj-operator`) by pasting `agents/grok/roles/gj-operator.md`; hand it the PAT when it asks. **Start the Claude Code Builder session** (separate from this Coordinator session) so it can work the queue and merge on green CI.
+- ☐ **Approve the M0 account + spend batch** (#008 onward): Unity account and plan, Luma API, Meshy and/or Tripo, Supabase (staging + production), Vercel, Inngest, `giganticjourneys.com` + `.app`, USPTO TESS search, attorney engagement.
+- ☐ **Buy Motion Warping: Climb & Interact** ($19.99, AUTH #001) on the Unity account. **Register the domains** `giganticjourneys.com` and `.app`.
+- ☐ **Scan the day-one corpus** (M0-OWNER-01): 10 rooms + 5 tabletop builds with your phone camera; hand off through the corpus intake path; no faces, documents, or addresses; GPS off. **Film the movement reference captures** (Movement Bible §7): the 8 Rokoko Vision reaction takes (~40 min) and the Move.ai hero clips (flag plant, running jump, hard landing, roll).
+- ☐ **List the iPhones you own** (model + year) so the Coordinator sets the quality-tier reference points (newest + oldest). **Decide on an iPhone Duo dev device** for verifying the three Duo features: buy one (AUTH spend, $1,999+) or accept adaptive design until one is available.
 - ☐ **Issue `START M0`.**
 
 ## 1. M0 — Harness
@@ -70,7 +68,7 @@ Legend: ☐ to do · ▶ in progress · ✅ done. AUTH numbers reference `govern
 - ☐ **Grow the TestFlight cohort to 100** and reach a 99%+ crash-free rate.
 - ☐ **Provide store assets:** screenshots with the diorama as the hero shot, the preview video (real room → unfold/shrink → play → publish → friend plays), description, keywords, localized for the top 5 markets.
 - ☐ **Submit the App Store featuring nomination** citing iPhone Duo adoption (M5-DUO-01).
-- ☐ **Give explicit approval to submit** to the App Store (the M5 exit test requires your explicit go). Then submit.
+- ☐ **Give explicit approval to submit** to the App Store (the M5 exit test requires your explicit go). Then submit and respond to App Store review.
 
 ## 7. M6 — Learning loops (post-launch)
 
@@ -78,21 +76,76 @@ Legend: ☐ to do · ▶ in progress · ✅ done. AUTH numbers reference `govern
 - ☐ **Review the weekly data reports** and approve validator/generator update PRs on the standing cadence.
 - ☐ **Handle moderation escalations** and App Store review responses; watch the crash dashboard.
 
-## 8. Cross-cutting — Legal and compliance (green before M5)
+# Part 2 — Cross-cutting tracks
 
-- ☐ Attorney engaged (spend AUTH). ☐ BIPA / Texas CUBI / Washington MHMDA consent signed off before M2 face processing. ☐ Vendor DPAs on file (Luma, Meshy/Tripo, Supabase). ☐ Privacy policy and retention schedule published. ☐ USPTO TESS search done (M0) and a trademark filing decision made for "Gigantic Journeys" in classes 9 and 41 (spend). ☐ 13+ age gate, no COPPA scope. ☐ Confirm the SparkForge Labs business entity for developer accounts, DPAs, trademark, and IAP banking.
+These run throughout the build, not at a single milestone.
 
-## 9. Cross-cutting — Marketing and launch
+## Accounts and credentials
 
-- ☐ Build-in-public Day N updates from week 1. ☐ Social handles and hashtags (#GiganticJourneys, #GJrun). ☐ Landing page on `giganticjourneys.com`. ☐ Launch video (diorama hero + Duo unfold). ☐ App Store featuring nomination. ☐ TestFlight public beta seeded in Duo communities if M3 is on schedule. ☐ Press and influencer outreach for launch.
+- ☐ **Apple Developer Program** (held) and the **App Store Connect app record** (reserves the name).
+- ☐ **Unity** account and plan — Personal now, **Pro seat mandatory once revenue exists**.
+- ☐ **Luma** API. ☐ **Meshy or Tripo** (head generation). ☐ **Supabase** staging + production. ☐ **Vercel**. ☐ **Inngest**.
+- ☐ **Domains** `giganticjourneys.com` + `.app`.
+- ☐ **RevenueCat or Unity IAP** (IAP provider). ☐ A **crash-reporting** account.
+- ☐ The **GitHub machine user** (AUTH #002).
+- ☐ **App Store payment banking + tax** forms.
+- ☐ The **SparkForge Labs business entity + EIN** for developer accounts, DPAs, trademark, and IAP banking.
+- ☐ A **USPTO account** for the trademark.
+- ☐ **Rotate the Bot PAT each milestone** (≤90-day expiry; SECURITY_CHECKLIST §8.1). Keep **production Supabase keys, Apple signing, and payment credentials CI-only** (SECURITY_CHECKLIST §1.4); no agent holds them.
 
-## 10. Ongoing Owner rituals
+## Legal, privacy, and compliance (green before M5)
+
+- ☐ **Engage the attorney** (spend AUTH).
+- ☐ **BIPA / Texas CUBI / Washington MHMDA consent** signed off before M2 face processing (SECURITY_CHECKLIST §5.5).
+- ☐ **Publish the privacy policy + retention schedule** before M5; **verify the deletion flow** (SECURITY_CHECKLIST §6.4).
+- ☐ **Vendor DPAs on file** (Luma, Meshy/Tripo, Supabase).
+- ☐ **13+ age gate, no COPPA scope.**
+- ☐ **Terms of Service + EULA.**
+- ☐ **USPTO TESS search** (M0) and a **trademark filing decision** for "Gigantic Journeys" in classes 9 and 41 (spend).
+- ☐ **App Store privacy labels** accurate to the frozen telemetry schema.
+- ☐ **Confirm the SparkForge Labs business entity** for developer accounts, DPAs, trademark, and IAP banking.
+
+## Testers and QA
+
+- ☐ **You test on your iPhones every milestone** as the final reviewer of each exit test.
+- ☐ Recruit and consent **~20 avatar testers** (M2), **three play-testers** (M3), **~50 publishers** (M4), and **100 TestFlight testers** (M5).
+- ☐ **Operate the moderation queue** from M4 as the escalation point.
+- All tests, QA passes, and device measurements are **suggestions, never merge gates** (AUTH #003); the merge gates are the automated CI checks and the security rules.
+
+## Monetization and finance
+
+- ☐ **Two cosmetic IAP SKUs** (outfit pack, realism+ materials) with prices; the **free-tier caps + lifted-cap values** (a pricing AUTH).
+- ☐ **IAP provider** (RevenueCat or Unity IAP; ADR at M5).
+- ☐ **App Store banking + tax.**
+- ☐ **Fund the $750–1,300/month steady state**; the daily cap is $50 in agent+API spend (the pipeline halts at the cap).
+- ☐ **Approve the Tier 2 compute line monthly** if running ($400–1,000/month), paused whenever the core build needs the budget.
+- ☐ **Set regional pricing.**
+
+## Marketing and go-to-market
+
+- ☐ **Build-in-public Day N updates** from week 1.
+- ☐ **Social handles + hashtags** (#GiganticJourneys, #GJrun).
+- ☐ **Landing page** on `giganticjourneys.com`.
+- ☐ **Launch video** (diorama hero + Duo unfold).
+- ☐ **Press + influencer list and outreach** for launch.
+- ☐ **App Store featuring nomination.**
+- ☐ **TestFlight public beta** seeded in Duo communities if M3 is on schedule.
+- ☐ **Launch-day plan + app-store optimization** (keywords, screenshots).
+
+## Devices and capture
+
+- ☐ **Your iPhone matrix** (the oldest sets the quality floor).
+- ☐ **The iPhone Duo device decision** (buy vs adaptive design).
+- ☐ A **paid iOS device farm only if** solo testing becomes a bottleneck.
+- ☐ **The physical scans + reference captures** listed in Part 1, plus more corpus as tuning and M6 need it.
+
+## Ongoing Owner rituals
 
 - ☐ **Answer AUTH REQUESTs promptly** — the only hard blocker for the agents.
 - ☐ **Clear each milestone checkpoint** (`REVIEW M<n>` → your `RESUME M<n+1>`); you are the final reviewer.
-- ☐ **Monthly budget and usage review** (AGENT_GOVERNANCE §7): spend vs the $750–1,300/month range, and per-surface usage on Max and SuperGrok Plus.
+- ☐ **Monthly budget + usage review** (AGENT_GOVERNANCE §7): spend vs the $750–1,300/month range, and per-surface usage on Max and SuperGrok Plus.
 - ☐ **Rotate the Bot PAT each milestone** (≤90-day expiry; SECURITY_CHECKLIST §8.1).
-- ☐ **Arrange the periodic secondary review** (AUTH #007): the Coordinator does it weekly and at checkpoints; you decide if you want an additional independent reviewer beyond that.
+- ☐ **Arrange the periodic secondary review** (AUTH #007): the Coordinator does it weekly and at checkpoints; decide whether you want an additional independent reviewer beyond that.
 
 ## Definition of launch done (SPEC §9)
 
