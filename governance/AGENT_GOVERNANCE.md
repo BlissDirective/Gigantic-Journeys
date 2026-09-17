@@ -1,6 +1,6 @@
 # Agent Governance
 
-`governance/AGENT_GOVERNANCE.md` · v1.0 · 2026-09-17 · Status: **LOCKED except by AUTH REQUEST (design-change)** · Authorization: APPROVED #006
+`governance/AGENT_GOVERNANCE.md` · v1.1 · 2026-09-17 · Status: **LOCKED except by AUTH REQUEST (design-change)** · Authorization: APPROVED #006, #007
 
 The operating model for who does the work on Gigantic Journeys and how their actions are optimized for cost and reliability. It **supersedes the kit's eight-Bot team model** (`context/GIGANTIC_JOURNEYS_PROMPT_KIT.md` §0, §2, §3) and returns to the plan's original Claude-subagent design (`context/DEVELOPMENT_PLAN.md` §2: Architect, Builder, Reviewer as separate contexts) with one consolidated Grok Bot for computer use. Companion documents: `agents/claude/SELF_GOVERNANCE.md` (Claude Code usage optimization), `agents/claude/COORDINATOR.md` and `agents/claude/BUILDER.md` (the two Claude roles), `agents/grok/roles/gj-operator.md` (the single Grok Bot prompt pack), `agents/grok/README.md` (repo rules for the Bot).
 
@@ -14,8 +14,8 @@ Cursor is retired from the automated loop (keep it as a personal editor if you l
 
 | Agent | Surface | Does | Never |
 |---|---|---|---|
-| **Claude Code — Builder** | a Claude Code session, separate from the Coordinator | Writes all feature code and text: C#, TypeScript, Python, tests, docs, PR authoring, on `ticket/<id>` branches. Runs anything scriptable (CLI, API, `-batchmode`). | Merges; reviews its own PRs; does GUI-only work |
-| **Claude Code — Coordinator** | this role, a separate Claude Code session | Governance, review against acceptance tests, the only one who merges to `main`. | Writes feature code; approves an AUTH; reviews are not skipped to save usage |
+| **Claude Code — Builder** | a Claude Code session | Writes all feature code and text: C#, TypeScript, Python, tests, docs, PR authoring, on `ticket/<id>` branches. Runs anything scriptable (CLI, API, `-batchmode`). **Self-reviews and merges its own PRs to `main` once CI is green** (AUTH #007). | Merges with red CI; skips self-review; does GUI-only work |
+| **Claude Code — Coordinator / Secondary Reviewer** | this role, a separate Claude Code session | Governance, AUTH handling, PROGRESS, **periodic independent secondary review** (§5), checkpoint reviews; merges governance PRs. | Writes feature code; approves an AUTH; skips security-sensitive secondary reviews |
 | **Grok Bot — Operator** (`gj-operator`) | one persistent Bot on the SuperGrok Plus cloud computer | Computer use (GUI with no API or CLI path) and long-running unattended operations, driven by one loaded skill hat per task. | Writes feature code; runs many copies of itself; holds production credentials |
 | **Owner** | you | Authorizes spend, accounts, and design or plan changes; physical capture; final review at checkpoints. | — |
 
@@ -48,9 +48,15 @@ One persistent Grok Bot, `gj-operator`, replaces the eight specialist Bots. It i
 - **Bounded bursts, by exception.** The Coordinator may authorize a capped parallel fan-out only for **isolated, read-only or write-isolated, high-value** work where wall-clock matters: a corpus reconstruction sweep, a one-time research pass. Every burst names its agent count cap and its isolation guarantee, and its writes still land single-threaded (one agent merges the results). This is the only sanctioned multi-agent pattern.
 - **Never** parallelize to "go faster" on shared-state work; that is the fragile, token-heavy pattern this spec rejects.
 
-## 5. Separation of duties
+## 5. Review, merge, and periodic secondary review (AUTH #007)
 
-The Builder writes, the Coordinator reviews against the ticket's acceptance tests and merges, and no agent reviews its own work (plan §2; SECURITY_CHECKLIST §8.2). The Builder and Coordinator are **separate Claude Code sessions with separate context** so the reviewer is never the context that wrote the code. The Owner is the final reviewer at each checkpoint. Only the Coordinator merges to `main`.
+Per-PR separation of duties is relaxed for velocity: the Builder self-reviews and merges its own work rather than handing off to a second session for every merge. The compensating controls are the always-on automated gates and a periodic independent review.
+
+- **Merge policy.** Any Claude Code role may merge its **own** reviewed work to `main` **once every required CI check is green** (secret-scan, repo hygiene, lint gate, governance, and the Unity and Android gates where they apply). A merge with red CI is a process violation. The Grok Operator does not self-merge; a Claude role merges its artifact PRs after a quick review.
+- **Self-review is the first gate.** The Builder runs the §1 self-review in `agents/claude/SKILLS.md` on its own diff before merging: acceptance criteria met with evidence, SPEC conformance, an adversarial diff read, the REVIEW_RUBRIC blocking rows, and the security rows that apply.
+- **Periodic secondary review is the second gate.** An independent reviewer (the Coordinator by default, or an Owner-designated reviewer) reviews at intervals, not per-PR: at least **weekly** (folded into the AUDIT) and at **every checkpoint**. It samples merged PRs since the last secondary review against `REVIEW_RUBRIC.md` and `SECURITY_CHECKLIST.md`, and covers **100% of security-sensitive merges** (auth, RLS, secrets, signed URLs, consent, payments, the movement/validator contract), which the Builder flags `secondary-review: required` at merge. Findings become fix tickets.
+- **The Owner** remains the final reviewer at each checkpoint.
+- **Residual risk, stated plainly.** A defect or unsafe change can reach `main` before a human or independent agent sees it; the automated security and lint gates plus 100% secondary review of security-sensitive merges are the mitigation, and the periodic review is expected to catch the rest quickly. This is the accepted cost of not switching sessions to merge (Owner decision, AUTH #007).
 
 ## 6. Credentials
 
@@ -95,3 +101,4 @@ The 61 existing tickets keep their domain labels; re-labeling to `claude-builder
 | Version | Date | Change | Authorization |
 |---|---|---|---|
 | 1.0 | 2026-09-17 | Consolidated to Claude Code Builder + Coordinator and one Grok Bot Operator; Cursor retired from the loop; routing rule, concurrency policy, credential model, and usage-optimization principles set | AUTH #006 |
+| 1.1 | 2026-09-17 | Builder may self-review and merge its own PRs to main on green CI; per-PR separation replaced by periodic independent secondary review (weekly, at checkpoints, and 100% of security-sensitive merges); merge policy and residual-risk note added | AUTH #007 |

@@ -7,7 +7,7 @@
 1. Read the ticket (`tickets/<id>.json`). The acceptance tests are the contract.
 2. Read the PR against the template: every section present, every acceptance-test row carries evidence.
 3. Walk sections A–H below. Rows marked **B** block: any failure means *changes requested* (or *reject*, §9). Rows marked *A* are advisory: noted in the review and tracked as debt.
-4. Write the verdict with reasons tied to acceptance-criterion ids, rubric rows, and checklist rows (§10 template). Merge when every B row passes and CI is green. Tests, QA passes, performance measurements, and device checks are suggestions (SPEC §11, AUTH #003): reviewed when evidence is offered, noted as advisory when absent, never a reason to withhold a merge.
+4. Write the verdict with reasons tied to acceptance-criterion ids, rubric rows, and checklist rows (§10 template). This rubric is applied by the **Builder at self-review before merging** and by the **secondary reviewer at intervals** (AUTH #007). Merge when every B row passes and CI is green. Tests, QA passes, performance measurements, and device checks are suggestions (SPEC §11, AUTH #003): reviewed when evidence is offered, noted as advisory when absent, never a reason to withhold a merge.
 5. On merge: update the ticket (`status`, `history`), `PROGRESS.md`, and, if an AUTH was consumed, `governance/AUTHORIZATION_LOG.md`.
 
 Verdicts: **merge** · **changes requested** (fixable within the ticket) · **reject** (wrong ticket, scope creep, unauthorized protected-path change, secret in history, or a resubmission that ignores earlier findings).

@@ -23,7 +23,7 @@ Owner: BlissDirective (SparkForge Labs). Software: a Claude Code Builder writes 
 
 ## Hard rules
 
-1. Only the Coordinator merges to `main`.
+1. The Builder self-reviews and merges its own code on green CI; the Coordinator does periodic independent secondary review (AUTH #007). No merge on red CI.
 2. Every PR is reviewed against its ticket's acceptance tests, `SPEC.md`, the rubric, and the security checklist.
 3. Spend, accounts, and changes to `SPEC.md`, ADRs, data schemas, the design system, or the milestone plan need the Owner's `APPROVED #n` (`AUTH REQUEST` first).
 4. No secrets in the repo. CI fails any PR with keys, tokens, or a committed `.env*` file.

@@ -8,25 +8,25 @@
   "status": "open",
   "priority": "P0",
   "size": "S",
-  "summary": "Owner configures the repository so that only the Coordinator (through the Owner's account) can merge to main, every merge needs a PR with green required checks and a Code Owner review, and GitHub's native secret scanning with push protection is on.",
+  "summary": "Owner configures the repository so that main takes changes only through a PR with every required CI check green, secret scanning with push protection is on, and history is protected (no force-push, no deletion). Per AUTH #007 a per-PR Code Owner review is NOT required to merge; independent review is periodic (the Coordinator's secondary review). The Builder's merge identity has write/merge access; no agent merges on red CI.",
   "acceptance_tests": [
     {
       "id": "AT-1",
-      "test": "main requires a pull request; direct pushes are rejected for everyone including administrators ('Do not allow bypassing the above settings').",
+      "test": "main requires a pull request and cannot be pushed to directly; force-pushes and deletions are blocked.",
       "evidence": "settings screenshot in qa/vm-setup/repo-settings.md",
       "automated": false,
       "level": "required"
     },
     {
       "id": "AT-2",
-      "test": "Required status checks: `gitleaks`, `repo hygiene (env files, keys, raw media, size)`, `lint gate`, `tickets validate`, `movement.json single source of truth`, `protected paths need APPROVED #n`, `unity tests gate`.",
+      "test": "Required status checks that must be green to merge: `gitleaks`, `repo hygiene (env files, keys, raw media, size)`, `lint gate`, `tickets validate`, `movement.json single source of truth`, `protected paths need APPROVED #n`, `unity tests gate`, `android build gate`.",
       "evidence": "settings screenshot",
       "automated": false,
       "level": "required"
     },
     {
       "id": "AT-3",
-      "test": "Require review from Code Owners (1 approval); dismiss stale approvals on new pushes; no force pushes; no deletions.",
+      "test": "Per-PR Code Owner review is NOT required (AUTH #007); independent secondary review is a periodic process control, not a branch-protection gate. Stale-approval dismissal and linear-history settings are the Owner's choice.",
       "evidence": "settings screenshot",
       "automated": false,
       "level": "required"
@@ -40,10 +40,10 @@
     },
     {
       "id": "AT-5",
-      "test": "A push to main by the Bot machine user is rejected (evidence: the rejected push output, redacted).",
-      "evidence": "qa/vm-setup/foreman.md excerpt",
+      "test": "The Builder's merge identity can merge on green CI; a merge attempt with a red required check is rejected.",
+      "evidence": "qa/vm-setup/repo-settings.md excerpt (redacted)",
       "automated": false,
-      "level": "required"
+      "level": "suggested"
     }
   ],
   "security": [
@@ -60,7 +60,7 @@
   "branch": null,
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-15",
+  "updated": "2026-09-17",
   "history": [
     {
       "date": "2026-09-15",
@@ -70,6 +70,11 @@
     {
       "date": "2026-09-15",
       "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-17",
+      "event": "revised for AUTH #007: per-PR Code Owner review dropped; merge gated on green CI plus periodic secondary review; Builder merges on green CI",
       "by": "coordinator"
     }
   ]
