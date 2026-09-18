@@ -64,7 +64,7 @@ Each verb: trigger geometry (in A), input, source, and the feel rule that makes 
 |---|---|---|---|---|
 | Step-up | h < 0.25A | none (auto) | Procedural foot IK | Never interrupts run |
 | Hop-over | 0.25A ≤ h < 0.5A, d < 1A | none at jog+, or jump tap | Mixamo "jump over" family, warped | Feet clear, hands never touch, no air time beyond a step |
-| Vault | 0.5A ≤ h < 0.9A, d < 1.5A | jump tap while moving toward | Mixamo vault, warped | One hand plants on the top surface; speed preserved |
+| Vault | 0.5A ≤ h < 0.9A, d < 1.5A | jump tap while moving toward | Mixamo vault, warped | One hand plants on the top surface; speed preserved; variants kong/dash, speed, underbar (AUTH #021) |
 | Mantle | 0.9A ≤ h < 1.4A | move into + jump, or auto on contact at jog+ | Mixamo climb-up, warped | Two-hand pull, knee plant, 0.5 s; speed lost |
 | Climb-up | h ≥ 1.4A | move into | enters climb state (Section 6) | — |
 
@@ -75,7 +75,9 @@ Each verb: trigger geometry (in A), input, source, and the feel rule that makes 
 | Running jump | jump tap at jog+ | jump | Mixamo running jump | Height 1.2A, distance 2.4A (sprint 3.0A) |
 | Precision jump | jump released early over a target < 0.6A wide | jump (short press) | running jump, shortened arc | Arc damped 30%; look-at target |
 | Ledge-to-ledge | from hang, jump toward a ledge within 1.5A | jump while hanging | Mixamo hang-hop, warped | Auto-catch if hands pass within 0.15A of the edge |
-| Wall-push | jump while touching a wall, moving away | jump | Mixamo wall-jump-ish, warped | One rebound only; no wall-run in v1 |
+| Wall-push | jump while touching a wall, moving away | jump | Mixamo wall-jump-ish, warped | One rebound; may chain into wall-run or tic-tac (AUTH #021) |
+| Wall-run (AUTH #021) | run into a flat vertical with ≥ 3A of run at run+ | auto on contact at run+ | Mixamo wall-run, warped | Short lateral/upward run ≤ 1.2 s, gravity dampened; exits to jump, mantle, or fall (`movement.json` `wallRun`) |
+| Tic-tac (AUTH #021) | jump while touching a wall to redirect or gain height | jump | Mixamo wall-jump variant, warped | +0.8A height / +1.2A distance; one per wall (`movement.json` `ticTac`) |
 | Coyote time | left an edge < 100 ms ago | jump | — | Jump still fires |
 | Jump buffer | pressed jump < 120 ms before landing | jump | — | Fires on landing |
 
@@ -86,6 +88,7 @@ See Section 5 for tiers.
 | Controlled drop | walk off edge, drop < 1.5A | stick over edge | Mixamo step-down / soft land |
 | Hang-and-drop | crouch at edge or hold contextual action | action | Mixamo hanging idle → drop |
 | Slide | incline 25–60°, speed ≥ jog | auto; action to slide on flat | Mixamo slide; procedural on soft surfaces |
+| Dive / dive-roll (AUTH #021) | jump forward at jog+, or dive off a ledge | jump (forward) | Mixamo dive-roll, warped |
 | Fall | airborne > 0.35 s | — | Mixamo falling idle |
 | Land (4 tiers) | ground contact | — | Section 5 |
 
@@ -93,6 +96,21 @@ See Section 5 for tiers.
 The right-thumb action button shows only when a verb is available: grab ledge, drop from hang, slide, sit on vista marker, plant flag. Never two options at once; the traversal query resolves priority: **plant flag > grab > drop > slide**.
 
 ---
+
+### 3.6 Traversal tools (v1, AUTH #021 — the `IVerbProvider` layer)
+
+Real, 1:1-scale objects the avatar **carries and uses** as gear, found diegetically in the captured scene. They are the sole SPEC §4 exception to "no synthetic game objects" (character-carried gear only; still no *placed* game objects). Each tool registers verbs through `IVerbProvider` (§2, §14) without touching the core. v1 adopts two:
+
+**Safety pin + twine — grapple.** Aim at a valid anchor within `grapple.reachA` (≈6A); the traversal query highlights anchors (any `ledge`/`overhang`/`pole`/graspable object edge for swing & rappel; any reachable top surface for ascend). Three modes:
+- *Swing* (`grapple-swing`): press the pin into the anchor; momentum-preserving pendulum (hang pose + look-at the landing); auto-unhook on arrival, reel + coil to the back.
+- *Ascend* (`grapple-climb`): throw the pin to a top target; climb the twine hand-over-hand; unmount at the top (pin appears stuck), reel + coil. Makes `wall-smooth` passable via an anchor above.
+- *Rappel* (`grapple-rappel`): press the pin into a ledge/overhang edge; controlled descent; auto-unhook at the base, reel + coil.
+
+Tool state machine: `Stowed (coiled on back)` → `Aim` → `Deploy (mount/throw)` → `Verb` → `Release (auto-unhook)` → `Reel` → `Coil` → `Stowed`. Feedback (§9): metal pin *thunk*/*ting*, fiber twine creak/*zip*. Constants: `movement.json` `grapple`.
+
+**Matchstick — pole-vault** (`vault-pole`): at jog+, plant the matchstick and vault over a gap (≤ `poleVault.maxGapA`) or up to a height (≤ `poleVault.maxHeightA`); the stick is left behind or reclaimed. Constants: `movement.json` `poleVault`.
+
+Validator/journey impact: grapple and pole-vault add transitions to the reachability graph (§10 contract) — voids become crossable, smooth walls passable, tall drops safe — so the route generator may author "grapple beats." Both tools are always available in v1, so they are global capabilities the generator can rely on. Deferred tools (glider, piton/picks, rubber-band spring, rope/zipline) remain V2 (§14), added later through the same layer with no core change.
 
 ## 4. Surface class × verb matrix
 
@@ -110,7 +128,7 @@ Surface classes come from `gj-scenegraph`. This matrix is what "the environment 
 | **pole** | lamp stand, table leg, cable, curtain rod (Ø 0.2–0.8A) | pole climb (P), pole slide-down | — | Section 6.5 |
 | **overhang** | underside of shelf/table with graspable edge | hang traverse | — | Section 6.6 |
 | **slope** | book ramp, cushion side, ramp 25–60° | slide, slope run (< 25°) | balance | Slide auto at speed |
-| **wall-smooth** | painted wall, glass, cabinet door | wall-push | climb | Blocks climb; forces route search |
+| **wall-smooth** | painted wall, glass, cabinet door | wall-push, wall-run (≥ 3A), grapple-ascend | climb | Passable via a grapple anchor above or a wall-run; else forces route search (AUTH #021) |
 | **soft-hanging** | curtain, plant fronds, paper, cord | brush-through (Tier 1 sway), grab if rope-like | stand | Never load-bearing |
 | **void** | gaps to floor, off-table edge | fall | — | Off-table fall on tabletop = respawn |
 | **hazard-none** | — | — | — | v1 has no damage; falls cost time only |
@@ -234,7 +252,12 @@ Single source of truth for both the controller and the traversal validator. Valu
   "narrowWidthA": 0.5,
   "crouchHeadroomA": 1.1,
   "gravityScale": 0.8,
-  "assist": { "coyoteMs": 200, "jumpBonus": 0.2, "slipsOff": true, "autoGrab": true }
+  "assist": { "coyoteMs": 200, "jumpBonus": 0.2, "slipsOff": true, "autoGrab": true },
+  "dive": { "minSpeed": 2.4, "distanceA": 2.0, "rollAboveA": 1.5 },
+  "ticTac": { "reboundHeightA": 0.8, "reboundDistanceA": 1.2, "maxChain": 1 },
+  "wallRun": { "minWallRunA": 3.0, "maxDurationSec": 1.2, "speed": 3.6, "minEntrySpeed": 3.0, "gravityDampen": 0.5 },
+  "poleVault": { "plantWindowSec": 0.25, "minRunSpeed": 2.4, "maxGapA": 3.0, "maxHeightA": 2.0 },
+  "grapple": { "reachA": 6.0, "swingSpeed": 3.0, "swingMaxArcDeg": 120, "ascendSpeed": 0.7, "rappelSpeed": 1.0, "deploySec": 0.4, "reelSec": 0.6, "anchorMinLedgeA": 0.1, "snapAssistA": 0.3 }
 }
 ```
 
@@ -293,13 +316,15 @@ Ticket `M1-MOVE-01`, owner `gj-gameplay`, QA `gj-qa-release`.
 
 ## 14. V2 hooks: tools as verb layers
 
-The controller exposes `IVerbProvider`; each tool registers verbs and their trigger queries without modifying the core. Planned:
-- **Grapple**: `reach` verb creating a temporary ledge at the anchor; swing uses the hang family.
-- **Parachute/glider**: replaces fall tiers above 3A with a glide state; landing always soft.
-- **Climbing picks/suction**: promotes `wall-smooth` to `textured-vertical`.
-- **Spring shoes**: jump constants ×1.5 in `movement.json` override scope.
-- **Rope**: player-placed `pole`/`soft-hanging` that is load-bearing.
-Deferred content also includes the Ultimate Traversal set, traceur-captured parkour clips, stamina, wall-run, and damage.
+The controller exposes `IVerbProvider`; each tool registers verbs and their trigger queries without modifying the core.
+
+**Promoted to v1 (AUTH #021, §3.6):** the safety-pin **grapple** (swing/ascend/rappel) and the matchstick **pole-vault**. The hooks below remain V2, added later through the same layer:
+- **Parachute/glider** (found feather): replaces fall tiers above 3A with a glide state; landing always soft.
+- **Climbing picks/suction** (bobby-pin piton): promotes `wall-smooth` to `textured-vertical`.
+- **Spring shoes** (rubber-band launcher): jump constants ×1.5 in `movement.json` override scope.
+- **Rope/zipline** (thread spool): player-placed `pole`/`soft-hanging` that is load-bearing.
+
+Deferred content also includes the Ultimate Traversal set, traceur-captured parkour clips, stamina, and damage. (Wall-run is promoted to v1, AUTH #021.)
 
 ---
 
@@ -317,3 +342,4 @@ Capture and cleanup: Rokoko Vision docs; Move.ai iPhone quickstart; Cascadeur Ba
 (Bots append contradictions, measured values, and clip-name corrections here; Owner reviews at each checkpoint.)
 
 - 2026-09-15 (Coordinator, AUTH #003): v1 ships on the iOS App Store only. The §2 reference device (2023 mid-tier Android, 30 fps floor) and the §13 pass/fail thresholds are read as targets measured on the Owner's iPhones, never as merge gates; quality tiers scale per device. SPEC.md §11 governs.
+- 2026-09-18 (Coordinator, AUTH #021): Movement v1 expansion — new verbs (dive-roll, tic-tac, vault variants, wall-run) and the v1 traversal-tools layer (safety-pin grapple: swing/ascend/rappel; matchstick pole-vault) via `IVerbProvider`; edits to §3.2–§3.6, §4, §10, §14. New `movement.json` blocks: `dive`, `ticTac`, `wallRun`, `poleVault`, `grapple`. Tools are the SPEC §4 diegetic character-gear exception. Rationale: `design/proposals/movement-v1-expansion.md`.

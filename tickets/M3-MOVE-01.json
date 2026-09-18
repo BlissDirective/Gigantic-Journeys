@@ -1,0 +1,70 @@
+{
+  "id": "M3-MOVE-01",
+  "title": "Traversal tools: safety-pin grapple + matchstick pole-vault (AUTH #021)",
+  "milestone": "M3",
+  "area": "MOVE",
+  "owner": "claude-builder",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P1",
+  "size": "L",
+  "summary": "Implement the v1 traversal-tools layer through the existing IVerbProvider (Bible §3.6, §14): the safety-pin grapple (swing/ascend/rappel) with the seamless tool state machine (aim -> deploy/mount -> verb -> auto-unhook -> reel -> coil to back), and the matchstick pole-vault. Real 1:1-scale carried objects (the sole SPEC §4 exception). Aim/targeting highlights valid anchors; the validator and route generator gain grapple/pole transitions. Tuned to movement.json grapple/poleVault.",
+  "deliverables": [
+    "unity (grapple + pole-vault verb providers, tool state machine, aim UI)",
+    "unity (validator + journey-gen tool transitions)"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "Grapple works in all three modes (swing/ascend/rappel) via IVerbProvider without core changes; the state machine mounts the pin diegetically, auto-unhooks on arrival, and reels + coils to the back; constants come from movement.json grapple.",
+      "evidence": "Unity test scene + screen capture",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "Matchstick pole-vault vaults a gap up to poleVault.maxGapA or a height up to maxHeightA at jog+.",
+      "evidence": "test scene",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "The reachability validator and route generator include grapple and pole transitions (voids crossable, wall-smooth passable via an anchor above) within the movement.json limits; a generated route can author a grapple beat.",
+      "evidence": "validator + generator test output",
+      "automated": true,
+      "level": "required"
+    },
+    {
+      "id": "AT-4",
+      "test": "Tools render as real 1:1 objects lighting-matched to the splat, with tactile feedback (§9); aim is forgiving (snapAssistA). Feels great on the Owner's iPhone.",
+      "evidence": "qa/reports/M3-tools.md + device clips",
+      "automated": false,
+      "level": "suggested"
+    }
+  ],
+  "security": [],
+  "depends_on": [
+    "M1-MOVE-01",
+    "M1-MOVE-02",
+    "M1-SCEN-04",
+    "M1-SCEN-05"
+  ],
+  "references": [
+    "AUTH #021",
+    "MOVEMENT_BIBLE §3.6, §10, §14",
+    "ADR-0004 (IVerbProvider)",
+    "design/proposals/movement-v1-expansion.md"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-18",
+  "updated": "2026-09-18",
+  "history": [
+    {
+      "date": "2026-09-18",
+      "event": "created by the Coordinator as the AUTH #021 traversal-tools follow-up (grapple + pole-vault).",
+      "by": "coordinator"
+    }
+  ]
+}

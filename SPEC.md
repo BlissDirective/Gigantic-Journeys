@@ -1,6 +1,6 @@
 # Gigantic Journeys — SPEC.md
 
-Version 1.3 · 2026-09-18 · Owner: BlissDirective (SparkForge Labs) · Maintainer: Coordinator (Claude Code)
+Version 1.4 · 2026-09-18 · Owner: BlissDirective (SparkForge Labs) · Maintainer: Coordinator (Claude Code)
 
 **Authority.** This file is the only authority on *what* v1 is. Below it rank `design/MOVEMENT_BIBLE.md` v1.0 (how the avatar moves), `design/Gigantic-Journey-Design-Skills.md` v1.1 with `design/DESIGN_SYSTEM.md` (how it looks and feels), then `ADRs/` (how it is built). Where documents disagree, this file wins until an authorized change says otherwise.
 
@@ -65,7 +65,8 @@ The verb set, trigger thresholds, feel rules, camera rules, and landing tiers ar
 - Assist mode (longer coyote time, jump bonus, slips off, auto-grab) per Bible §10.
 - Camera per Bible §8: collision-aware follow, look-ahead, dither-fade on occluding real geometry, manual orbit that auto-recenters, never fights the player mid-move.
 - Reactions and idle personality per Bible §7.
-- No stamina, no damage, no wall-run in v1. Falls cost time only; off-table falls on tabletops respawn at the last stable surface.
+- No stamina, no damage in v1. Falls cost time only; off-table falls on tabletops respawn at the last stable surface.
+- **Expanded verbs + traversal tools (AUTH #021):** the full parkour set plus dive-roll, tic-tac, vault variants, and **wall-run**; and two **found-object tools** — the safety-pin **grapple** (swing/ascend/rappel) and a matchstick **pole-vault** — real 1:1-scale objects the character carries and uses, registered via `IVerbProvider` (Bible §3.6, §14). These tools are the sole §4 exception to "no synthetic game objects."
 
 ### 3.6 Environment reactivity
 - **Tier 0 (ships):** material-keyed footstep, landing, grab, and slide audio; particles; haptics; camera shake, per the Bible §9 matrix, all scaled with the environment scale multiplier.
@@ -106,10 +107,10 @@ The verb set, trigger thresholds, feel rules, camera rules, and landing tiers ar
 ## 4. Non-goals for v1 (explicit)
 
 Not in v1, and not added without an AUTH (design-change) that also edits this section:
-- **No synthetic game objects.** No enemies, coins, platforms, creatures, tokens, hazards, or branded items. The only non-photo things on screen are the avatar, one summit beacon, optional route and vista markers, and the HUD.
+- **No synthetic game objects,** with one narrow exception: **character-carried traversal tools** — real 1:1-scale found objects the avatar uses as gear (the safety-pin grapple, the matchstick pole-vault; AUTH #021). Still no *placed* game objects: no enemies, coins, platforms, creatures, tokens, hazards, or branded items. The only non-photo things on screen are the avatar, its carried tools, one summit beacon, optional route and vista markers, and the HUD.
 - **No Tier 2 physics** in the shipped app (research track only, §5).
 - **No Android release in v1.** Android stays a compiling build target; its launch is v1.1 (`BACKLOG.md`).
-- No stamina, damage, health, lives, or wall-run; no V2 verb tools (grapple, glider, picks, spring shoes, rope).
+- No stamina, damage, health, or lives. (Wall-run and the grapple + pole-vault tools are now in v1 — AUTH #021.) The remaining V2 verb tools stay out of v1: glider, picks, spring shoes, rope/zipline.
 - No outdoor, garden, or street capture; no face or plate blur pipeline.
 - No multiplayer, live races, seasonal content, or level packs.
 - No slider-based avatar editor. **No user face/body capture or biometric processing in v1**; custom avatars from the player's likeness are a V2 feature (AUTH #020, ADR-0006). (Self-hosted reconstruction is now the v1 backend — ADR-0005 — no longer a non-goal.)
@@ -225,3 +226,4 @@ Apple's first foldable iPhone ships October 23, 2026 (7.6-inch inner display, 5.
 | 1.1 | 2026-09-15 | v1 on the iOS App Store only; no minimum device model with automatic quality tiers (§6); tests, QA, and device measurements are suggestions, never merge gates (§11); iPhone Duo optional track (§12); Android deferred to v1.1 | AUTH #003 (Owner instruction) |
 | 1.2 | 2026-09-16 | §2 and §3.2 capture wording aligned to the locked design decision 4 (rotation capture instead of three stills) | Transcription of the 2026-09-14 lock (M0-OWNER-02); no AUTH consumed |
 | 1.3 | 2026-09-18 | v1 avatar = curated pre-made character roster, cosmetic-only customization; **no face/body capture or biometric processing in v1** (custom avatars → V2); reconstruction backend = self-host (ADR-0005) with a KIRI corpus-only bridge, Luma dropped; M2 reframed to Character & rig; §5 biometric consent becomes a V2 gate. Applied to §1, §2, §3.1, §3.2, §3.9, §4, §7, §8, §9 | AUTH #018, #020 (Owner instruction) |
+| 1.4 | 2026-09-18 | Movement v1 expansion (AUTH #021): added verbs (dive-roll, tic-tac, vault variants, wall-run) and a v1 traversal-tools layer (safety-pin grapple, matchstick pole-vault); opened a narrow §4 exception for diegetic character-carried tools; §3.5 and §4 updated | AUTH #021 (Owner instruction) |

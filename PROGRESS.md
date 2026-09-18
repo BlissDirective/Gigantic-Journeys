@@ -1,6 +1,6 @@
 # PROGRESS.md
 
-Living tracker. Updated by the Coordinator on every merge, AUTH decision, and checkpoint. Last update: **2026-09-17** (M0 AUTH batch #008–#017 **approved**; #016 legal review is in-house at $0 (no external spend); M0-REPO-03 unblocked; M0 legal drafts in `legal/` for the Owner's in-house team; Meshy selected as head vendor (Tripo dropped); vendor research landed (`research/vendors/`) with two flags — Meshy needs Enterprise+DPA for biometric, Luma reconstruction/train concerns; build-vs-buy research complete; **Owner set the v1 game plan (2026-09-18): self-host reconstruction + KIRI corpus-only bridge (AUTH #018, spike M1-CAPT-03); v1 avatar = pre-made curated character roster with NO biometric (AUTH #020 / ADR-0006, supersedes the avatar vendor); focus on video→playable + world-class movement. Custom avatars → V2 R&D track (`research/rnd/`). SPEC → v1.3.** Ticket table regenerated with `python tickets/validate.py --summary`.
+Living tracker. Updated by the Coordinator on every merge, AUTH decision, and checkpoint. Last update: **2026-09-17** (M0 AUTH batch #008–#017 **approved**; #016 legal review is in-house at $0 (no external spend); M0-REPO-03 unblocked; M0 legal drafts in `legal/` for the Owner's in-house team; Meshy selected as head vendor (Tripo dropped); vendor research landed (`research/vendors/`) with two flags — Meshy needs Enterprise+DPA for biometric, Luma reconstruction/train concerns; build-vs-buy research complete; **Owner set the v1 game plan (2026-09-18): self-host reconstruction + KIRI corpus-only bridge (AUTH #018, spike M1-CAPT-03); v1 avatar = pre-made curated character roster with NO biometric (AUTH #020 / ADR-0006, supersedes the avatar vendor); focus on video→playable + world-class movement. Custom avatars → V2 R&D track (`research/rnd/`). Then the **movement v1 expansion (AUTH #021): full parkour + dive-roll/tic-tac/vault-variants/wall-run and a traversal-tools layer (safety-pin grapple + matchstick pole-vault) via IVerbProvider; a narrow §4 exception for diegetic character tools.** SPEC → v1.4; Movement Bible + movement.json updated; tickets M1-MOVE-02, M3-MOVE-01.** Ticket table regenerated with `python tickets/validate.py --summary`.
 
 ## Milestone
 
@@ -17,7 +17,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 
 | Status | Count |
 |---|---|
-| open | 55 |
+| open | 57 |
 | in-progress | 0 |
 | in-review | 0 |
 | changes-requested | 0 |
@@ -25,7 +25,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | merged | 1 |
 | done | 3 |
 | cancelled | 3 |
-| **total** | **63** |
+| **total** | **65** |
 
 ## Blockers
 
@@ -113,6 +113,8 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | M1-GAME-01 | Unity loads splat + collision mesh + environment spec | gj-gameplay | P0 | open | M0-UNITY-02, M1-DATA-01, M1-CAPT-02 | — |
 | M1-GAME-02 | Placeholder capsule journeys to the summit | gj-gameplay | P0 | open | M1-GAME-01, M1-SCEN-05, M1-MOVE-01 | — |
 | M1-MOVE-01 | Motion-matching vs blend-tree spike (Movement Bible §13) | gj-gameplay | P0 | open | M0-UNITY-03, M0-MOVE-01 | — |
+| M1-MOVE-02 | Expanded verb set: dive-roll, tic-tac, vault variants, wall-run (AUTH #021) | claude-builder | P1 | open | M0-UNITY-03, M0-MOVE-01, M1-MOVE-01 | — |
+| M3-MOVE-01 | Traversal tools: safety-pin grapple + matchstick pole-vault (AUTH #021) | claude-builder | P1 | open | M1-MOVE-01, M1-MOVE-02, M1-SCEN-04, M1-SCEN-05 | — |
 | M1-PIPE-01 | Inngest pipeline: real steps for reconstruct → scenegraph → journey → package | gj-platform | P0 | open | M0-PIPE-01 | — |
 | M1-QA-01 | M1 exit-test harness: 10 fresh scans to reachable summit + two routes | gj-qa-release | P0 | open | M1-GAME-02, M1-SCEN-04, M1-CAPT-01 | — |
 | M1-SCEN-01 | Mesh cleanup: hole fill, ceiling cap, floater removal | gj-scenegraph | P0 | open | M1-CAPT-02 | — |

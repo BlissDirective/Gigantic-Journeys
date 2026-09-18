@@ -1,0 +1,61 @@
+{
+  "id": "M1-MOVE-02",
+  "title": "Expanded verb set: dive-roll, tic-tac, vault variants, wall-run (AUTH #021)",
+  "milestone": "M1",
+  "area": "MOVE",
+  "owner": "claude-builder",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P1",
+  "size": "M",
+  "summary": "Add the AUTH #021 verbs to the traversal controller on the shared GJ skeleton, tuned to the new movement.json constants (dive, ticTac, wallRun): dive-roll (committed forward dive chaining to a roll), tic-tac (wall kick for height/redirect), vault variants (kong/dash, speed, underbar), and wall-run (short run across a flat vertical >= 3A). Each registers through the existing layers; the reachability validator is made aware of the new transitions.",
+  "deliverables": [
+    "unity (verb implementations + MoveClip tags)",
+    "design/MOVEMENT_BIBLE.md alignment (already updated §3.2-§3.4)"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "Dive-roll, tic-tac, the vault variants, and wall-run are implemented on the shared skeleton and honor the movement.json constants (dive, ticTac, wallRun); wall-run only triggers on a flat vertical with >= 3A of run at run+ speed and exits cleanly to jump/mantle/fall.",
+      "evidence": "Unity test scene + clip list",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "The deterministic reachability validator (M1-SCEN-05) accounts for the new transitions so generated routes may use them within the 85% margin.",
+      "evidence": "validator test output",
+      "automated": true,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "Each verb reads with real-body weight and platformer responsiveness (Bible §0 bar) on the Owner's iPhone.",
+      "evidence": "qa/reports/M1-verbs.md + device clips",
+      "automated": false,
+      "level": "suggested"
+    }
+  ],
+  "security": [],
+  "depends_on": [
+    "M0-UNITY-03",
+    "M0-MOVE-01",
+    "M1-MOVE-01"
+  ],
+  "references": [
+    "AUTH #021",
+    "MOVEMENT_BIBLE §3.2-§3.4, §10",
+    "design/proposals/movement-v1-expansion.md"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-18",
+  "updated": "2026-09-18",
+  "history": [
+    {
+      "date": "2026-09-18",
+      "event": "created by the Coordinator as an AUTH #021 movement follow-up (expanded verb set).",
+      "by": "coordinator"
+    }
+  ]
+}
