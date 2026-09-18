@@ -47,6 +47,8 @@ The app holds two sensitive things: biometric imagery (faces, bodies) and photog
 
 ## 5. Biometric consent gate (BIPA and peers)
 
+> **v1: NOT APPLICABLE — no biometric processing (AUTH #020 / ADR-0006).** v1 uses pre-made characters; there is no face or body capture. This section is a **V2 gate** for the custom-avatar feature — **except row 5.6 (the 13+ age gate), which remains a v1 requirement** (it is independent of biometrics). The other rows apply when V2 ships.
+
 | # | Control | |
 |---|---|---|
 | 5.1 | No face or body photo bytes leave the device, and no vendor job is created, until a consent record exists: user id, policy version, timestamp, locale, hash of the exact consent text shown, stated retention. | B |
@@ -61,8 +63,8 @@ The app holds two sensitive things: biometric imagery (faces, bodies) and photog
 | # | Control | |
 |---|---|---|
 | 6.1 | Raw scan video, poses, and depth are deleted from storage automatically when derived assets exist; failed jobs are deleted within 7 days. | B |
-| 6.2 | Face and body photos are deleted on device, in storage, and at the vendor immediately after avatar generation; a deletion receipt (job id, timestamp, vendor response) is logged without the media. | B |
-| 6.3 | Vendor retention and deletion terms (Luma; Meshy or Tripo) are on file in `legal/vendors/` before the vendor touches user data; a vendor that trains on customer data by default is not used without an opt-out in place. | G (M1, M2) |
+| 6.2 | *(V2, AUTH #020 — no face capture in v1)* Face and body photos are deleted on device, in storage, and at the vendor immediately after avatar generation; a deletion receipt is logged without the media. | V2 |
+| 6.3 | Reconstruction runs on our own infrastructure (self-host, ADR-0005); any managed **bridge (KIRI) processes only the consented corpus, never real user scans**, with its terms on file before use. **No avatar vendor in v1.** A third party that trains on customer data by default is never sent real user data. | G (M1) |
 | 6.4 | Per-user delete-all removes every data class in `SPEC.md` §7; an end-to-end run on staging is suggested. | G (M5) |
 | 6.5 | Bots never handle raw user photos or video; the test corpus is Owner-supplied and consented. | B |
 
@@ -119,8 +121,8 @@ Contain (rotate, unpublish), record in `governance/INCIDENTS.md`, notify the Own
 | Checkpoint | Rows |
 |---|---|
 | M0 | 1.1–1.6, 8.1, 8.2 |
-| M1 | 4.1–4.3 (upload path), 6.1, 6.3 (Luma), 7.1–7.2 |
-| M2 | 5.1–5.4, 6.2, 6.3 (Meshy or Tripo) |
+| M1 | 4.1–4.3 (upload path), 6.1, 6.3 (reconstruction bridge, corpus-only), 7.1–7.2 |
+| M2 | — (biometric rows 5.1–5.4, 6.2 deferred to V2 — AUTH #020; no new v1 security gate at M2) |
 | M3 | 9.7, 9.8 (release flags) |
 | M4 | 2.1–2.5, 3.1–3.4, 10.1–10.4 |
-| M5 | 5.5, 5.6, 6.4, 8.4, 9.1–9.10, accurate App Store privacy labels |
+| M5 | 6.4, 8.4, 9.1–9.10, 5.6 (13+ age gate), accurate App Store privacy labels (biometric 5.5 and avatar-vendor DPA deferred to V2 — AUTH #020) |

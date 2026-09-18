@@ -1,6 +1,8 @@
 # ADR-0005: Reconstruction self-host (with a managed bridge); avatar via Avatar SDK/MetaPerson on-prem
 
-Date: 2026-09-18 · Status: Accepted · Authorization: APPROVED #018 (reconstruction), #019 (avatar) · Supersedes: ADR-0003 · Owner: claude-builder (pipeline), coordinator (governance)
+Date: 2026-09-18 · Status: Accepted; **avatar half superseded by ADR-0006** · Authorization: APPROVED #018 (reconstruction), #019 (avatar) · Supersedes: ADR-0003 · Owner: claude-builder (pipeline), coordinator (governance)
+
+> **Addenda (2026-09-18):** (1) The **avatar decision here (Avatar SDK/MetaPerson on-prem, #019) is superseded by ADR-0006** — v1 uses a curated roster of pre-made characters with no biometric processing; Avatar SDK is deferred to the V2 custom-avatar track. (2) The **reconstruction managed bridge is selected: KIRI, corpus-only** (splat+mesh matches the self-host target; it only ever processes the consented corpus, never real user homes; real user scans wait for the self-host pipeline). The reconstruction decision otherwise stands.
 
 ## Context
 ADR-0003 chose Luma for reconstruction and Meshy/Tripo for avatar heads, both as third-party APIs, with a self-hosted gsplat path documented only as a fallback. Vendor research (2026-09-17, `research/vendors/`) invalidated both premises:

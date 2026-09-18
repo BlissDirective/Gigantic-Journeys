@@ -12,4 +12,5 @@ Creating or changing an ADR is an AUTH (design-change): the PR cites `APPROVED #
 | 0002 | Backend: Supabase, Vercel, Inngest; the secrets model | Accepted (recorded) |
 | 0003 | Reconstruction and avatar via third-party APIs; vendor-neutral package | **Superseded by 0005** |
 | 0004 | Movement architecture: five assemblies, motion matching spike, motion warping | Accepted (recorded) |
-| 0005 | Reconstruction self-host (with a managed bridge); avatar via Avatar SDK/MetaPerson on-prem | Accepted (AUTH #018/#019) |
+| 0005 | Reconstruction self-host (with a managed bridge); avatar via Avatar SDK/MetaPerson on-prem | Accepted (AUTH #018/#019); **avatar half superseded by 0006** |
+| 0006 | v1 avatar = curated character roster (no biometric); custom avatars are V2 | Accepted (AUTH #020) |

@@ -70,6 +70,8 @@ Coordinator consistency note: matches rules 7, 8, 27, 28 (own budget; Reduce Mot
 
 ## 4. Avatar presentation — LOCKED 2026-09-14 (transcribed 2026-09-16)
 
+> **v1 change (AUTH #020, ADR-0006, 2026-09-18):** v1 uses a **curated roster of pre-made rigged characters** — no photo capture, no likeness confirmation, no biometric. The transcribed capture / likeness / wardrobe-from-photo text below now describes the **V2 custom-avatar** feature. In v1: the player **selects** a character; the cosmetic store previews on the *chosen character*; the in-world constraints (realistic ~7-head proportions, rim light, contact shadow, reactive idle per Bible §7) still apply. Player-facing copy says "your character" in v1.
+
 Binding constraints (rules 15, 16, 20; SPEC §3.2):
 - Realistic proportions of about 7 heads, stylized grounded materials, rim light plus contact shadow.
 - Likeness confirmation: the head turning beside the source photo, "Is this you?", Retake or Tweak (skin tone, hair, glasses, build); no slider editor.

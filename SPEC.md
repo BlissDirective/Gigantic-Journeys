@@ -1,6 +1,6 @@
 # Gigantic Journeys — SPEC.md
 
-Version 1.2 · 2026-09-16 · Owner: BlissDirective (SparkForge Labs) · Maintainer: Coordinator (Claude Code)
+Version 1.3 · 2026-09-18 · Owner: BlissDirective (SparkForge Labs) · Maintainer: Coordinator (Claude Code)
 
 **Authority.** This file is the only authority on *what* v1 is. Below it rank `design/MOVEMENT_BIBLE.md` v1.0 (how the avatar moves), `design/Gigantic-Journey-Design-Skills.md` v1.1 with `design/DESIGN_SYSTEM.md` (how it looks and feels), then `ADRs/` (how it is built). Where documents disagree, this file wins until an authorized change says otherwise.
 
@@ -12,7 +12,7 @@ Version 1.2 · 2026-09-16 · Owner: BlissDirective (SparkForge Labs) · Maintain
 
 ## 1. Product definition
 
-Gigantic Journeys is a mobile game (v1 on the iOS App Store; one Unity 6 codebase that keeps Android buildable for a later release) in which the player scans a real place, a room or a tabletop build, becomes a near-photorealistic 1:12 avatar of themselves, and journeys through that place: reaching its summit, running its routes, finding its vistas. The environment is the content; the avatar is the piece; traversal is the product. Finished environments can be published to an opt-in global database where they are ranked and played by others.
+Gigantic Journeys is a mobile game (v1 on the iOS App Store; one Unity 6 codebase that keeps Android buildable for a later release) in which the player scans a real place, a room or a tabletop build, chooses a near-photorealistic 1:12 character (a curated roster; custom likeness avatars are a V2 feature — AUTH #020), and journeys through that place: reaching its summit, running its routes, finding its vistas. The environment is the content; the avatar is the piece; traversal is the product. Finished environments can be published to an opt-in global database where they are ranked and played by others.
 
 In one line (Bible §0): *a real person, 15 cm tall, parkouring through a real place, with the weight and hesitation of a real body and the responsiveness of a great platformer.*
 
@@ -22,7 +22,7 @@ Identity: name "Gigantic Journeys"; bundle id `com.sparkforgelabs.giganticjourne
 
 1. **Install → play in 60 s.** A pre-scanned demo environment lets the player run, jump, and mantle before scanning anything (Design Skills rule 9: play first, scan second). First playable moment under 3 minutes, first summit under 5.
 2. **Scan.** One illustrated toggle chooses room walkthrough or tabletop orbital; guided capture with live coverage, speed, blur, and light coaching; a quality gate before upload; under 90 seconds of active capture.
-3. **Become the avatar.** A separate, explicit biometric consent step; a full-body shot with a 360° rotation, then a face close-up with rotation; head from image-to-3D realistic mode, body from a parametric fit; "Is this you?" with Retake or four coarse tweaks; under 2 minutes; source photos deleted afterwards.
+3. **Choose your character.** Pick from a curated roster of rigged, semi-photorealistic 1:12 characters; the cosmetic wardrobe (outfit pack, realism+ materials) reskins them. No photos and no scan of the player — selection is instant. (Custom avatars from the player's own likeness are a V2 feature — AUTH #020, ADR-0006.)
 4. **Journey.** The environment resolves progressively while the player waits (never a blank spinner). Then: the summit beacon visible from the start; two or three generated routes of rising difficulty plus player-recorded challenge routes; three vistas rewarded with photo mode; the flag plant at the summit.
 5. **Publish and browse.** Opt-in publish (GPS stripped, moderation pass); browse by place; rate on four axes; race per-route time trials; see creator stats. A friend plays it from a link within five minutes.
 6. **Return.** New scans, other people's environments, the diorama view for sharing clips, the cosmetic wardrobe after a win.
@@ -34,18 +34,16 @@ Identity: name "Gigantic Journeys"; bundle id `com.sparkforgelabs.giganticjourne
 - ARKit camera poses and depth recorded alongside video (LiDAR depth when the device has it; ARKit poses give metric scale without it). Live coverage heat-map; speed meter that turns amber when moving too fast; blur rejection with a gentle haptic; a "you missed this corner" hint before upload; a quality gate that rejects early and kindly ("Too dark here — turn on a lamp?").
 - Passes of 1–3 minutes; active capture under 90 seconds.
 - GPS and EXIF stripped on device before upload and verified again server-side.
-- Reconstruction through the Luma API into a Gaussian splat plus a collision mesh (ADR-0003). The package format is vendor-neutral.
+- Reconstruction into a Gaussian splat plus a collision mesh via a **self-hosted pipeline** (gsplat/Brush + COLMAP + Open3D), with a managed bridge (KIRI, corpus-only) for early validation (ADR-0005). The package format is vendor-neutral. User home imagery is processed on our own infrastructure.
 - Well-lit indoor rooms and tabletop builds only.
 
-### 3.2 Avatar: realistic, 1:12
-- Consent gate first: a separate, explicit, versioned biometric consent record must exist before any face bytes leave the device (§7, SECURITY_CHECKLIST §5).
-- Capture (DESIGN_SYSTEM decision 4): a full-body shot with a 360° body rotation, then a face close-up with rotation, with lighting guidance and retakes.
-- Realistic proportions (about 7 heads), stylized "grounded" materials, a unified shader with an environment probe from the splat, a subtle rim light and contact shadow so the avatar pops off the photoreal floor (Design Skills rule 20).
-- Head via image-to-3D realistic mode (Meshy or Tripo; vendor fixed by ADR at M2 after the M0 vendor-terms review) with a fixed material prompt. Body via parametric fit with a small default wardrobe roughly matching the photo.
-- Merge, retopo to a fixed budget, bake, auto-rig to the **shared GJ humanoid skeleton**, retarget the shared animation set. Validation checklist (bone count, T-pose, eye height, texture seams) with automatic retry.
-- Likeness confirmation: the generated head turning beside the source photo, "Is this you?", Retake or Tweak (skin tone, hair, glasses, build). No slider editor.
+### 3.2 Avatar: a curated 1:12 character (v1)
+- The player picks from a **curated roster of rigged, semi-photorealistic 1:12 characters** (~6–12 at launch). **No face or body capture and no biometric processing in v1** — selection is instant (AUTH #020, ADR-0006).
+- All characters share the **GJ humanoid skeleton** and the shared animation/traversal set, so every character moves identically well; the roster is an authored art asset, not a per-user generation step.
+- Realistic proportions (about 7 heads), stylized "grounded" materials, a unified shader with an environment probe from the splat, a subtle rim light and contact shadow so the character pops off the photoreal floor (Design Skills rule 20).
+- Cosmetic customization only, through the two IAP SKUs (outfit pack, realism+ materials) plus free defaults, previewed on the chosen character in the diorama. No slider editor.
 - Default scale 1:12 (1.75 m → 14.6 cm) with a per-environment scale multiplier; every movement threshold is expressed in avatar heights **A** (Bible §1).
-- Targets: generated in under 2 minutes; recognizable by friends in a blind test at 60 % or better; source photos deleted after generation.
+- **Custom avatars from the player's own likeness are deferred to V2** (own-model R&D track, `research/rnd/`). v1 ships zero biometric processing.
 
 ### 3.3 Environment understanding (scene graph)
 - Mesh cleanup: hole fill, ceiling cap, floater removal.
@@ -90,10 +88,10 @@ The verb set, trigger thresholds, feel rules, camera rules, and landing tiers ar
 - Implemented with RevenueCat or Unity IAP (ADR at M5).
 
 ### 3.9 Compliance and privacy
-- Written, BIPA-compliant biometric consent before any face processing; a published retention schedule; source photos and video deleted once derived assets exist.
-- A training opt-in toggle separate from consent; derived data only; per-user deletion of everything, including vendor-side deletion.
+- **v1 has no biometric processing** (characters are pre-made; no face or body capture — AUTH #020). BIPA/CUBI/MHMDA consent applies only to the V2 custom-avatar feature. A published retention schedule; scan source video deleted once derived assets exist.
+- A training opt-in toggle for derived scan/telemetry data, default off, derived data only; per-user deletion of everything.
 - 13+ age gate; no COPPA scope in v1.
-- GPS and EXIF stripped from every upload; vendor DPAs and retention terms on file before a vendor touches user data.
+- GPS and EXIF stripped from every upload. Reconstruction runs on our own infrastructure (self-host); any managed bridge (KIRI) processes only the consented corpus, never real user scans, so no third party touches real user data in v1.
 - App Store privacy labels accurate to the frozen telemetry schema (the Play data safety form joins when Android ships).
 
 ### 3.10 Platform and backend
@@ -114,7 +112,7 @@ Not in v1, and not added without an AUTH (design-change) that also edits this se
 - No stamina, damage, health, lives, or wall-run; no V2 verb tools (grapple, glider, picks, spring shoes, rope).
 - No outdoor, garden, or street capture; no face or plate blur pipeline.
 - No multiplayer, live races, seasonal content, or level packs.
-- No slider-based avatar editor; no self-hosted reconstruction (documented only as a fallback path in ADR-0003).
+- No slider-based avatar editor. **No user face/body capture or biometric processing in v1**; custom avatars from the player's likeness are a V2 feature (AUTH #020, ADR-0006). (Self-hosted reconstruction is now the v1 backend — ADR-0005 — no longer a non-goal.)
 - No under-13 audience; no COPPA scope.
 - No paid content beyond the two SKUs; no creator revenue share.
 Every item above lives in `BACKLOG.md` with a one-line rationale.
@@ -168,10 +166,10 @@ Measurements are suggested evidence: the Owner gathers them on their own iPhones
 | Data class | Collected when | Retained | Deleted |
 |---|---|---|---|
 | Raw scan video, poses, depth | capture | until derived assets exist; failed jobs ≤ 7 days | automatically; per-user delete-all |
-| Face and body photos | avatar creation, after consent | until the avatar is generated (vendor job only) | immediately after generation, on device, in storage, and at the vendor; deletion receipt logged |
+| ~~Face and body photos~~ | **not collected in v1** (pre-made characters, no biometric) — a V2 custom-avatar data class | — | — |
 | Derived environment assets (splat, mesh, graph, spec, thumbnail) | reconstruction | while the user keeps the environment; published copies while published | per-user delete-all; unpublish removes from feeds immediately |
-| Avatar assets (head mesh, textures, body parameters) | avatar creation | while the account exists | per-user delete-all |
-| Consent records (policy version, timestamp, locale, text hash) | consent | as long as legally required | per the retention schedule |
+| Character selection + owned cosmetics (no biometric) | character pick / purchase | while the account exists | per-user delete-all |
+| Consent/ToS acceptance records (policy version, timestamp, locale, text hash) | account setup | as long as legally required | per the retention schedule |
 | Telemetry events (frozen schema, pseudonymous ids, no GPS, no media references) | play | aggregated; raw events per the retention schedule | per-user delete-all |
 | Correction events | one-tap "fix this label" | opt-in training only, derived data only | opt-out stops future use; delete-all removes |
 | Ratings, reports, leaderboard times | community actions | while the environment exists | with the environment or the account |
@@ -184,7 +182,7 @@ The authoritative retention schedule and deletion flow are drafted in `legal/` (
 |---|---|---|
 | **M0 Harness** | 1–2 | One ticket goes from creation to merged PR with a QA screenshot attached and no human typing. Also: repo and CI green; Unity 6 URP project with splat renderer and controller scaffold; Inngest skeleton; every Bot's SKILLS.md merged; Unity on the QA VM with one scripted task proven; telemetry and correction schemas frozen; consent copy and retention schedule drafted; vendor retention terms collected; design system proposal ready for lock; the M0 AUTH batch filed. |
 | **M1 Scan to playable** | 3–6 | 8 of 10 fresh room scans produce a reachable summit with at least two valid routes and no manual fixes. Under 6/10: stop and re-plan via AUTH. Motion matching versus blend trees decided (Bible §13). |
-| **M2 Avatar** | 5–8 | 20 tester avatars recognizable by friends in a blind test at 60 %+, generated under 2 minutes, all on the shared rig. |
+| **M2 Character & rig** | 5–8 | The curated character roster (≥6) rigs to the GJ humanoid skeleton and retargets the shared animation/traversal set cleanly; a tester picks a character and it moves identically well across environments. No biometric (AUTH #020). |
 | **M3 Game loop and tabletop** | 7–10 | The Owner and three testers each explore five environments and want a sixth; Tier 1 holds its 30 fps target on the Owner's older test iPhone. |
 | **M4 Sharing, moderation, leaderboards** | 9–12 | 50 tester-published environments with zero moderation misses in the Owner's review; the ranking survives a deliberate rate-spam test. |
 | **M5 Store readiness and IAP** | 12–16 | App Store submitted after the Owner's explicit approval; the TestFlight cohort at a 99 %+ crash-free target. |
@@ -196,11 +194,11 @@ Changing this table is a milestone-plan change (AUTH).
 
 v1 is done when all of the following hold, with evidence linked from `governance/CHECKPOINTS/M5.md`:
 1. A new user on iPhone scans a room or a Lego build in under 90 seconds of active capture.
-2. The same user creates a recognizable 1:12 avatar of themselves in under 2 minutes, behind an explicit consent step, and their source photos are provably deleted afterwards.
+2. The same user picks a 1:12 character from the curated roster (instant, no capture) that embodies the shared movement set.
 3. In their own scan they reach an auto-designated summit, plant the flag, complete at least two generated routes, and find a vista, with no manual fixes to the environment.
 4. They publish the environment and a friend plays it from a link within five minutes.
 5. The app meets its quality targets on the Owner's iPhones (60 fps on current models, 30 fps on older ones, Tier 0 and Tier 1 on) and holds a 99 %+ crash-free target across the TestFlight cohort; the Owner judges the targets, no test gates them.
-6. Every row of the compliance gates (`governance/SECURITY_CHECKLIST.md` §12, M5 row) is green: consent, retention, deletion, 13+ gate, GPS/EXIF stripping, moderation queue, vendor DPAs, accurate privacy labels.
+6. Every row of the compliance gates (`governance/SECURITY_CHECKLIST.md` §12, M5 row) is green: retention, deletion, 13+ gate, GPS/EXIF stripping, moderation queue, accurate privacy labels. (No biometric consent and no avatar-vendor DPA in v1 — AUTH #020.)
 7. The App Store has approved the app.
 8. No synthetic game object exists in the shipped build (§4).
 
@@ -226,3 +224,4 @@ Apple's first foldable iPhone ships October 23, 2026 (7.6-inch inner display, 5.
 | 1.0 | 2026-09-15 | Initial spec from the kit v0.5 product lock, plan v0.1, Movement Bible v1.0, Design Skills v1.1 | AUTH #000 (Prompt 1 kickoff) |
 | 1.1 | 2026-09-15 | v1 on the iOS App Store only; no minimum device model with automatic quality tiers (§6); tests, QA, and device measurements are suggestions, never merge gates (§11); iPhone Duo optional track (§12); Android deferred to v1.1 | AUTH #003 (Owner instruction) |
 | 1.2 | 2026-09-16 | §2 and §3.2 capture wording aligned to the locked design decision 4 (rotation capture instead of three stills) | Transcription of the 2026-09-14 lock (M0-OWNER-02); no AUTH consumed |
+| 1.3 | 2026-09-18 | v1 avatar = curated pre-made character roster, cosmetic-only customization; **no face/body capture or biometric processing in v1** (custom avatars → V2); reconstruction backend = self-host (ADR-0005) with a KIRI corpus-only bridge, Luma dropped; M2 reframed to Character & rig; §5 biometric consent becomes a V2 gate. Applied to §1, §2, §3.1, §3.2, §3.9, §4, §7, §8, §9 | AUTH #018, #020 (Owner instruction) |
