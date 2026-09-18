@@ -40,9 +40,11 @@ Both hard problems (reconstruction, avatar) come down to the same thing that bit
 | `iap-revenuecat-vs-unity.md` | IAP (M5 ADR) |
 | `crash-reporting.md` | crash reporting (#017) |
 
-## Decisions the Owner needs to make (see PROGRESS Owner-actions 9–10)
-1. **Reconstruction backend:** approve a self-host spike (target direction), and/or pick a managed bridge (Autodesk APS, or KIRI under written terms). This touches ADR-0002 (AUTH-gated) — surface an ADR when chosen.
-2. **Head vendor:** stay with Meshy (pursue Enterprise + DPA + PII carve-out) **or** switch to Avatar SDK/MetaPerson on-prem (recommended for biometric fit).
+## Decisions made (2026-09-18 — ADR-0005 / AUTH #018–#019)
+1. **Reconstruction backend:** **self-host + managed bridge** (Owner: "spike + bridge"). Self-host (gsplat/Brush + COLMAP + Open3D) is the target, de-risked by the **M1-CAPT-03 spike**; a bridge (Autodesk APS with a DPA, or KIRI under written no-train + DPA) covers early M1. **Luma dropped.**
+2. **Head vendor:** **switch to Avatar SDK/MetaPerson (Enterprise on-prem).** Biometric face data stays on our infra. **Meshy/Tripo dropped** (#010 superseded); self-host avatars deferred to V2.
+
+`meshy.md` and `luma.md` are retained as the superseded analysis behind ADR-0005.
 
 ## Standing caveats
 - All vendor data terms here are from **public pages** — confirm directly (send `legal/vendors/DATA_RETENTION_REQUEST_TEMPLATE.md`) before any real user data flows (SECURITY_CHECKLIST §6.3).

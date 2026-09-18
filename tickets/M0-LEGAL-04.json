@@ -1,6 +1,6 @@
 {
   "id": "M0-LEGAL-04",
-  "title": "Meshy data-retention and training terms (head vendor selected for M2)",
+  "title": "Avatar SDK/MetaPerson data-retention and training terms (head vendor, on-prem, for M2)",
   "milestone": "M0",
   "area": "LEGAL",
   "owner": "gj-avatar",
@@ -8,21 +8,21 @@
   "status": "open",
   "priority": "P1",
   "size": "S",
-  "summary": "Collect Meshy's data-retention, training, deletion, and DPA terms and confirm fit for M2. The Owner selected Meshy as the head vendor on 2026-09-17 (already holds an account); Tripo is dropped, so the bake-off is replaced by a Meshy dossier.",
+  "summary": "Collect Avatar SDK/MetaPerson (itSeez3D) data-retention, training, deletion, and DPA terms and confirm fit for M2. Per AUTH #019 / ADR-0005 the head vendor is Avatar SDK on-prem 'Local Compute' (replaces Meshy/Tripo, dropped). Confirm the on-prem/no-train + DPA path before any face processing.",
   "deliverables": [
-    "legal/vendors/meshy.md"
+    "legal/vendors/avatar-sdk.md"
   ],
   "acceptance_tests": [
     {
       "id": "AT-1",
-      "test": "legal/vendors/meshy.md records retention, deletion path, training-by-default and opt-out, DPA availability, region, with quotes, links, retrieval date.",
+      "test": "legal/vendors/avatar-sdk.md records retention, deletion path, training-by-default and the on-prem/no-train option, DPA availability, region, with quotes, links, retrieval date.",
       "evidence": "files in PR",
       "automated": false,
       "level": "required"
     },
     {
       "id": "AT-2",
-      "test": "A Meshy dossier (realistic-mode quality claims, price per generation, API limits, deletion guarantees, biometric-specific terms) confirms fit for M2; the head vendor is Meshy (Owner-selected 2026-09-17).",
+      "test": "An Avatar SDK/MetaPerson dossier (recognizability, generation time, Unity/iOS SDK, on-prem Local Compute, deletion guarantees, biometric-specific terms) confirms fit for M2; the head vendor is Avatar SDK (AUTH #019).",
       "evidence": "file section",
       "automated": false,
       "level": "required"
@@ -46,7 +46,7 @@
   "branch": null,
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-17",
+  "updated": "2026-09-18",
   "history": [
     {
       "date": "2026-09-15",
@@ -66,6 +66,11 @@
     {
       "date": "2026-09-17",
       "event": "Meshy dossier landed (legal/vendors/meshy.md + research/vendors/meshy.md). Red flags: trains on non-Enterprise inputs by default; ToS bans identifiable-person photos; Free output is CC BY 4.0. Decision: USABLE WITH CONDITIONS (Enterprise + DPA + no-train + immediate source-photo deletion + PII carve-out; paid tier). Vendor-confirmed terms still required (§6.3) — status stays open.",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-18",
+      "event": "Head vendor switched to Avatar SDK/MetaPerson on-prem (AUTH #019 / ADR-0005) — Meshy dropped after research showed its ToS bans identifiable-person photos. Retargeted title, summary, deliverable (legal/vendors/avatar-sdk.md), and AT-1/AT-2 to Avatar SDK; avatar-sdk.md filed from public terms. On-prem + DPA still to confirm (§6.3) — status stays open.",
       "by": "coordinator"
     }
   ]

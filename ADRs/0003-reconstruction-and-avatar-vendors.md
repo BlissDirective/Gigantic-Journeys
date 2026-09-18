@@ -1,6 +1,8 @@
 # ADR-0003: Reconstruction and avatar via third-party APIs; vendor-neutral package format
 
-Date: 2026-09-15 · Status: Accepted (recorded from plan §1, §8 and kit §3.1, §3.4) · Authorization: APPROVED #000 · Owner Bots: gj-capture (reconstruction), gj-avatar (head generation)
+Date: 2026-09-15 · Status: **Superseded by ADR-0005** (2026-09-18, AUTH #018/#019) · Authorization: APPROVED #000 · Owner Bots: gj-capture (reconstruction), gj-avatar (head generation)
+
+> **Superseded.** Luma (reconstruction) and Meshy/Tripo (avatar) were invalidated by vendor research (`research/vendors/`): Luma deprecated its reconstruction API and trains by default; Meshy's ToS bans identifiable-person photos. ADR-0005 records the replacement — self-hosted reconstruction (with a managed bridge) and Avatar SDK/MetaPerson on-prem. The vendor-neutral package format below still holds.
 
 ## Context
 Scan-to-splat and image-to-3D heads are solved by vendors at a per-job cost inside the budget; building either in-house would consume the whole schedule.

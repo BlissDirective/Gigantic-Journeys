@@ -10,5 +10,6 @@ Creating or changing an ADR is an AUTH (design-change): the PR cites `APPROVED #
 |---|---|---|
 | 0001 | Engine and rendering: Unity 6, URP, Gaussian splat renderer | Accepted (recorded) |
 | 0002 | Backend: Supabase, Vercel, Inngest; the secrets model | Accepted (recorded) |
-| 0003 | Reconstruction and avatar via third-party APIs; vendor-neutral package | Accepted (recorded) |
+| 0003 | Reconstruction and avatar via third-party APIs; vendor-neutral package | **Superseded by 0005** |
 | 0004 | Movement architecture: five assemblies, motion matching spike, motion warping | Accepted (recorded) |
+| 0005 | Reconstruction self-host (with a managed bridge); avatar via Avatar SDK/MetaPerson on-prem | Accepted (AUTH #018/#019) |

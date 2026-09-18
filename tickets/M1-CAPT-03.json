@@ -1,0 +1,72 @@
+{
+  "id": "M1-CAPT-03",
+  "title": "Self-host reconstruction spike + managed-bridge stand-up (ADR-0005)",
+  "milestone": "M1",
+  "area": "CAPT",
+  "owner": "claude-builder",
+  "qa": null,
+  "status": "open",
+  "priority": "P0",
+  "size": "L",
+  "summary": "De-risk the reconstruction backend chosen in ADR-0005 (AUTH #018): build a self-hosted Gaussian-splat pipeline and, in parallel, stand up a managed bridge for early M1 validation. Prove a real captured room reconstructs and renders on a physical iPhone before committing the M1 pipeline. GPU long-running ops go to the Grok Operator; the pipeline code is the Builder's.",
+  "deliverables": [
+    "services/reconstruction/ (self-host pipeline: COLMAP/GLOMAP + gsplat or Brush + Open3D)",
+    "research/vendors/reconstruction-spike-report.md"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "The self-host pipeline produces a Gaussian splat (.ply/.spz) plus a derived collision mesh from a captured room, using only commercially-licensed components (gsplat/Splatfacto or Brush + COLMAP/GLOMAP + Open3D; INRIA 3DGS and SuGaR excluded). A report records the exact stack, licenses, and per-scan GPU time and cost.",
+      "evidence": "pipeline output + report",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "The pruned/compressed splat renders on a physical iPhone in Unity 6 URP; splat count, package size, and frame rate are recorded against the <=150 MB package and 30 fps targets. Measurements are suggested evidence (SPEC 11), not a gate.",
+      "evidence": "device screenshots/video + numbers",
+      "automated": false,
+      "level": "suggested"
+    },
+    {
+      "id": "AT-3",
+      "test": "A managed reconstruction bridge is stood up for M1 validation and reconstructs at least one test scan: Autodesk APS Reality Capture (DPA in place) OR KIRI Engine only under a written no-train + DPA. The vendor's terms are filed in legal/vendors/ before any real user scan (SECURITY_CHECKLIST 6.3).",
+      "evidence": "reconstructed scan + legal/vendors/ terms file",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-4",
+      "test": "A decision note recommends self-host vs the managed bridge for the M1 pipeline, with the iOS splat-render risk assessed; it feeds an ADR-0005 addendum if the direction firms up.",
+      "evidence": "report section",
+      "automated": false,
+      "level": "required"
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §6.3",
+    "SECURITY_CHECKLIST §4"
+  ],
+  "depends_on": [
+    "M0-UNITY-01",
+    "M0-UNITY-02",
+    "M0-CAPT-01"
+  ],
+  "references": [
+    "ADR-0005",
+    "research/vendors/reconstruction-selfhost.md",
+    "research/vendors/reconstruction-alternatives.md",
+    "AUTH #018"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-18",
+  "updated": "2026-09-18",
+  "history": [
+    {
+      "date": "2026-09-18",
+      "event": "created by the Coordinator as the ADR-0005 reconstruction follow-up (AUTH #018, Owner chose 'spike + bridge').",
+      "by": "coordinator"
+    }
+  ]
+}

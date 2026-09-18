@@ -55,6 +55,11 @@
       "date": "2026-09-17",
       "event": "Public-terms research landed (legal/vendors/luma.md + research/vendors/luma.md). Red flags: trains on inputs by default (Enterprise-only no-train) and programmatic reconstruction appears deprecated. Recommendation: NOT usable on default terms; re-open the reconstruction vendor. Vendor-confirmed DPA still required (§6.3) — status stays open.",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-18",
+      "event": "Luma dropped as the reconstruction backend (ADR-0005 / AUTH #018): self-host is the target, with a managed bridge (Autodesk APS or KIRI-under-terms) for early M1. This ticket now covers the bridge's data terms IF a bridge is used; the vendor comes from the M1-CAPT-03 spike. luma.md retained as superseded analysis.",
+      "by": "coordinator"
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "id": "M1-CAPT-02",
-  "title": "Upload → Luma reconstruction → splat + collision mesh stored",
+  "title": "Upload → reconstruction (self-host/bridge, ADR-0005) → splat + collision mesh stored",
   "milestone": "M1",
   "area": "CAPT",
   "owner": "gj-platform",
@@ -8,7 +8,7 @@
   "status": "open",
   "priority": "P0",
   "size": "L",
-  "summary": "Wire the upload bundle to the Luma API through the Inngest pipeline: submit the reconstruction job, poll, store the Gaussian splat and collision mesh in staging storage behind signed URLs, track per-job cost, and halt at the daily cap. Blocked until Luma retention terms are on file.",
+  "summary": "Wire the upload bundle to the reconstruction backend chosen in ADR-0005 (the self-hosted Gaussian-splat pipeline, or a managed bridge — Autodesk APS / KIRI-under-terms — during early validation) through the Inngest pipeline: submit the job, poll, store the Gaussian splat and collision mesh in staging storage behind signed URLs, track per-job cost, and halt at the daily cap. Backend and its terms come from the M1-CAPT-03 spike.",
   "deliverables": [
     "services/reconstruction",
     "api"
@@ -23,21 +23,21 @@
     },
     {
       "id": "AT-2",
-      "test": "Per-job cost is recorded; the pipeline halts new jobs at the $50/day cap and resumes the next day.",
+      "test": "Per-job cost (GPU or bridge API) is recorded; the pipeline halts new jobs at the $50/day cap and resumes the next day.",
       "evidence": "cost sheet + a cap-halt test",
       "automated": false,
       "level": "required"
     },
     {
       "id": "AT-3",
-      "test": "Luma retention and training terms are on file in legal/vendors/luma.md before any user (non-corpus) scan is sent; corpus scans are Owner-supplied and consented.",
-      "evidence": "legal/vendors/luma.md link",
+      "test": "If a managed bridge is used, its retention and training terms (no-train + DPA) are on file in legal/vendors/ before any user (non-corpus) scan is sent; the self-host path keeps scan media on our own infra. Corpus scans are Owner-supplied and consented.",
+      "evidence": "legal/vendors/ terms file link",
       "automated": false,
       "level": "required"
     },
     {
       "id": "AT-4",
-      "test": "No Luma key or storage credential appears in the repo; the key lives only in .env.local / CI.",
+      "test": "No reconstruction backend key, GPU credential, or storage credential appears in the repo; secrets live only in .env.local / CI.",
       "evidence": "secret-scan green",
       "automated": true,
       "level": "required"
@@ -59,24 +59,26 @@
   "depends_on": [
     "M1-CAPT-01",
     "M1-PIPE-01",
+    "M1-CAPT-03",
     "M0-LEGAL-03"
   ],
-  "blocked_by": [
-    "Luma account AUTH (Foreman M0 batch)",
-    "Luma retention terms (M0-LEGAL-03)"
-  ],
   "references": [
-    "ADR-0003",
+    "ADR-0005",
     "kit RESUME M1"
   ],
   "branch": null,
   "pr": null,
   "created": "2026-09-16",
-  "updated": "2026-09-16",
+  "updated": "2026-09-18",
   "history": [
     {
       "date": "2026-09-16",
       "event": "created by the Coordinator (M1 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-18",
+      "event": "Retargeted from Luma to the ADR-0005 reconstruction backend (self-host / managed bridge); backend + terms now come from the M1-CAPT-03 spike. Luma-specific blocked_by removed; references updated to ADR-0005.",
       "by": "coordinator"
     }
   ]
