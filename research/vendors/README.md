@@ -1,16 +1,49 @@
 # `research/vendors/`
 
-Vendor research (Coordinator research pass, 2026-09-17). Decision-support, not decisions — all facts carry an observation date and sources; re-verify pricing/terms at build time. Vendor **data terms on file** live in `legal/vendors/`; this tree holds the capability/pricing/fit analysis.
+Vendor research + **build-vs-buy** analysis (Coordinator research pass, observed 2026-09-17). Decision-support, not decisions — all facts carry an observation date and sources; re-verify pricing/terms at build time. Vendor **data terms on file** live in `legal/vendors/`. Changing SPEC/ADR-0002 is AUTH-gated — nothing here changes them.
 
-| Report | For | Headline |
+## The throughline
+Both hard problems (reconstruction, avatar) come down to the same thing that bit us with Luma and Meshy: **vendor lock-in/deprecation, and vendors training on our users' biometric/home data.** The fix in both cases is **keep user data on infrastructure we control** — by self-hosting (reconstruction, feasible now) or by using a vendor's **on-prem** mode (avatar). That directly answers "could we build custom?": **reconstruction — yes, build; avatar — use a vendor's on-prem for v1, build only in V2.**
+
+## Reconstruction (scan → splat/mesh) — build-vs-buy
+
+| Path | Option | Verdict |
 |---|---|---|
-| `meshy.md` | head vendor (AUTH #010), M0-LEGAL-04 | **CONDITIONAL** — good tech fit, but standard terms train on inputs + ban identifiable-person photos → **Enterprise + DPA required** for biometric use |
-| `luma.md` | reconstruction (ADR-0002), M0-LEGAL-03 | **⚠ RE-OPEN** — programmatic reconstruction API appears **deprecated**, and default terms train on scans even on paid plans (Enterprise-only no-train) |
-| `iap-revenuecat-vs-unity.md` | M5 monetization ADR | **RevenueCat** primary (native entitlement, managed validation, free at our scale); **Unity IAP** fallback |
-| `crash-reporting.md` | AUTH #017 | **Sentry** (free tier, privacy-first) + Apple Xcode Organizer/MetricKit supplement; Crashlytics fallback |
+| **Build** | Self-host gsplat/Brush + COLMAP/GLOMAP + Open3D (or Epic RealityScan for mesh) | **Feasible-with-effort, legally clean, <$1/scan, full data control + no lock-in.** Main risk: iOS-in-Unity splat rendering + prod reliability. |
+| **Buy** | **KIRI Engine API** (splat+mesh, ~$1/scan) | Turnkey and best output fit, **but weak data terms** (HK entity, silent on training, no DPA) → only with a written no-train + DPA. |
+| **Buy** | **Autodesk APS Reality Capture** (mesh-only) | Clean managed **DPA** + delete; but mesh-only, photos-only, likely >10-min rooms. |
+| **Buy** | Polycam / Niantic / Matterport | Don't fit a "server reconstruction API" need. |
 
-## Two findings that need Owner attention
-1. **Meshy (head vendor):** usable for face data **only under a negotiated Enterprise agreement + DPA** (no-train clause, immediate source-photo deletion, PII/biometric carve-out; a paid tier — Free is CC BY 4.0). Recognizability unverified → own 60% blind test at M2.
-2. **Luma (reconstruction):** current public evidence says Luma has **exited supported programmatic reconstruction** and trains on inputs by default. This challenges the ADR-0002 assumption. **Recommend re-opening the reconstruction-vendor decision** (Polycam, Scaniverse/Niantic, self-hosted 3D Gaussian Splatting / COLMAP) — and confirming directly with Luma before relying on it.
+**Recommendation:** the private-home data + the Luma lock-in lesson make **self-hosting the stronger strategic direction** — but **de-risk it with a 1–2 week spike** first (capture a room → gsplat/Brush → prune → render on a physical iPhone in Unity 6 URP; the iOS Metal splat sort is the real unknown). If early M1 validation needs a bridge, use **Autodesk APS** (has a real DPA) or **KIRI only with written no-train+DPA**. Details: `reconstruction-selfhost.md`, `reconstruction-alternatives.md`.
 
-Both vendors' data terms are from **public pages only** and must be confirmed directly (send `legal/vendors/DATA_RETENTION_REQUEST_TEMPLATE.md`) before any real user data flows.
+## Avatar (photo → recognizable head) — build-vs-buy
+
+| Path | Option | Verdict |
+|---|---|---|
+| **Buy (on-prem)** | **Avatar SDK / MetaPerson (itSeez3D)** — Enterprise "Local Compute" | **#1.** Recognizable head+body, native **Unity + iOS SDKs**, EULA **already permits consented person-photos**, and **on-prem keeps biometric data on our infra** — the privacy win of self-hosting without the ML/licensing lift. |
+| **Buy** | **Meshcapade** | Runner-up: **cleanest published terms** (train opt-in, not default), but body-first, weak face likeness, no turnkey Unity plugin. |
+| **Buy** | **Meshy** (current pick) | Usable for face data **only** via a negotiated Enterprise agreement + DPA + a **PII carve-out** (its ToS bans identifiable-person photos) — the hardest path of the three. |
+| **Buy** | Didimo | **Disqualified as written** (trains on biometric inputs, "no consent required"; won't guarantee deletion). |
+| **Build** | Self-host (FLAME-2023-Open/ICT-FaceKit + own regressor) | **Not for v1** — the good models are non-commercially licensed; you'd trade a vendor-ToS problem for an IP-license one + an ML-quality risk. **V2 investment.** |
+
+**Recommendation:** do **not** self-host avatars for v1. The best v1 path is **Avatar SDK / MetaPerson on the Enterprise on-prem plan** — it delivers recognizability + Unity/iOS fit + biometric data on our own infra. **This likely beats Meshy for our biometric use** (Meshy needs a negotiated carve-out just to allow face photos at all). Meshy remains your selected vendor unless you choose to switch — but the research makes a strong case to **reconsider Meshy vs Avatar SDK/MetaPerson** before M2. Details: `avatar-alternatives.md`, `avatar-selfhost.md`.
+
+## Index
+| File | Topic |
+|---|---|
+| `reconstruction-alternatives.md` | reconstruction API/cloud options (buy) |
+| `reconstruction-selfhost.md` | self-host reconstruction feasibility (build) |
+| `avatar-alternatives.md` | avatar API/SDK options with biometric-permissive terms (buy) |
+| `avatar-selfhost.md` | self-host avatar feasibility (build) |
+| `meshy.md` | Meshy dossier (current head-vendor pick) |
+| `luma.md` | Luma dossier (reconstruction assumption at risk) |
+| `iap-revenuecat-vs-unity.md` | IAP (M5 ADR) |
+| `crash-reporting.md` | crash reporting (#017) |
+
+## Decisions the Owner needs to make (see PROGRESS Owner-actions 9–10)
+1. **Reconstruction backend:** approve a self-host spike (target direction), and/or pick a managed bridge (Autodesk APS, or KIRI under written terms). This touches ADR-0002 (AUTH-gated) — surface an ADR when chosen.
+2. **Head vendor:** stay with Meshy (pursue Enterprise + DPA + PII carve-out) **or** switch to Avatar SDK/MetaPerson on-prem (recommended for biometric fit).
+
+## Standing caveats
+- All vendor data terms here are from **public pages** — confirm directly (send `legal/vendors/DATA_RETENTION_REQUEST_TEMPLATE.md`) before any real user data flows (SECURITY_CHECKLIST §6.3).
+- **iOS-in-Unity splat rendering** (~200–500K splats @30 fps) is the shared risk on any splat path; ship compressed splats and/or the mesh for gameplay/collision.
