@@ -1,5 +1,7 @@
 # Avatar SDK / MetaPerson (itSeez3D) — data terms on file
 
+> **SUPERSEDED for v1 (AUTH #020 / ADR-0006, 2026-09-18):** v1 uses pre-made characters — **no avatar vendor.** This record is retained for the **V2 custom-avatar** track, where an on-prem/DPA vendor (or a self-hosted model) is re-evaluated.
+
 **Date collected:** 2026-09-17 · **Collected by:** Coordinator (from public EULA/Privacy/docs). **Source:** public terms only — **NOT yet vendor-confirmed** via `DATA_RETENTION_REQUEST_TEMPLATE.md`. Selected as the head-generation vendor per **AUTH #019 / ADR-0005** (replaces Meshy). Full analysis: `research/vendors/avatar-alternatives.md`. Ticket: M0-LEGAL-04.
 
 Links: EULA https://avatarsdk.com/eula/ · Privacy https://avatarsdk.com/privacy-policy/ · Unity/Local Compute https://docs.metaperson.avatarsdk.com/business-integration/unity/metaperson_creator_unity_project/

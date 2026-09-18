@@ -1,11 +1,11 @@
 {
   "id": "M2-DUO-01",
-  "title": "Rear-camera avatar capture with Duo Preview (iPhone Duo, optional)",
+  "title": "[V2] Rear-camera avatar capture with Duo Preview (iPhone Duo, optional)",
   "milestone": "M2",
   "area": "DUO",
   "owner": "gj-avatar",
   "qa": null,
-  "status": "open",
+  "status": "cancelled",
   "priority": "P2",
   "size": "M",
   "summary": "Owner-selected Duo feature (candidate 3). On an iPhone Duo in tent posture, the avatar capture flow uses the 48 MP rear cameras while the outer display shows framing, countdown, and coaching so the player can self-frame; the full-body rotation and the face close-up rotation come from the best cameras. Additive: every other iPhone keeps the standard front-camera flow.",

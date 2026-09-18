@@ -1,5 +1,7 @@
 # Biometric Consent — copy, flow, and record (DRAFT)
 
+> **V2 ARTIFACT (AUTH #020 / ADR-0006, 2026-09-18).** v1 ships pre-made characters and processes **no biometric data**, so this consent flow is **not used in v1**. It is retained as the starting point for the **V2 custom-avatar** feature. Ticket M0-LEGAL-01 is cancelled for v1.
+
 **Status: DRAFT v0.1 · 2026-09-17 · satisfies ticket M0-LEGAL-01 (draft).** Engineering draft of the exact consent experience and the consent record, operationalizing `governance/SECURITY_CHECKLIST.md §5` and `SPEC.md §3.9, §7`. **Not legal advice.** Counsel signs off the wording before it goes live at M2 (`SECURITY_CHECKLIST §5.5`). Owner/vendor placeholders in `[…]`.
 
 The rule this enforces (`SECURITY_CHECKLIST §5.1`): **no face or body photo bytes leave the device, and no vendor job is created, until a consent record exists.**

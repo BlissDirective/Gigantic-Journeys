@@ -40,11 +40,11 @@ Both hard problems (reconstruction, avatar) come down to the same thing that bit
 | `iap-revenuecat-vs-unity.md` | IAP (M5 ADR) |
 | `crash-reporting.md` | crash reporting (#017) |
 
-## Decisions made (2026-09-18 — ADR-0005 / AUTH #018–#019)
-1. **Reconstruction backend:** **self-host + managed bridge** (Owner: "spike + bridge"). Self-host (gsplat/Brush + COLMAP + Open3D) is the target, de-risked by the **M1-CAPT-03 spike**; a bridge (Autodesk APS with a DPA, or KIRI under written no-train + DPA) covers early M1. **Luma dropped.**
-2. **Head vendor:** **switch to Avatar SDK/MetaPerson (Enterprise on-prem).** Biometric face data stays on our infra. **Meshy/Tripo dropped** (#010 superseded); self-host avatars deferred to V2.
+## Decisions made
+1. **Reconstruction backend (ADR-0005 / AUTH #018):** **self-host + managed bridge.** Self-host (gsplat/Brush + COLMAP + Open3D) is the target, de-risked by the **M1-CAPT-03 spike**; the bridge is **KIRI, corpus-only** (splat+mesh matches the target; only ever processes the consented corpus, never real user homes). **Luma dropped.**
+2. **v1 avatar (ADR-0006 / AUTH #020 — supersedes the head-vendor decision):** **pre-made curated character roster, no biometric, no avatar vendor in v1.** The avatar-vendor work here (Avatar SDK/MetaPerson #1) and the self-host avatar analysis move to the **V2 custom-avatar R&D track** (`research/rnd/`). Meshy/Tripo/Avatar SDK all deferred/dropped for v1.
 
-`meshy.md` and `luma.md` are retained as the superseded analysis behind ADR-0005.
+`meshy.md`, `luma.md`, and `avatar-alternatives.md`/`avatar-selfhost.md` are retained as the analysis behind the V2 track and the superseded ADRs.
 
 ## Standing caveats
 - All vendor data terms here are from **public pages** — confirm directly (send `legal/vendors/DATA_RETENTION_REQUEST_TEMPLATE.md`) before any real user data flows (SECURITY_CHECKLIST §6.3).

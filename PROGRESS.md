@@ -1,6 +1,6 @@
 # PROGRESS.md
 
-Living tracker. Updated by the Coordinator on every merge, AUTH decision, and checkpoint. Last update: **2026-09-17** (M0 AUTH batch #008–#017 **approved**; #016 legal review is in-house at $0 (no external spend); M0-REPO-03 unblocked; M0 legal drafts in `legal/` for the Owner's in-house team; Meshy selected as head vendor (Tripo dropped); vendor research landed (`research/vendors/`) with two flags — Meshy needs Enterprise+DPA for biometric, Luma reconstruction/train concerns; build-vs-buy research complete (`research/vendors/`); **Owner decided (ADR-0005 / AUTH #018–#019, 2026-09-18): self-host reconstruction + managed bridge (spike M1-CAPT-03), Avatar SDK/MetaPerson on-prem for avatars — Luma and Meshy dropped**; launch checklist triaged with priority + delegability tags). Ticket table regenerated with `python tickets/validate.py --summary`.
+Living tracker. Updated by the Coordinator on every merge, AUTH decision, and checkpoint. Last update: **2026-09-17** (M0 AUTH batch #008–#017 **approved**; #016 legal review is in-house at $0 (no external spend); M0-REPO-03 unblocked; M0 legal drafts in `legal/` for the Owner's in-house team; Meshy selected as head vendor (Tripo dropped); vendor research landed (`research/vendors/`) with two flags — Meshy needs Enterprise+DPA for biometric, Luma reconstruction/train concerns; build-vs-buy research complete; **Owner set the v1 game plan (2026-09-18): self-host reconstruction + KIRI corpus-only bridge (AUTH #018, spike M1-CAPT-03); v1 avatar = pre-made curated character roster with NO biometric (AUTH #020 / ADR-0006, supersedes the avatar vendor); focus on video→playable + world-class movement. Custom avatars → V2 R&D track (`research/rnd/`). SPEC → v1.3.** Ticket table regenerated with `python tickets/validate.py --summary`.
 
 ## Milestone
 
@@ -17,15 +17,15 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 
 | Status | Count |
 |---|---|
-| open | 57 |
+| open | 55 |
 | in-progress | 0 |
 | in-review | 0 |
 | changes-requested | 0 |
 | blocked | 1 |
 | merged | 1 |
 | done | 3 |
-| cancelled | 0 |
-| **total** | **62** |
+| cancelled | 3 |
+| **total** | **63** |
 
 ## Blockers
 
@@ -66,8 +66,8 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 6. Scan 10 rooms and 5 tabletop builds (M0-OWNER-01) once the corpus intake path exists (M0-CAPT-01).
 7. **Create/enable the approved accounts (#008–#017).** Bot-prep once the Grok Bot arrives (it drives signup; you accept ToS/payment and move production keys to CI). Priority order: Unity (unblocks M0-REPO-03), Supabase. **Luma is dropped** (ADR-0005); the reconstruction bridge and Avatar SDK on-prem are the new vendor lines. Near-term real spend is only domains (#014, ~$25–55/yr).
 8. **In-house legal review** of the drafts in `legal/` (privacy policy, BIPA consent copy, retention schedule, ToS, vendor template + DPA checklist). No external legal spend (#016 = $0). The consent-text hash is frozen only after their sign-off (SECURITY_CHECKLIST §5.5).
-9. **Reconstruction backend — DECIDED (ADR-0005 / AUTH #018): self-host + managed bridge.** Next: the **spike** (M1-CAPT-03) runs once the Unity project + splat renderer exist (M0-UNITY-01/02); it proves a real room reconstructs and renders on a physical iPhone (the iOS Metal splat sort is the risk). For the bridge, choose **Autodesk APS** (has a DPA) or **KIRI** (only under a written no-train + DPA) — Coordinator sends the questionnaire. No Luma account.
-10. **Head vendor — DECIDED (ADR-0005 / AUTH #019): Avatar SDK/MetaPerson on-prem.** Next: have your **legal team pursue the Enterprise on-prem "Local Compute" + DPA** (keeps biometric face data on our infra); Coordinator sends the vendor questionnaire (`legal/vendors/avatar-sdk.md` lists the items to confirm). No Meshy account or spend. Recognizability blind test at M2.
+9. **Reconstruction backend — DECIDED (ADR-0005 / AUTH #018): self-host + managed bridge; bridge = KIRI, corpus-only.** Next: the **spike** (M1-CAPT-03) runs once the Unity project + splat renderer exist (M0-UNITY-01/02) — it proves a real room reconstructs and renders on a physical iPhone (the iOS Metal splat sort is the risk). KIRI only ever processes the consented corpus (never real user homes); real user scans wait for self-host. No Luma account.
+10. **v1 avatar — DECIDED (ADR-0006 / AUTH #020): pre-made curated character roster, no biometric, no vendor.** Next: author/source ~6–12 rigged semi-photoreal characters and wire selection + cosmetic IAP (M2-AVAT-01). **No avatar vendor, no DPA, no biometric consent in v1.** Custom likeness avatars → V2 R&D (`research/rnd/`).
 
 ## Risk watch
 
@@ -77,7 +77,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 - Motion-matching spike (M1-MOVE-01) decides the animation stack; a miss sends locomotion to blend trees.
 - iPhone Duo features depend on iOS 27 posture and Split View APIs reaching Unity; the research spike comes first.
 - **Reconstruction backend (decided, ADR-0005):** self-host + managed bridge replaces Luma. Residual risk: **iOS-in-Unity splat rendering** (~200–500K splats @30 fps) and self-host ops/reliability — the M1-CAPT-03 spike targets the render path first; mitigate by shipping compressed splats and/or the mesh for gameplay.
-- **Biometric handling (decided, ADR-0005):** Avatar SDK/MetaPerson **on-prem** for faces, **self-host** for scans — biometric + home data stays on our infra. Residual: confirm the Avatar SDK on-prem + DPA terms (and any bridge DPA) before real user data; BIPA's core duties (consent, retention schedule, no-sale) still apply regardless (SECURITY_CHECKLIST §5–§6).
+- **Biometric handling — REMOVED from v1 (ADR-0006 / AUTH #020):** v1 uses pre-made characters, so there is **no face/body capture and no biometric processing at all** — no consent flow, no avatar vendor, no DPA, and SECURITY_CHECKLIST §5 is a V2 gate (13+ age gate stays). A large App Store + legal de-risk. Biometric returns only in the **V2 custom-avatar track** (`research/rnd/`), processed on our own infra. Home-scan data stays on our infra (self-host reconstruction); the KIRI bridge sees corpus only.
 
 ## Tickets (M0, M1, and the Duo track)
 
@@ -107,6 +107,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | M1-CAPT-01 | In-app guided room capture (ARKit poses + depth, coverage, blur, quality gate) | gj-capture | P0 | open | M0-UNITY-01, M0-CAPT-01, M0-OWNER-03 | — |
 | M1-CAPT-02 | Upload → reconstruction (self-host/bridge, ADR-0005) → splat + collision mesh stored | gj-platform | P0 | open | M1-CAPT-01, M1-PIPE-01, M1-CAPT-03 | — |
 | M1-CAPT-03 | Self-host reconstruction spike + managed-bridge stand-up (ADR-0005) | claude-builder | P0 | open | M0-UNITY-01, M0-UNITY-02, M0-CAPT-01 | — |
+| M2-AVAT-01 | Character roster: rig, retarget, and in-app selection (ADR-0006) | claude-builder | P0 | open | M0-UNITY-01, M0-UNITY-03, M0-MOVE-01 | — |
 | M1-DATA-01 | Freeze scene-graph, traversal-graph, and environment-spec schemas v1.0 | gj-scenegraph | P0 | open | — | — |
 | M1-FORE-01 | M1 checkpoint report | gj-foreman | P0 | open | M1-QA-01, M1-GAME-02, M1-GAME-03, M1-CAPT-02, M1-SCEN-04, M1-PIPE-01, M1-MOVE-01, M1-DATA-01 | — |
 | M1-GAME-01 | Unity loads splat + collision mesh + environment spec | gj-gameplay | P0 | open | M0-UNITY-02, M1-DATA-01, M1-CAPT-02 | — |
@@ -122,10 +123,10 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | M0-CAPT-01 | Corpus intake: manifest schema, metadata stripping tool, storage rules | gj-capture | P1 | open | — | — |
 | M0-DSGN-02 | Design tokens v0 (DTCG JSON) and USS export for the locked decisions | gj-design | P1 | open | M0-DSGN-01 | — |
 | M0-FORE-03 | Verify every specialist's SKILLS.md is merged | gj-foreman | P1 | open | M0-SKILL-02, M0-SKILL-03, M0-SKILL-04, M0-SKILL-05, M0-SKILL-06, M0-SKILL-07, M0-SKILL-08, M0-SKILL-09 | — |
-| M0-LEGAL-01 | BIPA-compliant biometric consent copy and learn-more sheet (draft) | gj-avatar | P1 | open | — | — |
+| M0-LEGAL-01 | [V2] BIPA biometric consent copy (v1 has no biometric) | gj-avatar | P1 | cancelled | — | — |
 | M0-LEGAL-02 | Retention schedule and deletion flow specification (draft) | gj-platform | P1 | open | — | — |
 | M0-LEGAL-03 | Luma data-retention and training terms on file | gj-capture | P1 | open | — | — |
-| M0-LEGAL-04 | Avatar SDK/MetaPerson data-retention and training terms (head vendor, on-prem, for M2) | gj-avatar | P1 | open | — | — |
+| M0-LEGAL-04 | [V2] Avatar vendor data terms (no avatar vendor in v1) | gj-avatar | P1 | cancelled | — | — |
 | M0-OWNER-02 | Transcribe the four locked design decisions into DESIGN_SYSTEM.md | owner | P1 | done | — | — |
 | M0-PLAT-01 | Supabase local scaffold and RLS-by-default lint | gj-platform | P1 | open | — | — |
 | M0-REPO-06 | TestFlight lane in ios-build.yml (cloud-managed signing, fastlane pilot) | coordinator | P1 | done | M0-REPO-05 | — |
@@ -141,7 +142,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | M1-GAME-03 | Tier 0 material feedback wired | gj-gameplay | P1 | open | M1-GAME-02 | — |
 | M1-DUO-01 | iPhone Duo research spike: posture, Split View, Duo Preview, outer display in Unity 6 | gj-gameplay | P2 | open | M0-UNITY-01 | — |
 | M1-RES-01 | Tier 2 research prototype — month 1 (segment, embed, simulate on the corpus) | gj-scenegraph | P2 | blocked | — | — |
-| M2-DUO-01 | Rear-camera avatar capture with Duo Preview (iPhone Duo, optional) | gj-avatar | P2 | open | M1-DUO-01 | — |
+| M2-DUO-01 | [V2] Rear-camera avatar capture (iPhone Duo) — no face capture in v1 | gj-avatar | P2 | cancelled | M1-DUO-01 | — |
 | M3-DUO-01 | Stand-mode console layout (iPhone Duo, optional) | gj-gameplay | P2 | open | M1-DUO-01, M0-OWNER-03 | — |
 | M3-DUO-02 | Unfold triggers the signature transition (iPhone Duo, optional) | gj-gameplay | P2 | open | M1-DUO-01, M0-OWNER-02 | — |
 | M5-DUO-01 | App Store featuring nomination and iPhone Duo launch video | gj-qa-release | P2 | open | M3-DUO-01, M3-DUO-02 | — |

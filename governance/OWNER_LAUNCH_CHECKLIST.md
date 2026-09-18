@@ -1,6 +1,6 @@
 # Owner Launch Checklist
 
-`governance/OWNER_LAUNCH_CHECKLIST.md` · v1.3 · 2026-09-17 · Maintained by the Coordinator, actioned by the Owner. Every task here is **Owner-level**: something only you can do, or must authorize and sign off. The agents do everything else. **Part 1** is the sequenced path (roughly chronological); **Part 2** is the cross-cutting tracks that run throughout. Check items off as you go; the Coordinator updates status at each checkpoint.
+`governance/OWNER_LAUNCH_CHECKLIST.md` · v1.4 · 2026-09-18 · Maintained by the Coordinator, actioned by the Owner. Every task here is **Owner-level**: something only you can do, or must authorize and sign off. The agents do everything else. **Part 1** is the sequenced path (roughly chronological); **Part 2** is the cross-cutting tracks that run throughout. Check items off as you go; the Coordinator updates status at each checkpoint.
 
 Legend: ☐ to do · ▶ in progress · ✅ done. AUTH numbers reference `governance/AUTHORIZATION_LOG.md`; ticket IDs reference `tickets/`.
 
@@ -17,6 +17,14 @@ Each task carries a **[priority · delegability]** tag.
 - **Owner** — you (or another human) only: physical capture; legal identity, signature, or payment as principal; reserved approval/decision authority; Apple-account access; secret/credential custody; GitHub repo admin (the Bot's PAT deliberately lacks Administration/Secrets/Actions — AUTH #002); or handling real user biometric/home media (`SECURITY_CHECKLIST §6.5, §10.4`).
 
 Where a line bundles tiers, each sub-part carries its own tag.
+
+## ⚠ v1 game-plan update (2026-09-18 — supersedes items below; SPEC v1.3 is authoritative)
+
+Two Owner decisions change several items in this checklist:
+- **v1 avatar = pre-made character roster, NO biometric** (ADR-0006 / AUTH #020). This **removes from v1**: the head-generation vendor (Meshy/Tripo/Avatar SDK), the biometric consent step + BIPA/CUBI/MHMDA sign-off, face/body captures, the avatar blind test, and the avatar-vendor DPA. Those items below are **V2, not v1**. M2 is now "Character & rig." Custom avatars → `research/rnd/`.
+- **Reconstruction = self-host + KIRI corpus-only bridge** (ADR-0005 / AUTH #018). **Luma is dropped** — ignore Luma account/terms lines below. Home-scan data stays on our own infra.
+
+The 13+ age gate, GPS/EXIF stripping, the privacy policy (room scans), moderation, IAP, and the rest stay as written.
 
 ## Minimum viable launch path (the REQ spine)
 
@@ -63,13 +71,13 @@ One paid item is *not* on the REQ spine but I'd still not skip it: **a focused l
 - ☐ **[OPT · Owner]** **Approve or defer the monthly Tier 2 compute** (M1-RES-01).
 - ☐ **[REQ · Owner]** **Clear the M1 checkpoint — the big go/no-go:** 8 of 10 fresh scans reach a summit with two routes, no manual fixes; confirm the animation-stack decision. Then `RESUME M2`. *(Existential; the 8/10 bar is your call.)*
 
-## 3. M2 — Avatar
+## 3. M2 — Character & rig
 
-- ☐ **[REQ · Owner]** **Confirm the head-generation vendor** (Meshy or Tripo) and approve its account; an ADR records it.
-- ☐ **[REQ · Owner]** **The biometric consent step** must gate all face processing. **[REC · Owner]** **Attorney sign-off on the consent copy** before it goes live (SECURITY_CHECKLIST §5.5). *(Agents draft the copy and build the gate; you own the legal sign-off.)*
-- ☐ **[REC · Owner]** **Recruit test users for the avatar blind test** and record consent. *(Trim: 5–8 volunteers — you can't blind-test your own face, but you don't need 20. Recruiting + consenting real people is yours.)*
-- ☐ **[REQ · Owner]** **Provide your own face + full-body captures** (physical).
-- ☐ **[REQ · Owner]** **Clear the M2 checkpoint:** avatars recognizable in a blind test, under 2 minutes, source photos provably deleted. Then `RESUME M3`.
+- ☐ **[REQ · Bot-prep]** **Author/source the character roster** (~6–12 rigged, semi-photoreal 1:12 characters) and retarget the shared movement set (M2-AVAT-01). *(Art + integration — licensed, commissioned, or generated-once art; no user faces. Agents build the pipeline; you approve the look.)*
+- ☐ **[OPT · Owner]** **Recruit a few play-testers** for character + movement feel. *(No biometric, no consent — just fun.)*
+- ☐ **[REQ · Owner]** **Clear the M2 checkpoint:** the roster rigs and retargets cleanly, every character moves identically well, and the cosmetic IAP previews on the chosen character. Then `RESUME M3`.
+
+*(v1 has no face capture, no biometric consent, no avatar vendor — AUTH #020. Custom likeness avatars are the V2 R&D track, `research/rnd/`.)*
 
 ## 4. M3 — Game loop, tabletop, and Duo
 

@@ -26,5 +26,5 @@ ADR-0005 (and AUTH #019) had v1 generate a recognizable avatar from the player's
 
 ## Follow-ups
 - SPEC v1.3 (§1, §2, §3.2, §3.9, §4, §7, §8 M2, §9); SECURITY_CHECKLIST §5/§6/§12; DESIGN_SYSTEM decision 4 — updated under AUTH #020.
-- New ticket **M2-CHAR-01** (character roster + rig + retarget + selection). Retire/redirect: M0-LEGAL-01 (BIPA consent) → V2, M0-LEGAL-04 (avatar vendor terms) → cancelled, M2-DUO-01 (rear-camera face capture) → V2.
+- New ticket **M2-AVAT-01** (character roster + rig + retarget + selection). Retire/redirect: M0-LEGAL-01 (BIPA consent) → V2, M0-LEGAL-04 (avatar vendor terms) → cancelled, M2-DUO-01 (rear-camera face capture) → V2.
 - V2 own-avatar R&D charter (`research/rnd/`).

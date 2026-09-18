@@ -1,0 +1,68 @@
+{
+  "id": "M2-AVAT-01",
+  "title": "Character roster: rig, retarget, and in-app selection",
+  "milestone": "M2",
+  "area": "AVAT",
+  "owner": "claude-builder",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P0",
+  "size": "L",
+  "summary": "Build the v1 avatar as a curated roster of pre-made, rigged, semi-photorealistic 1:12 characters (ADR-0006, AUTH #020). Each shares the GJ humanoid skeleton and retargets the shared animation/traversal set; the player selects one; the two cosmetic IAP SKUs reskin it. No face/body capture, no biometric processing.",
+  "deliverables": [
+    "unity (character roster prefabs + selection UI)",
+    "design (character art + rig spec)"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "A roster of at least 6 rigged, semi-photorealistic 1:12 characters loads in Unity 6, each retargeting the shared GJ humanoid skeleton and animation/traversal set with no manual per-character fixes (bone count, T-pose, eye height, scale validated).",
+      "evidence": "Unity scene + validation log",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "In-app character selection: the chosen character carries into play and the diorama; the cosmetic IAP SKUs (outfit pack, realism+ materials) preview and apply on the selected character.",
+      "evidence": "screenshots/video",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "No face or body capture path exists and no biometric data is collected (verifies AUTH #020 / SECURITY_CHECKLIST §5 is v1-N/A).",
+      "evidence": "code review + Coordinator sign-off",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-4",
+      "test": "A tester picks a character and it moves identically well across five environments.",
+      "evidence": "qa/reports/M2-character.md",
+      "automated": false,
+      "level": "suggested"
+    }
+  ],
+  "depends_on": [
+    "M0-UNITY-01",
+    "M0-UNITY-03",
+    "M0-MOVE-01"
+  ],
+  "references": [
+    "ADR-0006",
+    "SPEC §3.2",
+    "DESIGN_SYSTEM decision 4",
+    "AUTH #020"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-18",
+  "updated": "2026-09-18",
+  "history": [
+    {
+      "date": "2026-09-18",
+      "event": "created by the Coordinator as the ADR-0006 v1 avatar follow-up (AUTH #020): replaces the face-capture avatar milestone with a curated character roster.",
+      "by": "coordinator"
+    }
+  ]
+}

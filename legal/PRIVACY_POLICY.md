@@ -1,5 +1,7 @@
 # Gigantic Journeys — Privacy Policy (DRAFT)
 
+> **v1 scope note (AUTH #020, 2026-09-18):** v1 collects **no biometric data** — the avatar is a pre-made character, there is no face or body capture. **§3 (biometric handling) applies to the V2 custom-avatar feature only.** In v1 the sensitive user media is room/tabletop **scans** (processed on our own infrastructure); the rest of this policy applies as written.
+
 **Status: DRAFT v0.1 · 2026-09-17 · NOT YET IN FORCE.** This is an engineering draft prepared by the Coordinator to operationalize `SPEC.md` §7 and `governance/SECURITY_CHECKLIST.md` §4–§6. **It is not legal advice.** Counsel must review and approve it before any real user data is processed (biometric consent goes live at M2; full sign-off is an M5 gate — `SECURITY_CHECKLIST §5.5`, SPEC §9.6). Bracketed `[…]` fields are placeholders the Owner fills.
 
 Publisher: **SparkForge Labs** ([entity form + state to confirm — AUTH account track]). App: **Gigantic Journeys** (`com.sparkforgelabs.giganticjourneys`). Contact: **[privacy@giganticjourneys.com — mailbox to create]**. Effective date: **[on publish]**.
