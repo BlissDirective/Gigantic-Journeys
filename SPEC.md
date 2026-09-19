@@ -1,6 +1,6 @@
 # Gigantic Journeys — SPEC.md
 
-Version 1.6 · 2026-09-19 · Owner: BlissDirective (SparkForge Labs) · Maintainer: Coordinator (Claude Code)
+Version 1.7 · 2026-09-19 · Owner: BlissDirective (SparkForge Labs) · Maintainer: Coordinator (Claude Code)
 
 **Authority.** This file is the only authority on *what* v1 is. Below it rank `design/MOVEMENT_BIBLE.md` v1.0 (how the avatar moves), `design/Gigantic-Journey-Design-Skills.md` v1.1 with `design/DESIGN_SYSTEM.md` (how it looks and feels), then `ADRs/` (how it is built). Where documents disagree, this file wins until an authorized change says otherwise.
 
@@ -38,11 +38,12 @@ Identity: name "Gigantic Journeys"; bundle id `com.sparkforgelabs.giganticjourne
 - Well-lit indoor rooms and tabletop builds only.
 
 ### 3.2 Avatar: a curated 1:12 character (v1)
-- The player picks from a **curated roster of rigged, semi-photorealistic 1:12 characters** (~6–12 at launch). **No face or body capture and no biometric processing in v1** — selection is instant (AUTH #020, ADR-0006).
-- All characters share the **GJ humanoid skeleton** and the shared animation/traversal set, so every character moves identically well; the roster is an authored art asset, not a per-user generation step.
-- Realistic proportions (about 7 heads), stylized "grounded" materials, a unified shader with an environment probe from the splat, a subtle rim light and contact shadow so the character pops off the photoreal floor (Design Skills rule 20).
-- Cosmetic customization only, through the two IAP SKUs (outfit pack, realism+ materials) plus free defaults, previewed on the chosen character in the diorama. No slider editor.
+- The player picks from a **curated roster of rigged, semi-photorealistic 1:12 characters** — **eight at launch**, cast against an inclusive matrix (body type, apparent gender presentation, skin tone, apparent age, and a distinct silhouette + hero color each) so players see themselves without any capture (≥6 is the M2 floor). **No face or body capture and no biometric processing in v1** — selection is instant (AUTH #020, ADR-0006).
+- All characters share the **GJ humanoid skeleton** and the shared animation/traversal set, so every character moves identically well; the roster is an authored art asset, not a per-user generation step. One enforced **rig standard** — Unity Humanoid mapping, normalized eye-height/scale to 1A, standardized foot/hand IK + contact markers, and the AUTH #021 carried-tool sockets (grapple coil, pole) — is checked by an automated rig-conformance gate on every character and cosmetic (AUTH #024).
+- **Grounded semi-photoreal** fidelity: realistic proportions (about 7 heads), stylized "grounded" materials, a unified shader with an environment probe from the splat, a subtle rim light and contact shadow so the character pops off the photoreal floor (Design Skills rule 20); warm but low-to-moderate-detail faces (a small reactive-idle blendshape set, no full FACS) — deliberately short of hyperreal to avoid uncanny valley and any real-person resemblance. **V2 pushes the same rig toward hero-photoreal** (the "realism+" tier is the on-ramp), unified with the custom-avatar track (`research/rnd/`) — AUTH #024.
+- Cosmetic customization only, through the two IAP SKUs (outfit pack, realism+ materials) plus free defaults, previewed on the chosen character in the diorama; each cosmetic passes the rig-conformance gate plus a clip test across the full verb + tool set. No slider editor.
 - Default scale 1:12 (1.75 m → 14.6 cm) with a per-environment scale multiplier; every movement threshold is expressed in avatar heights **A** (Bible §1).
+- **Sourcing** (clean-IP, zero biometric; AUTH #024): a **dual-track** build against the one rig contract — **open-base authoring as the primary path** (MakeHuman CC0 / Human Generator, uplifted in Blender; owned outright, $0 spend now) with a **leaner license path** (Character Creator 4 + Mixamo bring-up) held as a short-term contingency (its own spend AUTH if used). No scanned-real-people libraries; no MetaHuman (Unreal-only). Details: `research/vendors/character-roster-sourcing.md`.
 - **Custom avatars from the player's own likeness are deferred to V2** (own-model R&D track, `research/rnd/`). v1 ships zero biometric processing.
 
 ### 3.3 Environment understanding (scene graph)
@@ -88,7 +89,7 @@ The captured place must feel real and alive at 15 cm; sound and reactivity are t
 - Free tier: unlimited scans and play; 3 published environments live at once.
 
 ### 3.8 Monetization: two launch SKUs
-- SKU 1: a cosmetic outfit pack. SKU 2: "realism+" avatar materials.
+- SKU 1: a cosmetic **outfit pack** — outfits on rig-clean silhouettes (casual, athletic, layered, dressed) as mesh/material swaps. SKU 2: **"realism+" materials** — a higher-fidelity skin/cloth/hair material tier on the chosen character (the V2 hero-photoreal on-ramp). Both preview live on the chosen character in the diorama; each passes the rig-conformance gate + a clip test across the full verb + tool set so a purchased cosmetic never breaks a move (AUTH #024).
 - Cosmetic only: no timers, no gacha, no pay-to-win, no fake scarcity; clear prices; one-tap restore. The store is shown after a win, never on a loss, and never before the first level (Design Skills rules 16 and 26).
 - Owning either SKU lifts the published-environment cap (the lifted cap value is set at M5 via AUTH).
 - Implemented with RevenueCat or Unity IAP (ADR at M5).
@@ -188,7 +189,7 @@ The authoritative retention schedule and deletion flow are drafted in `legal/` (
 |---|---|---|
 | **M0 Harness** | 1–2 | One ticket goes from creation to merged PR with a QA screenshot attached and no human typing. Also: repo and CI green; Unity 6 URP project with splat renderer and controller scaffold; Inngest skeleton; every Bot's SKILLS.md merged; Unity on the QA VM with one scripted task proven; telemetry and correction schemas frozen; consent copy and retention schedule drafted; vendor retention terms collected; design system proposal ready for lock; the M0 AUTH batch filed. |
 | **M1 Scan to playable** | 3–6 | 8 of 10 fresh room scans produce a reachable summit with at least two valid routes and no manual fixes. Under 6/10: stop and re-plan via AUTH. Motion matching versus blend trees decided (Bible §13). |
-| **M2 Character & rig** | 5–8 | The curated character roster (≥6) rigs to the GJ humanoid skeleton and retargets the shared animation/traversal set cleanly; a tester picks a character and it moves identically well across environments. No biometric (AUTH #020). |
+| **M2 Character & rig** | 5–8 | The curated character roster (eight at launch; ≥6 floor) passes rig-conformance and retargets the shared animation/traversal set cleanly with no per-character fixes; the two cosmetic SKUs pass the verb+tool clip test; a tester picks a character and it moves identically well across environments. No biometric (AUTH #020, #024). |
 | **M3 Game loop and tabletop** | 7–10 | The Owner and three testers each explore five environments and want a sixth; Tier 1 holds its 30 fps target on the Owner's older test iPhone. |
 | **M4 Sharing, moderation, leaderboards** | 9–12 | 50 tester-published environments with zero moderation misses in the Owner's review; the ranking survives a deliberate rate-spam test. |
 | **M5 Store readiness and IAP** | 12–16 | App Store submitted after the Owner's explicit approval; the TestFlight cohort at a 99 %+ crash-free target. |
@@ -234,3 +235,4 @@ Apple's first foldable iPhone ships October 23, 2026 (7.6-inch inner display, 5.
 | 1.4 | 2026-09-18 | Movement v1 expansion (AUTH #021): added verbs (dive-roll, tic-tac, vault variants, wall-run) and a v1 traversal-tools layer (safety-pin grapple, matchstick pole-vault); opened a narrow §4 exception for diegetic character-carried tools; §3.5 and §4 updated | AUTH #021 (Owner instruction) |
 | 1.5 | 2026-09-19 | Sound design + environment reactivity (AUTH #022): deepened §3.6 — scale-aware acoustics (reverb from the reconstructed room), material×event sound bank for all verbs/tools, spatialization + ambience + mix, restrained adaptive music, Tier 1 reactivity extended to tools, muted-playable accessibility; Tier 2 physics stays research | AUTH #022 (Owner instruction) |
 | 1.6 | 2026-09-19 | Journey generation v1 (AUTH #023): deepened §3.4 — T0–T3 verb-difficulty model; per-environment rising-difficulty routes with a global difficulty score as metadata; beat-per-tier (beat 1 = T0 only) with the twist as the signature/tool beat; traversal tools may be required to reach the summit when taught in an earlier beat (never beat 1); vista scoring; retry→template-fallback guarantee; validator checks entry/surface prerequisites | AUTH #023 (Owner instruction) |
+| 1.7 | 2026-09-19 | Character roster art spec (AUTH #024): roster = 8 at launch on an inclusive casting matrix (≥6 floor); one enforced rig standard (Unity Humanoid, IK/contact markers, AUTH #021 tool sockets, rig-conformance gate); grounded semi-photoreal fidelity for v1 with a V2 hero-photoreal roadmap on the same rig; cosmetic SKUs gated by a verb+tool clip test; dual-track sourcing (open-base primary at $0, leaner license contingency); §3.2/§3.8/§8 + DESIGN_SYSTEM decision 4 updated | AUTH #024 (Owner instruction) |

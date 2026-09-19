@@ -72,6 +72,13 @@ Coordinator consistency note: matches rules 7, 8, 27, 28 (own budget; Reduce Mot
 
 > **v1 change (AUTH #020, ADR-0006, 2026-09-18):** v1 uses a **curated roster of pre-made rigged characters** — no photo capture, no likeness confirmation, no biometric. The transcribed capture / likeness / wardrobe-from-photo text below now describes the **V2 custom-avatar** feature. In v1: the player **selects** a character; the cosmetic store previews on the *chosen character*; the in-world constraints (realistic ~7-head proportions, rim light, contact shadow, reactive idle per Bible §7) still apply. Player-facing copy says "your character" in v1.
 
+**v1 roster art spec (AUTH #024, 2026-09-19):**
+- **Roster = 8 characters at launch** (≥6 is the M2 floor), cast against an inclusive matrix: body type, apparent gender presentation, skin tone, apparent age, and a **distinct silhouette + hero color** each (readable at 15 cm; colorblind-distinct).
+- **Fidelity = grounded semi-photoreal** for v1 — believable materials + splat-integrated lighting + rim light/contact shadow; warm, low-to-moderate-detail faces (a small reactive-idle blendshape set, no full FACS), deliberately short of hyperreal (no uncanny valley, no real-person resemblance). **V2 pushes the same rig toward hero-photoreal** (the "realism+" tier is the on-ramp), unified with the custom-avatar track (`research/rnd/`).
+- **One rig standard** — the GJ humanoid skeleton (Unity Humanoid mapping, normalized eye-height/scale to 1A, standardized foot/hand IK + contact markers, AUTH #021 carried-tool sockets), enforced by an automated **rig-conformance gate** on every character and cosmetic.
+- **Cosmetics** — SKU 1 outfits on the four rig-clean silhouettes (casual/athletic/layered/dressed); SKU 2 "realism+" material tier — each passes rig-conformance **plus a clip test across the full verb + tool set** so a cosmetic never breaks a move.
+- **Sourcing** (clean-IP, zero biometric) — dual-track against the one rig contract: **open-base authoring primary** (MakeHuman CC0 / Human Generator + Blender; owned; $0 now), leaner **license** path (Character Creator 4 + Mixamo) as a short-term contingency (own spend AUTH if used); no scanned-real-people libraries, no MetaHuman (Unreal-only). See `design/proposals/character-roster-v1.md`, `research/vendors/character-roster-sourcing.md`.
+
 Binding constraints (rules 15, 16, 20; SPEC §3.2):
 - Realistic proportions of about 7 heads, stylized grounded materials, rim light plus contact shadow.
 - Likeness confirmation: the head turning beside the source photo, "Is this you?", Retake or Tweak (skin tone, hair, glasses, build); no slider editor.
