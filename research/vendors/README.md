@@ -39,6 +39,7 @@ Both hard problems (reconstruction, avatar) come down to the same thing that bit
 | `luma.md` | Luma dossier (reconstruction assumption at risk) |
 | `iap-revenuecat-vs-unity.md` | IAP (M5 ADR) |
 | `crash-reporting.md` | crash reporting (#017) |
+| `character-roster-sourcing.md` | v1 character roster: license/commission vs open-base authoring (dual-track) |
 
 ## Decisions made
 1. **Reconstruction backend (ADR-0005 / AUTH #018):** **self-host + managed bridge.** Self-host (gsplat/Brush + COLMAP + Open3D) is the target, de-risked by the **M1-CAPT-03 spike**; the bridge is **KIRI, corpus-only** (splat+mesh matches the target; only ever processes the consented corpus, never real user homes). **Luma dropped.**
