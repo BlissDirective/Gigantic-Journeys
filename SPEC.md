@@ -1,6 +1,6 @@
 # Gigantic Journeys — SPEC.md
 
-Version 1.4 · 2026-09-18 · Owner: BlissDirective (SparkForge Labs) · Maintainer: Coordinator (Claude Code)
+Version 1.5 · 2026-09-19 · Owner: BlissDirective (SparkForge Labs) · Maintainer: Coordinator (Claude Code)
 
 **Authority.** This file is the only authority on *what* v1 is. Below it rank `design/MOVEMENT_BIBLE.md` v1.0 (how the avatar moves), `design/Gigantic-Journey-Design-Skills.md` v1.1 with `design/DESIGN_SYSTEM.md` (how it looks and feels), then `ADRs/` (how it is built). Where documents disagree, this file wins until an authorized change says otherwise.
 
@@ -68,10 +68,13 @@ The verb set, trigger thresholds, feel rules, camera rules, and landing tiers ar
 - No stamina, no damage in v1. Falls cost time only; off-table falls on tabletops respawn at the last stable surface.
 - **Expanded verbs + traversal tools (AUTH #021):** the full parkour set plus dive-roll, tic-tac, vault variants, and **wall-run**; and two **found-object tools** — the safety-pin **grapple** (swing/ascend/rappel) and a matchstick **pole-vault** — real 1:1-scale objects the character carries and uses, registered via `IVerbProvider` (Bible §3.6, §14). These tools are the sole §4 exception to "no synthetic game objects."
 
-### 3.6 Environment reactivity
-- **Tier 0 (ships):** material-keyed footstep, landing, grab, and slide audio; particles; haptics; camera shake, per the Bible §9 matrix, all scaled with the environment scale multiplier.
-- **Tier 1 (ships):** object segmentation of the splat plus procedural, shader-driven displacement: cushions dent, curtains sway, papers flutter, plants rustle. Adds roughly $0.02–0.10 of segmentation compute per scan. Must hold 30 fps on the reference device (M3 exit test).
-- **Tier 2 (does not ship in v1):** §5.
+### 3.6 Environment reactivity and sound (AUTH #022)
+The captured place must feel real and alive at 15 cm; sound and reactivity are the primary production value. Diegetic-first; everything **scales with the environment multiplier** (Lego clicks stay tiny, floor booms stay big).
+- **Sound (ships):** a material × event bank (Bible §9) covering every verb and tool — layered, round-robin, impact-scaled, and contact-frame-locked to the animation; 3D spatialized with an ambience bed and category mix buses. **Scale-aware acoustics:** reverb is derived from the reconstructed room's volume and materials, so each captured place sounds unique and real. **Restrained adaptive music:** a quiet ambient bed plus sparse stings at key beats (summit approach, vista reveal, flag plant) and the signature shrink-transition theme — never a wallpaper soundtrack. Sourced CC0/royalty-free or self-recorded (no encumbered audio).
+- **Tier 0 (ships):** material-keyed audio, particles, haptics, and camera shake per the Bible §9 matrix, all scaled with the environment multiplier.
+- **Tier 1 (ships):** object segmentation of the splat plus procedural, shader-driven displacement (no physics): cushions dent, curtains sway, papers flutter, plants rustle, cords swing — extended to the new verbs and tools (a wall-run scuffs dust, a rappel bells a curtain, the grapple twine sways). Adds roughly $0.02–0.10 of segmentation compute per scan. Must hold 30 fps on the reference device (M3 exit test).
+- **Accessibility:** playable fully muted — visual/caption cues for key audio events, plus haptics and camera-shake toggles (DESIGN_SYSTEM decision 10).
+- **Tier 2 (does not ship in v1):** real rigid/soft-body physics — research track, §5.
 
 ### 3.7 Publish, browse, rank, leaderboards
 - **Environment package**: splat, collision mesh, scene graph, environment spec, thumbnail; Supabase storage behind a CDN; delivered only through signed, short-lived URLs.
@@ -227,3 +230,4 @@ Apple's first foldable iPhone ships October 23, 2026 (7.6-inch inner display, 5.
 | 1.2 | 2026-09-16 | §2 and §3.2 capture wording aligned to the locked design decision 4 (rotation capture instead of three stills) | Transcription of the 2026-09-14 lock (M0-OWNER-02); no AUTH consumed |
 | 1.3 | 2026-09-18 | v1 avatar = curated pre-made character roster, cosmetic-only customization; **no face/body capture or biometric processing in v1** (custom avatars → V2); reconstruction backend = self-host (ADR-0005) with a KIRI corpus-only bridge, Luma dropped; M2 reframed to Character & rig; §5 biometric consent becomes a V2 gate. Applied to §1, §2, §3.1, §3.2, §3.9, §4, §7, §8, §9 | AUTH #018, #020 (Owner instruction) |
 | 1.4 | 2026-09-18 | Movement v1 expansion (AUTH #021): added verbs (dive-roll, tic-tac, vault variants, wall-run) and a v1 traversal-tools layer (safety-pin grapple, matchstick pole-vault); opened a narrow §4 exception for diegetic character-carried tools; §3.5 and §4 updated | AUTH #021 (Owner instruction) |
+| 1.5 | 2026-09-19 | Sound design + environment reactivity (AUTH #022): deepened §3.6 — scale-aware acoustics (reverb from the reconstructed room), material×event sound bank for all verbs/tools, spatialization + ambience + mix, restrained adaptive music, Tier 1 reactivity extended to tools, muted-playable accessibility; Tier 2 physics stays research | AUTH #022 (Owner instruction) |

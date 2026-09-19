@@ -199,6 +199,8 @@ Owner capture list (Rokoko Vision, single camera, plain wall, 10 takes each): pe
 
 Move.ai iPhone trial (hero clips, up to trial limit): flag plant sequence, running jump with arms, hard landing stagger, roll.
 
+Each reaction carries a matched sound and, where apt, a Tier 1 soft reaction (a brush-through sways the curtain; a cushion sit dents it) per §9 and SPEC §3.6 (AUTH #022).
+
 ---
 
 ## 8. Camera rules per verb
@@ -233,6 +235,8 @@ Every contact answers with sound, particles, haptic, and (for big events) camera
 | curtain | — | — | swish (Tier 1 sway) | slide swish |
 
 Haptics: light for footsteps (only at run+), medium for grabs and vaults, heavy for hard landings and flag plant. Camera shake only on hard/recover landings and flag plant. All feedback scales with the environment scale multiplier so Lego clicks stay tiny and floor booms stay big.
+
+**Sound system (AUTH #022).** The matrix extends to every v1 verb and tool: the vault family, tic-tac, wall-run (continuous surface scrape), dive-roll, the climb families (per-hand/foot ticks), and the tools — grapple (pin mount *thunk*/*ting*, twine creak/whip, swing whoosh, reel zip, coil pat) and matchstick pole-vault (plant thunk + shaft flex). Rules: every event is **layered** (transient + body + tail), **round-robin with micro-pitch** randomization, **impact-scaled** in gain and brightness, and fired on the **same contact frames motion-warping targets**. Audio is **3D-spatialized** (listener just behind the avatar, biased to the camera) over a scale-appropriate **ambience bed**, mixed on category buses (movement / world / tools / UI / music) with sidechain **ducking** so a critical cue always reads. **Scale-aware acoustics:** a parametric reverb (RT60 / early reflections / damping) is computed from the reconstructed room's volume and average material absorption, so each captured place has its own acoustic. **Music is restrained** (ambient bed + sparse stings; the §3 transition theme). Everything — pitch, gain, reverb size, particle size, haptic strength — scales with the environment multiplier. Sourcing is CC0 / royalty-free or self-recorded foley (no encumbered audio).
 
 ---
 
@@ -343,3 +347,4 @@ Capture and cleanup: Rokoko Vision docs; Move.ai iPhone quickstart; Cascadeur Ba
 
 - 2026-09-15 (Coordinator, AUTH #003): v1 ships on the iOS App Store only. The §2 reference device (2023 mid-tier Android, 30 fps floor) and the §13 pass/fail thresholds are read as targets measured on the Owner's iPhones, never as merge gates; quality tiers scale per device. SPEC.md §11 governs.
 - 2026-09-18 (Coordinator, AUTH #021): Movement v1 expansion — new verbs (dive-roll, tic-tac, vault variants, wall-run) and the v1 traversal-tools layer (safety-pin grapple: swing/ascend/rappel; matchstick pole-vault) via `IVerbProvider`; edits to §3.2–§3.6, §4, §10, §14. New `movement.json` blocks: `dive`, `ticTac`, `wallRun`, `poleVault`, `grapple`. Tools are the SPEC §4 diegetic character-gear exception. Rationale: `design/proposals/movement-v1-expansion.md`.
+- 2026-09-19 (Coordinator, AUTH #022): Sound design + environment reactivity — §9 extended with the sound system (layering, contact-frame timing, scale-aware acoustic reverb, 3D spatialization, mix buses, restrained adaptive music) covering the new verbs and tools; §7 reactions now carry sound + Tier 1 soft reactions. Applied to SPEC §3.6. Rationale: `design/proposals/sound-reactivity-v1.md`.

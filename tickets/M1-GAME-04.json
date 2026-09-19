@@ -1,0 +1,76 @@
+{
+  "id": "M1-GAME-04",
+  "title": "Audio system: material×event bank, scale-aware acoustics, spatialized mix (AUTH #022)",
+  "milestone": "M1",
+  "area": "GAME",
+  "owner": "claude-builder",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P1",
+  "size": "L",
+  "summary": "Build the v1 audio system per SPEC §3.6 and Movement Bible §9: a material × event sound bank covering every verb and tool, contact-frame-locked to the animation, layered + round-robin + impact-scaled; 3D spatialization with an ambience bed and category mix buses (movement/world/tools/UI/music) with sidechain ducking; scale-aware pitch/gain; scale-aware acoustic reverb computed from the reconstructed room (volume + material absorption); restrained adaptive music (ambient bed + sparse stings + the shrink-transition theme). CC0/royalty-free/self-recorded sourcing only.",
+  "deliverables": [
+    "unity (audio engine, SurfaceMaterial event bank, reverb-from-scenegraph, mix buses)",
+    "qa/audio-sources.md (CC0/royalty-free provenance)"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "The material × event bank covers all v1 verbs and tools (incl. grapple pin/twine, pole-vault, wall-run, dive-roll), fires on animation contact frames, and is round-robin + impact-scaled so a 2-minute run has no machine-gun repetition.",
+      "evidence": "test scene + audio log",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "Scale-aware acoustic reverb is computed from the scene graph (room volume + material absorption) and audibly differs between a small dead room and a large live one.",
+      "evidence": "A/B capture of two corpus rooms",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "Pitch, gain, and reverb size scale with the environment multiplier (Lego clicks tiny, floor booms big); category mix buses + ducking keep critical cues (summit/vista/flag) audible; audio is 3D-spatialized.",
+      "evidence": "test scene",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-4",
+      "test": "All audio is CC0/royalty-free/self-recorded with provenance recorded; the bank fits the mobile audio memory + polyphony budget.",
+      "evidence": "qa/audio-sources.md + budget report",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-5",
+      "test": "It sounds real and alive on the Owner's iPhone.",
+      "evidence": "device capture",
+      "automated": false,
+      "level": "suggested"
+    }
+  ],
+  "security": [],
+  "depends_on": [
+    "M0-UNITY-01",
+    "M1-SCEN-02",
+    "M1-MOVE-01"
+  ],
+  "references": [
+    "AUTH #022",
+    "SPEC §3.6",
+    "MOVEMENT_BIBLE §9",
+    "design/proposals/sound-reactivity-v1.md"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-19",
+  "updated": "2026-09-19",
+  "history": [
+    {
+      "date": "2026-09-19",
+      "event": "created by the Coordinator as an AUTH #022 follow-up (audio system).",
+      "by": "coordinator"
+    }
+  ]
+}

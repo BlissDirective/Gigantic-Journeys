@@ -1,0 +1,60 @@
+{
+  "id": "M3-GAME-01",
+  "title": "Tier 1 soft reactivity: shader displacement + tool/verb reactions (AUTH #022)",
+  "milestone": "M3",
+  "area": "GAME",
+  "owner": "claude-builder",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P1",
+  "size": "L",
+  "summary": "Ship Tier 1 environment reactivity per SPEC §3.6: object segmentation of the splat plus procedural, shader-driven displacement (NO physics — that is Tier 2/§5). Cushions dent, curtains/plants/paper sway and flutter, cords/soft-hanging swing, dust motes stir — keyed to the scene graph's segmented objects + material labels, and extended to the new verbs/tools (wall-run dust scuff, rappel curtain sway, grapple twine sway). Must hold the 30 fps target (M3 exit).",
+  "deliverables": [
+    "unity (Tier 1 shader-displacement reactions, segmentation-driven)"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "Cushions dent, curtains/plants/paper sway and flutter, and cords swing via shader displacement driven by segmentation + material labels, with no rigid/soft-body physics.",
+      "evidence": "test scene + capture",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "Verb/tool reactions land: a wall-run scuffs dust, a rappel sways a curtain, the grapple twine and its anchor object react on mount.",
+      "evidence": "test scene + capture",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "Tier 1 holds the 30 fps target on the Owner's older reference iPhone with Tier 0 + Tier 1 on (M3 exit test; a suggestion-level measurement, not a merge gate per SPEC §11).",
+      "evidence": "qa/reports/M3-reactivity.md + device numbers",
+      "automated": false,
+      "level": "suggested"
+    }
+  ],
+  "security": [],
+  "depends_on": [
+    "M1-SCEN-01",
+    "M1-SCEN-02",
+    "M1-GAME-04"
+  ],
+  "references": [
+    "AUTH #022",
+    "SPEC §3.6",
+    "design/proposals/sound-reactivity-v1.md"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-19",
+  "updated": "2026-09-19",
+  "history": [
+    {
+      "date": "2026-09-19",
+      "event": "created by the Coordinator as an AUTH #022 follow-up (Tier 1 soft reactivity).",
+      "by": "coordinator"
+    }
+  ]
+}

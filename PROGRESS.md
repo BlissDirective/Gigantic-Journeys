@@ -1,6 +1,6 @@
 # PROGRESS.md
 
-Living tracker. Updated by the Coordinator on every merge, AUTH decision, and checkpoint. Last update: **2026-09-17** (M0 AUTH batch #008–#017 **approved**; #016 legal review is in-house at $0 (no external spend); M0-REPO-03 unblocked; M0 legal drafts in `legal/` for the Owner's in-house team; Meshy selected as head vendor (Tripo dropped); vendor research landed (`research/vendors/`) with two flags — Meshy needs Enterprise+DPA for biometric, Luma reconstruction/train concerns; build-vs-buy research complete; **Owner set the v1 game plan (2026-09-18): self-host reconstruction + KIRI corpus-only bridge (AUTH #018, spike M1-CAPT-03); v1 avatar = pre-made curated character roster with NO biometric (AUTH #020 / ADR-0006, supersedes the avatar vendor); focus on video→playable + world-class movement. Custom avatars → V2 R&D track (`research/rnd/`). Then the **movement v1 expansion (AUTH #021): full parkour + dive-roll/tic-tac/vault-variants/wall-run and a traversal-tools layer (safety-pin grapple + matchstick pole-vault) via IVerbProvider; a narrow §4 exception for diegetic character tools.** SPEC → v1.4; Movement Bible + movement.json updated; tickets M1-MOVE-02, M3-MOVE-01.** Ticket table regenerated with `python tickets/validate.py --summary`.
+Living tracker. Updated by the Coordinator on every merge, AUTH decision, and checkpoint. Last update: **2026-09-17** (M0 AUTH batch #008–#017 **approved**; #016 legal review is in-house at $0 (no external spend); M0-REPO-03 unblocked; M0 legal drafts in `legal/` for the Owner's in-house team; Meshy selected as head vendor (Tripo dropped); vendor research landed (`research/vendors/`) with two flags — Meshy needs Enterprise+DPA for biometric, Luma reconstruction/train concerns; build-vs-buy research complete; **Owner set the v1 game plan (2026-09-18): self-host reconstruction + KIRI corpus-only bridge (AUTH #018, spike M1-CAPT-03); v1 avatar = pre-made curated character roster with NO biometric (AUTH #020 / ADR-0006, supersedes the avatar vendor); focus on video→playable + world-class movement. Custom avatars → V2 R&D track (`research/rnd/`). Then the **movement v1 expansion (AUTH #021): full parkour + dive-roll/tic-tac/vault-variants/wall-run and a traversal-tools layer (safety-pin grapple + matchstick pole-vault) via IVerbProvider; a narrow §4 exception for diegetic character tools.** SPEC → v1.4; Movement Bible + movement.json updated; tickets M1-MOVE-02, M3-MOVE-01. Then **sound + environment reactivity (AUTH #022, SPEC → v1.5):** scale-aware acoustics (reverb from the reconstructed room), the §9 feedback matrix extended to all verbs/tools, Tier 1 soft reactivity extended to tools, restrained adaptive music, muted-playable accessibility; tickets M1-GAME-04, M3-GAME-01.** Ticket table regenerated with `python tickets/validate.py --summary`.
 
 ## Milestone
 
@@ -17,7 +17,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 
 | Status | Count |
 |---|---|
-| open | 57 |
+| open | 59 |
 | in-progress | 0 |
 | in-review | 0 |
 | changes-requested | 0 |
@@ -25,7 +25,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | merged | 1 |
 | done | 3 |
 | cancelled | 3 |
-| **total** | **65** |
+| **total** | **67** |
 
 ## Blockers
 
@@ -142,6 +142,8 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | M0-SKILL-08 | gj-qa-release: research handbook (RESOURCES.md + SKILLS.md) | gj-qa-release | P1 | open | — | — |
 | M0-SKILL-09 | gj-data: research handbook (RESOURCES.md + SKILLS.md) | gj-data | P1 | open | — | — |
 | M1-GAME-03 | Tier 0 material feedback wired | gj-gameplay | P1 | open | M1-GAME-02 | — |
+| M1-GAME-04 | Audio system: material×event bank, scale-aware acoustics, spatialized mix (AUTH #022) | claude-builder | P1 | open | M0-UNITY-01, M1-SCEN-02, M1-MOVE-01 | — |
+| M3-GAME-01 | Tier 1 soft reactivity: shader displacement + tool/verb reactions (AUTH #022) | claude-builder | P1 | open | M1-SCEN-01, M1-SCEN-02, M1-GAME-04 | — |
 | M1-DUO-01 | iPhone Duo research spike: posture, Split View, Duo Preview, outer display in Unity 6 | gj-gameplay | P2 | open | M0-UNITY-01 | — |
 | M1-RES-01 | Tier 2 research prototype — month 1 (segment, embed, simulate on the corpus) | gj-scenegraph | P2 | blocked | — | — |
 | M2-DUO-01 | [V2] Rear-camera avatar capture (iPhone Duo) — no face capture in v1 | gj-avatar | P2 | cancelled | M1-DUO-01 | — |
