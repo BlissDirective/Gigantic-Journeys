@@ -8,7 +8,7 @@
   "status": "open",
   "priority": "P0",
   "size": "L",
-  "summary": "Generate the goals: designate the highest reachable point as the summit, generate two or three routes of rising difficulty structured introduce→develop→twist→resolve, and pick three vistas for view.",
+  "summary": "Generate the goals: designate the highest validated-reachable plantable point as the summit, generate two or three routes of per-environment rising difficulty structured introduce→develop→twist→resolve (beat 1 = T0 ground set only; the twist is the signature/tool beat), and pick three vistas scored for view. Traversal tools (grapple/pole-vault/wall-run) may be required to reach the summit only when the required tool is taught in an earlier beat of that route, never beat 1. Each route records a difficulty score and a global difficulty score as metadata (SPEC §3.4).",
   "reviewers": [
     "gj-gameplay"
   ],
@@ -18,14 +18,14 @@
   "acceptance_tests": [
     {
       "id": "AT-1",
-      "test": "For a corpus environment the service designates a reachable summit, generates 2–3 routes with a per-segment beat, and selects 3 vistas, all written to environment_spec.json.",
+      "test": "For a corpus environment the service designates a reachable summit, generates 2–3 routes of rising per-environment difficulty (each with a per-segment beat, a difficulty score, and a global difficulty score), and selects 3 vistas scored for view (viewshed/framing/low-to-moderate-difficulty access/spatial spread), all written to environment_spec.json.",
       "evidence": "sample environment_spec.json on 5 rooms",
       "automated": false,
       "level": "required"
     },
     {
       "id": "AT-2",
-      "test": "Beat 1 of every route uses only walk, jog, run, jump, step-up, hop-over, and mantle (Bible §10); three generation retries then a template fallback.",
+      "test": "Beat 1 of every route uses only the T0 set — walk, jog, run, jump, step-up, hop-over, mantle (Bible §10); three generation retries with relaxed shaping (never a relaxed margin), then a template fallback that is a single guaranteed-simple validated route so the environment is never a dead end.",
       "evidence": "validator report (M1-SCEN-05)",
       "automated": false,
       "level": "required"
@@ -43,11 +43,19 @@
       "evidence": "test names",
       "automated": true,
       "level": "required"
+    },
+    {
+      "id": "AT-5",
+      "test": "A route may require a traversal tool (grapple/pole-vault/wall-run) to reach the summit only if that tool is introduced in an earlier beat of the same route; no tool appears in beat 1. The validator (M1-SCEN-05) enforces this.",
+      "evidence": "validator report + a tool-required corpus room",
+      "automated": false,
+      "level": "required"
     }
   ],
   "design": [
     "Design Skills rule 22",
-    "Bible §10"
+    "Bible §10",
+    "SPEC §3.4"
   ],
   "depends_on": [
     "M1-SCEN-03",
@@ -55,16 +63,23 @@
   ],
   "references": [
     "SPEC §3.4",
-    "kit RESUME M1"
+    "kit RESUME M1",
+    "AUTH #023",
+    "design/proposals/journey-route-generation-v1.md"
   ],
   "branch": null,
   "pr": null,
   "created": "2026-09-16",
-  "updated": "2026-09-16",
+  "updated": "2026-09-19",
   "history": [
     {
       "date": "2026-09-16",
       "event": "created by the Coordinator (M1 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-19",
+      "event": "sharpened under AUTH #023 (journey generation v1): per-environment rising difficulty + per-route difficulty score and global difficulty score; beat 1 = T0 set with the twist as the signature/tool beat; vista scoring criteria; template fallback = one guaranteed-simple validated route; tools may be required to summit only if taught in an earlier beat, never beat 1 (AT-5).",
       "by": "coordinator"
     }
   ]

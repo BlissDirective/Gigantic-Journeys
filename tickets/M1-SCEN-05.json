@@ -8,7 +8,7 @@
   "status": "open",
   "priority": "P0",
   "size": "L",
-  "summary": "The validator every generated route must pass: a deterministic reachability search that accepts a route segment only if each transition is achievable under config/movement.json with a 15% margin (85% of max reach and distance). Shared movement contract with the controller.",
+  "summary": "The validator every generated route must pass: a deterministic reachability search that accepts a route segment only if each transition is achievable under config/movement.json with a 15% margin (85% of max reach and distance) AND its entry prerequisites (min speed, plant window) and surface prerequisites (wall-run min wall length, grapple anchor reach) are met. Also enforces beat 1 = T0 set and the rule that a tool may be required to summit only if it is taught in an earlier beat (never beat 1). Shared movement contract with the controller.",
   "reviewers": [
     "gj-gameplay"
   ],
@@ -18,14 +18,14 @@
   "acceptance_tests": [
     {
       "id": "AT-1",
-      "test": "Given a traversal graph and a proposed route, the validator returns valid/invalid per segment, using only config/movement.json constants at an 85% margin; identical input yields identical output.",
+      "test": "Given a traversal graph and a proposed route, the validator returns valid/invalid per segment, using only config/movement.json constants at an 85% margin and checking each transition's entry + surface prerequisites; identical input yields identical output.",
       "evidence": "test names showing determinism",
       "automated": false,
       "level": "required"
     },
     {
       "id": "AT-2",
-      "test": "Property tests cover unreachable summit, a gap just over 85% of max distance (rejected) and just under (accepted), and the beat-1 verb restriction.",
+      "test": "Property tests cover unreachable summit, a gap just over 85% of max distance (rejected) and just under (accepted), the beat-1 verb restriction, an unmet tool prerequisite (rejected), and a route that requires a tool not introduced in an earlier beat (rejected).",
       "evidence": "test names",
       "automated": true,
       "level": "required"
@@ -54,16 +54,23 @@
   ],
   "references": [
     "SPEC §3.4",
-    "config/README.md"
+    "config/README.md",
+    "AUTH #023",
+    "design/proposals/journey-route-generation-v1.md"
   ],
   "branch": null,
   "pr": null,
   "created": "2026-09-16",
-  "updated": "2026-09-16",
+  "updated": "2026-09-19",
   "history": [
     {
       "date": "2026-09-16",
       "event": "created by the Coordinator (M1 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-19",
+      "event": "sharpened under AUTH #023 (journey generation v1): validator also checks entry + surface prerequisites and enforces the tool-taught-before-required rule; property tests extended to unmet tool prerequisites and tools required without an earlier teaching beat.",
       "by": "coordinator"
     }
   ]

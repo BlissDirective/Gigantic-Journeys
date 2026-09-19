@@ -8,7 +8,7 @@
   "status": "open",
   "priority": "P0",
   "size": "M",
-  "summary": "Map surface classes to traversal verbs (the affordance library) and export the traversal graph: which surfaces reach which, by which verb, at what difficulty.",
+  "summary": "Map surface classes to traversal verbs (the affordance library) and export the traversal graph: which surfaces reach which, by which verb, at what difficulty. Each edge carries verb, capability cost (distance/height/angle in A-units), entry + surface prerequisites, and a T0–T3 difficulty tier (SPEC §3.4). Tool verbs (grapple swing/ascend/rappel, pole-vault, wall-run) are added the same way as any IVerbProvider verb. traversal_graph schema fields are frozen by M1-DATA-01.",
   "deliverables": [
     "services/scenegraph",
     "services/traversal"
@@ -16,7 +16,7 @@
   "acceptance_tests": [
     {
       "id": "AT-1",
-      "test": "The affordance library maps each Bible §4 class to its enabled verbs (Bible §4 matrix); the traversal graph exports nodes and verb-tagged edges into traversal_graph.json.",
+      "test": "The affordance library maps each Bible §4 class to its enabled verbs (Bible §4 matrix); the traversal graph exports nodes and edges into traversal_graph.json, each edge tagged with its verb, T0–T3 difficulty tier, capability cost, and entry + surface prerequisites.",
       "evidence": "sample traversal_graph.json + the affordance table",
       "automated": false,
       "level": "required"
@@ -34,25 +34,41 @@
       "evidence": "code reference",
       "automated": false,
       "level": "required"
+    },
+    {
+      "id": "AT-4",
+      "test": "Tool verbs (grapple swing/ascend/rappel, pole-vault, wall-run) appear as edges through the same affordance mapping, each recording its config/movement.json prerequisites on the edge (grapple anchor reach + min ledge, pole-vault plant window + max gap, wall-run min entry speed + min wall length).",
+      "evidence": "sample traversal_graph.json edges + test",
+      "automated": false,
+      "level": "required"
     }
   ],
   "design": [
-    "Bible §4"
+    "Bible §4",
+    "SPEC §3.4"
   ],
   "depends_on": [
     "M1-SCEN-02"
   ],
   "references": [
-    "SPEC §3.3"
+    "SPEC §3.3",
+    "SPEC §3.4",
+    "AUTH #023",
+    "design/proposals/journey-route-generation-v1.md"
   ],
   "branch": null,
   "pr": null,
   "created": "2026-09-16",
-  "updated": "2026-09-16",
+  "updated": "2026-09-19",
   "history": [
     {
       "date": "2026-09-16",
       "event": "created by the Coordinator (M1 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-19",
+      "event": "sharpened under AUTH #023 (journey generation v1): edges carry T0–T3 difficulty tier, capability cost, and prerequisites; tool verbs (grapple/pole-vault/wall-run) added via the same affordance mapping (AT-4).",
       "by": "coordinator"
     }
   ]
