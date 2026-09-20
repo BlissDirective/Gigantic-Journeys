@@ -10,7 +10,8 @@ Privacy policy, BIPA consent copy, retention schedule, vendor data-retention ter
 | `PRIVACY_POLICY.md` | Public privacy policy (data classes, biometric handling, rights) | — |
 | `BIPA_CONSENT.md` | Biometric consent screen, learn-more sheet, consent record, statute mapping | M0-LEGAL-01 |
 | `RETENTION_SCHEDULE.md` | Publishable retention & destruction schedule + deletion-flow spec | M0-LEGAL-02 |
-| `TERMS_OF_SERVICE.md` | Terms of Service / EULA (UGC rules, moderation, IAP) | — |
+| `TERMS_OF_SERVICE.md` | Terms of Service / EULA (UGC rules, moderation, IAP; Apple 1.2 + AUTH #026) | — |
+| `APP_STORE_UGC_COMPLIANCE.md` | Apple Guideline 1.2 requirement + evidence map (the four pillars, published contact info, DMCA) | M4-DATA-03, M4-GAME-01 |
 | `vendors/` | Vendor data-retention request template, DPA checklist, per-vendor terms on file | M0-LEGAL-03, M0-LEGAL-04 |
 
 All bracketed `[…]` fields are Owner/counsel placeholders. Counsel red-lines these; the consent copy is frozen (its hash) only after sign-off (`SECURITY_CHECKLIST §5.5`).
