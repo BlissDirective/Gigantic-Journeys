@@ -1,0 +1,49 @@
+{
+  "id": "M0-REPO-07",
+  "title": "Triage and merge the open Dependabot CI-action bumps (audit A1)",
+  "milestone": "M0",
+  "area": "REPO",
+  "owner": "coordinator",
+  "qa": null,
+  "status": "open",
+  "priority": "P2",
+  "size": "S",
+  "summary": "Five open Dependabot PRs (#1-5) bump GitHub Actions by major versions (actions/checkout 4->7, actions/setup-python 5->7, actions/setup-dotnet 4->6, actions/cache 4->6, game-ci/unity-builder 4->6). Supply-chain hygiene, but major bumps can change behavior. Rebase each onto main and merge only on green CI; hold any that breaks a workflow with a one-line note. Surfaced by the M0 audit (governance/checkpoints/M0.md, finding A1).",
+  "deliverables": [
+    ".github/workflows"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "Each open Dependabot action-bump PR (#1-5) is rebased onto main and merged only after its CI is green; any bump that breaks a workflow is held (not merged) with a one-line reason.",
+      "evidence": "PR merge/hold notes",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "After merges, the pinned action versions in .github/workflows/*.yml are current and all workflows still parse and pass on main.",
+      "evidence": "green CI run on main",
+      "automated": false,
+      "level": "required"
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §7 dependency pinning and audit"
+  ],
+  "depends_on": [],
+  "references": [
+    "governance/checkpoints/M0.md (audit A1)"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-20",
+  "updated": "2026-09-20",
+  "history": [
+    {
+      "date": "2026-09-20",
+      "event": "created by the Coordinator from the M0 audit (finding A1: open Dependabot CI-action bumps).",
+      "by": "coordinator"
+    }
+  ]
+}
