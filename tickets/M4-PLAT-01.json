@@ -1,0 +1,73 @@
+{
+  "id": "M4-PLAT-01",
+  "title": "Environment package + CDN delivery via signed URLs; unpublish; free-tier cap (AUTH #026)",
+  "milestone": "M4",
+  "area": "PLAT",
+  "owner": "gj-platform",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P0",
+  "size": "L",
+  "summary": "Package the environment (splat, collision mesh, scene graph, environment spec, thumbnail; vendor-neutral, versioned) into Supabase storage behind a CDN and deliver it only through signed URLs (≤15 min TTL) issued server-side after an auth check, with the CDN forwarding the signature. Enforce the free-tier 3-published-live cap at publish; unpublish removes from feeds immediately and frees a slot. Packages carry no location data (SPEC §3.7; security-sensitive → secondary review, AUTH #007).",
+  "deliverables": [
+    "services/reconstruction",
+    "api",
+    "supabase"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "A published package is retrievable only through a signed URL with a TTL ≤15 min issued server-side after an auth check; a direct storage URL is refused; the CDN forwards the signature.",
+      "evidence": "request trace (signed 200, direct 403)",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "Packages and thumbnails carry no location data and no capture metadata beyond the schema (SECURITY_CHECKLIST §4.4).",
+      "evidence": "stripped-package check",
+      "automated": true,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "The free-tier cap (3 published live) is enforced at publish; unpublish frees a slot and removes the environment from all feeds immediately.",
+      "evidence": "cap-enforcement test + unpublish test",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-4",
+      "test": "No storage or CDN credential appears in the repo; secrets live only in .env.local / CI.",
+      "evidence": "secret-scan green",
+      "automated": true,
+      "level": "required"
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §3.1 signed URLs",
+    "SECURITY_CHECKLIST §3.3 CDN forwards signature",
+    "SECURITY_CHECKLIST §4.4 no location data",
+    "SECURITY_CHECKLIST §1 secret hygiene"
+  ],
+  "depends_on": [
+    "M1-CAPT-02",
+    "M1-DATA-01"
+  ],
+  "references": [
+    "AUTH #026",
+    "SPEC §3.7",
+    "design/proposals/publish-browse-rank-moderation-v1.md"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-20",
+  "updated": "2026-09-20",
+  "history": [
+    {
+      "date": "2026-09-20",
+      "event": "created by the Coordinator (M4 decomposition, AUTH #026).",
+      "by": "coordinator"
+    }
+  ]
+}

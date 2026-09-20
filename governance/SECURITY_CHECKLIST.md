@@ -111,6 +111,7 @@ The app holds two sensitive things: biometric imagery (faces, bodies) and photog
 | 10.2 | Ratings and reports are rate-limited per user and device; the ranking has anti-gaming rules and passes a rate-spam test (M4 exit). | G (M4) |
 | 10.3 | Leaderboard times are validated against route length and movement constants; impossible times are rejected. | G (M4) |
 | 10.4 | The moderation queue shows an "Under review" state, escalates to the Owner, and gives Bots no raw media beyond the published thumbnail and package. | G (M4) |
+| 10.5 | UGC meets Apple guideline 1.2: an automated content filter (the vision pass) clears environments before they are public, a one-tap report + human queue give a timely response, abusive users can be blocked, and developer contact info is published (auto-clear + human-on-report, AUTH #026). | G (M4) |
 
 ## 11. Incident response
 

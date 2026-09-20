@@ -1,0 +1,48 @@
+{
+  "id": "M4-FORE-01",
+  "title": "M4 checkpoint report (AUTH #026)",
+  "milestone": "M4",
+  "area": "FORE",
+  "owner": "gj-foreman",
+  "qa": null,
+  "status": "open",
+  "priority": "P0",
+  "size": "S",
+  "summary": "M4 checkpoint report (mirrors M0-FORE-04 / M1-FORE-01): summarize M4 completion against the exit tests (publish → moderation → browse → rate → report; ranking rate-spam; leaderboard plausibility) and the SECURITY_CHECKLIST §12 M4 gates (§10.2/§10.4/§10.5), with any residual risk and follow-ups (incl. the in-house UGC ToS/EULA + published contact info).",
+  "deliverables": [
+    "governance/checkpoints/M4.md"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "A checkpoint report records the M4 exit-test results, the §12 M4 security gates (moderation, anti-gaming, Apple 1.2), and residual risk / follow-ups.",
+      "evidence": "governance/checkpoints/M4.md",
+      "automated": false,
+      "level": "required"
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §12 M4 gates"
+  ],
+  "depends_on": [
+    "M4-QA-01",
+    "M4-DATA-03",
+    "M4-GAME-01",
+    "M4-PLAT-01"
+  ],
+  "references": [
+    "AUTH #026",
+    "SPEC §8"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-20",
+  "updated": "2026-09-20",
+  "history": [
+    {
+      "date": "2026-09-20",
+      "event": "created by the Coordinator (M4 decomposition, AUTH #026).",
+      "by": "coordinator"
+    }
+  ]
+}

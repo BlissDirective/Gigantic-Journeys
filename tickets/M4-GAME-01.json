@@ -1,0 +1,69 @@
+{
+  "id": "M4-GAME-01",
+  "title": "In-app publish, browse, rating, report (wire decisions 8/9 to the backend) (AUTH #026)",
+  "milestone": "M4",
+  "area": "GAME",
+  "owner": "gj-gameplay",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P0",
+  "size": "L",
+  "summary": "Wire the locked browse cards (DESIGN_SYSTEM decision 8) and results/store (decision 9) to the backend: publish from the results screen; browse feeds (Top this week / New / Near your scale) with diorama cards; the four-axis rating sheet; one-tap report + reason sheet; the 'Under review' badge; creator stats on the creator's own environments; deep links. No UI redesign — decisions 8/9 are locked (SPEC §3.7).",
+  "deliverables": [
+    "unity/Assets/Social",
+    "api"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "Browse shows diorama cards in the three sort tabs (Top this week / New / Near your scale); tapping Journey plays a published environment fetched via a signed URL.",
+      "evidence": "clip of browse → play",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "The four-axis rating sheet and the one-tap report + reason sheet post to the backend (rate-limited); the 'Under review' badge shows on the creator's pending environments.",
+      "evidence": "clip + backend rows",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "Publish from the results screen (decision 9) triggers the moderation pipeline (M4-DATA-03); creator stats (plays, completions, best times) show on the creator's own environments (creator-only in v1).",
+      "evidence": "clip of publish + creator stats",
+      "automated": false,
+      "level": "required"
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §3 signed URLs",
+    "SECURITY_CHECKLIST §10.2 rate-limits"
+  ],
+  "design": [
+    "DESIGN_SYSTEM decision 8",
+    "DESIGN_SYSTEM decision 9",
+    "Design Skills §3.10"
+  ],
+  "depends_on": [
+    "M4-PLAT-01",
+    "M4-DATA-01",
+    "M4-DATA-03"
+  ],
+  "references": [
+    "AUTH #026",
+    "SPEC §3.7",
+    "design/proposals/publish-browse-rank-moderation-v1.md"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-20",
+  "updated": "2026-09-20",
+  "history": [
+    {
+      "date": "2026-09-20",
+      "event": "created by the Coordinator (M4 decomposition, AUTH #026).",
+      "by": "coordinator"
+    }
+  ]
+}

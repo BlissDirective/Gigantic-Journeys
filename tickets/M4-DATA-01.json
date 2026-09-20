@@ -1,0 +1,73 @@
+{
+  "id": "M4-DATA-01",
+  "title": "Social data model + RLS + rate-limits (environments, ratings, reports, leaderboard, moderation) (AUTH #026)",
+  "milestone": "M4",
+  "area": "DATA",
+  "owner": "gj-platform",
+  "qa": "gj-qa-release",
+  "reviewers": [
+    "gj-data"
+  ],
+  "status": "open",
+  "priority": "P0",
+  "size": "L",
+  "summary": "Supabase migrations for the social tables (environments, publishes, ratings, reports, leaderboard_times, moderation_actions) with RLS on every table and the locked policy patterns: owner-only for drafts and creator stats, published-read (published AND moderation-cleared) for public browse/play, service-role-only for the moderation queue and ranking jobs. Ratings, reports, and time submissions are rate-limited per user and device (SPEC §3.7; security-sensitive → secondary review, AUTH #007).",
+  "deliverables": [
+    "supabase",
+    "api"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "Every new table enables RLS with at least one policy in the same migration (supabase/scripts/check_rls.py green); policies implement owner-only, published-read (published AND cleared), and service-role-only per SECURITY_CHECKLIST §2.2.",
+      "evidence": "migration + check_rls run",
+      "automated": true,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "A two-user + anon test proves an unpublished or not-yet-cleared environment is invisible to others, and a published+cleared one is readable; a moderation-queue row is service-role-only.",
+      "evidence": "policy test names",
+      "automated": true,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "Ratings, reports, and leaderboard-time submissions are rate-limited per user and device (SECURITY_CHECKLIST §10.2).",
+      "evidence": "rate-limit test",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-4",
+      "test": "No secret appears in the repo; secret-scan green.",
+      "evidence": "secret-scan green",
+      "automated": true,
+      "level": "required"
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §2.1 RLS on every table",
+    "SECURITY_CHECKLIST §2.2 policy patterns",
+    "SECURITY_CHECKLIST §10.2 rate-limits"
+  ],
+  "depends_on": [
+    "M0-DATA-01"
+  ],
+  "references": [
+    "AUTH #026",
+    "SPEC §3.7",
+    "design/proposals/publish-browse-rank-moderation-v1.md"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-20",
+  "updated": "2026-09-20",
+  "history": [
+    {
+      "date": "2026-09-20",
+      "event": "created by the Coordinator (M4 decomposition, AUTH #026).",
+      "by": "coordinator"
+    }
+  ]
+}

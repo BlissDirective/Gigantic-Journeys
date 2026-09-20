@@ -1,0 +1,64 @@
+{
+  "id": "M4-DATA-03",
+  "title": "Moderation pipeline + queue + appeal + Apple 1.2 UGC compliance (AUTH #026)",
+  "milestone": "M4",
+  "area": "DATA",
+  "owner": "gj-data",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P0",
+  "size": "L",
+  "summary": "The publish moderation pipeline (SPEC §3.7, auto-clear + human-on-report): server-side GPS/EXIF re-strip → automated vision pass → auto-clear to public or route low-confidence to a human queue; under-review/cleared/rejected states with a one-line rejection reason + appeal; the human queue (gj-data, escalate to Owner) handles low-confidence flags, all user reports, and appeals, with no raw media to Bots beyond the thumbnail + package. Satisfies Apple guideline 1.2: content filter, report + timely response, block abusive users, published developer contact info. The UGC ToS/EULA copy is an in-house legal-team item. Security-sensitive → secondary review (AUTH #007).",
+  "deliverables": [
+    "services",
+    "api"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "Publish runs server-side GPS/EXIF re-strip → vision pass → auto-clear to public or route to the human queue on low confidence; the environment is creator-only until cleared; a rejection gives a one-line reason and an appeal.",
+      "evidence": "pipeline run through each state",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "One-tap reports (rate-limited) enter the queue and show 'Under review' to the reporter; the queue escalates to the Owner and exposes no raw media to Bots beyond the thumbnail + package (SECURITY_CHECKLIST §10.4).",
+      "evidence": "report → queue trace",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "Abusive users can be blocked and developer contact info is published (Apple 1.2 #3/#4); the vision pass covers the report reasons (private info visible, inappropriate, not a real place, broken) (SECURITY_CHECKLIST §10.5).",
+      "evidence": "block flow + contact-info + filter-coverage note",
+      "automated": false,
+      "level": "required"
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §10.4 moderation queue",
+    "SECURITY_CHECKLIST §10.5 Apple 1.2 UGC",
+    "SECURITY_CHECKLIST §6.1 source media deletion"
+  ],
+  "depends_on": [
+    "M4-DATA-01",
+    "M4-PLAT-01"
+  ],
+  "references": [
+    "AUTH #026",
+    "SPEC §3.7",
+    "design/proposals/publish-browse-rank-moderation-v1.md"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-20",
+  "updated": "2026-09-20",
+  "history": [
+    {
+      "date": "2026-09-20",
+      "event": "created by the Coordinator (M4 decomposition, AUTH #026): Owner chose auto-clear + human-on-report.",
+      "by": "coordinator"
+    }
+  ]
+}

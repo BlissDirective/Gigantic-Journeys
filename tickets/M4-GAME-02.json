@@ -1,0 +1,70 @@
+{
+  "id": "M4-GAME-02",
+  "title": "Leaderboards + time-trial integrity (ghosts + plausibility floor) (AUTH #026)",
+  "milestone": "M4",
+  "area": "GAME",
+  "owner": "gj-gameplay",
+  "qa": "gj-qa-release",
+  "reviewers": [
+    "gj-data"
+  ],
+  "status": "open",
+  "priority": "P1",
+  "size": "L",
+  "summary": "Per-route time trials with a ghost replay for the UX and a plausibility floor for integrity (SPEC §3.7, Owner chose plausibility floor): a submitted time is accepted only if it clears the deterministic reachability validator's theoretical minimum for that route (reuse M1-SCEN-05 and the same config/movement.json constants) plus telemetry sanity checks; impossible or anomalous times are rejected. Times are rate-limited and tied to a completed, validated run.",
+  "deliverables": [
+    "unity/Assets/Social",
+    "services/traversal",
+    "api"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "Submitting a route time records it and shows a ghost; a time below the validator's theoretical minimum for that route is rejected, reusing the M1-SCEN-05 validator and config/movement.json constants (no duplicated numbers).",
+      "evidence": "submit test (valid accepted, sub-minimum rejected)",
+      "automated": true,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "Telemetry sanity checks reject anomalous runs; times are rate-limited per user and device and tied to a completed, validated run (SECURITY_CHECKLIST §10.3).",
+      "evidence": "anomaly + rate-limit tests",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "A scripted impossible-time submission is rejected in a test.",
+      "evidence": "test name",
+      "automated": true,
+      "level": "suggested"
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §10.3 leaderboard plausibility"
+  ],
+  "design": [
+    "SPEC §3.4 validator contract"
+  ],
+  "depends_on": [
+    "M1-SCEN-05",
+    "M4-DATA-01",
+    "M4-GAME-01"
+  ],
+  "references": [
+    "AUTH #026",
+    "SPEC §3.7",
+    "design/proposals/publish-browse-rank-moderation-v1.md"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-20",
+  "updated": "2026-09-20",
+  "history": [
+    {
+      "date": "2026-09-20",
+      "event": "created by the Coordinator (M4 decomposition, AUTH #026): Owner chose the plausibility-floor integrity model (full replay verification deferred).",
+      "by": "coordinator"
+    }
+  ]
+}

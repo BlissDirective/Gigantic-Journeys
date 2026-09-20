@@ -1,0 +1,62 @@
+{
+  "id": "M4-DATA-02",
+  "title": "Ranking + anti-gaming: balanced blend, Top-this-week decay, rate-spam resistance (AUTH #026)",
+  "milestone": "M4",
+  "area": "DATA",
+  "owner": "gj-data",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P0",
+  "size": "L",
+  "summary": "The ranking pipeline (SPEC §3.7): a balanced blend of the four-axis community ratings (fun/interesting/interactive/exciting) and derived objective signals (verticality, move variety, reachable volume, completion rate, replay rate), with a time-decay for 'Top this week', recency for 'New', and a Room/Tabletop filter for 'Near your scale'. Weights are telemetry-tunable (config-driven, not hardcoded). Anti-gaming (rate-limits, one-rating-per-account-per-environment, self-rating and brigade detection) must survive a deliberate rate-spam test (M4 exit).",
+  "deliverables": [
+    "services",
+    "api"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "The ranking blends the four-axis ratings and the five derived signals into a score with config-driven (tunable) weights; derived signals are computed from the environment_spec / telemetry, never creator-supplied.",
+      "evidence": "ranking config + a computed-score sample",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "'Top this week' applies a time-decay, 'New' is recency, and 'Near your scale' filters Room vs Tabletop.",
+      "evidence": "feed query tests",
+      "automated": true,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "Anti-gaming survives a deliberate rate-spam test (M4 exit): a scripted spam attack does not materially move an environment's rank (SECURITY_CHECKLIST §10.2).",
+      "evidence": "rate-spam test report",
+      "automated": false,
+      "level": "required"
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §10.2 anti-gaming + rate-spam"
+  ],
+  "depends_on": [
+    "M4-DATA-01",
+    "M1-DATA-01"
+  ],
+  "references": [
+    "AUTH #026",
+    "SPEC §3.7",
+    "design/proposals/publish-browse-rank-moderation-v1.md"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-20",
+  "updated": "2026-09-20",
+  "history": [
+    {
+      "date": "2026-09-20",
+      "event": "created by the Coordinator (M4 decomposition, AUTH #026): Owner chose the balanced-blend ranking.",
+      "by": "coordinator"
+    }
+  ]
+}

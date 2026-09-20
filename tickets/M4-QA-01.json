@@ -1,0 +1,65 @@
+{
+  "id": "M4-QA-01",
+  "title": "M4 exit harness: 50 published environments, zero moderation misses, rate-spam + plausibility tests (AUTH #026)",
+  "milestone": "M4",
+  "area": "QA",
+  "owner": "gj-qa-release",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P0",
+  "size": "M",
+  "summary": "The M4 exit test (SPEC §8): drive 50 tester-published environments through publish → moderation → browse → rate → report end to end; confirm zero moderation misses in the Owner's review; verify the ranking survives a deliberate rate-spam test and the leaderboard rejects impossible times. Per SPEC §11 the human-judgment measures are suggestions; the security tests (rate-spam, plausibility) are merge gates.",
+  "deliverables": [
+    "qa/reports/M4-exit.md"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "50 published environments flow through publish → moderation → browse → rate → report end to end without pipeline breakage.",
+      "evidence": "qa/reports/M4-exit.md",
+      "automated": false,
+      "level": "suggested"
+    },
+    {
+      "id": "AT-2",
+      "test": "Zero moderation misses in the Owner's review of the 50 (an Owner-judgment measure per SPEC §11, not a CI merge gate).",
+      "evidence": "Owner review note",
+      "automated": false,
+      "level": "suggested"
+    },
+    {
+      "id": "AT-3",
+      "test": "The ranking survives a deliberate rate-spam test and the leaderboard rejects a scripted impossible time (SECURITY_CHECKLIST §10.2/§10.3 — merge gates).",
+      "evidence": "test reports",
+      "automated": false,
+      "level": "required"
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §10.2 rate-spam",
+    "SECURITY_CHECKLIST §10.3 plausibility",
+    "SECURITY_CHECKLIST §10.5 Apple 1.2"
+  ],
+  "depends_on": [
+    "M4-DATA-02",
+    "M4-DATA-03",
+    "M4-GAME-01",
+    "M4-GAME-02"
+  ],
+  "references": [
+    "AUTH #026",
+    "SPEC §3.7",
+    "SPEC §8"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-20",
+  "updated": "2026-09-20",
+  "history": [
+    {
+      "date": "2026-09-20",
+      "event": "created by the Coordinator (M4 decomposition, AUTH #026).",
+      "by": "coordinator"
+    }
+  ]
+}
