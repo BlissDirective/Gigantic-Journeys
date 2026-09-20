@@ -1,0 +1,69 @@
+{
+  "id": "M1-CAPT-04",
+  "title": "On-device reconstruction-readiness predictor + multi-pass 'add a pass' loop (AUTH #025)",
+  "milestone": "M1",
+  "area": "CAPT",
+  "owner": "gj-capture",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P1",
+  "size": "M",
+  "summary": "Before upload, compute a cheap on-device reconstruction-readiness score from ARKit signals (coverage, overlap/parallax, blur ratio, light, tracking continuity) and, when it is thin, recommend 'add a quick pass over here' — letting the player append passes to the SAME scan before upload (a multi-pass loop) that merge into one upload bundle. Extends the locked coaching UI (DESIGN_SYSTEM decision 6) and builds on M1-CAPT-01's base capture + gate. Kind, never a hard stop (SPEC §3.1, AUTH #025).",
+  "deliverables": [
+    "unity/Assets/Capture"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "An on-device readiness score is computed from coverage, overlap/parallax, blur ratio, light, and ARKit tracking continuity; on the corpus a higher score correlates with fewer reconstruction failures (the score is predictive, not cosmetic).",
+      "evidence": "score vs reconstruction-outcome table on the corpus",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "When the score is thin, an 'add a pass' prompt points at the weakest region (extends the decision-6 missed-corner arrow) and appending a pass raises coverage on the same scan without restarting; the appended passes merge into one upload bundle (M1-CAPT-01 contract).",
+      "evidence": "clip of the loop + a merged bundle manifest",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "The loop never hard-stops: 'Upload anyway' is always available (SPEC §3.1, decision 6c/6e); it reuses the locked coverage-wash + arrow language and respects Reduce Motion (DESIGN_SYSTEM decision 10).",
+      "evidence": "clip of upload-anyway + Reduce Motion on",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-4",
+      "test": "On the corpus, first-try reconstruction success is higher with the predictor + multi-pass loop on than off.",
+      "evidence": "qa/reports/M1-capture-readiness.md",
+      "automated": false,
+      "level": "suggested"
+    }
+  ],
+  "security": [],
+  "design": [
+    "DESIGN_SYSTEM decision 6",
+    "Design Skills §3.5"
+  ],
+  "depends_on": [
+    "M1-CAPT-01"
+  ],
+  "references": [
+    "AUTH #025",
+    "SPEC §3.1",
+    "design/proposals/capture-ux-coaching-v1.md"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-20",
+  "updated": "2026-09-20",
+  "history": [
+    {
+      "date": "2026-09-20",
+      "event": "created by the Coordinator as the AUTH #025 follow-up (Owner chose the predictor + multi-pass loop fork).",
+      "by": "coordinator"
+    }
+  ]
+}

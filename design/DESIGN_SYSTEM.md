@@ -123,6 +123,8 @@ Binding constraints: coach steady motion, overlap, angles, light; live coverage 
 - Progress and timing: a ring around the record button fills over 90 s as a target, not a limit; past three minutes it turns amber with "Long captures rebuild worse"; the coverage percentage sits inside the ring; Done appears at 60 % coverage or 60 s, whichever comes first.
 - Primary action and states: one 72 pt record button (neutral at rest, teal while recording, Done afterward as the single primary action); a 5 s preview before upload with Retake.
 
+**Extension (AUTH #025, 2026-09-20):** an **on-device reconstruction-readiness predictor + multi-pass "add a pass" loop.** Before upload, a cheap on-device readiness score (coverage, overlap/parallax, blur, light, tracking continuity) can extend the missed-corner arrow into "add a quick pass over here," letting the player append passes to the *same* scan before uploading. It reuses the locked coverage wash + arrow language, keeps "Upload anyway" always available, and never hard-stops. Ticket M1-CAPT-04.
+
 
 ## 7. Create-flow waiting states — LOCKED 2026-09-16 (AUTH #005)
 

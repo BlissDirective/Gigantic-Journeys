@@ -24,7 +24,7 @@
     },
     {
       "id": "AT-2",
-      "test": "services/reconstruction/corpus/manifest.schema.json and manifest.json describe each capture: id, mode (room/tabletop), lighting, duration, device, object classes present (Bible §1 examples), notes; no GPS, addresses, or people.",
+      "test": "services/reconstruction/corpus/manifest.schema.json and manifest.json describe each capture: id, mode (room/tabletop), lighting, duration, device, object classes present (Bible §1 examples), readiness score + coverage summary (to match the live upload bundle, SPEC §3.1), notes; no GPS, addresses, or people.",
       "evidence": "files in PR; validate in test",
       "automated": true,
       "level": "required"
@@ -52,12 +52,14 @@
   "depends_on": [],
   "references": [
     "kit §3.1 (corpus ownership)",
-    "SPEC §3.1"
+    "SPEC §3.1",
+    "AUTH #025",
+    "design/proposals/capture-ux-coaching-v1.md"
   ],
   "branch": null,
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-15",
+  "updated": "2026-09-20",
   "history": [
     {
       "date": "2026-09-15",
@@ -67,6 +69,11 @@
     {
       "date": "2026-09-15",
       "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-20",
+      "event": "sharpened under AUTH #025 (capture UX): manifest carries readiness score + coverage summary so the corpus manifest and the live upload bundle share one shape (AT-2).",
       "by": "coordinator"
     }
   ]

@@ -8,7 +8,7 @@
   "status": "open",
   "priority": "P0",
   "size": "L",
-  "summary": "Room walkthrough capture in the app: record video with ARKit camera poses and depth, live coverage and speed coaching, blur rejection, and a pre-upload quality gate, producing an upload bundle for reconstruction. Coaching UI follows DESIGN_SYSTEM §6 once locked.",
+  "summary": "Guided capture in the app (room walkthrough + tabletop orbital, one illustrated toggle): record video with ARKit camera poses and depth, live coverage and speed coaching, blur rejection, and a pre-upload quality gate, producing an upload bundle for reconstruction (the capture→reconstruction contract). Coaching UI follows the locked DESIGN_SYSTEM §6; the pre-upload gate uses an on-device reconstruction-readiness score (coverage, overlap/parallax, blur, light, tracking continuity). Includes both mode coaching scripts, failure/recovery (tracking-loss relocalize, resume, downstream free retry), and first-run guided capture per SPEC §3.1 (AUTH #025). The on-device predictor + multi-pass 'add a pass' loop is M1-CAPT-04.",
   "deliverables": [
     "unity/Assets/Capture",
     "services/reconstruction"
@@ -16,7 +16,7 @@
   "acceptance_tests": [
     {
       "id": "AT-1",
-      "test": "A capture session records video plus per-frame ARKit poses and available depth into a bundle matching the upload contract in services/reconstruction; a session over a real room produces a valid bundle.",
+      "test": "A capture session records video plus per-frame ARKit poses, camera intrinsics, available LiDAR depth, the gravity/up vector and metric scale, and the mode + readiness score + coverage map into a bundle matching the upload contract in services/reconstruction (one shape shared with the M0-CAPT-01 corpus manifest); a session over a real room produces a valid bundle.",
       "evidence": "clip + a sample bundle manifest in the PR",
       "automated": false,
       "level": "required"
@@ -30,7 +30,7 @@
     },
     {
       "id": "AT-3",
-      "test": "A quality gate blocks upload on too-dark or too-fast captures with a kind, actionable message; the player can retake; nothing hard-crashes.",
+      "test": "The pre-upload gate computes an on-device reconstruction-readiness score (coverage, overlap/parallax, blur, light, tracking continuity) and warns kindly on a weak scan ('Too dark here — turn on a lamp?'); it never hard-stops ('Upload anyway' always available); the player can retake; nothing hard-crashes.",
       "evidence": "clip of the gate firing",
       "automated": false,
       "level": "required"
@@ -48,6 +48,13 @@
       "evidence": "debug overlay / timing note",
       "automated": false,
       "level": "suggested"
+    },
+    {
+      "id": "AT-6",
+      "test": "Failure/recovery holds: ARKit tracking loss relocalizes and keeps coverage; an interruption (call/app-switch) offers Resume or Start over; a downstream reconstruction failure returns a kind, free retry that preserves the mode. The first capture after the demo shows a one-time richer coach-through.",
+      "evidence": "clips of each path",
+      "automated": false,
+      "level": "required"
     }
   ],
   "security": [
@@ -65,16 +72,23 @@
   ],
   "references": [
     "kit RESUME M1",
-    "SPEC §3.1"
+    "SPEC §3.1",
+    "AUTH #025",
+    "design/proposals/capture-ux-coaching-v1.md"
   ],
   "branch": null,
   "pr": null,
   "created": "2026-09-16",
-  "updated": "2026-09-16",
+  "updated": "2026-09-20",
   "history": [
     {
       "date": "2026-09-16",
       "event": "created by the Coordinator (M1 decomposition)",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-20",
+      "event": "sharpened under AUTH #025 (capture UX + coaching): reconstruction-readiness gate signals (AT-3); named upload-contract contents (AT-1); both mode coaching scripts; failure/recovery + first-run coach-through (AT-6). On-device predictor + multi-pass loop split to M1-CAPT-04.",
       "by": "coordinator"
     }
   ]

@@ -1,6 +1,6 @@
 # Gigantic Journeys — SPEC.md
 
-Version 1.7 · 2026-09-19 · Owner: BlissDirective (SparkForge Labs) · Maintainer: Coordinator (Claude Code)
+Version 1.8 · 2026-09-20 · Owner: BlissDirective (SparkForge Labs) · Maintainer: Coordinator (Claude Code)
 
 **Authority.** This file is the only authority on *what* v1 is. Below it rank `design/MOVEMENT_BIBLE.md` v1.0 (how the avatar moves), `design/Gigantic-Journey-Design-Skills.md` v1.1 with `design/DESIGN_SYSTEM.md` (how it looks and feels), then `ADRs/` (how it is built). Where documents disagree, this file wins until an authorized change says otherwise.
 
@@ -30,10 +30,14 @@ Identity: name "Gigantic Journeys"; bundle id `com.sparkforgelabs.giganticjourne
 ## 3. v1 scope (in)
 
 ### 3.1 Capture: indoor rooms and tabletop builds
-- Two guided modes: **room walkthrough** (chest-height arc around the space) and **tabletop orbital** (slow circle at two heights). Mode chosen by one toggle with an illustration, never a settings page.
-- ARKit camera poses and depth recorded alongside video (LiDAR depth when the device has it; ARKit poses give metric scale without it). Live coverage heat-map; speed meter that turns amber when moving too fast; blur rejection with a gentle haptic; a "you missed this corner" hint before upload; a quality gate that rejects early and kindly ("Too dark here — turn on a lamp?").
-- Passes of 1–3 minutes; active capture under 90 seconds.
-- GPS and EXIF stripped on device before upload and verified again server-side.
+- **Flow:** Scan → in-context camera permission (value-first, never on launch) → the illustrated mode toggle → framing/relocalize → coached capture → missed-corner check → quality gate → a 5 s preview with Retake → on-device strip + bundle → upload, handing off to the create waiting state (decision 7). The coaching UI is locked (DESIGN_SYSTEM decision 6); this section is the system around it.
+- Two guided modes, each with its own coaching script (Design Skills rule 13): **room walkthrough** (chest-height arc around the space; sweep back for overlap; a low and a high pass where there is verticality) and **tabletop orbital** (slow circle at two heights, keep the build centered). Mode chosen by one toggle with an illustration, never a settings page.
+- ARKit camera poses and depth recorded alongside video (LiDAR depth when the device has it; ARKit poses give metric scale without it). Live coverage wash, a speed meter that turns amber when moving too fast, and blur rejection with a gentle haptic — all per decision 6.
+- **Reconstruction-readiness quality gate:** before upload the app computes a cheap **on-device readiness score** from coverage, overlap/parallax, blur ratio, light, and ARKit tracking continuity, and rejects early and kindly ("Too dark here — turn on a lamp?"). When the score is thin it recommends **"add a quick pass"** at the weak region and lets the player **append passes to the same scan** (a multi-pass loop) before uploading; it never hard-stops ("Upload anyway" is always available) — AUTH #025.
+- **Upload bundle (the capture→reconstruction contract):** compressed video, per-frame ARKit poses, camera intrinsics, optional LiDAR depth, the gravity/up vector and metric scale, and the mode + readiness score + coverage map so failures can be diagnosed. It shares one shape with the corpus manifest (M0-CAPT-01).
+- Passes of 1–3 minutes; active capture under 90 seconds. **Failure/recovery:** tracking loss relocalizes and keeps progress; an interruption offers Resume or Start over; a downstream reconstruction failure returns a kind, free retry that preserves the mode and the user's place in the loop.
+- **First-run:** after the play-first demo (rule 9), the first capture gets a one-time, richer coach-through that does not repeat on later scans.
+- GPS and EXIF stripped on device before upload and verified again server-side. **People who wander into frame** are handled by coaching ("scan spaces, not people") and the opt-in publish-time moderation pass — no on-device person detection in v1 (§3.9); processing stays on our own infrastructure.
 - Reconstruction into a Gaussian splat plus a collision mesh via a **self-hosted pipeline** (gsplat/Brush + COLMAP + Open3D), with a managed bridge (KIRI, corpus-only) for early validation (ADR-0005). The package format is vendor-neutral. User home imagery is processed on our own infrastructure.
 - Well-lit indoor rooms and tabletop builds only.
 
@@ -99,6 +103,7 @@ The captured place must feel real and alive at 15 cm; sound and reactivity are t
 - A training opt-in toggle for derived scan/telemetry data, default off, derived data only; per-user deletion of everything.
 - 13+ age gate; no COPPA scope in v1.
 - GPS and EXIF stripped from every upload. Reconstruction runs on our own infrastructure (self-host); any managed bridge (KIRI) processes only the consented corpus, never real user scans, so no third party touches real user data in v1.
+- **People in a scan:** capture coaches "scan spaces, not people" rather than detecting faces on device; because processing stays on our own infrastructure and GPS/EXIF are stripped, the capture-time control is the coaching, and any **published** environment additionally passes the §3.7 vision moderation pass. On-device person detection/blur is a deferred option, not v1 (AUTH #025).
 - App Store privacy labels accurate to the frozen telemetry schema (the Play data safety form joins when Android ships).
 
 ### 3.10 Platform and backend
@@ -236,3 +241,4 @@ Apple's first foldable iPhone ships October 23, 2026 (7.6-inch inner display, 5.
 | 1.5 | 2026-09-19 | Sound design + environment reactivity (AUTH #022): deepened §3.6 — scale-aware acoustics (reverb from the reconstructed room), material×event sound bank for all verbs/tools, spatialization + ambience + mix, restrained adaptive music, Tier 1 reactivity extended to tools, muted-playable accessibility; Tier 2 physics stays research | AUTH #022 (Owner instruction) |
 | 1.6 | 2026-09-19 | Journey generation v1 (AUTH #023): deepened §3.4 — T0–T3 verb-difficulty model; per-environment rising-difficulty routes with a global difficulty score as metadata; beat-per-tier (beat 1 = T0 only) with the twist as the signature/tool beat; traversal tools may be required to reach the summit when taught in an earlier beat (never beat 1); vista scoring; retry→template-fallback guarantee; validator checks entry/surface prerequisites | AUTH #023 (Owner instruction) |
 | 1.7 | 2026-09-19 | Character roster art spec (AUTH #024): roster = 8 at launch on an inclusive casting matrix (≥6 floor); one enforced rig standard (Unity Humanoid, IK/contact markers, AUTH #021 tool sockets, rig-conformance gate); grounded semi-photoreal fidelity for v1 with a V2 hero-photoreal roadmap on the same rig; cosmetic SKUs gated by a verb+tool clip test; dual-track sourcing (open-base primary at $0, leaner license contingency); §3.2/§3.8/§8 + DESIGN_SYSTEM decision 4 updated | AUTH #024 (Owner instruction) |
+| 1.8 | 2026-09-20 | Capture UX + coaching (AUTH #025): deepened §3.1 into a capture system around the locked coaching UI — flow/state machine, room + tabletop coaching scripts, a reconstruction-readiness quality gate (coverage/overlap/blur/light/tracking), the capture→reconstruction upload contract, failure/recovery, first-run guided capture; an on-device readiness predictor + multi-pass "add a pass" loop (extends DESIGN_SYSTEM decision 6); §3.9 — people in frame handled by coaching + publish-time moderation, no on-device person detection in v1 | AUTH #025 (Owner instruction) |

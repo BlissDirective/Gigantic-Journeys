@@ -44,7 +44,7 @@
     },
     {
       "id": "AT-5",
-      "test": "Ten corpus rooms reconstruct end to end; failure modes are logged with the input that caused them.",
+      "test": "Ten corpus rooms reconstruct end to end; failure modes are logged with the input that caused them, including the on-device readiness score and coverage map; a downstream failure returns the kind free-retry handoff (SPEC §3.1, AUTH #025).",
       "evidence": "qa/reports/M1-recon.md",
       "automated": false,
       "level": "suggested"
@@ -64,12 +64,15 @@
   ],
   "references": [
     "ADR-0005",
-    "kit RESUME M1"
+    "kit RESUME M1",
+    "SPEC §3.1",
+    "AUTH #025",
+    "design/proposals/capture-ux-coaching-v1.md"
   ],
   "branch": null,
   "pr": null,
   "created": "2026-09-16",
-  "updated": "2026-09-18",
+  "updated": "2026-09-20",
   "history": [
     {
       "date": "2026-09-16",
@@ -79,6 +82,11 @@
     {
       "date": "2026-09-18",
       "event": "Retargeted from Luma to the ADR-0005 reconstruction backend (self-host / managed bridge); backend + terms now come from the M1-CAPT-03 spike. Luma-specific blocked_by removed; references updated to ADR-0005.",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-20",
+      "event": "sharpened under AUTH #025 (capture UX): failures log the on-device readiness score + coverage map, and return the kind free-retry handoff (AT-5).",
       "by": "coordinator"
     }
   ]
