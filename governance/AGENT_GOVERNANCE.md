@@ -21,12 +21,14 @@ Cursor is retired from the automated loop (keep it as a personal editor if you l
 
 The kit's **Foreman** role is absorbed: with no multi-Bot team to coordinate, ticket assignment, the queue, standups, and checkpoint reports fall to the Coordinator (and VM/computer-use setup to the Operator). There is no separate Foreman Bot.
 
+> **AUTH #027 (2026-09-23) — unified in-session roles.** At the Owner's direction, one Claude Code session may act as **Builder + secondary reviewer + Coordinator together** (write code, self-review, and coordinate in a single session); the separate-context split above is a preference, not a requirement, for this build. The retained invariants still bind: no secrets in the repo, **only the Owner approves AUTHs** (the agent never self-approves), no merge on red CI, protected paths need `APPROVED #n`. The reduced independent-eyes separation is the accepted residual risk.
+
 ## 2. The routing rule (the money-saver)
 
 For any task, route by **tool surface**, cheapest capable agent first:
 
 1. **Can it be done with code, a CLI, an API, or Unity `-batchmode`?** → Claude Code **Builder**. This is the default and covers most work.
-2. **Does it need a screen with no API or CLI path** (importing a scan into the Unity Editor visually, a vendor dashboard, a console step, visual QA screenshots), **or is it long-running and unattended** (babysitting the Luma reconstruction queue, watching a cost dashboard for hours)? → Grok Bot **Operator**.
+2. **Does it need a screen with no API or CLI path** (importing a scan into the Unity Editor visually, a vendor dashboard, a console step, visual QA screenshots), **or is it long-running and unattended** (babysitting the reconstruction queue — self-host / KIRI corpus-only — watching a cost dashboard for hours)? → Grok Bot **Operator**.
 3. **Is it governance, review, or merge?** → **Coordinator**.
 4. **Is it spend, an account, physical capture, or a design or plan change?** → **Owner** (an AUTH REQUEST or an OWNER ticket).
 

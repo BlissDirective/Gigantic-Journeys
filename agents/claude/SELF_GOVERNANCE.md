@@ -2,7 +2,7 @@
 
 `agents/claude/SELF_GOVERNANCE.md` · v1.0 · 2026-09-17 · Status: LOCKED except by AUTH (design-change) · Authorization: APPROVED #006
 
-Rules every Claude Code session on this project follows, in **both** roles (Builder and Coordinator), to do the most useful work per token. Read at the start of every session alongside the role doc (`BUILDER.md` or `COORDINATOR.md`).
+Rules every Claude Code session on this project follows, in **both** roles (Builder and Coordinator) — which, per **AUTH #027**, one session may exercise together — to do the most useful work per token. Read at the start of every session alongside the role doc (`BUILDER.md` or `COORDINATOR.md`).
 
 ## 0. What "optimize usage" means on Claude Max
 
