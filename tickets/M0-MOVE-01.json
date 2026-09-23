@@ -5,7 +5,7 @@
   "area": "MOVE",
   "owner": "gj-gameplay",
   "qa": null,
-  "status": "open",
+  "status": "in-progress",
   "priority": "P0",
   "size": "S",
   "summary": "Make config/movement.json the single source of truth in practice: a JSON Schema, a Unity copy kept byte-identical by CI, and a Python loader in services/traversal that exposes the same constants plus the 85 % margin helper the validator will use.",
@@ -63,10 +63,10 @@
     "Bible §10",
     "config/README.md"
   ],
-  "branch": null,
+  "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-15",
+  "updated": "2026-09-23",
   "history": [
     {
       "date": "2026-09-15",
@@ -77,6 +77,11 @@
       "date": "2026-09-15",
       "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-23",
+      "event": "Builder (AUTH #027): landed the unprotected core — services/traversal/movement.py (typed frozen dataclasses, strict missing/unknown-key rejection, with_margin 85% helper), tests (6 passing), requirements.txt (stdlib-only), the byte-identical unity/Assets/StreamingAssets/movement.json, and .github/scripts/copy_movement_to_unity.py (documented copy step). AT-2, AT-3, AT-5 done; movement-sync green. Pending: AT-1 config/movement.schema.json (protected path — awaits the Owner's APPROVED #n); the C# loader + AT-4 (C#/Python agreement) ride the first-Editor-open step (CSharpier).",
+      "by": "builder"
     }
   ]
 }

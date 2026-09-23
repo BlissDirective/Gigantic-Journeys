@@ -1,0 +1,18 @@
+{
+  "avatarHeightA": 1.0,
+  "speeds": { "walk": 1.2, "jog": 2.4, "run": 3.6, "sprint": 4.5, "shimmy": 0.8, "rung": 0.9, "stud": 0.6, "freeClimb": 0.4, "pole": 0.5, "overhang": 0.5 },
+  "jump": { "standingHeight": 1.1, "standingDistance": 1.2, "runningHeight": 1.2, "runningDistance": 2.4, "sprintDistance": 3.0, "precisionDamping": 0.3, "coyoteMs": 100, "bufferMs": 120, "ledgeCatchRadius": 0.15 },
+  "verticals": { "stepUp": 0.25, "hopOver": 0.5, "vault": 0.9, "mantle": 1.4, "vaultMaxDepth": 1.5, "hopMaxDepth": 1.0 },
+  "landing": { "soft": 1.5, "roll": 3.0, "hard": 5.0, "softSurfaceTierBonus": 1 },
+  "slopes": { "runMaxDeg": 25, "slideMinDeg": 25, "slideMaxDeg": 60 },
+  "reach": { "ledgeToLedge": 1.5, "holdReach": 1.1, "slipChanceAtMaxReach": 0.15 },
+  "narrowWidthA": 0.5,
+  "crouchHeadroomA": 1.1,
+  "gravityScale": 0.8,
+  "assist": { "coyoteMs": 200, "jumpBonus": 0.2, "slipsOff": true, "autoGrab": true },
+  "dive": { "minSpeed": 2.4, "distanceA": 2.0, "rollAboveA": 1.5 },
+  "ticTac": { "reboundHeightA": 0.8, "reboundDistanceA": 1.2, "maxChain": 1 },
+  "wallRun": { "minWallRunA": 3.0, "maxDurationSec": 1.2, "speed": 3.6, "minEntrySpeed": 3.0, "gravityDampen": 0.5 },
+  "poleVault": { "plantWindowSec": 0.25, "minRunSpeed": 2.4, "maxGapA": 3.0, "maxHeightA": 2.0 },
+  "grapple": { "reachA": 6.0, "swingSpeed": 3.0, "swingMaxArcDeg": 120, "ascendSpeed": 0.7, "rappelSpeed": 1.0, "deploySec": 0.4, "reelSec": 0.6, "anchorMinLedgeA": 0.1, "snapAssistA": 0.3 }
+}

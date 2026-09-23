@@ -1,0 +1,6 @@
+# services/traversal — movement.json loader (ticket M0-MOVE-01).
+#
+# The loader (movement.py) is standard-library only: no third-party runtime
+# dependency, so there is nothing to pin here. Test tooling (pytest) is provided
+# and pinned by CI (.github/workflows/lint.yml). Add any real dependency below
+# with an exact == pin; CI's lint gate enforces exact pins and runs pip-audit.
