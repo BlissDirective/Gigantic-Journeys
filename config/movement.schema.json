@@ -1,0 +1,179 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://giganticjourneys.com/schemas/movement.schema.json",
+  "title": "Gigantic Journeys movement tuning constants",
+  "description": "Schema for config/movement.json (Movement Bible §10). Every key is required and no extra keys are allowed, so a malformed or drifted file fails CI (governance.yml, movement-sync). Created under AUTH #028; value changes are a design change (Bible §10) needing their own AUTH.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "avatarHeightA",
+    "speeds",
+    "jump",
+    "verticals",
+    "landing",
+    "slopes",
+    "reach",
+    "narrowWidthA",
+    "crouchHeadroomA",
+    "gravityScale",
+    "assist",
+    "dive",
+    "ticTac",
+    "wallRun",
+    "poleVault",
+    "grapple"
+  ],
+  "properties": {
+    "avatarHeightA": { "type": "number" },
+    "narrowWidthA": { "type": "number" },
+    "crouchHeadroomA": { "type": "number" },
+    "gravityScale": { "type": "number" },
+    "speeds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["walk", "jog", "run", "sprint", "shimmy", "rung", "stud", "freeClimb", "pole", "overhang"],
+      "properties": {
+        "walk": { "type": "number" },
+        "jog": { "type": "number" },
+        "run": { "type": "number" },
+        "sprint": { "type": "number" },
+        "shimmy": { "type": "number" },
+        "rung": { "type": "number" },
+        "stud": { "type": "number" },
+        "freeClimb": { "type": "number" },
+        "pole": { "type": "number" },
+        "overhang": { "type": "number" }
+      }
+    },
+    "jump": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["standingHeight", "standingDistance", "runningHeight", "runningDistance", "sprintDistance", "precisionDamping", "coyoteMs", "bufferMs", "ledgeCatchRadius"],
+      "properties": {
+        "standingHeight": { "type": "number" },
+        "standingDistance": { "type": "number" },
+        "runningHeight": { "type": "number" },
+        "runningDistance": { "type": "number" },
+        "sprintDistance": { "type": "number" },
+        "precisionDamping": { "type": "number" },
+        "coyoteMs": { "type": "number" },
+        "bufferMs": { "type": "number" },
+        "ledgeCatchRadius": { "type": "number" }
+      }
+    },
+    "verticals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stepUp", "hopOver", "vault", "mantle", "vaultMaxDepth", "hopMaxDepth"],
+      "properties": {
+        "stepUp": { "type": "number" },
+        "hopOver": { "type": "number" },
+        "vault": { "type": "number" },
+        "mantle": { "type": "number" },
+        "vaultMaxDepth": { "type": "number" },
+        "hopMaxDepth": { "type": "number" }
+      }
+    },
+    "landing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["soft", "roll", "hard", "softSurfaceTierBonus"],
+      "properties": {
+        "soft": { "type": "number" },
+        "roll": { "type": "number" },
+        "hard": { "type": "number" },
+        "softSurfaceTierBonus": { "type": "number" }
+      }
+    },
+    "slopes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["runMaxDeg", "slideMinDeg", "slideMaxDeg"],
+      "properties": {
+        "runMaxDeg": { "type": "number" },
+        "slideMinDeg": { "type": "number" },
+        "slideMaxDeg": { "type": "number" }
+      }
+    },
+    "reach": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ledgeToLedge", "holdReach", "slipChanceAtMaxReach"],
+      "properties": {
+        "ledgeToLedge": { "type": "number" },
+        "holdReach": { "type": "number" },
+        "slipChanceAtMaxReach": { "type": "number" }
+      }
+    },
+    "assist": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["coyoteMs", "jumpBonus", "slipsOff", "autoGrab"],
+      "properties": {
+        "coyoteMs": { "type": "number" },
+        "jumpBonus": { "type": "number" },
+        "slipsOff": { "type": "boolean" },
+        "autoGrab": { "type": "boolean" }
+      }
+    },
+    "dive": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minSpeed", "distanceA", "rollAboveA"],
+      "properties": {
+        "minSpeed": { "type": "number" },
+        "distanceA": { "type": "number" },
+        "rollAboveA": { "type": "number" }
+      }
+    },
+    "ticTac": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reboundHeightA", "reboundDistanceA", "maxChain"],
+      "properties": {
+        "reboundHeightA": { "type": "number" },
+        "reboundDistanceA": { "type": "number" },
+        "maxChain": { "type": "number" }
+      }
+    },
+    "wallRun": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minWallRunA", "maxDurationSec", "speed", "minEntrySpeed", "gravityDampen"],
+      "properties": {
+        "minWallRunA": { "type": "number" },
+        "maxDurationSec": { "type": "number" },
+        "speed": { "type": "number" },
+        "minEntrySpeed": { "type": "number" },
+        "gravityDampen": { "type": "number" }
+      }
+    },
+    "poleVault": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["plantWindowSec", "minRunSpeed", "maxGapA", "maxHeightA"],
+      "properties": {
+        "plantWindowSec": { "type": "number" },
+        "minRunSpeed": { "type": "number" },
+        "maxGapA": { "type": "number" },
+        "maxHeightA": { "type": "number" }
+      }
+    },
+    "grapple": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reachA", "swingSpeed", "swingMaxArcDeg", "ascendSpeed", "rappelSpeed", "deploySec", "reelSec", "anchorMinLedgeA", "snapAssistA"],
+      "properties": {
+        "reachA": { "type": "number" },
+        "swingSpeed": { "type": "number" },
+        "swingMaxArcDeg": { "type": "number" },
+        "ascendSpeed": { "type": "number" },
+        "rappelSpeed": { "type": "number" },
+        "deploySec": { "type": "number" },
+        "reelSec": { "type": "number" },
+        "anchorMinLedgeA": { "type": "number" },
+        "snapAssistA": { "type": "number" }
+      }
+    }
+  }
+}
