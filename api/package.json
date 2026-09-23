@@ -1,0 +1,27 @@
+{
+  "name": "@gigantic-journeys/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Gigantic Journeys durable pipeline (Inngest): scan.submitted -> reconstruct -> scenegraph -> journey -> package. M0 skeleton (logged stubs); M1 fills the steps.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test src/pipeline.test.ts",
+    "dev": "tsx src/server.ts"
+  },
+  "dependencies": {
+    "inngest": "^3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9",
+    "@types/node": "^22",
+    "eslint": "^9",
+    "tsx": "^4",
+    "typescript": "^5",
+    "typescript-eslint": "^8"
+  }
+}

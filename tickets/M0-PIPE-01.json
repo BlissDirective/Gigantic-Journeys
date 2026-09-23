@@ -5,7 +5,7 @@
   "area": "PIPE",
   "owner": "gj-platform",
   "qa": null,
-  "status": "open",
+  "status": "merged",
   "priority": "P0",
   "size": "M",
   "summary": "Stand up the durable workflow that M1 fills in: a TypeScript project under api/ with one Inngest function whose four steps are logged stubs, runnable locally with the Inngest dev server, tested, linted, pinned, with no keys committed and no deploy (Vercel deploy waits for its AUTH).",
@@ -66,10 +66,10 @@
     "kit START M0 (Inngest loop skeleton)",
     "plan §4"
   ],
-  "branch": null,
-  "pr": null,
+  "branch": "claude/gigantic-journeys-governance-f0wgak",
+  "pr": "fast-forward to main (no PR; branch-protection process not yet in force)",
   "created": "2026-09-15",
-  "updated": "2026-09-15",
+  "updated": "2026-09-23",
   "history": [
     {
       "date": "2026-09-15",
@@ -80,6 +80,11 @@
       "date": "2026-09-15",
       "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-23",
+      "event": "Builder (AUTH #027): built the api/ Inngest skeleton — Node 22 strict TS, eslint flat config, node:test via tsx, package-lock.json; journey/pipeline function on scan.submitted with reconstruct->scenegraph->journey->package logged-stub steps, injectable stages, idempotent status recorder, TIMEOUTS_MS per step; api/.env.example (PLACEHOLDER names incl. INNGEST/SUPABASE/LUMA); README documents no-deploy (blocked on #012/#013). Local checks green (lint, typecheck, 4 tests, npm audit 0 high); CI-parity confirmed via `npm ci --ignore-scripts`. All ATs met (AT-3/AT-4-dev-log suggested). Merged to main.",
+      "by": "builder"
     }
   ]
 }
