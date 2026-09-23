@@ -5,7 +5,7 @@
   "area": "UNITY",
   "owner": "gj-gameplay",
   "qa": "gj-qa-release",
-  "status": "open",
+  "status": "in-progress",
   "priority": "P0",
   "size": "M",
   "summary": "Create the Unity 6 project under unity/ with URP, the iOS target (Android stays buildable but is not shipped in v1), the bundle id, pinned packages, and EditMode/PlayMode test assemblies with one smoke test each, so CI can run -batchmode tests and builds.",
@@ -66,10 +66,10 @@
     "kit START M0",
     "plan M0"
   ],
-  "branch": null,
+  "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-15",
+  "updated": "2026-09-23",
   "history": [
     {
       "date": "2026-09-15",
@@ -80,6 +80,11 @@
       "date": "2026-09-15",
       "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-23",
+      "event": "Builder (unified-role session, AUTH #027): committed the headless-authorable scaffold — pinned editor version (ProjectVersion.txt, 6000.0.28f1), pinned package manifest (URP 17, Input System, Animation Rigging, Test Framework, uGUI/UI Toolkit + modules), and unity/README.md as the authoritative project spec + first-Editor-open runbook (AT-1 done; AT-3 manifest done). Remaining ATs (AT-2 URP assets, AT-3 packages-lock, AT-4 batchmode tests, AT-5 zero-console, AT-6 CSharpier) need the first Editor open (computer-use step, Operator/QA VM) and the Unity license (M0-REPO-03); no dotnet/CSharpier or Unity Editor in the headless container.",
+      "by": "builder"
     }
   ]
 }
