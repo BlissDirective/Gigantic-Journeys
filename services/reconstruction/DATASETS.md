@@ -14,6 +14,7 @@ Fetch the default set inside the container:
 ```python
 from pathlib import Path
 from reconstruction.fetch_dataset import fetch
+
 fetch("mipnerf360", Path("./data/mipnerf360"))
 ```
 

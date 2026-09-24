@@ -5,7 +5,7 @@
   "area": "REPO",
   "owner": "owner",
   "qa": null,
-  "status": "open",
+  "status": "done",
   "priority": "P0",
   "size": "S",
   "summary": "Owner adds the Unity activation secrets so unity-tests and ios-build stop skipping. Depends on the Unity account approved in the Foreman's M0 AUTH batch. Secret values are never pasted anywhere but the GitHub secrets UI.",
@@ -42,7 +42,7 @@
   "branch": null,
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-17",
+  "updated": "2026-09-24",
   "history": [
     {
       "date": "2026-09-15",
@@ -58,6 +58,11 @@
       "date": "2026-09-17",
       "event": "unblocked: Unity account approved (AUTH #008, M0 batch). Owner adds the license secrets once the Unity account exists.",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-24",
+      "event": "Operator completed. Unity Personal activated via Unity Hub 3.21.3 for admin@prolectio.com on 2026-09-23 (Hub produced the .ulf directly; no .alf step). GitHub Actions secrets UNITY_LICENSE (raw .ulf XML), UNITY_EMAIL, UNITY_PASSWORD are set; values never in the repo, chat, or logs. The .ulf is machine-bound (Hub VM), so hosted runners rely on UNITY_EMAIL + UNITY_PASSWORD per the lockout fix. Owner to set the repository variable UNITY_CI_ENABLED=true (Owner-reserved) once the Unity account is confirmed unlocked; AT-1/AT-2 evidence is the first preflight run=true after that.",
+      "by": "gj-operator"
     }
   ]
 }
