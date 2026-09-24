@@ -30,7 +30,8 @@ The `reconstruction` package and its tests are **standard-library only** and run
 ## Run
 
 - **Tests (no GPU):** `pytest services/reconstruction` (CI runs this repo-wide).
-- **Spike (GPU box):** build the container, then drive `reconstruction.run_pipeline` with the real adapters. Compute target for the spike: **serverless GPU** (RunPod-flex / Modal, ~$1/scan, scale-to-zero) under the $100 cap.
+- **Dry run (no GPU):** `python -m reconstruction.spike --images <dir> --scan-id room1 --dry-run` — exercises the whole pipeline with the fakes and writes a cost sheet.
+- **Spike (GPU box):** build the container, fetch a public dataset (`DATASETS.md` / `reconstruction.fetch_dataset`), then `python -m reconstruction.spike --images <scene>/images --trainer gsplat --sfm glomap --rate <gpu $/hr>`. Compute target: **serverless GPU** (RunPod-flex / Modal, ~$1/scan, scale-to-zero) under the $100 cap (AUTH #031).
 
 ## Context
 - Cost & trainer analysis: `research/vendors/reconstruction-cost-and-trainer-analysis.md`
