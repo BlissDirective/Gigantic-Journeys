@@ -32,8 +32,10 @@ The `reconstruction` package and its tests are **standard-library only** and run
 - **Tests (no GPU):** `pytest services/reconstruction` (CI runs this repo-wide).
 - **Dry run (no GPU):** `python -m reconstruction.spike --images <dir> --scan-id room1 --dry-run` — exercises the whole pipeline with the fakes and writes a cost sheet.
 - **Spike (GPU box):** build the container, fetch a public dataset (`DATASETS.md` / `reconstruction.fetch_dataset`), then `python -m reconstruction.spike --images <scene>/images --trainer gsplat --sfm glomap --rate <gpu $/hr>`. Compute target: **serverless GPU** (RunPod-flex / Modal, ~$1/scan, scale-to-zero) under the $100 cap (AUTH #031).
+- **On Modal (Operator, recommended host):** `modal run services/reconstruction/modal_app.py --images <dir> --scan-id <id> --rate <gpu $/hr>` — scale-to-zero GPU in Modal's cloud, image built from the `Dockerfile`. Account + token + caps setup: `OPERATOR_RUNBOOK.md`.
 
 ## Context
 - Cost & trainer analysis: `research/vendors/reconstruction-cost-and-trainer-analysis.md`
 - Spike report (fill during the spike, **render-path first**): `research/vendors/reconstruction-spike-report.md`
 - Backend decision: `ADRs/0005-reconstruction-selfhost-and-avatar-onprem.md`
+- Operator runbook (Modal host, account + token): `OPERATOR_RUNBOOK.md` · Modal entrypoint: `modal_app.py`
