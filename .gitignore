@@ -119,3 +119,6 @@ Thumbs.db
 *.log
 tmp/
 .scratch/
+
+# Local license / secret files (operator VM)
+.secrets-local/

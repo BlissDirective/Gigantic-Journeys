@@ -21,16 +21,16 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | in-progress | 12 |
 | in-review | 0 |
 | changes-requested | 0 |
-| blocked | 1 |
+| blocked | 2 |
 | merged | 2 |
-| done | 5 |
+| done | 4 |
 | cancelled | 3 |
 | **total** | **78** |
 
 ## Blockers
 
 - Build execution cannot start until the Owner hands the machine-user PAT to the agents (AUTH #002 approved; Owner creating it) and spins up the **Grok Operator** (`agents/grok/roles/gj-operator.md`). Per AUTH #006 the team is the Claude Code **Builder** + this **Coordinator** + one Grok **Operator** (the Foreman + 8-specialist model is retired).
-- Unity CI jobs skip until the Unity project is finalized (M0-UNITY-01: scaffold config committed 2026-09-23; the full Editor project — URP assets, `packages-lock.json`, test assemblies, `.meta` — needs the first Editor open, a computer-use step) and the license secret is added (M0-REPO-03). The Unity account AUTH is approved (#008); M0-REPO-03 awaits the Owner creating the Unity account + adding `UNITY_LICENSE`. **Update 2026-09-24:** the machine-bound `.ulf` cannot activate on hosted runners; CI fell back to password sign-in, which failed and locked the Unity account. Unity CI now needs `UNITY_EMAIL` + `UNITY_PASSWORD` (2FA off) and the repository variable `UNITY_CI_ENABLED=true`, and runs on pushes to `main` + on demand only. **M0-REPO-03 done 2026-09-24:** Unity Personal activated via Hub for admin@prolectio.com on 2026-09-23; `UNITY_LICENSE`/`UNITY_EMAIL`/`UNITY_PASSWORD` are in Actions. Remaining: the Owner sets `UNITY_CI_ENABLED=true` (Owner-reserved) once the Unity account is confirmed unlocked.
+- Unity CI jobs skip until the Unity project is finalized (M0-UNITY-01: scaffold config committed 2026-09-23; the full Editor project — URP assets, `packages-lock.json`, test assemblies, `.meta` — needs the first Editor open, a computer-use step) and the license secret is added (M0-REPO-03). The Unity account AUTH is approved (#008); M0-REPO-03 awaits the Owner creating the Unity account + adding `UNITY_LICENSE`. **Update 2026-09-24:** the machine-bound `.ulf` cannot activate on hosted runners; CI fell back to password sign-in, which failed and locked the Unity account. Unity CI now needs `UNITY_EMAIL` + `UNITY_PASSWORD` (2FA off) and the repository variable `UNITY_CI_ENABLED=true`, and runs on pushes to `main` + on demand only. **M0-REPO-03 done 2026-09-24:** Unity Personal activated via Hub for admin@prolectio.com on 2026-09-23; `UNITY_LICENSE`/`UNITY_EMAIL`/`UNITY_PASSWORD` are in Actions. Remaining: the Owner sets `UNITY_CI_ENABLED=true` (Owner-reserved) once the Unity account is confirmed unlocked. **Reopened 2026-09-24 (→ blocked):** the first ios-build activation failed on Unity login (HTTP 401, 15 failed sign-ins); `UNITY_CI_ENABLED` was removed again. The Owner must fix the Unity password (unlocked, real password, 2FA off), re-set `UNITY_PASSWORD`, then set `UNITY_CI_ENABLED=true`; M0-REPO-03 closes after the first successful activation.
 
 ## Pending AUTH REQUESTs
 
@@ -96,7 +96,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | M0-QA-02 | Visual QA procedure and evidence standard | gj-qa-release | P0 | open | — | — |
 | M0-REPO-01 | Repository scaffold and CI harness green on main | coordinator | P0 | merged | — | https://github.com/BlissDirective/Gigantic-Journeys/commit/fd4d44b291bc2ec626bde4d54c2039416334beea |
 | M0-REPO-02 | Branch protection, merge policy, and native secret scanning on main | owner | P0 | open | M0-REPO-01, M0-REPO-04 | — |
-| M0-REPO-03 | Unity license secrets in GitHub Actions | owner | P0 | done | M0-FORE-02 | GH secrets (Owner) |
+| M0-REPO-03 | Unity license secrets in GitHub Actions | owner | P0 | blocked | M0-FORE-02 | GH secrets (Owner) |
 | M0-REPO-04 | Bot GitHub identity with least-privilege access | owner | P0 | open | — | — |
 | M0-REPO-05 | App Store Connect API key and signing secrets in GitHub Actions | owner | P0 | done | — | GH secrets (Owner) |
 | M0-SKILL-01 | gj-foreman: research handbook (RESOURCES.md + SKILLS.md) | gj-foreman | P0 | in-progress | — | claude/gigantic-journeys-governance-f0wgak |
