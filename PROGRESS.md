@@ -17,7 +17,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 
 | Status | Count |
 |---|---|
-| open | 65 |
+| open | 66 |
 | in-progress | 3 |
 | in-review | 0 |
 | changes-requested | 0 |
@@ -25,7 +25,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | merged | 2 |
 | done | 3 |
 | cancelled | 3 |
-| **total** | **77** |
+| **total** | **78** |
 
 ## Blockers
 
@@ -123,6 +123,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | M1-SCEN-03 | Affordance library and traversal-graph export | gj-scenegraph | P0 | open | M1-SCEN-02 | — |
 | M1-SCEN-04 | Summit designation, route generation, vista selection | gj-scenegraph | P0 | open | M1-SCEN-03, M1-SCEN-05 | — |
 | M1-SCEN-05 | Deterministic reachability validator against movement.json | gj-scenegraph | P0 | open | M0-MOVE-01, M1-SCEN-03 | — |
+| M1-UNITY-01 | iOS Metal Gaussian-splat render de-risk (depth sort + on-device 30 fps) | claude-builder | P0 | open | M0-UNITY-01, M0-UNITY-02, M1-CAPT-03 | — |
 | M0-CAPT-01 | Corpus intake: manifest schema, metadata stripping tool, storage rules | gj-capture | P1 | open | — | — |
 | M0-REPO-07 | Triage and merge the open Dependabot CI-action bumps (audit A1) | coordinator | P2 | open | — | — |
 | M0-DSGN-02 | Design tokens v0 (DTCG JSON) and USS export for the locked decisions | gj-design | P1 | open | M0-DSGN-01 | — |

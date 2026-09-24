@@ -1,0 +1,81 @@
+{
+  "id": "M1-UNITY-01",
+  "title": "iOS Metal Gaussian-splat render de-risk (depth sort + on-device 30 fps)",
+  "milestone": "M1",
+  "area": "UNITY",
+  "owner": "claude-builder",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P0",
+  "size": "L",
+  "summary": "Retire the #1 program risk: render a reconstructed Gaussian splat correctly, depth-sorted, at 30 fps on a physical iPhone in Unity 6 URP. Trainer-orthogonal — the failure is Unity's per-frame Metal depth sort (aras-p radix sort glitches on Metal, issue #226). Plan in design/proposals/ios-splat-render-v1.md: baseline aras-p (MIT) on desktop, then fix the Metal sort with a tile-local bitonic sort (msplat approach) or a native Metal plugin wrapping MetalSplatter (MIT); hold splats to ~1-2.5M via gsplat MCMC + SOG/.spz. Render-path-first (Owner decision, AUTH #030 spike).",
+  "deliverables": [
+    "unity/ (splat render integration + iOS Metal sort fix or native plugin)",
+    "design/proposals/ios-splat-render-v1.md",
+    "qa/reports/M1-ios-splat-render.md"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "aras-p/UnityGaussianSplatting (MIT) is integrated in Unity 6 URP via GaussianSplatURPFeature (render graph, Compatibility Mode off) and renders a corpus splat correctly in the Editor/desktop as the baseline.",
+      "evidence": "editor screenshot + scene",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "On a physical iPhone, splats render with correct back-to-front depth ordering (no glitching) using the chosen Metal sort fix — a tile-local bitonic sort (Option A) or a native Metal plugin wrapping MetalSplatter (Option B). This is the gate for 'solved'.",
+      "evidence": "device video showing correct ordering",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "At a room splat budget (~1-2.5M, gsplat MCMC), sustained frame rate and package size are recorded against the 30 fps and <=150 MB targets, with SOG/.spz compression. Measurements are suggested evidence (SPEC §11), not a gate.",
+      "evidence": "qa/reports/M1-ios-splat-render.md numbers",
+      "automated": false,
+      "level": "suggested"
+    },
+    {
+      "id": "AT-4",
+      "test": "An LOD / chunked-streaming approach is specified (aras-p has none) so larger or multi-room scenes stay within budget on device.",
+      "evidence": "report section",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-5",
+      "test": "The renderer loads splats only through signed, short-lived URLs (SECURITY_CHECKLIST §3.1), never a direct storage URL.",
+      "evidence": "code path + review",
+      "automated": false,
+      "level": "required"
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §3.1",
+    "SECURITY_CHECKLIST §9.7"
+  ],
+  "depends_on": [
+    "M0-UNITY-01",
+    "M0-UNITY-02",
+    "M1-CAPT-03"
+  ],
+  "references": [
+    "ADR-0005",
+    "design/proposals/ios-splat-render-v1.md",
+    "research/vendors/reconstruction-cost-and-trainer-analysis.md",
+    "M0-UNITY-02",
+    "AUTH #030"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-24",
+  "updated": "2026-09-24",
+  "history": [
+    {
+      "date": "2026-09-24",
+      "event": "created by the Builder as the render-first spike track (the #1 program risk, orthogonal to the trainer). Plan in design/proposals/ios-splat-render-v1.md; complements M0-UNITY-02 (general renderer) and M1-CAPT-03 (produces the splat).",
+      "by": "claude-builder"
+    }
+  ]
+}
