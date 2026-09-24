@@ -1,0 +1,14 @@
+# services/reconstruction — self-hosted Gaussian-splat pipeline (M1-CAPT-03).
+#
+# The orchestration (the `reconstruction` package) and its tests are standard
+# library only: no third-party runtime dependency, so there is nothing to pin
+# here and CI installs nothing. Test tooling (pytest) is provided and pinned by
+# CI (.github/workflows/lint.yml).
+#
+# The heavy GPU tools this pipeline drives — COLMAP/GLOMAP, gsplat/nerfstudio,
+# Open3D, splat-transform, torch (CUDA) — are NOT Python-installable in CI and
+# live only in the CUDA container image (see Dockerfile), pinned there. Do not
+# add them here: CI pip-installs every *requirements*.txt on a CPU runner and
+# runs pip-audit against it.
+#
+# Add any real, CI-installable dependency below with an exact == pin.

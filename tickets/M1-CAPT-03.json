@@ -5,7 +5,7 @@
   "area": "CAPT",
   "owner": "claude-builder",
   "qa": null,
-  "status": "open",
+  "status": "in-progress",
   "priority": "P0",
   "size": "L",
   "summary": "De-risk the reconstruction backend (ADR-0005, AUTH #018/#030): build the self-hosted Gaussian-splat pipeline — the committed, PRIORITIZED v1 path — and prove a captured room reconstructs and renders on a physical iPhone before committing the M1 pipeline. A managed bridge is CONDITIONAL: stand one up only under a written no-train + DPA + data-residency commitment (AUTH #030); otherwise skip it and rely on self-host. GPU long-running ops go to the Grok Operator; the pipeline code is the Builder's.",
@@ -56,9 +56,13 @@
     "ADR-0005",
     "research/vendors/reconstruction-selfhost.md",
     "research/vendors/reconstruction-alternatives.md",
-    "AUTH #018"
+    "research/vendors/reconstruction-cost-and-trainer-analysis.md",
+    "research/vendors/reconstruction-spike-report.md",
+    "AUTH #018",
+    "AUTH #030",
+    "AUTH #031"
   ],
-  "branch": null,
+  "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-09-18",
   "updated": "2026-09-24",
@@ -72,6 +76,11 @@
       "date": "2026-09-24",
       "event": "AUTH #030 (Owner): self-host confirmed as the committed, prioritized v1 path — stand this spike up ASAP. Managed bridge is now conditional (only under written no-train + DPA + data-residency); AT-3 tightened; summary updated. Luma remains rejected.",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-24",
+      "event": "Builder built the headless services/reconstruction/ scaffold (gsplat-first, pluggable SfM/trainer/compress/mesh adapters, cost+cap and commercial-license gates, 21 tests green, CUDA Dockerfile) and landed the cost+trainer analysis (research/vendors/reconstruction-cost-and-trainer-analysis.md); trainer recommendation = gsplat-first (pluggable, Brush second). Spike report skeleton created, render-path first (Owner decision). Status -> in-progress; the $100 GPU spike run (AUTH #031) is pending Unity/Mac/iPhone + input data.",
+      "by": "claude-builder"
     }
   ]
 }
