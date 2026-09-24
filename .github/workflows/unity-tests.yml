@@ -1,19 +1,30 @@
 # Unity -batchmode EditMode and PlayMode tests via game-ci.
-# Preflight skips (green, with a reason) until both exist:
-#   1. the Unity project at unity/ProjectSettings/ProjectVersion.txt (M0-UNITY-01)
-#   2. the UNITY_LICENSE secret, or UNITY_EMAIL + UNITY_PASSWORD + UNITY_SERIAL (M0-REPO-03)
+# Runs on pushes to main and on demand only. Every run is a Unity account
+# sign-in, and Unity locks the account after 7 failed sign-ins in a row, so
+# runs are kept few: no branch pushes, no PRs, both test modes in one job.
+# Preflight skips (green, with a reason) until all of these hold:
+#   1. the Unity project exists at unity/ProjectSettings/ProjectVersion.txt (M0-UNITY-01)
+#   2. the repository variable UNITY_CI_ENABLED is "true" (the off switch for
+#      every Unity workflow; unset it to stop sign-ins without a code change)
+#   3. UNITY_EMAIL + UNITY_PASSWORD exist (M0-REPO-03). A UNITY_LICENSE .ulf
+#      alone is not enough: it is bound to the machine it was made on and
+#      hosted runners are new machines every run.
 # The "unity tests gate" job always reports, so it can be a required check.
 name: unity-tests
 
 on:
   push:
-    branches: ["**"]
-  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
   checks: write
+
+# One Unity sign-in at a time across all Unity workflows.
+concurrency:
+  group: unity-license
+  cancel-in-progress: false
 
 jobs:
   preflight:
@@ -26,7 +37,8 @@ jobs:
       - uses: actions/checkout@v4
       - id: p
         env:
-          HAS_LICENSE: ${{ secrets.UNITY_LICENSE != '' || (secrets.UNITY_EMAIL != '' && secrets.UNITY_PASSWORD != '' && secrets.UNITY_SERIAL != '') }}
+          CI_ENABLED: ${{ vars.UNITY_CI_ENABLED }}
+          HAS_LOGIN: ${{ secrets.UNITY_EMAIL != '' && secrets.UNITY_PASSWORD != '' }}
         run: |
           set -euo pipefail
           if [ ! -f unity/ProjectSettings/ProjectVersion.txt ]; then
@@ -34,24 +46,25 @@ jobs:
             echo "reason=no Unity project yet (ticket M0-UNITY-01)" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          if [ "$HAS_LICENSE" != "true" ]; then
+          if [ "$CI_ENABLED" != "true" ]; then
             echo "run=false" >> "$GITHUB_OUTPUT"
-            echo "reason=Unity license secrets not configured (ticket M0-REPO-03)" >> "$GITHUB_OUTPUT"
+            echo "reason=repository variable UNITY_CI_ENABLED is not true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ "$HAS_LOGIN" != "true" ]; then
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "reason=UNITY_EMAIL + UNITY_PASSWORD not configured; a machine-bound UNITY_LICENSE cannot activate on hosted runners (ticket M0-REPO-03)" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           echo "run=true" >> "$GITHUB_OUTPUT"
-          echo "reason=project and license present" >> "$GITHUB_OUTPUT"
+          echo "reason=project, switch, and Unity login present" >> "$GITHUB_OUTPUT"
       - run: echo "::notice::unity-tests ${{ steps.p.outputs.run == 'true' && 'will run' || format('skipped — {0}', steps.p.outputs.reason) }}"
 
   tests:
-    name: ${{ matrix.testMode }}
+    name: editmode + playmode
     needs: preflight
     if: needs.preflight.outputs.run == 'true'
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        testMode: [editmode, playmode]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -70,14 +83,14 @@ jobs:
           UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
         with:
           projectPath: unity
-          testMode: ${{ matrix.testMode }}
+          testMode: all
           githubToken: ${{ secrets.GITHUB_TOKEN }}
-          checkName: unity ${{ matrix.testMode }} results
+          checkName: unity test results
           customParameters: -nographics
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: unity-test-results-${{ matrix.testMode }}
+          name: unity-test-results
           path: artifacts
           if-no-files-found: ignore
 

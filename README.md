@@ -31,4 +31,4 @@ Owner: BlissDirective (SparkForge Labs). Software: a Claude Code Builder writes 
 
 ## CI
 
-`secret-scan` (gitleaks, repo hygiene) · `lint` (ruff, npm, CSharpier, audits) · `governance` (ticket validation, movement.json sync, AUTH gate on protected paths) · `unity-tests` (skips until the Unity project and license secrets exist) · `android-build` (on demand only; keeps the Android target compiling for v1.1) · `ios-build` (Unity export on Linux, unsigned archive on GitHub's free macOS runner; skips until the Unity project and license exist).
+`secret-scan` (gitleaks, repo hygiene) · `lint` (ruff, npm, CSharpier, audits) · `governance` (ticket validation, movement.json sync, AUTH gate on protected paths) · `unity-tests` (pushes to `main` and on demand only; skips until the Unity project, `UNITY_EMAIL` + `UNITY_PASSWORD`, and the repository variable `UNITY_CI_ENABLED=true` exist) · `android-build` (on demand only; keeps the Android target compiling for v1.1) · `ios-build` (Unity export on Linux, unsigned archive on GitHub's free macOS runner; skips until the Unity project, Unity login secrets, and `UNITY_CI_ENABLED=true` exist).
