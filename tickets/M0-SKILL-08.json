@@ -5,7 +5,7 @@
   "area": "SKILL",
   "owner": "gj-qa-release",
   "qa": null,
-  "status": "open",
+  "status": "in-progress",
   "priority": "P1",
   "size": "M",
   "summary": "First task before any ticket (kit §3 common block): research the top 100 resources on Unity test frameworks, mobile QA matrices, TestFlight and Play Console operations, App Store review guidelines, Play policy, crash analytics; save an annotated list and distill a working handbook. Re-read SKILLS.md at every session start and update it when you learn something.",
@@ -55,10 +55,10 @@
     "kit §3 common block",
     "kit §3 role block"
   ],
-  "branch": null,
+  "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-15",
+  "updated": "2026-09-24",
   "history": [
     {
       "date": "2026-09-15",
@@ -69,6 +69,11 @@
       "date": "2026-09-15",
       "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-24",
+      "event": "Builder authored the working handbook (projects/skills/<role>/SKILLS.md) + a curated RESOURCES.md foundation; status -> in-progress (Owner-approved). The full annotated top-100 and the re-read/update-every-session discipline remain this role's ongoing task.",
+      "by": "claude-builder"
     }
   ]
 }
