@@ -4,50 +4,67 @@ Runs our container pipeline on a scale-to-zero Modal GPU. The Operator supplies 
 Modal token (MODAL_TOKEN_ID / MODAL_TOKEN_SECRET in the VM .env.local) and runs,
 from the repo root:
 
-    modal run services/reconstruction/modal_app.py --images ./data/room1/images --scan-id room1
+    modal run services/reconstruction/modal_app.py \
+        --images ./data/mipnerf360/room/images_4 --scan-id smoke \
+        --source public --sfm colmap --rate 1.10
 
-The image is built from services/reconstruction/Dockerfile, so the COLMAP/GLOMAP +
-gsplat + Open3D stack matches the pinned container. Corpus-only data; spend is
-capped by the Modal dashboard limit (Owner) and the in-pipeline $100 cap (AUTH #031).
+The image is built from services/reconstruction/Dockerfile, so the COLMAP + gsplat +
+Open3D stack matches the pinned container. The build context is pinned to this
+directory (``context_dir``): Modal uploads only the Dockerfile COPY sources found
+under it (``reconstruction/``), so nothing elsewhere in the repo (``.env.local``,
+``.secrets-local/``) can enter the image build.
 
-Verify against modal.com/docs for your installed Modal version: the Dockerfile
-build context (Modal uses the Dockerfile's directory by default, which is where our
-`reconstruction/` package lives, so the Dockerfile COPY resolves) and the GPU name.
+Only ``public`` and ``corpus`` sources may run here; ``user`` scans are rejected
+locally before upload and again in the container (ADR-0005 / AUTH #030).
+
+Spend: the Modal workspace budget / spend limit (Owner) is the real cumulative cap.
+The in-pipeline guard (AUTH #031 $100 / $50-per-day) starts from a fresh ledger on
+every run, so it only stops a single run whose estimate would cross a cap.
 """
 
 from __future__ import annotations
 
 import io
 import json
+import os
 import tarfile
 from pathlib import Path
 
 import modal
 
 _HERE = Path(__file__).parent
-image = modal.Image.from_dockerfile((_HERE / "Dockerfile").as_posix())
+image = modal.Image.from_dockerfile((_HERE / "Dockerfile").as_posix(), context_dir=_HERE)
 app = modal.App("gj-recon-spike", image=image)
 
 
 @app.function(gpu="A10G", timeout=3600)
 def reconstruct(
-    images_tar: bytes, scan_id: str, source: str, rate_per_hour_usd: float
+    images_tar: bytes,
+    scan_id: str,
+    source: str,
+    rate_per_hour_usd: float,
+    sfm: str = "colmap",
 ) -> tuple[dict, bytes, bytes]:
     """Run SfM -> train -> compress -> mesh in-container; return (cost sheet, splat, mesh)."""
     import tempfile
 
     from reconstruction import (
         CostLedger,
-        GlomapSfM,
         GsplatTrainer,
         Open3DMesher,
         ReconstructionConfig,
         ScanInput,
-        Source,
         SplatTransformCompressor,
+        require_offsite_source,
         run_pipeline,
+        select_sfm,
     )
     from reconstruction.spike import cost_sheet
+
+    scan_source = require_offsite_source(source)  # defence in depth: never a user scan
+    # The image's COLMAP is the Ubuntu apt build (no CUDA): SIFT must run on CPU.
+    # Set GJ_COLMAP_CUDA=1 in the Dockerfile once a CUDA-enabled COLMAP is used.
+    sfm_adapter = select_sfm(sfm, use_gpu=os.environ.get("GJ_COLMAP_CUDA") == "1")
 
     work = Path(tempfile.mkdtemp())
     images = work / "images"
@@ -60,12 +77,12 @@ def reconstruct(
         scan_id=scan_id,
         image_dir=images,
         image_count=image_count,
-        source=Source(source),
+        source=scan_source,
     )
     run = run_pipeline(
         scan,
-        ReconstructionConfig(),
-        sfm=GlomapSfM(),
+        ReconstructionConfig(sfm=sfm),
+        sfm=sfm_adapter,
         trainer=GsplatTrainer(),
         compressor=SplatTransformCompressor(),
         mesher=Open3DMesher(),
@@ -84,19 +101,29 @@ def reconstruct(
 def main(
     images: str,
     scan_id: str = "spike",
-    source: str = "corpus",
-    rate: float = 1.0,
+    source: str = "public",
+    sfm: str = "colmap",
+    rate: float = 1.10,
     out: str = "./out",
 ) -> None:
     """Tar a local image dir, run the pipeline on Modal, save the outputs + cost sheet."""
+    # Local import: modal puts this file's directory on sys.path. Validate before
+    # any upload so a user scan never leaves the machine.
+    from reconstruction import SFM_CHOICES, require_offsite_source
+
+    require_offsite_source(source)
+    if sfm not in SFM_CHOICES:
+        raise SystemExit(f"--sfm must be one of {SFM_CHOICES}, got {sfm!r}")
     src = Path(images)
+    if not src.is_dir():
+        raise SystemExit(f"--images {images!r} is not a directory")
     buf = io.BytesIO()
     with tarfile.open(fileobj=buf, mode="w") as tar:
         for p in sorted(src.iterdir()):
             if p.is_file():
                 tar.add(p, arcname=p.name)
 
-    sheet, splat_bytes, mesh_bytes = reconstruct.remote(buf.getvalue(), scan_id, source, rate)
+    sheet, splat_bytes, mesh_bytes = reconstruct.remote(buf.getvalue(), scan_id, source, rate, sfm)
 
     out_dir = Path(out)
     out_dir.mkdir(parents=True, exist_ok=True)

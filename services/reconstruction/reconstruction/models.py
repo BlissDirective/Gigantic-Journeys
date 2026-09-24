@@ -35,6 +35,30 @@ class Source(enum.Enum):
     USER = "user"  # a real user's home scan (never sent to a third-party trainer)
 
 
+# Sources allowed to leave our own infrastructure (e.g. to a rented Modal GPU).
+# Real user scans never do (ADR-0005 / AUTH #030).
+OFFSITE_SOURCES = frozenset({Source.PUBLIC, Source.CORPUS})
+
+
+def require_offsite_source(source: str | Source) -> Source:
+    """Return ``source`` as a Source if it may run off-site; else raise.
+
+    Only public benchmark data and the Owner's consented corpus may be sent to
+    third-party compute. ``user`` (or any unknown value) is rejected.
+    """
+    try:
+        parsed = source if isinstance(source, Source) else Source(source)
+    except ValueError:
+        parsed = None
+    if parsed not in OFFSITE_SOURCES:
+        allowed = ", ".join(sorted(s.value for s in OFFSITE_SOURCES))
+        raise ReconstructionError(
+            f"source {source!r} may not be sent to off-site compute; allowed: {allowed} "
+            "(real user scans never leave our infrastructure, ADR-0005 / AUTH #030)"
+        )
+    return parsed
+
+
 @dataclass(frozen=True)
 class ScanInput:
     """A capture bundle handed to the pipeline."""

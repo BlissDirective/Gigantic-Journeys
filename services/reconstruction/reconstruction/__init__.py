@@ -21,6 +21,7 @@ from .fakes import FakeCompressor, FakeMesher, FakeSfM, FakeTrainer
 from .licenses import MANIFEST, Component, LicenseError, assert_commercial_safe
 from .mesh import Mesher, MeshError, Open3DMesher
 from .models import (
+    OFFSITE_SOURCES,
     CameraPoses,
     CollisionMesh,
     CompressedSplat,
@@ -32,15 +33,18 @@ from .models import (
     Source,
     SplatModel,
     read_ply_vertex_count,
+    require_offsite_source,
 )
 from .pipeline import ReconstructionRun, run_pipeline
-from .sfm import ColmapSfM, GlomapSfM, SfM
+from .sfm import SFM_CHOICES, ColmapSfM, GlomapSfM, SfM, select_sfm
 from .tools import ToolNotFoundError, require
 from .trainer import BrushTrainer, GsplatTrainer, Trainer, TrainerError
 
 __all__ = [
     "DAILY_CAP_USD",
     "MANIFEST",
+    "OFFSITE_SOURCES",
+    "SFM_CHOICES",
     "SPIKE_CAP_USD",
     "BrushTrainer",
     "CameraPoses",
@@ -80,5 +84,7 @@ __all__ = [
     "estimate_usd",
     "read_ply_vertex_count",
     "require",
+    "require_offsite_source",
     "run_pipeline",
+    "select_sfm",
 ]

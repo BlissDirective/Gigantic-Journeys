@@ -12,7 +12,7 @@ import subprocess  # noqa: S404 - orchestrating trusted CLI tools by fixed argv
 from pathlib import Path
 from typing import Protocol
 
-from .models import CameraPoses, ScanInput
+from .models import CameraPoses, ReconstructionError, ScanInput
 from .tools import require
 
 
@@ -32,6 +32,17 @@ def _count_registered(model_dir: Path) -> int:
     return int(num)
 
 
+def _sift_flags(use_gpu: bool) -> tuple[list[str], list[str]]:
+    """COLMAP SIFT extraction/matching GPU flags.
+
+    ``use_gpu=False`` is required for a COLMAP built without CUDA (e.g. the
+    Ubuntu 22.04 apt package in our Dockerfile): its GPU SIFT path falls back to
+    OpenGL, which needs a display and fails on a headless GPU host.
+    """
+    flag = "1" if use_gpu else "0"
+    return ["--SiftExtraction.use_gpu", flag], ["--SiftMatching.use_gpu", flag]
+
+
 class GlomapSfM:
     """Global SfM: COLMAP feature/match front-end, GLOMAP global mapper.
 
@@ -40,9 +51,13 @@ class GlomapSfM:
     finalized on the GPU box during the spike.
     """
 
+    def __init__(self, use_gpu: bool = True) -> None:
+        self.use_gpu = use_gpu
+
     def run(self, scan: ScanInput, work_dir: Path) -> CameraPoses:
         colmap = require("colmap")
         glomap = require("glomap")
+        extract_flags, match_flags = _sift_flags(self.use_gpu)
         db = work_dir / "database.db"
         sparse = work_dir / "sparse"
         sparse.mkdir(parents=True, exist_ok=True)
@@ -54,11 +69,12 @@ class GlomapSfM:
                 str(db),
                 "--image_path",
                 str(scan.image_dir),
+                *extract_flags,
             ],
             check=True,
         )
         subprocess.run(
-            [colmap, "exhaustive_matcher", "--database_path", str(db)],
+            [colmap, "exhaustive_matcher", "--database_path", str(db), *match_flags],
             check=True,
         )
         subprocess.run(
@@ -85,8 +101,12 @@ class GlomapSfM:
 class ColmapSfM:
     """Incremental SfM with COLMAP (fallback for hard scenes)."""
 
+    def __init__(self, use_gpu: bool = True) -> None:
+        self.use_gpu = use_gpu
+
     def run(self, scan: ScanInput, work_dir: Path) -> CameraPoses:
         colmap = require("colmap")
+        extract_flags, match_flags = _sift_flags(self.use_gpu)
         db = work_dir / "database.db"
         sparse = work_dir / "sparse"
         sparse.mkdir(parents=True, exist_ok=True)
@@ -98,11 +118,12 @@ class ColmapSfM:
                 str(db),
                 "--image_path",
                 str(scan.image_dir),
+                *extract_flags,
             ],
             check=True,
         )
         subprocess.run(
-            [colmap, "exhaustive_matcher", "--database_path", str(db)],
+            [colmap, "exhaustive_matcher", "--database_path", str(db), *match_flags],
             check=True,
         )
         subprocess.run(
@@ -124,3 +145,15 @@ class ColmapSfM:
             sparse_dir=model,
             registered_images=_count_registered(model),
         )
+
+
+SFM_CHOICES = ("colmap", "glomap")
+
+
+def select_sfm(name: str, *, use_gpu: bool = True) -> SfM:
+    """Return the SfM adapter for ``name`` ("colmap" or "glomap")."""
+    if name == "glomap":
+        return GlomapSfM(use_gpu=use_gpu)
+    if name == "colmap":
+        return ColmapSfM(use_gpu=use_gpu)
+    raise ReconstructionError(f"unknown sfm {name!r}; expected one of {SFM_CHOICES}")

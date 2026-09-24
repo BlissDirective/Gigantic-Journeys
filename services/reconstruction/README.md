@@ -31,8 +31,8 @@ The `reconstruction` package and its tests are **standard-library only** and run
 
 - **Tests (no GPU):** `pytest services/reconstruction` (CI runs this repo-wide).
 - **Dry run (no GPU):** `python -m reconstruction.spike --images <dir> --scan-id room1 --dry-run` — exercises the whole pipeline with the fakes and writes a cost sheet.
-- **Spike (GPU box):** build the container, fetch a public dataset (`DATASETS.md` / `reconstruction.fetch_dataset`), then `python -m reconstruction.spike --images <scene>/images --trainer gsplat --sfm glomap --rate <gpu $/hr>`. Compute target: **serverless GPU** (RunPod-flex / Modal, ~$1/scan, scale-to-zero) under the $100 cap (AUTH #031).
-- **On Modal (Operator, recommended host):** `modal run services/reconstruction/modal_app.py --images <dir> --scan-id <id> --rate <gpu $/hr>` — scale-to-zero GPU in Modal's cloud, image built from the `Dockerfile`. Account + token + caps setup: `OPERATOR_RUNBOOK.md`.
+- **Spike (GPU box):** build the container, fetch a public dataset (`DATASETS.md` / `reconstruction.fetch_dataset`), then `python -m reconstruction.spike --images <scene>/images --trainer gsplat --sfm colmap --rate <gpu $/hr>` (GLOMAP is not in the image yet). Compute target: **serverless GPU** (RunPod-flex / Modal, ~$1/scan, scale-to-zero) under the $100 cap (AUTH #031).
+- **On Modal (Operator, recommended host):** `modal run services/reconstruction/modal_app.py --images <dir> --scan-id <id> --source public --sfm colmap --rate 1.10` (public/corpus only) — scale-to-zero GPU in Modal's cloud, image built from the `Dockerfile`. Account + token + caps setup: `OPERATOR_RUNBOOK.md`.
 
 ## Context
 - Cost & trainer analysis: `research/vendors/reconstruction-cost-and-trainer-analysis.md`

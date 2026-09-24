@@ -1,0 +1,3 @@
+# Build context is services/reconstruction (modal_app.py context_dir); keep it to source only.
+**/__pycache__
+**/*.pyc

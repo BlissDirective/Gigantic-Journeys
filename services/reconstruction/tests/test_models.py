@@ -2,6 +2,7 @@
 
 import pytest
 from reconstruction import (
+    OFFSITE_SOURCES,
     CollisionMesh,
     CompressedSplat,
     EnvironmentPackage,
@@ -11,6 +12,7 @@ from reconstruction import (
     ScanInput,
     Source,
     read_ply_vertex_count,
+    require_offsite_source,
 )
 
 
@@ -59,3 +61,14 @@ def test_total_size_is_splat_plus_mesh(tmp_path):
     mesh = CollisionMesh("s1", tmp_path / "s.obj", 500, 200)
     package = EnvironmentPackage(scan_id="s1", splat=splat, mesh=mesh)
     assert package.total_size_bytes == 1200
+
+
+@pytest.mark.parametrize("value", ["public", "corpus", Source.PUBLIC, Source.CORPUS])
+def test_offsite_source_allows_public_and_corpus(value):
+    assert require_offsite_source(value) in OFFSITE_SOURCES
+
+
+@pytest.mark.parametrize("value", ["user", Source.USER, "USER", "", "prod-scan"])
+def test_offsite_source_rejects_user_and_unknown(value):
+    with pytest.raises(ReconstructionError, match="off-site"):
+        require_offsite_source(value)

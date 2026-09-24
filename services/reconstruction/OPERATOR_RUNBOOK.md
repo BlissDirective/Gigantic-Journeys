@@ -19,7 +19,7 @@
 2. **Ping the Owner with the account-creation screen** (screenshot/handoff). The Owner then, on that screen:
    - completes sign-up (their identity — GitHub/Google SSO or email) and **sets the password**;
    - adds a **payment method**;
-   - sets a **spend limit** (Settings → Usage/Billing) as a hard backstop that matches the **$100 spike cap** (AUTH #031). The pipeline also self-halts at $100 / $50-per-day in code.
+   - sets the **workspace budget / spend limit** (Settings → Usage & Billing) to match the **$100 spike cap** (AUTH #031). **This is the real cumulative cap.** The in-code guard (`CostLedger`, $100 / $50-per-day) starts from a fresh ledger on every `modal run`, so it only stops a *single* run whose estimate would cross a cap; it does not add up across runs. Modal budgets are **monthly** and reset each cycle, while the spike cap is one-time: lower the budget after the spike (Starter includes $30/month of compute credit).
 3. The account belongs to the Owner. The Bot does **not** retain the password or card.
 
 ## Step 2 — Provision + store the API token
@@ -34,26 +34,41 @@
 4. Credential created → it's logged (this account = AUTH #033; §8.6). Rotate per milestone (§8.1).
 
 ## Step 3 — Install + authenticate the Modal CLI (Operator)
+From the repo root, in the git-ignored `.venv`:
 ```
-pip install modal
-# token auth is picked up from MODAL_TOKEN_ID / MODAL_TOKEN_SECRET in the env
-python -c "import modal; print('modal ok')"
+python3 -m venv .venv && .venv/bin/pip install modal
+. .venv/bin/activate
+# Export ONLY the two Modal values (never `set -a; . ./.env.local`, which would
+# export every secret in the file, e.g. GITHUB_TOKEN). Nothing is echoed.
+export MODAL_TOKEN_ID="$(grep -E '^MODAL_TOKEN_ID=' .env.local | cut -d= -f2-)"
+export MODAL_TOKEN_SECRET="$(grep -E '^MODAL_TOKEN_SECRET=' .env.local | cut -d= -f2-)"
+modal app list >/dev/null && echo "modal auth ok"
 ```
-Load `.env.local` into the shell env (e.g. `set -a; . ./.env.local; set +a`) so the CLI sees the token — no browser needed on the VM.
+The Modal CLI reads `MODAL_TOKEN_ID` / `MODAL_TOKEN_SECRET` from the environment, so neither `modal token set` nor `~/.modal.toml` is needed — no browser on the VM.
 
 ## Step 4 — Smoke test on a public dataset (no corpus, no privacy risk)
+Mip-NeRF 360, scene **`room`** (indoor), the 4x-downsampled **`images_4`** set (smaller upload, faster CPU SfM, cheaper). The archive is ~12.5 GB (~25 GB with extraction); `data/mipnerf360/` and `out/` are git-ignored.
 ```
-python -c "from pathlib import Path; from reconstruction.fetch_dataset import fetch; fetch('mipnerf360', Path('./data/mipnerf360'))"
-modal run services/reconstruction/modal_app.py --images ./data/mipnerf360/<scene>/images --scan-id smoke --rate 1.0
+PYTHONPATH=services/reconstruction python3 -c "from pathlib import Path; from reconstruction.fetch_dataset import fetch; fetch('mipnerf360', Path('./data/mipnerf360'))"
+modal run services/reconstruction/modal_app.py \
+    --images ./data/mipnerf360/room/images_4 --scan-id smoke \
+    --source public --sfm colmap --rate 1.10
 ```
-First `modal run` builds the image from `Dockerfile` in Modal's cloud (a few minutes, once). Success = a `.spz`/`.sog` splat + `.obj` mesh + `cost.json` land in `./out`.
+- `--source public`: only `public` and `corpus` are accepted; `user` is rejected locally before upload and again in the container (ADR-0005 / AUTH #030).
+- `--sfm colmap`: GLOMAP is not in the image yet. The image's COLMAP is the Ubuntu 22.04 apt build (3.7, **no CUDA**), so SIFT runs on CPU while the A10G idles — expect SfM to dominate wall time (tens of minutes for ~300 images with exhaustive matching). The function timeout is 1 h.
+- `--rate 1.10`: Modal A10G ≈ $0.000306/s ≈ $1.10/hr (plus small CPU/memory charges), so `cost.json` stays close to the bill. Worst case per run ≈ $1.20 (1 h timeout).
+- First `modal run` builds the image from `Dockerfile` in Modal's cloud (several minutes, once). The build context is pinned to `services/reconstruction/` and only `reconstruction/` is uploaded.
+- Success = a `.spz`/`.sog` splat + `.obj` mesh + `cost.json` land in `./out`.
 
 ## Step 5 — Run a corpus room + record cost
 ```
 modal run services/reconstruction/modal_app.py --images ./data/<corpus-room>/images --scan-id room1 --source corpus --rate <gpu $/hr>
 ```
 - Copy the `cost.json` per-scan numbers into `research/vendors/reconstruction-spike-report.md` §2 (GPU time + $/scan).
-- **Halt at the cap.** If `cost.json` shows the spike total nearing $100, stop and ping the Owner — do not raise the cap (Owner-only). The pipeline raises `SpendCapError` before a run that would cross it.
+- **Halt at the cap.** Keep a running total of every run's `cost.json` (and check Settings → Usage & Billing). The Modal workspace spend limit is the real cumulative stop; the in-code `SpendCapError` only fires when a *single* run's estimate would cross a cap, because each run starts a fresh ledger. Near $100, stop and ping the Owner — do not raise the cap (Owner-only).
+
+## Follow-up — faster SfM (CUDA COLMAP / GLOMAP)
+Not done yet; propose to the Builder once the smoke test passes. Cheapest paths to GPU SIFT/matching: base the image on (or copy the binaries from) the official CUDA-enabled `colmap/colmap` Docker image, or install a CUDA build of COLMAP from conda-forge. Then set `GJ_COLMAP_CUDA=1` in the Dockerfile (switches SIFT to GPU) and, if GLOMAP is added, use `--sfm glomap`. Record the choice and pins in the spike report.
 
 ## Step 6 — Hand outputs to the iOS render leg
 The compressed splat (`./out/<scan_id>.spz`) is the input for **M1-UNITY-01** (the iOS Metal render de-risk). Keep splats behind signed URLs when they move to storage (§3.1); never commit raw scan media (§6.1/§6.5).

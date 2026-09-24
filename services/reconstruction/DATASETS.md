@@ -22,7 +22,7 @@ Then run the spike driver against an extracted scene folder:
 
 ```bash
 python -m reconstruction.spike --images ./data/mipnerf360/<scene>/images \
-    --scan-id smoke --trainer gsplat --sfm glomap --rate 1.0
+    --scan-id smoke --source public --trainer gsplat --sfm colmap --rate 1.10
 ```
 
 After the public smoke test passes, switch `--images` to a consented corpus room

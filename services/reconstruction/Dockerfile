@@ -11,18 +11,38 @@
 
 FROM nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04
 
+# /opt/venv (Python 3.11) is first on PATH, so `python` and `pip` resolve to the
+# interpreter that has torch/gsplat/nerfstudio/open3d. Modal (from_dockerfile)
+# requires `python` + `pip` on PATH and runs the function with it.
+# PYTHONPATH=/work makes the `reconstruction` package importable in the function.
+# QT_QPA_PLATFORM=offscreen lets the Qt-linked apt COLMAP run headless.
+# GJ_COLMAP_CUDA=0: the apt COLMAP has no CUDA, so SIFT runs on CPU (modal_app.py).
 ENV DEBIAN_FRONTEND=noninteractive \
     PYTHONUNBUFFERED=1 \
-    PIP_NO_CACHE_DIR=1
+    PIP_NO_CACHE_DIR=1 \
+    VIRTUAL_ENV=/opt/venv \
+    PATH=/opt/venv/bin:$PATH \
+    PYTHONPATH=/work \
+    QT_QPA_PLATFORM=offscreen \
+    GJ_COLMAP_CUDA=0
 
-# System + SfM. COLMAP/GLOMAP are BSD-3-Clause. (GLOMAP is built from a pinned
-# tag in the spike if the distro package lags; the apt package unblocks the
-# first smoke test.)
+# System + SfM. COLMAP is BSD-3-Clause. The Ubuntu 22.04 apt COLMAP (3.7) is
+# built WITHOUT CUDA, so SIFT extraction/matching run on CPU (slow). GLOMAP is
+# NOT installed (no apt package); modal_app.py defaults to --sfm colmap. A
+# CUDA COLMAP (+ GLOMAP) is a follow-up, see OPERATOR_RUNBOOK.md.
+# Python 3.11 comes from the deadsnakes PPA: Ubuntu 22.04's own python3.11 is a
+# 3.11.0 release candidate, which lacks tarfile's extraction `filter=` (3.11.4+)
+# used by modal_app.py.
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        python3.11 python3.11-venv python3-pip \
+        software-properties-common gpg-agent \
+    && add-apt-repository -y ppa:deadsnakes/ppa \
+    && apt-get update && apt-get install -y --no-install-recommends \
+        python3.11 python3.11-venv python3.11-dev \
         git curl ca-certificates \
         colmap \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && python3.11 -m venv /opt/venv \
+    && python -c "import sys, tarfile; assert sys.version_info >= (3, 11, 4) and hasattr(tarfile, 'data_filter'), sys.version"
 
 # Node for splat-transform (MIT): PLY -> .spz/.sog.
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
@@ -33,10 +53,10 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
 # Python GPU stack (pins validated during the spike):
 #   torch (CUDA 12.4) — BSD-style; gsplat / nerfstudio (Splatfacto) — Apache-2.0;
 #   open3d — MIT.
-RUN python3.11 -m pip install --upgrade pip==24.2 \
-    && python3.11 -m pip install \
+RUN python -m pip install --upgrade pip==24.2 \
+    && python -m pip install \
         torch==2.4.1 --index-url https://download.pytorch.org/whl/cu124 \
-    && python3.11 -m pip install \
+    && python -m pip install \
         gsplat==1.4.0 \
         nerfstudio==1.1.5 \
         open3d==0.18.0
@@ -46,5 +66,5 @@ COPY reconstruction ./reconstruction
 
 # Default: show the license manifest gate. The spike driver invokes
 # reconstruction.pipeline.run_pipeline with the real adapters.
-CMD ["python3.11", "-c", "from reconstruction import assert_commercial_safe; \
+CMD ["python", "-c", "from reconstruction import assert_commercial_safe; \
 print('license gate OK:', len(assert_commercial_safe()), 'components')"]
