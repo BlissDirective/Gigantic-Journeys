@@ -30,7 +30,7 @@
     },
     {
       "id": "AT-3",
-      "test": "If a managed bridge is used, its retention and training terms (no-train + DPA) are on file in legal/vendors/ before any user (non-corpus) scan is sent; the self-host path keeps scan media on our own infra. Corpus scans are Owner-supplied and consented.",
+      "test": "If a managed bridge is used, its terms (written no-train + DPA + data residency) are on file in legal/vendors/ before any user (non-corpus) scan is sent (AUTH #030); absent that commitment there is no bridge and self-host is the sole path. The self-host path keeps scan media on our own infra. Corpus scans are Owner-supplied and consented.",
       "evidence": "legal/vendors/ terms file link",
       "automated": false,
       "level": "required"
@@ -72,7 +72,7 @@
   "branch": null,
   "pr": null,
   "created": "2026-09-16",
-  "updated": "2026-09-20",
+  "updated": "2026-09-24",
   "history": [
     {
       "date": "2026-09-16",
@@ -87,6 +87,11 @@
     {
       "date": "2026-09-20",
       "event": "sharpened under AUTH #025 (capture UX): failures log the on-device readiness score + coverage map, and return the kind free-retry handoff (AT-5).",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-24",
+      "event": "AUTH #030: bridge terms in AT-3 tightened to written no-train + DPA + data residency; bridge is conditional (self-host primary).",
       "by": "coordinator"
     }
   ]

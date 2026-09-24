@@ -1,8 +1,10 @@
 # ADR-0005: Reconstruction self-host (with a managed bridge); avatar via Avatar SDK/MetaPerson on-prem
 
-Date: 2026-09-18 · Status: Accepted; **avatar half superseded by ADR-0006** · Authorization: APPROVED #018 (reconstruction), #019 (avatar) · Supersedes: ADR-0003 · Owner: claude-builder (pipeline), coordinator (governance)
+Date: 2026-09-18 · Status: Accepted; **avatar half superseded by ADR-0006** · Authorization: APPROVED #018 (reconstruction), #019 (avatar), #030 (self-host prioritized; bridge conditional) · Supersedes: ADR-0003 · Owner: claude-builder (pipeline), coordinator (governance)
 
 > **Addenda (2026-09-18):** (1) The **avatar decision here (Avatar SDK/MetaPerson on-prem, #019) is superseded by ADR-0006** — v1 uses a curated roster of pre-made characters with no biometric processing; Avatar SDK is deferred to the V2 custom-avatar track. (2) The **reconstruction managed bridge is selected: KIRI, corpus-only** (splat+mesh matches the self-host target; it only ever processes the consented corpus, never real user homes; real user scans wait for the self-host pipeline). The reconstruction decision otherwise stands.
+>
+> **(3) 2026-09-24 (AUTH #030):** self-host is the **committed, prioritized** v1 reconstruction path — the **M1-CAPT-03 spike stands up as soon as possible**. This **supersedes (2)'s pre-selection of KIRI**: a managed bridge (KIRI or Autodesk APS) is now **conditional**, used only when a **written no-train + DPA + data-residency** commitment is on file *before any use*, and only ever on the consented corpus — never real user scans. Absent that commitment there is **no bridge** and self-host is the sole reconstruction backend. **Luma remains rejected** (deprecated to generative video/image; default terms train on inputs; no-train is Enterprise-only) — not usable under our security/legal bar.
 
 ## Context
 ADR-0003 chose Luma for reconstruction and Meshy/Tripo for avatar heads, both as third-party APIs, with a self-hosted gsplat path documented only as a fallback. Vendor research (2026-09-17, `research/vendors/`) invalidated both premises:

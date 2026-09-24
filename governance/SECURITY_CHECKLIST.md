@@ -64,7 +64,7 @@ The app holds two sensitive things: biometric imagery (faces, bodies) and photog
 |---|---|---|
 | 6.1 | Raw scan video, poses, and depth are deleted from storage automatically when derived assets exist; failed jobs are deleted within 7 days. | B |
 | 6.2 | *(V2, AUTH #020 — no face capture in v1)* Face and body photos are deleted on device, in storage, and at the vendor immediately after avatar generation; a deletion receipt is logged without the media. | V2 |
-| 6.3 | Reconstruction runs on our own infrastructure (self-host, ADR-0005); any managed **bridge (KIRI) processes only the consented corpus, never real user scans**, with its terms on file before use. **No avatar vendor in v1.** A third party that trains on customer data by default is never sent real user data. | G (M1) |
+| 6.3 | Reconstruction runs on our own infrastructure (self-host, ADR-0005) — the committed, prioritized v1 path. A managed **bridge (KIRI/APS) is conditional**: used only under a **written no-train + DPA + data-residency** commitment on file before use, and only ever on the **consented corpus, never real user scans**; absent that commitment there is no bridge (AUTH #030). **No avatar vendor in v1.** A third party that trains on customer data by default is never sent real user data. | G (M1) |
 | 6.4 | Per-user delete-all removes every data class in `SPEC.md` §7; an end-to-end run on staging is suggested. | G (M5) |
 | 6.5 | Bots never handle raw user photos or video; the test corpus is Owner-supplied and consented. | B |
 
