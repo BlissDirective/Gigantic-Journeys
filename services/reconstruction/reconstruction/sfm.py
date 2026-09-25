@@ -69,6 +69,9 @@ class GlomapSfM:
                 str(db),
                 "--image_path",
                 str(scan.image_dir),
+                # One capture = one device/lens: share intrinsics across images.
+                "--ImageReader.single_camera",
+                "1",
                 *extract_flags,
             ],
             check=True,
@@ -95,6 +98,7 @@ class GlomapSfM:
             scan_id=scan.scan_id,
             sparse_dir=model,
             registered_images=_count_registered(model),
+            image_dir=scan.image_dir,
         )
 
 
@@ -118,6 +122,9 @@ class ColmapSfM:
                 str(db),
                 "--image_path",
                 str(scan.image_dir),
+                # One capture = one device/lens: share intrinsics across images.
+                "--ImageReader.single_camera",
+                "1",
                 *extract_flags,
             ],
             check=True,
@@ -144,6 +151,7 @@ class ColmapSfM:
             scan_id=scan.scan_id,
             sparse_dir=model,
             registered_images=_count_registered(model),
+            image_dir=scan.image_dir,
         )
 
 

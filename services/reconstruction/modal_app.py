@@ -37,7 +37,9 @@ image = modal.Image.from_dockerfile((_HERE / "Dockerfile").as_posix(), context_d
 app = modal.App("gj-recon-spike", image=image)
 
 
-@app.function(gpu="A10G", timeout=3600)
+# cpu/memory: the apt COLMAP runs SIFT extraction + exhaustive matching on CPU, so
+# reserve real cores (billed separately from the GPU; see the spike report).
+@app.function(gpu="A10G", cpu=8.0, memory=16384, timeout=3600)
 def reconstruct(
     images_tar: bytes,
     scan_id: str,

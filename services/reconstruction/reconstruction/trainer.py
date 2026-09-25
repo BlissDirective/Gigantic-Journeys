@@ -34,39 +34,57 @@ class Trainer(Protocol):
 
 
 class GsplatTrainer:
-    """gsplat / Splatfacto with MCMC densification to a fixed splat budget.
+    """gsplat via nerfstudio Splatfacto (``ns-train splatfacto``), then a PLY export.
 
-    Trains via ``ns-train splatfacto`` then exports a PLY. Exact flags are pinned
-    against the container's nerfstudio version during the spike.
+    Reads the COLMAP model directly (nerfstudio's ``colmap`` dataparser) at the
+    capture's native resolution. nerfstudio 1.1.5 (the latest release) exposes
+    only gsplat's default densification strategy, so ``config.splat_budget`` is
+    not enforced here yet (MCMC with a hard cap needs a newer Splatfacto or
+    gsplat's own trainer); the resulting splat count is recorded instead.
+    ``--vis tensorboard`` keeps the run headless and lets it exit when done
+    (the default web viewer keeps the process alive after training).
     """
 
     def train(self, poses: CameraPoses, work_dir: Path, config: ReconstructionConfig) -> SplatModel:
         ns_train = require("ns-train")
         ns_export = require("ns-export")
         out = work_dir / "gsplat"
+        image_dir = poses.image_dir or poses.sparse_dir.parent.parent / "images"
         subprocess.run(
             [
                 ns_train,
                 "splatfacto",
                 "--data",
-                str(poses.sparse_dir.parent),
-                "--max-num-iterations",
-                str(config.train_iters),
-                "--pipeline.model.strategy",
-                "mcmc",
-                "--pipeline.model.max-gs-num",
-                str(config.splat_budget),
+                str(work_dir),
                 "--output-dir",
                 str(out),
+                "--experiment-name",
+                poses.scan_id,
+                "--timestamp",
+                "run",
+                "--max-num-iterations",
+                str(config.train_iters),
+                "--vis",
+                "tensorboard",
+                "colmap",
+                "--colmap-path",
+                str(poses.sparse_dir.resolve()),
+                "--images-path",
+                str(image_dir.resolve()),
+                "--downscale-factor",
+                "1",
             ],
             check=True,
         )
+        configs = sorted(out.rglob("config.yml"))
+        if not configs:
+            raise TrainerError(f"ns-train produced no config.yml under {out}")
         subprocess.run(
             [
                 ns_export,
                 "gaussian-splat",
                 "--load-config",
-                str(out / "config.yml"),
+                str(configs[-1]),
                 "--output-dir",
                 str(out),
             ],

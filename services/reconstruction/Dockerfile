@@ -38,33 +38,55 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && add-apt-repository -y ppa:deadsnakes/ppa \
     && apt-get update && apt-get install -y --no-install-recommends \
         python3.11 python3.11-venv python3.11-dev \
-        git curl ca-certificates \
+        git curl ca-certificates libgl1 libgomp1 \
         colmap \
     && rm -rf /var/lib/apt/lists/* \
     && python3.11 -m venv /opt/venv \
     && python -c "import sys, tarfile; assert sys.version_info >= (3, 11, 4) and hasattr(tarfile, 'data_filter'), sys.version"
 
-# Node for splat-transform (MIT): PLY -> .spz/.sog.
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+# Node 22 for @playcanvas/splat-transform (MIT): PLY -> .spz/.sog. splat-transform
+# 3.x requires Node >= 22; the unscoped npm name "splat-transform" does not exist.
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && apt-get install -y --no-install-recommends nodejs \
     && rm -rf /var/lib/apt/lists/* \
-    && npm install -g splat-transform@2.6.0
+    && npm install -g @playcanvas/splat-transform@3.6.4 \
+    && splat-transform --version
 
 # Python GPU stack (pins validated during the spike):
 #   torch (CUDA 12.4) — BSD-style; gsplat / nerfstudio (Splatfacto) — Apache-2.0;
 #   open3d — MIT.
-RUN python -m pip install --upgrade pip==24.2 \
-    && python -m pip install \
-        torch==2.4.1 --index-url https://download.pytorch.org/whl/cu124 \
-    && python -m pip install \
+# torchvision is pinned from the same cu124 index so nerfstudio's torchvision
+# requirement cannot pull a newer PyPI torch over the CUDA build.
+RUN python -m pip install --upgrade pip==24.2 setuptools wheel ninja \
+    && python -m pip install torch==2.4.1 torchvision==0.19.1 \
+        --index-url https://download.pytorch.org/whl/cu124
+
+# gsplat 1.4.0 ships only a pure-Python PyPI wheel (CUDA kernels are JIT-compiled
+# on first use, i.e. on billed GPU time) and its sdist lacks the glm submodule;
+# prebuilt wheels exist only for cp310. So compile the CUDA extension here, from
+# the tagged source, for A100 (8.0), A10G (8.6) and L4/L40S (8.9). No GPU is
+# needed to compile.
+ENV TORCH_CUDA_ARCH_LIST="8.0;8.6;8.9" \
+    MAX_JOBS=4
+RUN git clone --depth 1 --branch v1.4.0 --recurse-submodules --shallow-submodules \
+        https://github.com/nerfstudio-project/gsplat.git /tmp/gsplat \
+    && python -m pip install --no-build-isolation /tmp/gsplat \
+    && rm -rf /tmp/gsplat
+
+# numpy<2: open3d 0.18 is built against the numpy 1.x ABI.
+RUN python -m pip install \
         gsplat==1.4.0 \
         nerfstudio==1.1.5 \
-        open3d==0.18.0
+        open3d==0.18.0 \
+        numpy==1.26.4 \
+        torch==2.4.1 \
+        torchvision==0.19.1 \
+    && ns-train --help > /dev/null \
+    && python -c "import open3d, gsplat, torch; print('torch', torch.__version__, 'gsplat', gsplat.__version__, 'open3d', open3d.__version__)"
 
 WORKDIR /work
 COPY reconstruction ./reconstruction
 
 # Default: show the license manifest gate. The spike driver invokes
 # reconstruction.pipeline.run_pipeline with the real adapters.
-CMD ["python", "-c", "from reconstruction import assert_commercial_safe; \
-print('license gate OK:', len(assert_commercial_safe()), 'components')"]
+CMD ["python", "-c", "from reconstruction import assert_commercial_safe; print('license gate OK:', len(assert_commercial_safe()), 'components')"]

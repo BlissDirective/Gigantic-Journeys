@@ -82,6 +82,7 @@ class CameraPoses:
     scan_id: str
     sparse_dir: Path
     registered_images: int
+    image_dir: Path | None = None  # the images the poses refer to (trainer input)
 
 
 @dataclass(frozen=True)
