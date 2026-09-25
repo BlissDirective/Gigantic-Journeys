@@ -69,7 +69,7 @@
   "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-23",
+  "updated": "2026-09-25",
   "history": [
     {
       "date": "2026-09-15",
@@ -85,6 +85,11 @@
       "date": "2026-09-23",
       "event": "Builder (unified-role session, AUTH #027): committed the headless-authorable scaffold — pinned editor version (ProjectVersion.txt, 6000.0.28f1), pinned package manifest (URP 17, Input System, Animation Rigging, Test Framework, uGUI/UI Toolkit + modules), and unity/README.md as the authoritative project spec + first-Editor-open runbook (AT-1 done; AT-3 manifest done). Remaining ATs (AT-2 URP assets, AT-3 packages-lock, AT-4 batchmode tests, AT-5 zero-console, AT-6 CSharpier) need the first Editor open (computer-use step, Operator/QA VM) and the Unity license (M0-REPO-03); no dotnet/CSharpier or Unity Editor in the headless container.",
       "by": "builder"
+    },
+    {
+      "date": "2026-09-25",
+      "event": "Note from M0-REPO-03 closure (gj-operator): CI Unity activation now works, but ios-build run 36201220032 failed at the export step with 'Cannot build untitled scene' (exit 103) because unity/ProjectSettings/EditorBuildSettings.asset does not exist. Deliverable for this ticket: commit unity/ProjectSettings/EditorBuildSettings.asset listing Assets/Scenes/SampleScene.unity (enabled, with its .meta GUID) so the CI export can build; the scene itself is not in the repo yet and is created at the first Editor open. Status unchanged.",
+      "by": "gj-operator"
     }
   ]
 }

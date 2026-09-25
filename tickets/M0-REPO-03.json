@@ -5,7 +5,7 @@
   "area": "REPO",
   "owner": "owner",
   "qa": null,
-  "status": "blocked",
+  "status": "done",
   "priority": "P0",
   "size": "S",
   "summary": "Owner adds the Unity activation secrets so unity-tests and ios-build stop skipping. Depends on the Unity account approved in the Foreman's M0 AUTH batch. Secret values are never pasted anywhere but the GitHub secrets UI.",
@@ -39,13 +39,10 @@
   "depends_on": [
     "M0-FORE-02"
   ],
-  "blocked_by": [
-    "Owner action: fix the Unity account sign-in (confirm admin@prolectio.com is unlocked, has a real password with 2FA off), re-set the UNITY_PASSWORD (and if needed UNITY_EMAIL) Actions secret, then set UNITY_CI_ENABLED=true"
-  ],
   "branch": null,
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-24",
+  "updated": "2026-09-25",
   "history": [
     {
       "date": "2026-09-15",
@@ -70,6 +67,11 @@
     {
       "date": "2026-09-24",
       "event": "Reopened (done -> blocked). The first ios-build activation (run 36072046904, workflow_dispatch on 322f328) passed preflight but game-ci license activation failed: Unity login rejected UNITY_EMAIL/UNITY_PASSWORD with HTTP 401 (15 failed sign-ins across 6 attempts). UNITY_CI_ENABLED was removed again to stop further failed sign-ins and a repeat account lockout. Owner must fix the Unity password and re-set the secret. Close after the first successful activation (preflight run=true + activation success).",
+      "by": "gj-operator"
+    },
+    {
+      "date": "2026-09-25",
+      "event": "Closed (blocked -> done). The Owner reset the Unity password and re-set the UNITY_PASSWORD Actions secret (2026-09-25 18:28 CDT); UNITY_CI_ENABLED=true is set again. ios-build run 36201220032 (https://github.com/BlissDirective/Gigantic-Journeys/actions/runs/36201220032, workflow_dispatch on 80d2cef): preflight run=true ('project, switch, and Unity login present'); game-ci activated the Unity Personal license on the first try ('Activation successful', no HTTP 401s or retries) and returned the license at job end ('Successfully returned ULF license'; serial masked in the log). The closing criterion set at reopen (preflight run=true + activation success) is met. AT-1 met (login secrets present, preflight run=true). AT-3 met for this run (no secret values in the log; secret-scan green). AT-2 partly met: ios-build preflight reports the project and Unity login present, but the literal 'next run after M0-UNITY-01 merges' check cannot happen until M0-UNITY-01 lands; the unity-tests preflight is exercised by the next push to main. The same run then failed at the export step with 'Cannot build untitled scene' (exit 103) because unity/ProjectSettings has no EditorBuildSettings.asset; that is M0-UNITY-01 scope, deferred there. The run shows as cancelled because the watcher cancelled it after the export failed.",
       "by": "gj-operator"
     }
   ]
