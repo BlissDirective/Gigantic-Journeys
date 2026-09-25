@@ -65,7 +65,7 @@
   "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-09-18",
-  "updated": "2026-09-24",
+  "updated": "2026-09-25",
   "history": [
     {
       "date": "2026-09-18",
@@ -81,6 +81,11 @@
       "date": "2026-09-24",
       "event": "Builder built the headless services/reconstruction/ scaffold (gsplat-first, pluggable SfM/trainer/compress/mesh adapters, cost+cap and commercial-license gates, 21 tests green, CUDA Dockerfile) and landed the cost+trainer analysis (research/vendors/reconstruction-cost-and-trainer-analysis.md); trainer recommendation = gsplat-first (pluggable, Brush second). Spike report skeleton created, render-path first (Owner decision). Status -> in-progress; the $100 GPU spike run (AUTH #031) is pending Unity/Mac/iPhone + input data.",
       "by": "claude-builder"
+    },
+    {
+      "date": "2026-09-25",
+      "event": "Operator ran the Modal smoke test (AUTH #033): fixed the image build (Dockerfile CMD escape rejected by Modal's parser, plus splat-transform/Node 22, gsplat CUDA build, torchvision/numpy pins, headless Splatfacto via the colmap dataparser; commit 5a25f89). Mip-NeRF 360 room (public, 311 images_4) reconstructed end to end on an A10G: 311/311 registered, 431,684-Gaussian SPZ (8.0 MB) + Poisson OBJ collision mesh (36.3 MB), 44.3 MB package; pipeline 1371 s (SfM ~16 min on CPU, train ~6 min); $0.42 GPU-only per cost.json, $0.86 actual Modal metered incl. CPU/memory. Recorded in the spike report. AT-1 partly evidenced (public dataset, not yet a captured/corpus room); AT-2 (iOS render) and AT-4 (decision note) open, so status stays in-progress.",
+      "by": "gj-operator"
     }
   ]
 }
