@@ -34,7 +34,7 @@ jobs:
       run: ${{ steps.p.outputs.run }}
       reason: ${{ steps.p.outputs.reason }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - id: p
         env:
           CI_ENABLED: ${{ vars.UNITY_CI_ENABLED }}
@@ -66,7 +66,7 @@ jobs:
     if: needs.preflight.outputs.run == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           lfs: true
       - uses: actions/cache@v4
