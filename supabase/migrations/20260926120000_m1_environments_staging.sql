@@ -1,12 +1,11 @@
 -- 20260926120000_m1_environments_staging.sql
 --
--- DRAFT — DO NOT APPLY until BOTH are true:
---   1) the Owner approves an AUTH for the M1 staging DB schema. Table creation is
---      AUTH-gated (supabase/README.md; SECURITY_CHECKLIST §2.5). Filed as pending
---      AUTH #034 (governance/AUTHORIZATION_LOG.md → Pending). Replace the citation
---      below with the approved number before applying.
---   2) M1-DATA-01 freezes the environment_spec schema, so the `environment_spec`
---      jsonb column's shape is fixed rather than provisional.
+-- APPROVED #034 (Owner, 2026-09-26) — ready to apply to the STAGING project.
+-- Table creation is AUTH-gated (supabase/README.md; SECURITY_CHECKLIST §2.5); this
+-- migration carries that approval. The Operator (gj-platform; staging creds only,
+-- §8.3) applies it. M1-DATA-01 will later freeze the environment_spec schema; the
+-- jsonb column is flexible, so applying now is safe and its shape is validated at
+-- the app layer once frozen.
 --
 -- Scope (why it exists): give the reconstruction pipeline somewhere to land its
 -- output — the compressed splat, collision mesh, and thumbnail — with Row-Level
@@ -15,7 +14,7 @@
 -- Ratings, reports, and leaderboard times are M4 (separate, later, AUTH-gated
 -- migrations). Apply to the STAGING project first.
 --
--- AUTH: APPROVED #034 (PENDING — this migration must not be applied until approved).
+-- AUTH: APPROVED #034 (Owner, 2026-09-26).
 
 -- ---------- enums ----------
 create type public.environment_status as enum

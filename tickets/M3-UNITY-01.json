@@ -5,7 +5,7 @@
   "area": "UNITY",
   "owner": "claude-builder",
   "qa": "gj-qa-release",
-  "status": "open",
+  "status": "done",
   "priority": "P2",
   "size": "M",
   "summary": "M0-UNITY-01 review finding. Burst (com.unity.burst, transitive via URP / Input System / Animation Rigging) is disabled for the iOS build so the Linux game-ci export succeeds (iOS Burst AOT cannot cross-compile from Linux). Two gaps: (1) the disable is NOT committed — no ProjectSettings/BurstAotSettings_iOS.json and no CI flag — so 'Burst off' is not reproducible from a fresh checkout (SECURITY_CHECKLIST §7.1 reproducible builds); (2) Burst is a performance optimizer, so shipping with it off leaves CPU-side performance (Jobs / hot numeric loops in movement, physics, scene-graph math) on the table for device fps. Not a correctness issue and not blocking M0/M1 — the iOS splat render is GPU-sort-bound, so the M1-UNITY-01 render measurement is unaffected. Fix: make the iOS Burst state explicit + committed, and add a macOS Unity player-build lane (Burst AOT compiles arm64 natively on macOS) for perf/TestFlight builds before device perf testing.",
@@ -56,6 +56,11 @@
     {
       "date": "2026-09-26",
       "event": "Created by the Coordinator from the M0-UNITY-01 review (Owner flagged Burst-off + graphics=automatic). Graphics=automatic resolves to Metal-only and is correctly guarded by an EditMode test (ProjectSettingsSmokeTests) — no action needed there. Burst-off is the correct workaround for the Linux iOS export; tracked here for reproducibility + perf.",
+      "by": "coordinator"
+    },
+    {
+      "date": "2026-09-26",
+      "event": "Independent secondary review (Coordinator) of the Operator's implementation (97ce8f9): BurstAotSettings_iOS.json committed ENABLED (AT-1); IosBurstBuildHook flips Burst off only for the fast Linux compile-check export (-gjIosBurstOff) and restores it; the macOS player lane builds iOS with Burst AOT on and asserts lib_burst_generated.a compiled (AT-2); EditMode tests cover committed-state + flag parsing. CI green, no secrets. Confirmed sound (exceeds the ticket spec — Burst stays ENABLED for the real/TestFlight build). AT-3 (device fps Burst-off vs on) is suggested (SPEC §11) and rides the M1 render/perf pass. Status -> done.",
       "by": "coordinator"
     }
   ]

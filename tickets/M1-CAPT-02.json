@@ -67,12 +67,14 @@
     "kit RESUME M1",
     "SPEC §3.1",
     "AUTH #025",
-    "design/proposals/capture-ux-coaching-v1.md"
+    "design/proposals/capture-ux-coaching-v1.md",
+    "supabase/migrations/20260926120000_m1_environments_staging.sql",
+    "supabase/functions/environment-urls/"
   ],
   "branch": null,
   "pr": null,
   "created": "2026-09-16",
-  "updated": "2026-09-24",
+  "updated": "2026-09-26",
   "history": [
     {
       "date": "2026-09-16",
@@ -93,6 +95,11 @@
       "date": "2026-09-24",
       "event": "AUTH #030: bridge terms in AT-3 tightened to written no-train + DPA + data residency; bridge is conditional (self-host primary).",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-26",
+      "event": "Backend landing drafted (Builder): the M1 staging schema migration (environments table + private bucket + RLS, AUTH #034) and the environment-urls edge function issuing <=15-min signed download URLs (owner or published+cleared via RLS) + owner-scoped upload URLs, service-role signing, no direct storage exposure — the signed-URL delivery path for AT-1/AT-3. To be applied + deployed to staging by gj-platform.",
+      "by": "claude-builder"
     }
   ]
 }
