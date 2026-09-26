@@ -117,7 +117,7 @@ jobs:
         run: |
           sudo rm -rf /usr/share/dotnet /usr/local/lib/android/sdk/ndk /opt/ghc || true
           df -h /
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           path: unity/Library
           key: Library-ios-${{ hashFiles('unity/Assets/**', 'unity/Packages/**', 'unity/ProjectSettings/**') }}
@@ -169,7 +169,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           lfs: true
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           path: unity/Library
           key: LibraryMac-ios-${{ hashFiles('unity/Assets/**', 'unity/Packages/**', 'unity/ProjectSettings/**') }}
