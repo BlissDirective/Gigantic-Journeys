@@ -6,10 +6,21 @@
 # repository variable IOS_MAC_RUNNER to that runner's label (for example
 # "gj-ios") to switch; leave it unset to use GitHub's macos-14.
 #
-# Two macOS lanes, chosen by the repository variable TESTFLIGHT_ENABLED:
-#   - unset/false: unsigned build (compile check only)
-#   - true: signed archive with Xcode cloud-managed signing using the App Store
-#     Connect API key, export, and TestFlight upload through fastlane pilot.
+# Lanes (ticket M3-UNITY-01 for Burst):
+#   - Linux export lane (every push to main, or dispatch with lane=linux): the
+#     fast compile check. game-ci exports the Xcode project on Linux with
+#     Burst OFF for that build only (customParameters -gjIosBurstOff, handled
+#     by unity/Assets/Editor/Build/IosBurstBuildHook.cs), then a macOS runner
+#     runs an unsigned xcodebuild.
+#   - macOS player lane (dispatch with lane=macos, the default, and every run
+#     while TESTFLIGHT_ENABLED is "true"): game-ci runs the Unity iOS player
+#     build natively on a macOS runner with the committed Burst state
+#     (ProjectSettings/BurstAotSettings_iOS.json, ENABLED), asserts the Burst
+#     library is in the Xcode project, and runs an unsigned xcodebuild. This is
+#     the lane for perf and TestFlight builds.
+#   - TestFlight (TESTFLIGHT_ENABLED "true"): signed archive of the macOS
+#     player lane's Xcode project with Xcode cloud-managed signing using the
+#     App Store Connect API key, export, and upload through fastlane pilot.
 #     Internal testers with automatic distribution receive every build.
 # Secrets (CI-only, added by the Owner, ticket M0-REPO-05): ASC_KEY_ID,
 # ASC_ISSUER_ID, ASC_KEY_P8_BASE64. Variable: APPLE_TEAM_ID.
@@ -29,6 +40,12 @@ on:
       - "config/movement.json"
       - ".github/workflows/ios-build.yml"
   workflow_dispatch:
+    inputs:
+      lane:
+        description: "macos = Unity iOS player build on macOS with Burst AOT on (perf/TestFlight); linux = fast Linux export compile check (Burst off)"
+        type: choice
+        options: [macos, linux]
+        default: macos
 
 permissions:
   contents: read
@@ -45,6 +62,8 @@ jobs:
     outputs:
       run: ${{ steps.p.outputs.run }}
       reason: ${{ steps.p.outputs.reason }}
+      linux: ${{ steps.lanes.outputs.linux }}
+      macos: ${{ steps.lanes.outputs.macos }}
     steps:
       - uses: actions/checkout@v4
       - id: p
@@ -70,12 +89,25 @@ jobs:
           fi
           echo "run=true" >> "$GITHUB_OUTPUT"
           echo "reason=project, switch, and Unity login present" >> "$GITHUB_OUTPUT"
+      - id: lanes
+        env:
+          EVENT: ${{ github.event_name }}
+          LANE: ${{ inputs.lane }}
+          TESTFLIGHT: ${{ vars.TESTFLIGHT_ENABLED }}
+        run: |
+          set -euo pipefail
+          linux=false; macos=false
+          if [ "$EVENT" = "push" ] || [ "$LANE" = "linux" ]; then linux=true; fi
+          if [ "$LANE" = "macos" ] || [ "$TESTFLIGHT" = "true" ]; then macos=true; fi
+          echo "linux=$linux" >> "$GITHUB_OUTPUT"
+          echo "macos=$macos" >> "$GITHUB_OUTPUT"
+          echo "lanes: linux export=$linux, macOS player (Burst on)=$macos"
       - run: echo "::notice::ios-build ${{ steps.p.outputs.run == 'true' && 'will run' || format('skipped — {0}', steps.p.outputs.reason) }}"
 
   export:
     name: Unity iOS export (Xcode project, Linux)
     needs: preflight
-    if: needs.preflight.outputs.run == 'true'
+    if: needs.preflight.outputs.run == 'true' && needs.preflight.outputs.linux == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -101,6 +133,9 @@ jobs:
           projectPath: unity
           targetPlatform: iOS
           buildName: GiganticJourneys
+          # Burst off for this compile-check export only (M3-UNITY-01); the
+          # committed iOS Burst state stays ENABLED. See the [GJ-BURST] log line.
+          customParameters: -gjIosBurstOff
       - uses: actions/upload-artifact@v4
         with:
           name: ios-xcode-project
@@ -110,7 +145,6 @@ jobs:
   archive:
     name: xcodebuild (unsigned, macOS)
     needs: export
-    if: vars.TESTFLIGHT_ENABLED != 'true'
     runs-on: ${{ vars.IOS_MAC_RUNNER || 'macos-14' }}
     steps:
       - uses: actions/download-artifact@v4
@@ -125,10 +159,68 @@ jobs:
             -sdk iphoneos -derivedDataPath ../DerivedData \
             CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO build
 
+  macos-player:
+    name: Unity iOS player build (macOS, Burst AOT on) + unsigned xcodebuild
+    # After the Linux export so only one Unity activation runs at a time.
+    needs: [preflight, export]
+    if: ${{ !cancelled() && needs.preflight.outputs.run == 'true' && needs.preflight.outputs.macos == 'true' }}
+    runs-on: ${{ vars.IOS_MAC_RUNNER || 'macos-14' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/cache@v4
+        with:
+          path: unity/Library
+          key: LibraryMac-ios-${{ hashFiles('unity/Assets/**', 'unity/Packages/**', 'unity/ProjectSettings/**') }}
+          restore-keys: |
+            LibraryMac-ios-
+      - name: Committed iOS Burst state must be ENABLED
+        run: |
+          set -euo pipefail
+          grep -Eq '"EnableBurstCompilation"[[:space:]]*:[[:space:]]*true' unity/ProjectSettings/BurstAotSettings_iOS.json \
+            || { echo "::error::unity/ProjectSettings/BurstAotSettings_iOS.json must have EnableBurstCompilation true (M3-UNITY-01)"; exit 1; }
+          echo "[GJ-BURST] committed iOS Burst state: ENABLED"
+      - uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+        with:
+          projectPath: unity
+          targetPlatform: iOS
+          buildName: GiganticJourneys
+          cacheUnityInstallationOnMac: true
+      - name: Burst AOT library is in the Xcode project
+        run: |
+          set -euo pipefail
+          lib=build/iOS/GiganticJourneys/Libraries/lib_burst_generated.a
+          test -s "$lib" || { echo "::error::$lib missing or empty: Burst AOT did not run (M3-UNITY-01)"; exit 1; }
+          size=$(stat -f %z "$lib")
+          syms=$(nm -gU "$lib" 2>/dev/null | grep -c ' T ' || true)
+          lipo -info "$lib" || true
+          echo "[GJ-BURST] Burst AOT ENABLED: $lib is $size bytes with $syms exported code symbols"
+          echo "::notice::Burst AOT ENABLED: lib_burst_generated.a $size bytes, $syms code symbols"
+      - name: xcodebuild (unsigned compile check)
+        run: |
+          set -euo pipefail
+          cd build/iOS/GiganticJourneys
+          xcodebuild -project Unity-iPhone.xcodeproj -scheme Unity-iPhone -configuration Release \
+            -sdk iphoneos -derivedDataPath ../DerivedData \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ios-xcode-project-burst
+          path: |
+            build/iOS
+            !build/iOS/DerivedData
+          retention-days: 3
+
   testflight:
     name: signed archive + TestFlight upload (macOS)
-    needs: export
-    if: vars.TESTFLIGHT_ENABLED == 'true'
+    needs: macos-player
+    if: ${{ !cancelled() && vars.TESTFLIGHT_ENABLED == 'true' && needs.macos-player.result == 'success' }}
     runs-on: ${{ vars.IOS_MAC_RUNNER || 'macos-14' }}
     env:
       ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
@@ -138,7 +230,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: ios-xcode-project
+          name: ios-xcode-project-burst
           path: build/iOS
       - name: Install the App Store Connect API key (never printed)
         env:
@@ -202,7 +294,7 @@ jobs:
 
   gate:
     name: ios build gate
-    needs: [preflight, export, archive, testflight]
+    needs: [preflight, export, archive, macos-player, testflight]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -211,11 +303,22 @@ jobs:
             echo "skipped: ${{ needs.preflight.outputs.reason }}"
             exit 0
           fi
-          if [ "${{ needs.export.result }}" != "success" ]; then
-            echo "::error::Unity iOS export failed (${{ needs.export.result }})"
-            exit 1
+          fail=0
+          if [ "${{ needs.preflight.outputs.linux }}" = "true" ]; then
+            if [ "${{ needs.export.result }}/${{ needs.archive.result }}" != "success/success" ]; then
+              echo "::error::Linux export lane failed (export=${{ needs.export.result }}, xcodebuild=${{ needs.archive.result }})"
+              fail=1
+            fi
           fi
-          case "${{ needs.archive.result }}/${{ needs.testflight.result }}" in
-            success/skipped|skipped/success) echo "ios build: OK" ;;
-            *) echo "::error::macOS lane failed (archive=${{ needs.archive.result }}, testflight=${{ needs.testflight.result }})"; exit 1 ;;
-          esac
+          if [ "${{ needs.preflight.outputs.macos }}" = "true" ]; then
+            if [ "${{ needs.macos-player.result }}" != "success" ]; then
+              echo "::error::macOS player lane (Burst on) failed (${{ needs.macos-player.result }})"
+              fail=1
+            fi
+            if [ "${{ vars.TESTFLIGHT_ENABLED }}" = "true" ] && [ "${{ needs.testflight.result }}" != "success" ]; then
+              echo "::error::TestFlight lane failed (${{ needs.testflight.result }})"
+              fail=1
+            fi
+          fi
+          [ "$fail" = 0 ] && echo "ios build: OK (linux=${{ needs.preflight.outputs.linux }}, macos=${{ needs.preflight.outputs.macos }})"
+          exit "$fail"
