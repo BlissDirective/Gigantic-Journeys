@@ -69,7 +69,7 @@
   "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-25",
+  "updated": "2026-09-26",
   "history": [
     {
       "date": "2026-09-15",
@@ -99,6 +99,11 @@
     {
       "date": "2026-09-25",
       "event": "CI on 33026a1 all green: lint 36204143645 (csharp/CSharpier job success, AT-6), governance 36204143662, secret-scan 36204143735, unity-tests 36204143651 (EditMode 4/4 + PlayMode 1/1 passed in CI, AT-4), ios-build 36204143658 (license activation successful; Unity iOS export 'Build Finished, Result: Success'; unsigned xcodebuild on macos-14 success; TestFlight lane skipped since TESTFLIGHT_ENABLED is not true; gate success; license returned). Runs: https://github.com/BlissDirective/Gigantic-Journeys/actions/runs/36204143658 and /36204143651.",
+      "by": "gj-operator"
+    },
+    {
+      "date": "2026-09-26",
+      "event": "Editor upgrade (Owner-approved, security): 6000.0.28f1 carries Unity's 'Security Alert' sept-2025-01 (CVE-2025-59489; 6000.0 patched from 6000.0.58f2). Re-pinned to 6000.0.84f1 (changeset 78ab6fc243d5), the newest 6000.0 LTS release with no release-API label; installed with iOS Build Support via the Hub CLI. The Package Manager raised packages to the Editor's minimums (Input System 1.20.0, Animation Rigging 1.4.1, Test Framework 1.6.0, Visual Studio 2.0.27; URP stays 17.0.4) and URP/Player settings re-serialized (new default fields only). Warm and clean CI-like headless opens: 0 console errors/warnings; ProjectSetup.Run idempotent; EditMode 4/4 + PlayMode 1/1 locally. Evidence: qa/reports/M0-UNITY-01/upgrade-6000.0.84f1.md. game-ci reads ProjectVersion.txt (no workflow pin). Status stays done.",
       "by": "gj-operator"
     }
   ]

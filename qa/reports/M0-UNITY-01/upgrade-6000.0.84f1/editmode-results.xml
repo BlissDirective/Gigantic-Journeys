@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="4" result="Passed" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-26 12:23:21Z" end-time="2026-09-26 12:23:21Z" duration="0.0396737">
+  <test-suite type="TestSuite" id="1000" name="Gigantic Journeys" fullname="Gigantic Journeys" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-09-26 12:23:21Z" end-time="2026-09-26 12:23:21Z" duration="0.039674" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1006" name="GiganticJourneys.EditMode.Tests.dll" fullname="/home/box/projects/gigantic-journeys/unity/Library/ScriptAssemblies/GiganticJourneys.EditMode.Tests.dll" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-09-26 12:23:21Z" end-time="2026-09-26 12:23:21Z" duration="0.033715" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="1782148" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1007" name="GiganticJourneys" fullname="GiganticJourneys" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-09-26 12:23:21Z" end-time="2026-09-26 12:23:21Z" duration="0.033405" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1008" name="Tests" fullname="GiganticJourneys.Tests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-09-26 12:23:21Z" end-time="2026-09-26 12:23:21Z" duration="0.033277" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1001" name="ProjectSettingsSmokeTests" fullname="GiganticJourneys.Tests.ProjectSettingsSmokeTests" classname="GiganticJourneys.Tests.ProjectSettingsSmokeTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-09-26 12:23:21Z" end-time="2026-09-26 12:23:21Z" duration="0.032377" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1004" name="BootSceneIsFirstEnabledBuildScene" fullname="GiganticJourneys.Tests.ProjectSettingsSmokeTests.BootSceneIsFirstEnabledBuildScene" methodname="BootSceneIsFirstEnabledBuildScene" classname="GiganticJourneys.Tests.ProjectSettingsSmokeTests" runstate="Runnable" seed="653791046" result="Passed" start-time="2026-09-26 12:23:21Z" end-time="2026-09-26 12:23:21Z" duration="0.015598" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1002" name="IosBundleIdIsTheStoreId" fullname="GiganticJourneys.Tests.ProjectSettingsSmokeTests.IosBundleIdIsTheStoreId" methodname="IosBundleIdIsTheStoreId" classname="GiganticJourneys.Tests.ProjectSettingsSmokeTests" runstate="Runnable" seed="751743280" result="Passed" start-time="2026-09-26 12:23:21Z" end-time="2026-09-26 12:23:21Z" duration="0.000650" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1003" name="IosUsesMetalOnlyAndIl2Cpp" fullname="GiganticJourneys.Tests.ProjectSettingsSmokeTests.IosUsesMetalOnlyAndIl2Cpp" methodname="IosUsesMetalOnlyAndIl2Cpp" classname="GiganticJourneys.Tests.ProjectSettingsSmokeTests" runstate="Runnable" seed="336094478" result="Passed" start-time="2026-09-26 12:23:21Z" end-time="2026-09-26 12:23:21Z" duration="0.002675" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1005" name="UrpIsTheDefaultRenderPipeline" fullname="GiganticJourneys.Tests.ProjectSettingsSmokeTests.UrpIsTheDefaultRenderPipeline" methodname="UrpIsTheDefaultRenderPipeline" classname="GiganticJourneys.Tests.ProjectSettingsSmokeTests" runstate="Runnable" seed="1866854111" result="Passed" start-time="2026-09-26 12:23:21Z" end-time="2026-09-26 12:23:21Z" duration="0.000786" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Saving results to: /home/box/.config/unity3d/SparkForge Labs/Gigantic Journeys/TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>
