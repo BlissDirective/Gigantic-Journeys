@@ -5,7 +5,7 @@
 > **Goal:** get a reconstructed Gaussian splat rendering **correctly depth-sorted at 30 fps on a physical iPhone** in Unity 6 URP. Input: the smoke-test `smoke.spz` from the Modal run (M1-CAPT-03). The #1 program risk is the **per-frame Metal depth sort**, not rasterization.
 
 ## What you need
-- Unity **6000.0.28f1** (the pinned editor), the project at `unity/`.
+- Unity 6 — the pinned editor in `unity/ProjectSettings/ProjectVersion.txt` (currently `6000.0.84f1`), project at `unity/`.
 - A `.spz` (or `.ply`) splat — start with the M1-CAPT-03 `smoke.spz`.
 - The iOS build path already wired: `.github/workflows/ios-build.yml` (Linux export → macOS archive → TestFlight). Install on the iPhone via the internal TestFlight group.
 - Licenses (all clean): aras-p/UnityGaussianSplatting **MIT**, Niantic spz **MIT**, rayanht/msplat **Apache-2.0**, scier/MetalSplatter **MIT**. Record any package add in SECURITY_CHECKLIST §7.4 terms (version + license).
