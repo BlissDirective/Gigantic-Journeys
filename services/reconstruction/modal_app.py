@@ -11,7 +11,10 @@ Defaults (spike report 2026-09-26): CUDA COLMAP 4.1 — GPU SIFT extraction, GPU
 matching (``--matcher auto``: exhaustive up to 500 images, else sequential with
 vocab-tree loop detection), incremental ``mapper``. ``--sfm glomap`` selects the
 GLOMAP global mapper (``colmap global_mapper``); ``--matcher exhaustive`` /
-``sequential`` / ``vocab_tree`` force a matcher; ``--no-gpu-features`` CPU SIFT. Decision + numbers:
+``sequential`` / ``vocab_tree`` force a matcher; ``--no-gpu-features`` CPU SIFT.
+Training: Splatfacto profile ``scaled-10k-dense`` (``--profile`` for others),
+hard splat cap ``--splat-budget`` (2M), cleaned + decimated collision mesh, A10G
+(``--gpu L40S`` is ~25% faster, ~20% dearer). Decision + numbers:
 research/vendors/reconstruction-spike-report.md.
 
 SfM-only sweep (every matcher x mapper, no training), used to pick the defaults:
@@ -57,6 +60,10 @@ _SKIP = "# modal-skip"
 CPU_CORES = 8.0
 MEMORY_MIB = 16384
 GPU = "A10G"
+# Modal GPU list prices, $/hour (`modal billing rates`, 2026-09-26). The gsplat
+# layer is compiled for sm_80 / sm_86 / sm_89 only, so these are the usable
+# tiers (H100 / B200 / RTX PRO 6000 would need another arch in the Dockerfile).
+GPU_RATES = {"A10G": 1.10, "L4": 0.80, "L40S": 1.95, "A100-40GB": 2.10}
 
 
 def dockerfile_layers(text: str) -> list[list[str]]:
@@ -124,8 +131,17 @@ def reconstruct(
     sfm: str = "colmap",
     matcher: str = "auto",
     gpu_features: bool = True,
+    gpu: str = GPU,
+    profile: str = "",
+    splat_budget: int = 2_000_000,
+    cpu_cores: float = CPU_CORES,
 ) -> tuple[dict, bytes, bytes, bytes]:
-    """SfM -> train (+eval) -> compress -> mesh; return (cost sheet, splat, mesh, preview)."""
+    """SfM -> train (+cap, eval) -> compress -> mesh; return (cost sheet, splat, mesh, preview).
+
+    ``gpu`` / ``cpu_cores`` only label and price the cost sheet: the caller
+    picks the hardware with ``reconstruct.with_options(gpu=..., cpu=...)``. ``profile`` names a
+    ``trainer.PROFILES`` schedule ("" = the default).
+    """
     import tempfile
 
     from reconstruction import (
@@ -144,7 +160,7 @@ def reconstruct(
 
     scan_source = require_offsite_source(source)  # defence in depth: never a user scan
     # Meter the whole container job (untar included): that is what Modal bills.
-    meter = ResourceMeter(cores=CPU_CORES, memory_gib=MEMORY_MIB / 1024)
+    meter = ResourceMeter(cores=cpu_cores, memory_gib=MEMORY_MIB / 1024)
     use_gpu = gpu_features and os.environ.get("GJ_COLMAP_CUDA") == "1"
     sfm_adapter = select_sfm(sfm, use_gpu=use_gpu, matcher=matcher)
 
@@ -158,9 +174,9 @@ def reconstruct(
     )
     run = run_pipeline(
         scan,
-        ReconstructionConfig(sfm=sfm),
+        ReconstructionConfig(sfm=sfm, splat_budget=splat_budget),
         sfm=sfm_adapter,
-        trainer=GsplatTrainer(),
+        trainer=GsplatTrainer(profile=profile or None),
         compressor=SplatTransformCompressor(),
         mesher=Open3DMesher(),
         work_dir=work / "out",
@@ -169,7 +185,7 @@ def reconstruct(
         meter=meter,
     )
     sheet = cost_sheet(run)
-    sheet["host"] = {"gpu": GPU, "cpu_cores": CPU_CORES, "memory_mib": MEMORY_MIB}
+    sheet["host"] = {"gpu": gpu, "cpu_cores": cpu_cores, "memory_mib": MEMORY_MIB}
     preview = run.model.preview_image if run.model else None
     return (
         sheet,
@@ -212,6 +228,154 @@ def sfm_bench(images_tar: bytes, source: str, matchers: str, mappers: str) -> di
     }
 
 
+@app.function(gpu=GPU, cpu=(CPU_CORES, CPU_CORES), memory=MEMORY_MIB, timeout=3600)
+def sfm_export(images_tar: bytes, source: str) -> tuple[bytes, dict]:
+    """Default SfM only; return the sparse model as a tar (+ stats) for ``train_bench``."""
+    import tempfile
+
+    from reconstruction import ScanInput, require_offsite_source, select_sfm
+
+    scan_source = require_offsite_source(source)
+    work = Path(tempfile.mkdtemp())
+    count = _untar(images_tar, work / "images")
+    scan = ScanInput("bench", work / "images", count, scan_source)
+    use_gpu = os.environ.get("GJ_COLMAP_CUDA") == "1"
+    poses = select_sfm("colmap", use_gpu=use_gpu).run(scan, work / "out")
+    buf = io.BytesIO()
+    with tarfile.open(fileobj=buf, mode="w") as tar:
+        tar.add(poses.sparse_dir, arcname="sparse")
+    stats = dict(poses.stats or {})
+    stats["registered_images"] = poses.registered_images
+    return buf.getvalue(), stats
+
+
+@app.function(gpu=GPU, cpu=(CPU_CORES, CPU_CORES), memory=MEMORY_MIB, timeout=3600)
+def train_bench(
+    images_tar: bytes,
+    sparse_tar: bytes,
+    source: str,
+    profile: str,
+    splat_budget: int,
+    gpu: str,
+    rate_per_hour_usd: float,
+    growth_limit: bool = True,
+) -> dict:
+    """Train (+cap, eval) -> compress -> mesh from a fixed SfM model; return timings + cost.
+
+    Training-only sweep (``--train-bench``): every profile trains from the same
+    poses, so differences are the trainer's alone. The cost is this container's
+    whole job (untar included), priced like ``cost.json``.
+    """
+    import tempfile
+    import time
+
+    from reconstruction import (
+        CameraPoses,
+        GsplatTrainer,
+        Open3DMesher,
+        ReconstructionConfig,
+        SplatTransformCompressor,
+        require_offsite_source,
+    )
+    from reconstruction.cost import ResourceMeter
+
+    require_offsite_source(source)
+    meter = ResourceMeter(cores=CPU_CORES, memory_gib=MEMORY_MIB / 1024).start()
+    started = time.monotonic()
+    work = Path(tempfile.mkdtemp())
+    count = _untar(images_tar, work / "images")
+    with tarfile.open(fileobj=io.BytesIO(sparse_tar)) as tar:
+        tar.extractall(work / "out", filter="data")  # noqa: S202 - produced by sfm_export
+    poses = CameraPoses("bench", work / "out" / "sparse", count, image_dir=work / "images")
+    config = ReconstructionConfig(splat_budget=splat_budget)
+    t0 = time.monotonic()
+    trainer = GsplatTrainer(profile=profile, growth_limit=growth_limit)
+    model = trainer.train(poses, work / "out", config)
+    t1 = time.monotonic()
+    compressed = SplatTransformCompressor().compress(model, work / "out", config)
+    t2 = time.monotonic()
+    mesh = Open3DMesher().derive(model, work / "out")
+    t3 = time.monotonic()
+    usage = meter.stop()
+    wall = time.monotonic() - started
+    gpu_usd = wall / 3600 * rate_per_hour_usd
+    return {
+        "profile": profile,
+        "gpu": gpu,
+        "splat_budget": splat_budget,
+        "growth_limit": growth_limit,
+        "splat_count": model.splat_count,
+        "spz_bytes": compressed.size_bytes,
+        "quality": model.metrics,
+        "stage_seconds": {
+            "setup": round(t0 - started, 2),
+            "train": round(t1 - t0, 2),
+            "compress": round(t2 - t1, 2),
+            "mesh": round(t3 - t2, 2),
+        },
+        "mesh": {"triangles": mesh.triangle_count, "bytes": mesh.size_bytes, **(mesh.stats or {})},
+        "wall_s": round(wall, 2),
+        "gpu_usd": round(gpu_usd, 4),
+        "cpu_usd": round(usage.cpu_usd(), 4),
+        "memory_usd": round(usage.memory_usd(), 4),
+        "usd": round(gpu_usd + usage.cpu_usd() + usage.memory_usd(), 4),
+        "avg_used_cores": round(usage.used_core_seconds / max(usage.wall_seconds, 1e-9), 2),
+        "peak_memory_gib": round(usage.peak_memory_gib, 2),
+    }
+
+
+@app.function(cpu=(4.0, 4.0), memory=8192, timeout=1800)
+def mesh_bench(splats: dict[str, bytes], variants: dict[str, dict]) -> dict:
+    """Collision-mesh rules sweep on existing splats (CPU only, no GPU).
+
+    Each splat (.spz / .ply) is meshed with every ``MeshFilter`` variant; per
+    variant it reports size / triangles / box per splat and the symmetric
+    Chamfer distance between the meshes of every pair of splats (the same scene
+    from different runs), i.e. how stable the mesh *shape* is run to run.
+    """
+    import itertools
+    import subprocess
+    import tempfile
+
+    import numpy as np
+    import open3d as o3d
+    from reconstruction import Open3DMesher, SplatModel
+    from reconstruction.models import read_ply_vertex_count
+    from reconstruction.splat_ops import MeshFilter
+
+    work = Path(tempfile.mkdtemp())
+    plys = {}
+    for name, data in splats.items():
+        src = work / name
+        src.write_bytes(data)
+        ply = src if src.suffix == ".ply" else work / f"{src.stem}.ply"
+        if src.suffix != ".ply":
+            subprocess.run(["splat-transform", str(src), str(ply)], check=True)
+        plys[name] = ply
+    result: dict = {}
+    for vname, kwargs in variants.items():
+        rules = MeshFilter(**kwargs)
+        rows, samples = {}, {}
+        for name, ply in plys.items():
+            out = work / vname / name
+            out.mkdir(parents=True)
+            model = SplatModel(Path(name).stem, ply, read_ply_vertex_count(ply))
+            mesh = Open3DMesher(rules).derive(model, out)
+            rows[name] = {"bytes": mesh.size_bytes, "triangles": mesh.triangle_count, **mesh.stats}
+            tri = o3d.io.read_triangle_mesh(str(mesh.path))
+            samples[name] = tri.sample_points_uniformly(50_000)
+        chamfer = {}
+        for a, b in itertools.combinations(samples, 2):
+            d_ab = np.asarray(samples[a].compute_point_cloud_distance(samples[b]))
+            d_ba = np.asarray(samples[b].compute_point_cloud_distance(samples[a]))
+            chamfer[f"{a}|{b}"] = {
+                "mean": round(float((d_ab.mean() + d_ba.mean()) / 2), 4),
+                "p95": round(float(max(np.percentile(d_ab, 95), np.percentile(d_ba, 95))), 4),
+            }
+        result[vname] = {"rules": kwargs, "meshes": rows, "chamfer": chamfer}
+    return result
+
+
 def _tar_images(images: str, source: str) -> bytes:
     # Local import: modal puts this file's directory on sys.path. Validate before
     # any upload so a user scan never leaves the machine.
@@ -237,28 +401,69 @@ def main(
     sfm: str = "colmap",
     matcher: str = "auto",
     gpu_features: bool = True,
-    rate: float = 1.10,
+    gpu: str = GPU,
+    cpu: float = CPU_CORES,
+    rate: float = 0.0,
+    profile: str = "",
+    splat_budget: int = 2_000_000,
     out: str = "./out",
     bench: bool = False,
     matchers: str = "exhaustive,sequential,vocab_tree",
     mappers: str = "colmap,glomap",
+    train_bench_profiles: str = "",
+    repeat: int = 1,
+    sparse_cache: str = "",
+    growth_limit: bool = True,
+    mesh_splats: str = "",
+    mesh_variants: str = "",
 ) -> None:
     """Tar a local image dir, run on Modal, save the outputs + cost sheet.
 
+    ``--gpu`` picks the Modal GPU (``GPU_RATES``); ``--rate`` overrides its $/h
+    (0 = list price); ``--cpu`` the reserved (= hard-limited) CPU cores.
+    ``--profile`` a ``trainer.PROFILES`` schedule ("" = default);
+    ``--splat-budget`` the hard splat cap.
+
     ``--bench`` runs the SfM-only matcher x mapper sweep instead (writes
     ``<out>/sfm-bench.json``); ``--matchers`` / ``--mappers`` pick the grid.
+
+    ``--train-bench-profiles a,b,...`` runs the training-only sweep: SfM once
+    (cached as ``--sparse-cache`` if given), then every profile ``--repeat``
+    times in parallel on ``--gpu`` (writes ``<out>/train-bench.json``).
+    ``--no-growth-limit`` trains uncapped so only the post-train prune enforces
+    ``--splat-budget`` (cap stress test).
+
+    ``--mesh-splats a.spz,b.spz`` runs the collision-mesh sweep on existing
+    splats instead (CPU only; ``--mesh-variants`` = JSON ``{name: MeshFilter
+    kwargs}``, default the current rules; writes ``<out>/mesh-bench.json``).
     """
     from reconstruction import SFM_CHOICES, require_offsite_source
     from reconstruction.sfm import MATCHER_CHOICES
+    from reconstruction.trainer import PROFILES
 
     require_offsite_source(source)
+    if gpu not in GPU_RATES:
+        raise SystemExit(f"--gpu must be one of {sorted(GPU_RATES)}, got {gpu!r}")
+    rate = rate or GPU_RATES[gpu]
+    names = [p for p in train_bench_profiles.split(",") if p]
+    for name in [*names, *([profile] if profile else [])]:
+        if name not in PROFILES:
+            raise SystemExit(f"unknown profile {name!r}; one of {sorted(PROFILES)}")
     if sfm not in SFM_CHOICES:
         raise SystemExit(f"--sfm must be one of {SFM_CHOICES}, got {sfm!r}")
     if matcher not in MATCHER_CHOICES:
         raise SystemExit(f"--matcher must be one of {MATCHER_CHOICES}, got {matcher!r}")
-    payload = _tar_images(images, source)
     out_dir = Path(out)
     out_dir.mkdir(parents=True, exist_ok=True)
+    if mesh_splats:
+        files = [Path(p) for p in mesh_splats.split(",") if p]
+        splats = {f"{i}-{f.name}": f.read_bytes() for i, f in enumerate(files)}
+        variants = json.loads(mesh_variants) if mesh_variants else {"default": {}}
+        result = mesh_bench.remote(splats, variants)
+        (out_dir / "mesh-bench.json").write_text(json.dumps(result, indent=2) + "\n")
+        print(json.dumps(result, indent=2))
+        return
+    payload = _tar_images(images, source)
 
     if bench:
         result = sfm_bench.remote(payload, source, matchers, mappers)
@@ -266,12 +471,33 @@ def main(
         print(json.dumps(result, indent=2))
         return
 
-    sheet, splat_bytes, mesh_bytes, preview = reconstruct.remote(
-        payload, scan_id, source, rate, sfm, matcher, gpu_features
+    if names:
+        cache = Path(sparse_cache) if sparse_cache else None
+        if cache and cache.exists():
+            sparse_tar, sfm_stats = cache.read_bytes(), {"cached": str(cache)}
+        else:
+            sparse_tar, sfm_stats = sfm_export.remote(payload, source)
+            if cache:
+                cache.write_bytes(sparse_tar)
+        jobs = [
+            (payload, sparse_tar, source, name, splat_budget, gpu, rate, growth_limit)
+            for name in names
+            for _ in range(repeat)
+        ]
+        rows = list(train_bench.with_options(gpu=gpu).starmap(jobs))
+        result = {"gpu": gpu, "rate_per_hour_usd": rate, "sfm": sfm_stats, "rows": rows}
+        (out_dir / "train-bench.json").write_text(json.dumps(result, indent=2) + "\n")
+        print(json.dumps(result, indent=2))
+        return
+
+    fn = reconstruct.with_options(gpu=gpu, cpu=(cpu, cpu))
+    sheet, splat_bytes, mesh_bytes, preview = fn.remote(
+        payload, scan_id, source, rate, sfm, matcher, gpu_features, gpu, profile, splat_budget, cpu
     )
     (out_dir / f"{scan_id}.{sheet['format']}").write_bytes(splat_bytes)
     (out_dir / f"{scan_id}.obj").write_bytes(mesh_bytes)
     if preview:
-        (out_dir / f"{scan_id}-eval-view.jpg").write_bytes(preview)
+        ext = ".png" if preview.startswith(b"\x89PNG") else ".jpg"
+        (out_dir / f"{scan_id}-eval-view{ext}").write_bytes(preview)
     (out_dir / "cost.json").write_text(json.dumps(sheet, indent=2) + "\n")
     print(json.dumps(sheet, indent=2))

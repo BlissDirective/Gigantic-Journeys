@@ -94,7 +94,7 @@ class SplatModel:
     scan_id: str
     ply_path: Path
     splat_count: int
-    # Held-out eval (ns-eval: psnr/ssim/lpips) + train timings, when available.
+    # Held-out eval (ns_finish: psnr/ssim/lpips), train profile + timings, splat-cap counts.
     metrics: dict | None = None
     preview_image: Path | None = None  # one rendered eval view next to ground truth
 
@@ -118,6 +118,8 @@ class CollisionMesh:
     path: Path
     triangle_count: int
     size_bytes: int
+    # Cleaning / meshing counts (Open3DMesher): points kept per filter, bounds, ...
+    stats: dict | None = None
 
 
 @dataclass(frozen=True)
@@ -137,12 +139,15 @@ class EnvironmentPackage:
 class ReconstructionConfig:
     """Tunables for one reconstruction run.
 
-    Defaults target a room at <=150 MB / 30 fps on iPhone: a fixed splat budget
-    (gsplat MCMC) plus SPZ compression (analysis 2026-09-24).
+    Defaults target a room at <=150 MB / 30 fps on iPhone: a hard splat budget
+    (growth limit during training + importance prune after it, trainer.py) plus
+    SPZ compression (analysis 2026-09-24). ``train_iters`` sets the Splatfacto
+    run length when no explicit profile is given (schedule scaled to it; spike
+    report "Training speed-up").
     """
 
     splat_budget: int = 2_000_000
-    train_iters: int = 15_000
+    train_iters: int = 10_000
     compress_format: Format = Format.SPZ
     sfm: str = "colmap"  # incremental; "glomap" = global mapper (spike report)
     max_package_bytes: int = 150 * MiB

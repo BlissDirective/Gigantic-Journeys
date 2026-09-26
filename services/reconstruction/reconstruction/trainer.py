@@ -8,8 +8,11 @@ requires them. Tests use ``fakes.FakeTrainer``. The pipeline is trainer-agnostic
 from __future__ import annotations
 
 import json
+import os
 import subprocess  # noqa: S404 - orchestrating trusted CLI tools by fixed argv
+import sys
 import time
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Protocol
 
@@ -20,6 +23,7 @@ from .models import (
     SplatModel,
     read_ply_vertex_count,
 )
+from .splat_ops import STATS_ENV
 from .tools import require
 
 
@@ -35,36 +39,164 @@ class Trainer(Protocol):
     ) -> SplatModel: ...
 
 
-class GsplatTrainer:
-    """gsplat via nerfstudio Splatfacto (``ns-train splatfacto``), then a PLY export.
+@dataclass(frozen=True)
+class TrainProfile:
+    """Splatfacto schedule for one ``ns-train`` run.
 
-    Reads the COLMAP model directly (nerfstudio's ``colmap`` dataparser) at the
-    capture's native resolution. nerfstudio 1.1.5 (the latest release) exposes
-    only gsplat's default densification strategy, so ``config.splat_budget`` is
-    not enforced here yet (MCMC with a hard cap needs a newer Splatfacto or
-    gsplat's own trainer); the resulting splat count is recorded instead.
-    ``--vis tensorboard`` keeps the run headless and lets it exit when done
-    (the default web viewer keeps the process alive after training).
-
-    With ``evaluate`` (default), ``ns-eval`` then scores the held-out views
-    (the colmap dataparser holds out every 8th image) and writes PSNR / SSIM /
-    LPIPS to ``SplatModel.metrics``; one rendered view (ground truth | render)
-    is kept as ``preview_image`` for a visual check. Eval failures never fail the
-    run: the splat is the deliverable, metrics are best-effort.
+    nerfstudio's Splatfacto defaults are tuned for 30k iterations. The first
+    15k default here kept them unscaled: splitting ran to the very last step,
+    full resolution only from step 6000 and the position learning rate was only
+    half-decayed at the end. ``scaled(iterations)`` rescales every step-based
+    knob to the run length (spike report, "Training speed-up"). ``in_training_eval``
+    keeps nerfstudio's periodic evals / checkpoints (every 100 / 1000 / 2000
+    steps), which cost ~20% of the train stage and are not used: the held-out
+    eval runs once after training (``ns_finish``).
     """
 
-    def __init__(self, evaluate: bool = True) -> None:
+    name: str
+    iterations: int
+    extra_args: tuple[str, ...] = ()
+    in_training_eval: bool = False
+
+    @classmethod
+    def upstream(cls, iterations: int, name: str = "") -> TrainProfile:
+        """nerfstudio's unscaled 30k schedule, cut at ``iterations`` (old default)."""
+        return cls(name or f"upstream-{iterations // 1000}k", iterations, in_training_eval=True)
+
+    @classmethod
+    def scaled(cls, iterations: int, name: str = "", *extra: str) -> TrainProfile:
+        """Splatfacto's step-based schedule scaled from 30k to ``iterations``.
+
+        Scaled: stop of splitting (half the run), resolution doubling, SH
+        degree steps, screen-size culling stop, position-LR decay (to the end
+        of the run). Kept: warmup (500) and the opacity reset period (3000
+        steps); scaling those too made each reset's refine pause
+        (``num_images + refine_every`` steps) eat most of a short run.
+        """
+        f = iterations / 30_000
+
+        def steps(n: int) -> str:
+            return str(max(1, round(n * f)))
+
+        args = (
+            "--pipeline.model.stop-split-at",
+            steps(15_000),
+            "--pipeline.model.resolution-schedule",
+            steps(3_000),
+            "--pipeline.model.sh-degree-interval",
+            steps(1_000),
+            "--pipeline.model.stop-screen-size-at",
+            steps(4_000),
+            "--optimizers.means.scheduler.max-steps",
+            str(iterations),
+            *extra,
+        )
+        return cls(name or f"scaled-{iterations // 1000}k", iterations, args)
+
+    def ns_train_args(self) -> list[str]:
+        args = ["--max-num-iterations", str(self.iterations)]
+        if not self.in_training_eval:
+            # 0 disables each periodic hook; the final checkpoint is always saved.
+            args += [
+                "--steps-per-eval-image",
+                "0",
+                "--steps-per-eval-batch",
+                "0",
+                "--steps-per-eval-all-images",
+                "0",
+                "--steps-per-save",
+                "0",
+            ]
+        return [*args, *self.extra_args]
+
+
+# Densify a bit more eagerly than Splatfacto's 0.0008 gradient threshold: on
+# the room it bought back most of the LPIPS a 10k run loses, at no extra time.
+DENSE_ARGS = ("--pipeline.model.densify-grad-thresh", "0.0006")
+
+# The profiles benchmarked on Mip-NeRF 360 room (spike report, "Training
+# speed-up"); DEFAULT_PROFILE is the pipeline default.
+PROFILES: dict[str, TrainProfile] = {
+    p.name: p
+    for p in (
+        TrainProfile.upstream(15_000),
+        TrainProfile("upstream-15k-noeval", 15_000),
+        TrainProfile.scaled(15_000),
+        TrainProfile.scaled(12_000),
+        TrainProfile.scaled(10_000),
+        TrainProfile.scaled(10_000, "scaled-10k-dense", *DENSE_ARGS),
+        TrainProfile.scaled(7_000),
+        TrainProfile.scaled(5_000),
+    )
+}
+DEFAULT_PROFILE = "scaled-10k-dense"
+
+
+_NO_GROWTH_LIMIT = 2**62
+
+
+class GsplatTrainer:
+    """gsplat via nerfstudio Splatfacto, then a hard splat cap, eval and export.
+
+    1. ``ns-train splatfacto`` (``reconstruction.ns_train_capped``: densification
+       stops growing at ``config.splat_budget``) with the colmap dataparser at
+       the capture's native resolution and the ``profile``'s schedule.
+       ``--vis tensorboard`` keeps the run headless and lets it exit when done.
+    2. ``reconstruction.ns_finish``: one model load that hard-caps the splat
+       count to ``config.splat_budget`` (by importance), scores the held-out
+       views (``evaluate``; the colmap dataparser holds out every 8th image) and
+       writes the PLY. Metrics are PSNR / SSIM / LPIPS of the *capped* model.
+
+    With ``evaluate`` (default) one rendered view (ground truth | render) is kept
+    as ``preview_image``. Eval failures never fail the run: the splat is the
+    deliverable, metrics are best-effort (on an eval error the export is
+    retried without eval).
+    """
+
+    def __init__(
+        self,
+        evaluate: bool = True,
+        profile: TrainProfile | str | None = None,
+        growth_limit: bool = True,
+    ) -> None:
         self.evaluate = evaluate
+        # False only to exercise the post-train hard cap alone (stress bench).
+        self.growth_limit = growth_limit
+        if isinstance(profile, str):
+            if profile not in PROFILES:
+                raise TrainerError(f"unknown train profile {profile!r}; one of {sorted(PROFILES)}")
+            profile = PROFILES[profile]
+        self.profile = profile
+
+    def profile_for(self, config: ReconstructionConfig) -> TrainProfile:
+        """The explicit profile, else the default recipe at ``config.train_iters``.
+
+        The default recipe is ``DEFAULT_PROFILE`` (scaled schedule + ``DENSE_ARGS``);
+        another ``train_iters`` rescales it to that length.
+        """
+        if self.profile is not None:
+            return self.profile
+        default = PROFILES[DEFAULT_PROFILE]
+        if config.train_iters == default.iterations:
+            return default
+        return TrainProfile.scaled(config.train_iters, "", *DENSE_ARGS)
 
     def train(self, poses: CameraPoses, work_dir: Path, config: ReconstructionConfig) -> SplatModel:
-        ns_train = require("ns-train")
-        ns_export = require("ns-export")
+        python = sys.executable
         out = work_dir / "gsplat"
+        out.mkdir(parents=True, exist_ok=True)
         image_dir = poses.image_dir or poses.sparse_dir.parent.parent / "images"
+        profile = self.profile_for(config)
+        growth = out / "growth.json"
         started = time.monotonic()
         subprocess.run(
             [
-                ns_train,
+                python,
+                "-m",
+                "reconstruction.ns_train_capped",
+                "--budget",
+                str(config.splat_budget if self.growth_limit else _NO_GROWTH_LIMIT),
+                "--",
                 "splatfacto",
                 "--data",
                 str(work_dir),
@@ -74,8 +206,7 @@ class GsplatTrainer:
                 poses.scan_id,
                 "--timestamp",
                 "run",
-                "--max-num-iterations",
-                str(config.train_iters),
+                *profile.ns_train_args(),
                 "--vis",
                 "tensorboard",
                 "colmap",
@@ -87,41 +218,36 @@ class GsplatTrainer:
                 "1",
             ],
             check=True,
+            env={**os.environ, STATS_ENV: str(growth)},
         )
-        metrics: dict = {"train_s": round(time.monotonic() - started, 2)}
+        metrics: dict = {
+            "profile": profile.name,
+            "iterations": profile.iterations,
+            "train_s": round(time.monotonic() - started, 2),
+        }
+        if growth.exists():
+            metrics["growth"] = json.loads(growth.read_text(encoding="utf-8"))
         configs = sorted(out.rglob("config.yml"))
         if not configs:
             raise TrainerError(f"ns-train produced no config.yml under {out}")
-        started = time.monotonic()
-        subprocess.run(
-            [
-                ns_export,
-                "gaussian-splat",
-                "--load-config",
-                str(configs[-1]),
-                "--output-dir",
-                str(out),
-            ],
-            check=True,
-        )
-        metrics["export_s"] = round(time.monotonic() - started, 2)
+        preview = _finish(python, configs[-1], out, config.splat_budget, self.evaluate, metrics)
         ply = out / "splat.ply"
         if not ply.exists():
             raise TrainerError(f"expected splat PLY not produced: {ply}")
-        preview = None
-        if self.evaluate:
-            preview = _evaluate(configs[-1], out, metrics)
+        count = read_ply_vertex_count(ply)
+        if count > config.splat_budget:
+            raise TrainerError(f"splat cap violated: {count} > {config.splat_budget}")
         return SplatModel(
             scan_id=poses.scan_id,
             ply_path=ply,
-            splat_count=read_ply_vertex_count(ply),
+            splat_count=count,
             metrics=metrics,
             preview_image=preview,
         )
 
 
 def parse_eval_json(path: Path) -> dict[str, float]:
-    """PSNR / SSIM / LPIPS (+ eval image count) from an ``ns-eval`` output file."""
+    """PSNR / SSIM / LPIPS (+ std) from an ``ns-eval`` / ``ns_finish`` output file."""
     results = json.loads(path.read_text(encoding="utf-8")).get("results", {})
     return {
         key: round(float(results[key]), 4)
@@ -130,33 +256,52 @@ def parse_eval_json(path: Path) -> dict[str, float]:
     }
 
 
-def _evaluate(config: Path, out: Path, metrics: dict) -> Path | None:
-    """Run ``ns-eval`` on the held-out views; best-effort (never raises)."""
+def _finish(
+    python: str, config: Path, out: Path, budget: int, evaluate: bool, metrics: dict
+) -> Path | None:
+    """Run ``ns_finish`` (cap + eval + export); on an eval failure, export only."""
+    renders = out / "eval_renders"
+    cmd = [
+        python,
+        "-m",
+        "reconstruction.ns_finish",
+        "--load-config",
+        str(config),
+        "--output-dir",
+        str(out),
+        "--budget",
+        str(budget),
+    ]
+    started = time.monotonic()
     try:
-        ns_eval = require("ns-eval")
-        eval_json = out / "eval.json"
-        renders = out / "eval_renders"
-        started = time.monotonic()
-        subprocess.run(
-            [
-                ns_eval,
-                "--load-config",
-                str(config),
-                "--output-path",
-                str(eval_json),
-                "--render-output-path",
-                str(renders),
-            ],
-            check=True,
-        )
-        metrics["eval_s"] = round(time.monotonic() - started, 2)
-        metrics.update(parse_eval_json(eval_json))
-        views = sorted(renders.glob("*")) if renders.is_dir() else []
-        metrics["eval_views"] = len(views)
-        return views[len(views) // 2] if views else None
-    except (ReconstructionError, subprocess.CalledProcessError, OSError, ValueError) as exc:
-        metrics["eval_error"] = str(exc)[:300]
+        if not evaluate:
+            raise _SkipEval
+        subprocess.run([*cmd, "--eval", "--renders", str(renders)], check=True)
+    except (_SkipEval, subprocess.CalledProcessError, OSError) as exc:
+        if not isinstance(exc, _SkipEval):
+            metrics["eval_error"] = str(exc)[:300]
+        subprocess.run(cmd, check=True)
+    metrics["finish_s"] = round(time.monotonic() - started, 2)
+    report_path = out / "finish.json"
+    if not report_path.exists():
         return None
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+    for key in ("trained_splats", "capped_splats", "cap_applied", "exported_splats"):
+        if key in report:
+            metrics[key] = report[key]
+    for key in ("load_s", "cap_s", "eval_s", "export_s"):
+        if key in report:
+            metrics[key] = report[key]
+    metrics.update(parse_eval_json(report_path))
+    if "eval_views" not in report:
+        return None
+    metrics["eval_views"] = report["eval_views"]
+    views = sorted(renders.glob("*")) if renders.is_dir() else []
+    return views[len(views) // 2] if views else None
+
+
+class _SkipEval(Exception):
+    """Internal: evaluation disabled."""
 
 
 class BrushTrainer:

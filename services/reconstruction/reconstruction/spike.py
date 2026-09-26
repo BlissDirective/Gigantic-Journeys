@@ -93,6 +93,12 @@ def cost_sheet(run: ReconstructionRun) -> dict:
         sheet["sfm"] = run.poses.stats
     if run.model is not None and run.model.metrics:
         sheet["quality"] = run.model.metrics
+    mesh = pkg.mesh
+    sheet["mesh"] = {
+        "triangles": mesh.triangle_count,
+        "bytes": mesh.size_bytes,
+        **(mesh.stats or {}),
+    }
     return sheet
 
 
