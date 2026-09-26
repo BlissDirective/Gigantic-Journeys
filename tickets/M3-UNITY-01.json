@@ -1,0 +1,62 @@
+{
+  "id": "M3-UNITY-01",
+  "title": "iOS Burst: commit the explicit disable (reproducibility) + macOS player build to re-enable (perf)",
+  "milestone": "M3",
+  "area": "UNITY",
+  "owner": "claude-builder",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P2",
+  "size": "M",
+  "summary": "M0-UNITY-01 review finding. Burst (com.unity.burst, transitive via URP / Input System / Animation Rigging) is disabled for the iOS build so the Linux game-ci export succeeds (iOS Burst AOT cannot cross-compile from Linux). Two gaps: (1) the disable is NOT committed — no ProjectSettings/BurstAotSettings_iOS.json and no CI flag — so 'Burst off' is not reproducible from a fresh checkout (SECURITY_CHECKLIST §7.1 reproducible builds); (2) Burst is a performance optimizer, so shipping with it off leaves CPU-side performance (Jobs / hot numeric loops in movement, physics, scene-graph math) on the table for device fps. Not a correctness issue and not blocking M0/M1 — the iOS splat render is GPU-sort-bound, so the M1-UNITY-01 render measurement is unaffected. Fix: make the iOS Burst state explicit + committed, and add a macOS Unity player-build lane (Burst AOT compiles arm64 natively on macOS) for perf/TestFlight builds before device perf testing.",
+  "deliverables": [
+    "unity/ProjectSettings (explicit, committed iOS Burst setting)",
+    ".github/workflows/ios-build.yml (macOS player-build lane, Burst on)"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "The iOS Burst state is explicit and committed (ProjectSettings/BurstAotSettings_iOS.json or set in ProjectSetup.cs), so a fresh checkout reproduces the same Burst behavior; an EditMode test or a CI note records it.",
+      "evidence": "committed setting + test/CI note",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "A macOS Unity player-build lane produces an iOS build with Burst AOT enabled (compiles arm64 natively on macOS), used for perf/TestFlight builds; the Linux export lane stays for fast compile-check CI.",
+      "evidence": "green macOS build log showing Burst enabled",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "Device fps is compared Burst-off vs Burst-on on a CPU-bound scene to quantify the gain and confirm the 30 fps target holds with Burst on. Measurements are suggested evidence (SPEC §11), not a gate.",
+      "evidence": "qa/reports device fps numbers",
+      "automated": false,
+      "level": "suggested"
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §7.1"
+  ],
+  "depends_on": [
+    "M0-UNITY-01"
+  ],
+  "references": [
+    "M0-UNITY-01",
+    "M1-UNITY-01",
+    ".github/workflows/ios-build.yml",
+    "unity/Assets/Editor/ProjectSetup.cs"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-26",
+  "updated": "2026-09-26",
+  "history": [
+    {
+      "date": "2026-09-26",
+      "event": "Created by the Coordinator from the M0-UNITY-01 review (Owner flagged Burst-off + graphics=automatic). Graphics=automatic resolves to Metal-only and is correctly guarded by an EditMode test (ProjectSettingsSmokeTests) — no action needed there. Burst-off is the correct workaround for the Linux iOS export; tracked here for reproducibility + perf.",
+      "by": "coordinator"
+    }
+  ]
+}
