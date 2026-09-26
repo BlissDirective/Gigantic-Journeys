@@ -187,6 +187,10 @@ jobs:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          # The Package Manager server (embedded Node) aborts with "async hook
+          # stack has become corrupted" during the first package resolve on
+          # GitHub macOS runners; skip Node's strict async-hook check.
+          NODE_OPTIONS: --no-force-async-hooks-checks
         with:
           projectPath: unity
           targetPlatform: iOS
