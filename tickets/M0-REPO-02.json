@@ -5,22 +5,22 @@
   "area": "REPO",
   "owner": "owner",
   "qa": null,
-  "status": "in-review",
+  "status": "done",
   "priority": "P0",
   "size": "S",
   "summary": "Owner configures the repository so that main takes changes only through a PR with every required CI check green, secret scanning with push protection is on, and history is protected (no force-push, no deletion). Per AUTH #007 a per-PR Code Owner review is NOT required to merge; independent review is periodic (the Coordinator's secondary review). The Builder's merge identity has write/merge access; no agent merges on red CI.",
   "acceptance_tests": [
     {
       "id": "AT-1",
-      "test": "main requires a pull request and cannot be pushed to directly; force-pushes and deletions are blocked.",
-      "evidence": "settings screenshot in qa/vm-setup/repo-settings.md",
+      "test": "main is protected: force-pushes and deletions are blocked, and the required status checks apply to pull requests; administrators remain exempt, so direct pushes by the Owner's admin credential remain possible (Owner decision 2026-09-26).",
+      "evidence": "API readback in qa/vm-setup/repo-settings.md",
       "automated": false,
       "level": "required"
     },
     {
       "id": "AT-2",
-      "test": "Required status checks that must be green to merge: `gitleaks`, `repo hygiene (env files, keys, raw media, size)`, `lint gate`, `tickets validate`, `movement.json single source of truth`, `protected paths need APPROVED #n`, `unity tests gate`, `android build gate`.",
-      "evidence": "settings screenshot",
+      "test": "Required status checks that must be green to merge: `lint gate`, `gitleaks`, `repo hygiene (env files, keys, raw media, size)`, `tickets validate`, `movement.json single source of truth`, `protected paths need APPROVED`, and `unity tests gate`. `android build gate` is excluded because android-build runs only on demand and would leave PRs stuck waiting (Owner decision 2026-09-26).",
+      "evidence": "API readback in qa/vm-setup/repo-settings.md",
       "automated": false,
       "level": "required"
     },
@@ -57,7 +57,7 @@
   "references": [
     "kit §0 (only the Coordinator merges)"
   ],
-  "branch": "ticket/M0-REPO-02-branch-protection",
+  "branch": "ticket/M0-REPO-02-complete",
   "pr": null,
   "created": "2026-09-15",
   "updated": "2026-09-26",
@@ -80,6 +80,11 @@
     {
       "date": "2026-09-26",
       "event": "Owner API configuration verified: secret scanning and push protection are enabled; main requires the lint gate (strict=false), blocks force-pushes and deletions, and has no required PR reviews. The Owner chose admins-exempt protection (enforce_admins=false) on 2026-09-26 so direct pushes remain possible; AT-1 and AT-2 therefore differ from the ticket (PR-only main and the full required-check list), so status is in-review pending acceptance-policy reconciliation.",
+      "by": "gj-operator"
+    },
+    {
+      "date": "2026-09-26",
+      "event": "Owner decision at 1:23 PM CT applied: AT-1 now records protected main with force-push/deletion blocks, PR checks, and admins exempt for the Owner's direct pushes; AT-2 now records the seven configured required checks and explicitly excludes android build gate because it is on-demand. API readback is recorded in qa/vm-setup/repo-settings.md; secret scanning and push protection remain enabled. All required criteria are met, so the ticket is done.",
       "by": "gj-operator"
     }
   ]
