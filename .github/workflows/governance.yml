@@ -38,6 +38,16 @@ jobs:
       - run: pip install jsonschema==4.26.0
       - run: python .github/scripts/check_movement_sync.py
 
+  rls:
+    name: RLS on every table (supabase migrations)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python supabase/scripts/check_rls.py
+
   auth-gate:
     name: protected paths need APPROVED #n
     if: github.event_name == 'pull_request'
