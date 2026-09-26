@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-26 00:13:51Z" end-time="2026-09-26 00:13:51Z" duration="0.026847">
+  <test-suite type="TestSuite" id="1009" name="Gigantic Journeys" fullname="Gigantic Journeys" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-26 00:13:51Z" end-time="2026-09-26 00:13:51Z" duration="0.026847" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1003" name="GiganticJourneys.PlayMode.Tests.dll" fullname="/home/box/projects/gigantic-journeys/unity/Library/ScriptAssemblies/GiganticJourneys.PlayMode.Tests.dll" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-26 00:13:51Z" end-time="2026-09-26 00:13:51Z" duration="0.022263" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="1568885" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1004" name="GiganticJourneys" fullname="GiganticJourneys" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-26 00:13:51Z" end-time="2026-09-26 00:13:51Z" duration="0.021843" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1005" name="Tests" fullname="GiganticJourneys.Tests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-26 00:13:51Z" end-time="2026-09-26 00:13:51Z" duration="0.021645" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1001" name="RuntimeSmokeTests" fullname="GiganticJourneys.Tests.RuntimeSmokeTests" classname="GiganticJourneys.Tests.RuntimeSmokeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-26 00:13:51Z" end-time="2026-09-26 00:13:51Z" duration="0.020839" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1002" name="PlayerLoopAdvancesAFrame" fullname="GiganticJourneys.Tests.RuntimeSmokeTests.PlayerLoopAdvancesAFrame" methodname="PlayerLoopAdvancesAFrame" classname="GiganticJourneys.Tests.RuntimeSmokeTests" runstate="Runnable" seed="2062776021" result="Passed" start-time="2026-09-26 00:13:51Z" end-time="2026-09-26 00:13:51Z" duration="0.013051" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Saving results to: /home/box/.config/unity3d/SparkForge Labs/Gigantic Journeys/TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

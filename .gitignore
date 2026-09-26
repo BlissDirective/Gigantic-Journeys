@@ -120,8 +120,10 @@ Thumbs.db
 tmp/
 .scratch/
 
-# Local license / secret files (operator VM)
+# Local license / secret files (operator VM). Unity license files never enter git.
 .secrets-local/
+*.ulf
+*.alf
 
 # Reconstruction spike (services/reconstruction/OPERATOR_RUNBOOK.md): public dataset
 # download/extract and modal_app.py outputs (splat, mesh, cost.json). Never commit.

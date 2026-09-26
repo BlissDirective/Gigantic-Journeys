@@ -25,6 +25,8 @@ Feature packages, exact-pinned: URP `com.unity.render-pipelines.universal`, Inpu
 ## Assets layout (create on first open)
 ```
 Assets/
+  Editor/      ProjectSetup.cs (GiganticJourneys.Editor.asmdef) — idempotent project configuration
+  Scenes/      SampleScene.unity (boot scene; first entry in EditorBuildSettings)
   GiganticJourneys/
     Runtime/   GiganticJourneys.asmdef            (root runtime assembly)
     Tests/
@@ -50,6 +52,15 @@ Needs Unity `6000.0.28f1` installed and, for CI test/build runs, the Unity licen
 8. **Tests**: `Unity -batchmode -nographics -runTests -testPlatform EditMode` and `PlayMode` pass; save logs under `qa/reports/M0-UNITY-01/`.
 9. Commit `ProjectSettings/**`, `Packages/packages-lock.json`, `Assets/**` (with `.meta` files). CI's `unity tests gate` + `ios-build` activate once `UNITY_LICENSE` is set.
 
+## Re-applying the project settings
+`Assets/Editor/ProjectSetup.cs` is the scripted source of the identity, iOS/Android player settings, URP tiers, boot scene and build-scene list. It is idempotent; re-run it headless after editor upgrades or to repair drift:
+```
+Unity -batchmode -nographics -projectPath unity -quit \
+  -executeMethod GiganticJourneys.EditorTools.ProjectSetup.Run
+```
+(or **Gigantic Journeys → Apply Project Setup** in the Editor). iOS graphics stays on *automatic*, which in Unity 6 resolves to Metal only; the EditMode smoke test asserts Metal + IL2CPP, the bundle id, the boot scene and URP.
+
 ## Status
-- **Committed (Builder, headless):** the pinned editor version, the pinned package manifest, and this spec/runbook.
-- **Pending first Editor open (needs Unity + `UNITY_LICENSE`):** `packages-lock.json`, `ProjectSettings/*.asset`, URP assets, the test assemblies + smoke tests, and the zero-console / batchmode verification (M0-UNITY-01 AT-2/AT-3-lock/AT-4/AT-5/AT-6).
+- **Committed (Builder, headless, 2026-09-23):** the pinned editor version, the pinned package manifest, and this spec/runbook.
+- **First Editor open done (gj-operator, 2026-09-25, headless `-batchmode -nographics`, Unity `6000.0.28f1` / `f336aca0cab5`):** `packages-lock.json`, `ProjectSettings/*.asset` (incl. `EditorBuildSettings.asset`), URP assets per tier, `Assets/Scenes/SampleScene.unity`, test assemblies + smoke tests, and all `.meta` files. Zero console errors; EditMode 4/4 and PlayMode 1/1 pass locally; a local iOS Xcode export succeeds. Evidence: `qa/reports/M0-UNITY-01/`.
+- **Still open (suggested evidence):** an Editor GUI screenshot and the QA-VM zero-console screenshot (AT-5).
