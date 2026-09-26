@@ -5,7 +5,7 @@
   "area": "SKILL",
   "owner": "gj-capture",
   "qa": null,
-  "status": "in-progress",
+  "status": "in-review",
   "priority": "P1",
   "size": "M",
   "summary": "First task before any ticket (kit §3 common block): research the top 100 resources on Gaussian splatting on mobile, ARKit/ARCore capture best practices, Luma/Polycam/Scaniverse UX, photogrammetry capture guidance, splat compression and LOD, Unity splat renderers; save an annotated list and distill a working handbook. Re-read SKILLS.md at every session start and update it when you learn something.",
@@ -55,10 +55,10 @@
     "kit §3 common block",
     "kit §3 role block"
   ],
-  "branch": "claude/gigantic-journeys-governance-f0wgak",
-  "pr": null,
+  "branch": "setup/capture-skills",
+  "pr": "https://github.com/BlissDirective/Gigantic-Journeys/pull/7",
   "created": "2026-09-15",
-  "updated": "2026-09-24",
+  "updated": "2026-09-26",
   "history": [
     {
       "date": "2026-09-15",
@@ -74,6 +74,11 @@
       "date": "2026-09-24",
       "event": "Builder authored the working handbook (projects/skills/<role>/SKILLS.md) + a curated RESOURCES.md foundation; status -> in-progress (Owner-approved). The full annotated top-100 and the re-read/update-every-session discipline remain this role's ongoing task.",
       "by": "claude-builder"
+    },
+    {
+      "date": "2026-09-26",
+      "event": "gj-operator completed the handbook. RESOURCES.md has 106 link-checked entries (title, URL, type, why-for-GJ) grouped by the kit research focus (AT-1). SKILLS.md covers capture coaching, quality gating, the upload pipeline, splat renderer integration and corpus handling, plus mistakes to avoid and pre-PR checklists (AT-2). Its §1 cites agents/grok/README.md, REVIEW_RUBRIC.md and SECURITY_CHECKLIST.md by section, and the Movement Bible / Design Skills sections by number where the role touches them (AT-3). It ends with a Session log (AT-4). Branch setup/capture-skills plus a templated PR; the change lands on main by fast-forward once the PR's CI is green (AT-5). Status -> in-review so the Coordinator can count entries (AT-1).",
+      "by": "gj-operator"
     }
   ]
 }
