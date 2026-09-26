@@ -62,6 +62,7 @@
   ],
   "references": [
     "ADR-0005",
+    "unity/docs/splat-render-integration.md",
     "design/proposals/ios-splat-render-v1.md",
     "research/vendors/reconstruction-cost-and-trainer-analysis.md",
     "M0-UNITY-02",
@@ -70,11 +71,16 @@
   "branch": null,
   "pr": null,
   "created": "2026-09-24",
-  "updated": "2026-09-24",
+  "updated": "2026-09-26",
   "history": [
     {
       "date": "2026-09-24",
       "event": "created by the Builder as the render-first spike track (the #1 program risk, orthogonal to the trainer). Plan in design/proposals/ios-splat-render-v1.md; complements M0-UNITY-02 (general renderer) and M1-CAPT-03 (produces the splat).",
+      "by": "claude-builder"
+    },
+    {
+      "date": "2026-09-26",
+      "event": "Builder drafted the implementation runbook (unity/docs/splat-render-integration.md): aras-p package wiring + URP feature, splat import + budget, and a Metal-safe sort-fix ladder — global bitonic sort (drop-in for aras-p's radix sort; reference compute kernel included) first, tile-local bitonic / MetalSplatter native plugin only if it misses 30 fps — plus the on-device test procedure. Editor/device implementation is the Operator's next step.",
       "by": "claude-builder"
     }
   ]
