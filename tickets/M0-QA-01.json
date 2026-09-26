@@ -5,7 +5,7 @@
   "area": "QA",
   "owner": "gj-qa-release",
   "qa": null,
-  "status": "open",
+  "status": "in-progress",
   "priority": "P0",
   "size": "M",
   "summary": "Install the pinned Unity version on the QA Bot's VM and prove one unattended scripted task: open the project, import the sample splat, open the sample scene, capture a screenshot, write a report. This is the QA half of the M0 exit test.",
@@ -52,10 +52,10 @@
     "kit START M0 (Unity installed on QA VM, one scripted task proven)",
     "plan M0"
   ],
-  "branch": null,
+  "branch": "ticket/M0-QA-01-editor-smoke",
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-15",
+  "updated": "2026-09-26",
   "history": [
     {
       "date": "2026-09-15",
@@ -66,6 +66,11 @@
       "date": "2026-09-15",
       "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-26",
+      "event": "open -> in-progress (gj-operator on the Operator box as the QA VM, per the M0-UNITY-01 precedent). Landed qa/scripts/editor_smoke.py + unity/Assets/Editor/QA/EditorSmoke.cs (batchmode with a graphics device under xvfb-run, llvmpipe OpenGLCore). Ran twice unattended with Unity 6000.0.84f1 (78ab6fc243d5) + iOS Build Support: both PASS, exit 0, 12.1 s wall each, 0 errors / 0 exceptions / 0 compile errors, console 0 errors / 0 warnings on open, identical step results (logs qa/reports/M0-QA-01/run-1.log, run-2.log). AT-1 met (version match + iOS module in the report header). AT-3 met (two identical runs). AT-4 met (automated privacy line: no captured imagery). AT-2 partial: open project, open scene and screenshot pass, but the splat import step reports 'pending M0-UNITY-02' (no sample splat or SplatSample.unity yet) and the scene opened is the fallback Assets/Scenes/SampleScene.unity (Main Camera + Directional Light only), so qa/evidence/M0-QA-01/editor-smoke.png shows only the URP procedural skybox and horizon, no geometry. The splat step, and a screenshot of the splat scene, wait on M0-UNITY-02. Note: a graphics-device open re-serializes GraphicsSettings (m_LightsUseColorTemperature 0->1) and QualitySettings (one tier antiAliasing 0->4, a 'Nintendo Switch 2' platform entry); reverted, not committed. Work is committed directly to main (Operator precedent); the branch field names the work stream for the validator, no separate branch is pushed.",
+      "by": "gj-operator"
     }
   ]
 }

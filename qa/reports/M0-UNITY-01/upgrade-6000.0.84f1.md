@@ -24,4 +24,11 @@
 | PlayMode tests | **Passed 1/1**: `upgrade-6000.0.84f1/playmode-results.xml` |
 | Environment-only log lines | ALSA/FMOD (no audio device), `[Licensing::Module] Access token is unavailable` (no Hub token handed to the Editor; the .ulf validates), same as on 28f1 |
 
-CI results for the upgrade commit are recorded in the M0-UNITY-01 ticket history.
+## CI on the upgrade
+| Workflow | Run | Commit | Result |
+|---|---|---|---|
+| ios-build | [36241881048](https://github.com/BlissDirective/Gigantic-Journeys/actions/runs/36241881048) | `b567e36` (push) | **success**: Unity iOS export + unsigned xcodebuild |
+| unity-tests | [36245697459](https://github.com/BlissDirective/Gigantic-Journeys/actions/runs/36245697459) | `95a3b99` (workflow_dispatch on main; contains `b567e36`) | **success**: EditMode 4/4, PlayMode 1/1 |
+| unity-tests | [36241881067](https://github.com/BlissDirective/Gigantic-Journeys/actions/runs/36241881067) (attempt 2) | `b567e36` (push, re-run) | **success**: EditMode 4/4, PlayMode 1/1 |
+
+Attempt 1 of 36241881067 was cancelled when later pushes took the `unity-license` concurrency slot; both green runs had no Unity login 401s. Also recorded in the M0-UNITY-01 ticket history.

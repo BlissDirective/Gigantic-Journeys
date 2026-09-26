@@ -1,0 +1,52 @@
+{
+  "unityVersion": "6000.0.84f1",
+  "unityFullVersion": "6000.0.84f1 (78ab6fc243d5)",
+  "platform": "Linux 6.12 Debian GNU/Linux 13 64bit",
+  "graphicsDevice": "OpenGLCore (llvmpipe (LLVM 19.1.7, 256 bits))",
+  "activeBuildTarget": "iOS",
+  "iosModuleInstalled": true,
+  "secondsSinceEditorStart": 6.014044449,
+  "scenePath": "Assets/Scenes/SampleScene.unity",
+  "screenshotFile": "editor-smoke.png",
+  "screenshotWidth": 1280,
+  "screenshotHeight": 720,
+  "sceneTextureCount": 0,
+  "sceneTextures": [],
+  "consoleErrorsOnOpen": 0,
+  "consoleWarningsOnOpen": 0,
+  "errorCount": 0,
+  "exceptionCount": 0,
+  "warningCount": 0,
+  "errors": [],
+  "steps": [
+    {
+      "name": "open project",
+      "status": "pass",
+      "seconds": 0.002,
+      "detail": "domain loaded 6.0s after Editor start; compile errors: none; console on open: 0 error(s), 0 warning(s)"
+    },
+    {
+      "name": "import sample splat",
+      "status": "pending",
+      "seconds": 0.002,
+      "detail": "no sample splat under Assets/Capture/Samples yet (renderer + sample land in M0-UNITY-02)"
+    },
+    {
+      "name": "open sample scene",
+      "status": "pass",
+      "seconds": 0.27,
+      "detail": "opened Assets/Scenes/SampleScene.unity, 2 root object(s) (fallback: Assets/Capture/Samples/SplatSample.unity lands in M0-UNITY-02)"
+    },
+    {
+      "name": "capture screenshot",
+      "status": "pass",
+      "seconds": 0.467,
+      "detail": "Main Camera rendered 1280x720 -> editor-smoke.png (64+ colours)"
+    }
+  ],
+  "passed": true,
+  "run": 2,
+  "exit_code": 0,
+  "wall_seconds": 12.1,
+  "compile_errors": 0
+}
