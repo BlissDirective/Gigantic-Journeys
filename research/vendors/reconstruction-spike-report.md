@@ -93,7 +93,7 @@ Goal: cut SfM time and cost without regressing splat quality. Same input for eve
 - A `--bench` SfM-only sweep was added.
 - License note: the conda COLMAP build dynamically links Qt 5 (LGPL-3.0) and FreeImage for its GUI and image I/O, as the apt 3.7 build did. It runs server-side only and is never distributed, so this is unchanged from before and not a blocker. Flagged for the license manifest review.
 
-**Spend for this pass:** about $2.7 Modal metered on 2026-09-26: one full image build, one SfM sweep, 8 full runs and one aborted run. All of it was covered by the monthly credits (billed $0), and the month to date is about $3.7 against the $20 limit.
+**Spend for this pass:** $2.47 Modal metered on 2026-09-26 (`modal billing report --for today`): one full image build, one SfM sweep, 7 full runs, one SIGILL-aborted run, and one crash-looping start (an in-container Dockerfile read, fixed before any GPU work). All of it was covered by the monthly credits (billed $0), and the month to date is about $3.6 against the $20 limit.
 
 **Still open.**
 - Training (about 6.5 of the 9.7 min) is now the main cost. Options are fewer iterations, an MCMC splat cap (nerfstudio 1.1.5 still does not enforce 2M), or a newer gsplat trainer.
