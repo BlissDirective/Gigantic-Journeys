@@ -38,8 +38,8 @@ class Component:
 
 
 MANIFEST: tuple[Component, ...] = (
-    Component("COLMAP", "BSD-3-Clause", "structure-from-motion (incremental)"),
-    Component("GLOMAP", "BSD-3-Clause", "structure-from-motion (global, default)"),
+    Component("COLMAP", "BSD-3-Clause", "structure-from-motion (incremental, default; CUDA SIFT)"),
+    Component("GLOMAP", "BSD-3-Clause", "structure-from-motion (global; inside COLMAP >= 4.0)"),
     Component("gsplat", "Apache-2.0", "gaussian-splat trainer (primary)"),
     Component("Nerfstudio/Splatfacto", "Apache-2.0", "training pipeline over gsplat"),
     Component("Brush", "Apache-2.0", "gaussian-splat trainer (secondary, wgpu)"),

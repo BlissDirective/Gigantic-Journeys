@@ -65,7 +65,7 @@
   "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-09-18",
-  "updated": "2026-09-25",
+  "updated": "2026-09-26",
   "history": [
     {
       "date": "2026-09-18",
@@ -85,6 +85,11 @@
     {
       "date": "2026-09-25",
       "event": "Operator ran the Modal smoke test (AUTH #033): fixed the image build (Dockerfile CMD escape rejected by Modal's parser, plus splat-transform/Node 22, gsplat CUDA build, torchvision/numpy pins, headless Splatfacto via the colmap dataparser; commit 5a25f89). Mip-NeRF 360 room (public, 311 images_4) reconstructed end to end on an A10G: 311/311 registered, 431,684-Gaussian SPZ (8.0 MB) + Poisson OBJ collision mesh (36.3 MB), 44.3 MB package; pipeline 1371 s (SfM ~16 min on CPU, train ~6 min); $0.42 GPU-only per cost.json, $0.86 actual Modal metered incl. CPU/memory. Recorded in the spike report. AT-1 partly evidenced (public dataset, not yet a captured/corpus room); AT-2 (iOS render) and AT-4 (decision note) open, so status stays in-progress.",
+      "by": "gj-operator"
+    },
+    {
+      "date": "2026-09-26",
+      "event": "Operator: SfM speed-up. The image now has CUDA COLMAP 4.1.1 (conda-forge; GLOMAP built in as `colmap global_mapper`). Option A (GPU SIFT + GPU matching + incremental mapper) and option B (GLOMAP global mapper) were benchmarked on the same Mip-NeRF 360 room (311 images_4): an SfM-only matcher x mapper sweep plus 7 full runs with ns-eval quality. Winner and new modal_app.py default: A with `--matcher auto` (GPU exhaustive up to 500 images, sequential + loop detection beyond). SfM 16.2 -> 3.0 min, pipeline 22.9 -> 9.7 min, full cost $0.86 -> $0.26 per room, 311/311 registered, PSNR/SSIM/LPIPS 31.30/0.932/0.092 over 2 runs. B (`--sfm glomap`) stays selectable: equal registration, +48 s pipeline, +$0.02-0.03, -0.14 dB. The sequential matcher was fastest but gave one -1.2 dB run. cost.json now prices GPU + CPU + memory (cgroup meter; within ~3% of Modal's bill); CPU hard-limited to 8 cores; the Modal image is layered so code edits never rebuild; conda COLMAP SIGILL/OIIO pitfalls fixed. Spend about $2.7 (credits; month about $3.7 of the $20 limit). Recorded in the spike report. Status stays in-progress (corpus room, AT-2 iOS render, AT-4 decision note open).",
       "by": "gj-operator"
     }
   ]

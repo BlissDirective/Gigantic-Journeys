@@ -83,6 +83,8 @@ class CameraPoses:
     sparse_dir: Path
     registered_images: int
     image_dir: Path | None = None  # the images the poses refer to (trainer input)
+    # Per-step wall times + model_analyzer numbers (reprojection error, ...).
+    stats: dict | None = None
 
 
 @dataclass(frozen=True)
@@ -92,6 +94,9 @@ class SplatModel:
     scan_id: str
     ply_path: Path
     splat_count: int
+    # Held-out eval (ns-eval: psnr/ssim/lpips) + train timings, when available.
+    metrics: dict | None = None
+    preview_image: Path | None = None  # one rendered eval view next to ground truth
 
 
 @dataclass(frozen=True)
@@ -139,7 +144,7 @@ class ReconstructionConfig:
     splat_budget: int = 2_000_000
     train_iters: int = 15_000
     compress_format: Format = Format.SPZ
-    sfm: str = "glomap"
+    sfm: str = "colmap"  # incremental; "glomap" = global mapper (spike report)
     max_package_bytes: int = 150 * MiB
 
     def __post_init__(self) -> None:

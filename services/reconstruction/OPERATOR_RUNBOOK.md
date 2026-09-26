@@ -1,6 +1,6 @@
 # Reconstruction Spike — Operator Runbook (Modal)
 
-`services/reconstruction/OPERATOR_RUNBOOK.md` · 2026-09-24 · For **gj-operator** (Grok Bot). Stands up the Modal GPU host and runs the self-host reconstruction spike (M1-CAPT-03) under the **$100 cap (AUTH #031)** on the **Modal account (AUTH #033)**. Companion: `modal_app.py`, `README.md`, `DATASETS.md`, `Dockerfile`.
+`services/reconstruction/OPERATOR_RUNBOOK.md` · 2026-09-24, SfM speed-up 2026-09-26 · For **gj-operator** (Grok Bot). Stands up the Modal GPU host and runs the self-host reconstruction spike (M1-CAPT-03) under the **$100 cap (AUTH #031)** on the **Modal account (AUTH #033)**. Companion: `modal_app.py`, `README.md`, `DATASETS.md`, `Dockerfile`.
 
 > The VM is only the **control plane** — Modal runs the GPU job in its own cloud, provisions/pulls our image, runs it, tears it down. The VM needs the `modal` CLI + a token + network. **No GPU on the VM.**
 
@@ -51,24 +51,43 @@ Mip-NeRF 360, scene **`room`** (indoor), the 4x-downsampled **`images_4`** set (
 ```
 PYTHONPATH=services/reconstruction python3 -c "from pathlib import Path; from reconstruction.fetch_dataset import fetch; fetch('mipnerf360', Path('./data/mipnerf360'))"
 modal run services/reconstruction/modal_app.py \
-    --images ./data/mipnerf360/room/images_4 --scan-id smoke \
-    --source public --sfm colmap --rate 1.10
+    --images ./data/mipnerf360/room/images_4 --scan-id smoke --source public --rate 1.10
 ```
 - `--source public`: only `public` and `corpus` are accepted; `user` is rejected locally before upload and again in the container (ADR-0005 / AUTH #030).
-- `--sfm colmap`: GLOMAP is not in the image yet. The image's COLMAP is the Ubuntu 22.04 apt build (3.7, **no CUDA**), so SIFT runs on CPU while the A10G idles — expect SfM to dominate wall time (tens of minutes for ~300 images with exhaustive matching). The function timeout is 1 h.
-- `--rate 1.10`: Modal A10G ≈ $0.000306/s ≈ $1.10/hr (plus small CPU/memory charges), so `cost.json` stays close to the bill. Worst case per run ≈ $1.20 (1 h timeout).
-- First `modal run` builds the image from `Dockerfile` in Modal's cloud (several minutes, once). The build context is pinned to `services/reconstruction/` and only `reconstruction/` is uploaded.
-- Success = a `.spz`/`.sog` splat + `.obj` mesh + `cost.json` land in `./out`.
+- **SfM defaults (2026-09-26):** CUDA COLMAP 4.1.1 runs GPU SIFT extraction, then GPU matching with `--matcher auto`, then the **incremental** `mapper`.
+  - `--matcher auto` uses **exhaustive** matching for captures of up to 500 images. Beyond 500 it switches to **sequential** matching: 15-frame overlap, quadratic overlap, and vocab-tree loop detection every 10 frames.
+  - On the 311-image room, SfM takes about 3 min (it was about 16 min on CPU COLMAP) and the whole pipeline about 9.5 min, at baseline splat quality.
+  - Selectable alternatives:
+    - `--sfm glomap`: the GLOMAP global mapper (`colmap view_graph_calibrator` + `colmap global_mapper`; GLOMAP ships inside COLMAP since 4.0). On this scene it was about 10-60 s slower and about 0.15 dB lower PSNR. Re-try it on large captures (1000+ frames), where global SfM is expected to win.
+    - `--matcher sequential`: linear in frame count, for long ordered captures. On the room it saved about 30 s, but its quality was less stable: PSNR 30.1-31.1 dB over 3 runs, against 31.3 dB for exhaustive in 2 of 2 runs.
+    - `--matcher vocab_tree`: for large unordered sets.
+    - `--no-gpu-features`: CPU SIFT. Diagnostic only; slow.
+- **SfM-only sweep** (no training; about $0.46 on the room): `modal run services/reconstruction/modal_app.py --images <dir> --bench --out ./out/bench` runs every matcher × mapper and writes `sfm-bench.json` (step times, registered images, points, mean reprojection error). Use `--matchers` / `--mappers` to narrow it.
+- `--rate 1.10`: the A10G $/hr. `cost.json` now prices **GPU + CPU + memory** the way Modal bills them. CPU and memory are billed per second as `max(reserved, used)`, and a background meter samples the container's cgroup counters. `usd` is the full total; `gpu_usd` / `cpu_usd` / `memory_usd` break it down, and `usage` shows the basis. The function reserves 8 cores (hard limit 8, so a CPU-heavy step can't burst onto the bill) and 16 GiB. The 2026-09-26 runs matched Modal's metered bill to within about 2%. Expect about **$0.26 per room**. The 1 h timeout caps a runaway run at about $1.60.
+- `cost.json` also records `stage_seconds` (sfm / train / compress / mesh), `sfm` (step times, registered images, reprojection error), and `quality`: PSNR / SSIM / LPIPS from `ns-eval` on the held-out views (every 8th image). One rendered eval view (ground truth | render) lands as `<scan_id>-eval-view.jpg` for a visual check.
+- **Image builds are layered.** Each `# modal-layer:` section of the `Dockerfile` (base, torch, gsplat, nerfstudio, colmap) is its own cached Modal layer. The `reconstruction/` package is mounted at container start, not baked in.
+  - A code edit triggers **no rebuild**.
+  - A COLMAP-layer edit rebuilds in about 1 min.
+  - Only base/torch/gsplat edits pay the ~17 min gsplat compile.
+  - Comment-only Dockerfile edits never rebuild.
+  - Image builds are billed as CPU time: about $0.13 for a full build.
+- Success = a `.spz`/`.sog` splat + `.obj` mesh + `cost.json` (+ eval view) land in `./out`.
 
 ## Step 5 — Run a corpus room + record cost
 ```
 modal run services/reconstruction/modal_app.py --images ./data/<corpus-room>/images --scan-id room1 --source corpus --rate <gpu $/hr>
 ```
-- Copy the `cost.json` per-scan numbers into `research/vendors/reconstruction-spike-report.md` §2 (GPU time + $/scan).
-- **Halt at the cap.** Keep a running total of every run's `cost.json` (and check Settings → Usage & Billing). The Modal workspace spend limit is the real cumulative stop; the in-code `SpendCapError` only fires when a *single* run's estimate would cross a cap, because each run starts a fresh ledger. Near $100, stop and ping the Owner — do not raise the cap (Owner-only).
+- Copy the `cost.json` per-scan numbers into `research/vendors/reconstruction-spike-report.md` §2 (stage times, full $/scan, PSNR/SSIM).
+- **Check spend before every run:** `modal billing summary` (month to date) and `modal billing report --for today --show-resources` (per app, per resource). These read-only commands work with the Operator token.
+- **Halt at the cap.** Keep a running total of every run's `cost.json` and check the billing summary. The Modal workspace spend limit is the real cumulative stop. The in-code `SpendCapError` only fires when a *single* run's estimate would cross a cap, because each run starts a fresh ledger. Near the limit, stop and ping the Owner. Do not raise the cap (Owner-only).
 
-## Follow-up — faster SfM (CUDA COLMAP / GLOMAP)
-Not done yet; propose to the Builder once the smoke test passes. Cheapest paths to GPU SIFT/matching: base the image on (or copy the binaries from) the official CUDA-enabled `colmap/colmap` Docker image, or install a CUDA build of COLMAP from conda-forge. Then set `GJ_COLMAP_CUDA=1` in the Dockerfile (switches SIFT to GPU) and, if GLOMAP is added, use `--sfm glomap`. Record the choice and pins in the spike report.
+## SfM notes (CUDA COLMAP 4.1.1, conda-forge)
+- Installed with micromamba into `/opt/colmap` (appended to `PATH`).
+- Two conda-forge quirks are handled in the `Dockerfile`:
+  1. `openimageio=3.1` must be listed explicitly. The colmap 4.1.x builds link it without declaring it.
+  2. `CONDA_OVERRIDE_ARCHSPEC=x86_64_v3` must be set. Otherwise the solver picks AVX-512 builds for Modal's builder CPU, and `colmap` dies with **SIGILL** on GPU hosts without AVX-512. This happened once on 2026-09-26.
+- The vocabulary tree used for loop detection is baked into the image (sha256-pinned).
+- Headless: the CUDA SIFT path needs no display or OpenGL.
 
 ## Step 6 — Hand outputs to the iOS render leg
 The compressed splat (`./out/<scan_id>.spz`) is the input for **M1-UNITY-01** (the iOS Metal render de-risk). Keep splats behind signed URLs when they move to storage (§3.1); never commit raw scan media (§6.1/§6.5).

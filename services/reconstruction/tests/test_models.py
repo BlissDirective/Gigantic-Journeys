@@ -30,7 +30,7 @@ def test_config_defaults_are_valid():
     config = ReconstructionConfig()
     assert config.splat_budget == 2_000_000
     assert config.compress_format is Format.SPZ
-    assert config.sfm == "glomap"
+    assert config.sfm == "colmap"  # incremental default (spike report 2026-09-26)
 
 
 def test_config_rejects_unknown_sfm():

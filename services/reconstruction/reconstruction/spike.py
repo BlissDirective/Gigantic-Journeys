@@ -27,7 +27,7 @@ from .fakes import FakeCompressor, FakeMesher, FakeSfM, FakeTrainer
 from .mesh import Mesher, Open3DMesher
 from .models import Format, ReconstructionConfig, ScanInput, Source
 from .pipeline import ReconstructionRun, run_pipeline
-from .sfm import ColmapSfM, GlomapSfM, SfM
+from .sfm import MATCHER_CHOICES, SFM_CHOICES, SfM, select_sfm
 from .trainer import BrushTrainer, GsplatTrainer, Trainer
 
 _IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".heic", ".heif"}
@@ -40,9 +40,11 @@ def count_images(image_dir: Path) -> int:
     return sum(1 for p in image_dir.iterdir() if p.suffix.lower() in _IMAGE_EXTS)
 
 
-def build_adapters(trainer_name: str, sfm_name: str) -> tuple[SfM, Trainer, Compressor, Mesher]:
+def build_adapters(
+    trainer_name: str, sfm_name: str, matcher: str = "auto"
+) -> tuple[SfM, Trainer, Compressor, Mesher]:
     """Real container adapters."""
-    sfm: SfM = GlomapSfM() if sfm_name == "glomap" else ColmapSfM()
+    sfm = select_sfm(sfm_name, matcher=matcher)
     trainer: Trainer = GsplatTrainer() if trainer_name == "gsplat" else BrushTrainer()
     return sfm, trainer, SplatTransformCompressor(), Open3DMesher()
 
@@ -53,9 +55,14 @@ def build_fake_adapters() -> tuple[SfM, Trainer, Compressor, Mesher]:
 
 
 def cost_sheet(run: ReconstructionRun) -> dict:
-    """A one-scan record for the spike report's cost table."""
+    """A one-scan record for the spike report's cost table.
+
+    ``usd`` is the FULL cost (GPU + CPU + memory); ``gpu_usd`` / ``cpu_usd`` /
+    ``memory_usd`` break it down. ``gpu_seconds`` is the pipeline wall time (the
+    GPU is held for all of it). ``usage`` shows the billed CPU/memory basis.
+    """
     pkg = run.package
-    return {
+    sheet = {
         "scan_id": pkg.scan_id,
         "splat_count": pkg.splat.splat_count,
         "format": pkg.splat.fmt.value,
@@ -63,9 +70,30 @@ def cost_sheet(run: ReconstructionRun) -> dict:
         "within_budget": run.within_budget,
         "gpu_seconds": round(run.cost.gpu_seconds, 2),
         "rate_per_hour_usd": run.cost.rate_per_hour_usd,
+        "gpu_usd": round(run.cost.gpu_usd, 4),
+        "cpu_usd": round(run.cost.cpu_usd, 4),
+        "memory_usd": round(run.cost.memory_usd, 4),
         "usd": round(run.cost.usd, 4),
         "day": run.cost.day.isoformat(),
+        "stage_seconds": run.stage_seconds,
     }
+    if run.usage is not None:
+        u = run.usage
+        sheet["usage"] = {
+            "source": u.source,
+            "wall_seconds": round(u.wall_seconds, 2),
+            "billed_core_seconds": round(u.billed_core_seconds, 1),
+            "avg_used_cores": round(u.used_core_seconds / u.wall_seconds, 2)
+            if u.wall_seconds
+            else 0.0,
+            "billed_gib_seconds": round(u.billed_gib_seconds, 1),
+            "peak_memory_gib": round(u.peak_memory_gib, 2),
+        }
+    if run.poses is not None and run.poses.stats:
+        sheet["sfm"] = run.poses.stats
+    if run.model is not None and run.model.metrics:
+        sheet["quality"] = run.model.metrics
+    return sheet
 
 
 def run_spike(args: argparse.Namespace) -> ReconstructionRun:
@@ -86,7 +114,7 @@ def run_spike(args: argparse.Namespace) -> ReconstructionRun:
     if args.dry_run:
         sfm, trainer, compressor, mesher = build_fake_adapters()
     else:
-        sfm, trainer, compressor, mesher = build_adapters(args.trainer, args.sfm)
+        sfm, trainer, compressor, mesher = build_adapters(args.trainer, args.sfm, args.matcher)
     return run_pipeline(
         scan,
         config,
@@ -109,7 +137,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--work-dir", default="./work")
     parser.add_argument("--cost-sheet", default=None, help="cost-sheet JSON path")
     parser.add_argument("--trainer", default="gsplat", choices=["gsplat", "brush"])
-    parser.add_argument("--sfm", default="glomap", choices=["glomap", "colmap"])
+    parser.add_argument("--sfm", default="colmap", choices=list(SFM_CHOICES))
+    parser.add_argument("--matcher", default="auto", choices=list(MATCHER_CHOICES))
     parser.add_argument("--format", default="spz", choices=[f.value for f in Format])
     parser.add_argument("--splat-budget", type=int, default=2_000_000)
     parser.add_argument("--rate", type=float, default=1.0, help="GPU $/hr for costing")
