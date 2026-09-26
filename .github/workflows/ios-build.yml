@@ -123,7 +123,7 @@ jobs:
           key: Library-ios-${{ hashFiles('unity/Assets/**', 'unity/Packages/**', 'unity/ProjectSettings/**') }}
           restore-keys: |
             Library-ios-
-      - uses: game-ci/unity-builder@v4
+      - uses: game-ci/unity-builder@v6
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
@@ -181,7 +181,7 @@ jobs:
           grep -Eq '"EnableBurstCompilation"[[:space:]]*:[[:space:]]*true' unity/ProjectSettings/BurstAotSettings_iOS.json \
             || { echo "::error::unity/ProjectSettings/BurstAotSettings_iOS.json must have EnableBurstCompilation true (M3-UNITY-01)"; exit 1; }
           echo "[GJ-BURST] committed iOS Burst state: ENABLED"
-      - uses: game-ci/unity-builder@v4
+      - uses: game-ci/unity-builder@v6
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
