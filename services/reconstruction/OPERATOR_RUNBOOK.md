@@ -1,6 +1,6 @@
 # Reconstruction Spike — Operator Runbook (Modal)
 
-`services/reconstruction/OPERATOR_RUNBOOK.md` · 2026-09-24, SfM speed-up 2026-09-26 · For **gj-operator** (Grok Bot). Stands up the Modal GPU host and runs the self-host reconstruction spike (M1-CAPT-03) under the **$100 cap (AUTH #031)** on the **Modal account (AUTH #033)**. Companion: `modal_app.py`, `README.md`, `DATASETS.md`, `Dockerfile`.
+`services/reconstruction/OPERATOR_RUNBOOK.md` · 2026-09-24, SfM speed-up 2026-09-26, training speed-up + splat cap + mesh cleaning 2026-09-26 · For **gj-operator** (Grok Bot). Stands up the Modal GPU host and runs the self-host reconstruction spike (M1-CAPT-03) under the **$100 cap (AUTH #031)** on the **Modal account (AUTH #033)**. Companion: `modal_app.py`, `README.md`, `DATASETS.md`, `Dockerfile`.
 
 > The VM is only the **control plane** — Modal runs the GPU job in its own cloud, provisions/pulls our image, runs it, tears it down. The VM needs the `modal` CLI + a token + network. **No GPU on the VM.**
 
@@ -51,20 +51,26 @@ Mip-NeRF 360, scene **`room`** (indoor), the 4x-downsampled **`images_4`** set (
 ```
 PYTHONPATH=services/reconstruction python3 -c "from pathlib import Path; from reconstruction.fetch_dataset import fetch; fetch('mipnerf360', Path('./data/mipnerf360'))"
 modal run services/reconstruction/modal_app.py \
-    --images ./data/mipnerf360/room/images_4 --scan-id smoke --source public --rate 1.10
+    --images ./data/mipnerf360/room/images_4 --scan-id smoke --source public
 ```
 - `--source public`: only `public` and `corpus` are accepted; `user` is rejected locally before upload and again in the container (ADR-0005 / AUTH #030).
 - **SfM defaults (2026-09-26):** CUDA COLMAP 4.1.1 runs GPU SIFT extraction, then GPU matching with `--matcher auto`, then the **incremental** `mapper`.
   - `--matcher auto` uses **exhaustive** matching for captures of up to 500 images. Beyond 500 it switches to **sequential** matching: 15-frame overlap, quadratic overlap, and vocab-tree loop detection every 10 frames.
-  - On the 311-image room, SfM takes about 3 min (it was about 16 min on CPU COLMAP) and the whole pipeline about 9.5 min, at baseline splat quality.
+  - On the 311-image room, SfM takes about 3 min (it was about 16 min on CPU COLMAP) and the whole pipeline about **7 min**, at baseline splat quality.
   - Selectable alternatives:
     - `--sfm glomap`: the GLOMAP global mapper (`colmap view_graph_calibrator` + `colmap global_mapper`; GLOMAP ships inside COLMAP since 4.0). On this scene it was about 10-60 s slower and about 0.15 dB lower PSNR. Re-try it on large captures (1000+ frames), where global SfM is expected to win.
     - `--matcher sequential`: linear in frame count, for long ordered captures. On the room it saved about 30 s, but its quality was less stable: PSNR 30.1-31.1 dB over 3 runs, against 31.3 dB for exhaustive in 2 of 2 runs.
     - `--matcher vocab_tree`: for large unordered sets.
     - `--no-gpu-features`: CPU SIFT. Diagnostic only; slow.
 - **SfM-only sweep** (no training; about $0.46 on the room): `modal run services/reconstruction/modal_app.py --images <dir> --bench --out ./out/bench` runs every matcher × mapper and writes `sfm-bench.json` (step times, registered images, points, mean reprojection error). Use `--matchers` / `--mappers` to narrow it.
-- `--rate 1.10`: the A10G $/hr. `cost.json` now prices **GPU + CPU + memory** the way Modal bills them. CPU and memory are billed per second as `max(reserved, used)`, and a background meter samples the container's cgroup counters. `usd` is the full total; `gpu_usd` / `cpu_usd` / `memory_usd` break it down, and `usage` shows the basis. The function reserves 8 cores (hard limit 8, so a CPU-heavy step can't burst onto the bill) and 16 GiB. The 2026-09-26 runs matched Modal's metered bill to within about 2%. Expect about **$0.26 per room**. The 1 h timeout caps a runaway run at about $1.60.
-- `cost.json` also records `stage_seconds` (sfm / train / compress / mesh), `sfm` (step times, registered images, reprojection error), and `quality`: PSNR / SSIM / LPIPS from `ns-eval` on the held-out views (every 8th image). One rendered eval view (ground truth | render) lands as `<scan_id>-eval-view.jpg` for a visual check.
+- **Training defaults (2026-09-26):** profile `scaled-10k-dense`: 10k Splatfacto iterations with the schedule scaled from nerfstudio's 30k default (splitting stops at 5k, resolution doubles every 1k, SH degree every 333 steps, position LR decays to step 10k), `densify_grad_thresh` 0.0006, and no in-training evals or periodic checkpoints. Train stage about 3.5 min (was about 6.5), PSNR/SSIM/LPIPS 31.32 / 0.930 / 0.095 on the room (old default 31.30 / 0.932 / 0.092).
+  - `--profile scaled-15k`: best quality measured (31.52 dB), train stage about 5 min. `--profile upstream-15k` is the old default, for comparison. All profiles are listed in `reconstruction/trainer.py` (`PROFILES`).
+  - `--gpu A10G|L4|L40S|A100-40GB` (default A10G; `--rate` defaults to the GPU's list price in `GPU_RATES`). **L40S** is the fastest (about 5.5 min per room) but costs about 20% more. L4 was the slowest and not cheaper (slower host CPUs for the mapper). `--cpu <cores>` changes the reservation (default 8; 4 saved 4% but was 37 s slower).
+  - **Training-only sweep** (SfM once, then every profile from the same poses, in parallel): `modal run services/reconstruction/modal_app.py --images <dir> --train-bench-profiles scaled-10k-dense,scaled-15k --repeat 2 --sparse-cache ./out/room-sparse.tar --out ./out/train-bench`. It writes `train-bench.json`: quality, stage times and $ per profile. `--sparse-cache` reuses the SfM model on later sweeps. About $0.10 per 10k profile run on A10G.
+- **Splat cap:** `--splat-budget` (default 2,000,000) is enforced in two places. During training, `reconstruction/ns_train_capped.py` stops densification from growing past the budget. After training, `reconstruction/ns_finish.py` hard-caps the model by rendered contribution. A PLY over the budget fails the run. `cost.json` `quality` shows `growth.limited_steps`, `trained_splats`, `capped_splats` and `cap_applied`. Stress check: `--train-bench-profiles scaled-10k-dense --splat-budget 200000` (add `--no-growth-limit` to exercise the post-train prune alone).
+- **Collision mesh:** splats are cleaned before Poisson (opacity ≥ 0.5, robust scene box crop, huge-splat filter, statistical outliers, voxel downsample; `splat_ops.MeshFilter`), then the mesh is cropped, stripped of small pieces and decimated to 100K triangles: about 3.75 MB on the room, every run (was 3.8–46 MB). The per-step counts are in `cost.json` `mesh`. A CPU-only sweep of the mesh rules on existing splats: `modal run services/reconstruction/modal_app.py --images x --mesh-splats a.spz,b.spz --mesh-variants '{"name": {"bounds_percentile": 2.0}}' --out ./out/mesh-bench` (writes `mesh-bench.json` with sizes and run-to-run Chamfer distances).
+- `--rate`: the GPU $/hr (defaults to the list price of `--gpu`). `cost.json` now prices **GPU + CPU + memory** the way Modal bills them. CPU and memory are billed per second as `max(reserved, used)`, and a background meter samples the container's cgroup counters. `usd` is the full total; `gpu_usd` / `cpu_usd` / `memory_usd` break it down, and `usage` shows the basis. The function reserves 8 cores (hard limit 8, so a CPU-heavy step can't burst onto the bill) and 16 GiB. The 2026-09-26 runs matched Modal's metered bill to within about 2%. Expect about **$0.19 per room** on A10G (was $0.26). The 1 h timeout caps a runaway run at about $1.60 on A10G (about $2.45 on L40S).
+- `cost.json` also records `host` (GPU, cores, memory), `stage_seconds` (sfm / train / compress / mesh), `sfm` (step times, registered images, reprojection error), `mesh` (triangles, bytes, cleaning counts, scene box), and `quality`: the training profile, timings, splat-cap counts, and PSNR / SSIM / LPIPS of the capped model on the held-out views (every 8th image). One rendered eval view (ground truth | render) lands as `<scan_id>-eval-view.png` for a visual check.
 - **Image builds are layered.** Each `# modal-layer:` section of the `Dockerfile` (base, torch, gsplat, nerfstudio, colmap) is its own cached Modal layer. The `reconstruction/` package is mounted at container start, not baked in.
   - A code edit triggers **no rebuild**.
   - A COLMAP-layer edit rebuilds in about 1 min.
@@ -75,7 +81,7 @@ modal run services/reconstruction/modal_app.py \
 
 ## Step 5 — Run a corpus room + record cost
 ```
-modal run services/reconstruction/modal_app.py --images ./data/<corpus-room>/images --scan-id room1 --source corpus --rate <gpu $/hr>
+modal run services/reconstruction/modal_app.py --images ./data/<corpus-room>/images --scan-id room1 --source corpus
 ```
 - Copy the `cost.json` per-scan numbers into `research/vendors/reconstruction-spike-report.md` §2 (stage times, full $/scan, PSNR/SSIM).
 - **Check spend before every run:** `modal billing summary` (month to date) and `modal billing report --for today --show-resources` (per app, per resource). These read-only commands work with the Operator token.

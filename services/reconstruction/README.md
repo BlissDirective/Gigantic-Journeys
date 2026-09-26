@@ -21,18 +21,18 @@ Trainer- and backend-agnostic via dependency-injected adapters (analysis 2026-09
 | Stage | Protocol | Real adapter (container) | Test/dry-run fake |
 |---|---|---|---|
 | SfM | `sfm.SfM` | `ColmapSfM` (default: CUDA COLMAP 4.1, GPU SIFT + GPU matching (`auto`: exhaustive ≤500 images, else sequential) + incremental mapper), `GlomapSfM` (`colmap global_mapper`) | `fakes.FakeSfM` |
-| Train | `trainer.Trainer` | `GsplatTrainer` (MCMC, fixed budget), `BrushTrainer` | `fakes.FakeTrainer` |
+| Train | `trainer.Trainer` | `GsplatTrainer` (nerfstudio Splatfacto; default profile `scaled-10k-dense`; hard splat cap = growth limit `ns_train_capped` + post-train prune `ns_finish`), `BrushTrainer` | `fakes.FakeTrainer` |
 | Compress | `compress.Compressor` | `SplatTransformCompressor` | `fakes.FakeCompressor` |
-| Mesh | `mesh.Mesher` | `Open3DMesher` | `fakes.FakeMesher` |
+| Mesh | `mesh.Mesher` | `Open3DMesher` (splat cleaning per `splat_ops.MeshFilter` + Poisson + crop + decimation to 100K triangles) | `fakes.FakeMesher` |
 
-The `reconstruction` package and its tests are **standard-library only** and run with no GPU. The heavy tools live only in the CUDA container (`Dockerfile`); the fakes let the whole pipeline be exercised in CI.
+The `reconstruction` package and its tests are **standard-library only** and run with no GPU (`ns_train_capped.py` / `ns_finish.py` run inside the container and import torch / nerfstudio only when executed; the rules they apply are pinned in `splat_ops.py` and its tests). The heavy tools live only in the CUDA container (`Dockerfile`); the fakes let the whole pipeline be exercised in CI.
 
 ## Run
 
 - **Tests (no GPU):** `pytest services/reconstruction` (CI runs this repo-wide).
 - **Dry run (no GPU):** `python -m reconstruction.spike --images <dir> --scan-id room1 --dry-run` — exercises the whole pipeline with the fakes and writes a cost sheet.
 - **Spike (GPU box):** build the container, fetch a public dataset (`DATASETS.md` / `reconstruction.fetch_dataset`), then `python -m reconstruction.spike --images <scene>/images --trainer gsplat --rate <gpu $/hr>` (defaults: `--sfm colmap --matcher auto`; `--sfm glomap` for the global mapper). Compute target: **serverless GPU** (RunPod-flex / Modal, ~$1/scan, scale-to-zero) under the $100 cap (AUTH #031).
-- **On Modal (Operator, recommended host):** `modal run services/reconstruction/modal_app.py --images <dir> --scan-id <id> --source public --rate 1.10` (public/corpus only; ~9.5 min / ~$0.26 for a 311-image room; `--bench` = SfM-only matcher × mapper sweep) — scale-to-zero GPU in Modal's cloud, image built from the `Dockerfile`. Account + token + caps setup: `OPERATOR_RUNBOOK.md`.
+- **On Modal (Operator, recommended host):** `modal run services/reconstruction/modal_app.py --images <dir> --scan-id <id> --source public` (public/corpus only; ~7 min / ~$0.19 for a 311-image room on A10G; `--gpu L40S` ~5.5 min / ~$0.23; `--profile`, `--splat-budget`, `--cpu` for experiments; `--bench` = SfM-only matcher × mapper sweep, `--train-bench-profiles` = training-only sweep, `--mesh-splats` = CPU mesh-rules sweep) — scale-to-zero GPU in Modal's cloud, image built from the `Dockerfile`. Account + token + caps setup: `OPERATOR_RUNBOOK.md`.
 
 ## Context
 - Cost & trainer analysis: `research/vendors/reconstruction-cost-and-trainer-analysis.md`
