@@ -69,7 +69,7 @@
   "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": "fast-forward to main (no PR; branch-protection process not yet in force)",
   "created": "2026-09-15",
-  "updated": "2026-09-23",
+  "updated": "2026-09-26",
   "history": [
     {
       "date": "2026-09-15",
@@ -85,6 +85,11 @@
       "date": "2026-09-23",
       "event": "Builder (AUTH #027): built the api/ Inngest skeleton — Node 22 strict TS, eslint flat config, node:test via tsx, package-lock.json; journey/pipeline function on scan.submitted with reconstruct->scenegraph->journey->package logged-stub steps, injectable stages, idempotent status recorder, TIMEOUTS_MS per step; api/.env.example (PLACEHOLDER names incl. INNGEST/SUPABASE/LUMA); README documents no-deploy (blocked on #012/#013). Local checks green (lint, typecheck, 4 tests, npm audit 0 high); CI-parity confirmed via `npm ci --ignore-scripts`. All ATs met (AT-3/AT-4-dev-log suggested). Merged to main.",
       "by": "builder"
+    },
+    {
+      "date": "2026-09-26",
+      "event": "gj-operator (M1-PLAT-01): AUTH #012/#013 accounts verified read-only — the Vercel token authenticates (no GJ project exists yet in the team) and the Inngest signing key authenticates against the `production` Inngest environment (no events, no app synced). The deploy blocked in AT-6 is now unblocked on accounts and belongs to M1-PIPE-01. Evidence qa/reports/M1-PLAT-01.md §4.",
+      "by": "gj-operator"
     }
   ]
 }

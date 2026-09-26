@@ -100,6 +100,11 @@
       "date": "2026-09-26",
       "event": "Backend landing drafted (Builder): the M1 staging schema migration (environments table + private bucket + RLS, AUTH #034) and the environment-urls edge function issuing <=15-min signed download URLs (owner or published+cleared via RLS) + owner-scoped upload URLs, service-role signing, no direct storage exposure — the signed-URL delivery path for AT-1/AT-3. To be applied + deployed to staging by gj-platform.",
       "by": "claude-builder"
+    },
+    {
+      "date": "2026-09-26",
+      "event": "gj-operator (M1-PLAT-01): the AUTH #034 migration is APPLIED to STAGING (environments table + private `environments` bucket + RLS; recorded in supabase_migrations.schema_migrations); RLS probe passed. The environment-urls edge function is NOT yet deployed — `supabase functions deploy` needs a Supabase access token (Owner/CI). Evidence qa/reports/M1-PLAT-01.md.",
+      "by": "gj-operator"
     }
   ]
 }

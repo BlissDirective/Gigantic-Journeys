@@ -1,0 +1,119 @@
+{
+  "id": "M1-PLAT-01",
+  "title": "Backend staging stand-up: Supabase staging (AUTH #011), Vercel (#012), Inngest (#013) verified",
+  "milestone": "M1",
+  "area": "PLAT",
+  "owner": "gj-operator",
+  "qa": null,
+  "status": "blocked",
+  "priority": "P0",
+  "size": "M",
+  "summary": "Verify the 2026-09-24 account setup end to end and bring STAGING to a usable state for M1: staging Supabase reachable with the .env.local URL + anon key, approved migrations applied with RLS on every table, auth settings per SECURITY_CHECKLIST §9.3, the Vercel and Inngest accounts usable, CI secrets present by name, and a repeatable staging smoke test. Production is never touched (production keys are CI-only, §1.4).",
+  "scope_out": [
+    "Production data or production migrations (CI-only).",
+    "Vercel project creation + API deploy and Inngest app sync (M1-PIPE-01, once the API has an HTTP handler and a staging Inngest environment exists).",
+    "Social tables (M4-DATA-01)."
+  ],
+  "deliverables": [
+    "supabase/config.toml",
+    "supabase/scripts/staging_smoke.py",
+    "supabase/scripts/tests/test_staging_smoke.py",
+    "supabase/README.md",
+    "qa/reports/M1-PLAT-01.md",
+    "qa/reports/STAGING-smoke.md"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "Staging Supabase answers with the .env.local SUPABASE_URL + SUPABASE_ANON_KEY (auth health 200); the anon key and staging service-role key decode to the staging ref, never the production ref.",
+      "evidence": "qa/reports/M1-PLAT-01.md §1; qa/reports/STAGING-smoke.md",
+      "automated": true,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "Every migration in supabase/migrations/ is applied to STAGING and recorded in supabase_migrations.schema_migrations; no pending migrations.",
+      "evidence": "staging_smoke db.migrations PASS",
+      "automated": true,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "Every table in an app schema on STAGING has RLS enabled and at least one policy; a two-user + anon probe shows owner-only and published-read behave (other users and anon see only published+cleared rows; cross-user writes refused).",
+      "evidence": "staging_smoke db.rls_every_table PASS + RLS probe in qa/reports/M1-PLAT-01.md §3",
+      "automated": true,
+      "level": "required"
+    },
+    {
+      "id": "AT-4",
+      "test": "Auth settings: email sign-in with confirmation required, anonymous sign-in off, Apple and Google sign-in enabled (SECURITY_CHECKLIST §9.3).",
+      "evidence": "staging_smoke auth.* rows",
+      "automated": true,
+      "level": "required"
+    },
+    {
+      "id": "AT-5",
+      "test": "The environment-urls edge function is deployed to STAGING with verify_jwt on (a call without a user JWT returns 401).",
+      "evidence": "staging_smoke fn.environment_urls",
+      "automated": true,
+      "level": "required"
+    },
+    {
+      "id": "AT-6",
+      "test": "Vercel token and Inngest signing key authenticate read-only against their APIs; the state of the GJ Vercel project and Inngest app is recorded.",
+      "evidence": "qa/reports/M1-PLAT-01.md §4",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-7",
+      "test": "GitHub Actions secrets and variables needed for the backend exist (checked by name only); gaps and ambiguous duplicates are listed for the Owner.",
+      "evidence": "qa/reports/M1-PLAT-01.md §5",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-8",
+      "test": "No key, URL, password, or project ref appears in the repo or the evidence; secret-scan green.",
+      "evidence": "secret-scan green",
+      "automated": true,
+      "level": "required"
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST §1.4 production keys CI-only",
+    "SECURITY_CHECKLIST §2.1–2.2 RLS",
+    "SECURITY_CHECKLIST §8.3 staging-only Bot credentials",
+    "SECURITY_CHECKLIST §9.3 Apple + Google sign-in"
+  ],
+  "depends_on": [
+    "M0-PLAT-01"
+  ],
+  "blocked_by": [
+    "Owner: Apple + Google OAuth clients for Supabase Auth (AT-4)",
+    "Owner/CI: Supabase access token to deploy edge functions to staging (AT-5)"
+  ],
+  "references": [
+    "AUTH #011",
+    "AUTH #012",
+    "AUTH #013",
+    "AUTH #034",
+    "ADR-0002"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-09-26",
+  "updated": "2026-09-26",
+  "history": [
+    {
+      "date": "2026-09-26",
+      "event": "created by gj-operator to track the backend staging stand-up (no existing ticket covered AUTH #011–#013 verification).",
+      "by": "gj-operator"
+    },
+    {
+      "date": "2026-09-26",
+      "event": "Verified staging: auth health 200; anon + staging service-role keys decode to the staging ref. Applied the AUTH #034 migration (20260926120000_m1_environments_staging) to STAGING via the session pooler in one transaction and recorded it in supabase_migrations.schema_migrations. Smoke 9 PASS / 0 FAIL / 3 PENDING (Apple, Google, edge-function deploy). Two-user + anon RLS probe (rolled back) passed. Vercel token + Inngest prod signing key authenticate; no GJ Vercel project and no Inngest app synced yet (deploy is M1-PIPE-01). GH secrets present by name, with ambiguous duplicates flagged. AT-1/2/3/6/7/8 met; AT-4/AT-5 blocked on the Owner. Evidence qa/reports/M1-PLAT-01.md.",
+      "by": "gj-operator"
+    }
+  ]
+}
