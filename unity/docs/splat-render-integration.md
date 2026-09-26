@@ -122,6 +122,16 @@ Decision rule: try A→B first; escalate to C only with device numbers showing B
 
 ---
 
+## Testing on the phone — TestFlight (no Mac, no Xcode)
+You test entirely through Apple's free **TestFlight** app on your iPhone — no Mac, no cable, nothing on a computer:
+1. Install **TestFlight** from the App Store; sign in with the Apple ID that is an internal tester on the **Gigantic Journeys Internal** group (you're the Account Holder — add your Apple ID under App Store Connect → the app → TestFlight → Internal Testing if it isn't already).
+2. With `TESTFLIGHT_ENABLED=true`, each CI run uploads the build via `fastlane pilot`; after Apple processing (usually minutes for internal testers — no beta review), it appears in TestFlight. Tap **Install/Update**, open **Gigantic Journeys**, and it runs like a normal app.
+3. Loop: push → CI builds on the macOS runner → TestFlight → your phone, over the air.
+
+Build two small things into the render test scene so the check is measurable **without a Mac** (Instruments/Xcode would need one; these don't):
+- an **on-screen fps HUD** (debug only, behind `GJ_DEBUG`) showing fps + splat count;
+- a **touch-drag orbit camera** so you can move around the splat and confirm depth ordering from multiple angles (the #226 glitch is angle-dependent).
+
 ## On-device test procedure (record in the spike report §1)
 1. Build via `ios-build.yml` (TestFlight lane) → install from TestFlight on the iPhone.
 2. Record: **correct depth-sorted splats? Y/N** (the gate for "solved"), **fps @ splat count**, **package MB** (≤150 target), device model + iOS version, and a short video.
@@ -135,3 +145,4 @@ For the spike a bundled `GaussianSplatAsset` is fine. In production the splat is
 - `unity/Assets/Settings/URP-*-Renderer.asset` — the URP feature added.
 - `unity/Assets/GiganticJourneys/Runtime/Render/BitonicSort.compute` + a small C# dispatcher + the aras-p sort-stage swap (Tier B).
 - Boot scene + `GaussianSplatAsset` for `smoke.spz` (do not commit large real media; the smoke asset is public-dataset-derived).
+- `Assets/GiganticJourneys/Runtime/Debug/FpsHud.cs` (a `GJ_DEBUG` fps + splat-count HUD) and a touch-orbit camera on the splat test scene, so the on-device check is measurable without a Mac.

@@ -47,7 +47,7 @@ Numbering is sequential across all types. **Next free number: #034**. The Coordi
 
 | # | Filed | Type | What | Cost | Requested by | Blocks | Status |
 |---|---|---|---|---|---|---|---|
-| — | | | (none — the M0 batch #008–#017 was approved 2026-09-17; see Decisions) | | | | |
+| #034 | 2026-09-26 | data schema | **M1 staging DB schema** — `environments` table + private `environments` storage bucket + RLS (draft migration `supabase/migrations/20260926120000_m1_environments_staging.sql`) so reconstruction output lands behind signed URLs (SPEC §3/§7; SECURITY_CHECKLIST §2/§3). Owner-only + published-read (published AND cleared) + service-role writes. | $0 (staging free tier) | claude-builder | M1-CAPT-02, M1 pipeline | **REQUESTED — awaiting Owner `APPROVED #034`; do not apply until approved + M1-DATA-01 freezes environment_spec** |
 
 Deferred (file when needed): trademark filing in classes 9 and 41 (~$250–350/class, after traction); an iPhone Duo development device ($1,999–3,199, only if on-device Duo verification is wanted); Tier 2 GPU compute ($400–1,000/mo, monthly line from M1). The App Store Connect app record that reserves the name needs no AUTH — it runs on the already-held Apple Developer account (checklist §0).
 
