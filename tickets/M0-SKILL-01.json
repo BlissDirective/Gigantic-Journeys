@@ -5,7 +5,7 @@
   "area": "SKILL",
   "owner": "gj-foreman",
   "qa": null,
-  "status": "in-progress",
+  "status": "in-review",
   "priority": "P0",
   "size": "M",
   "summary": "First task before any ticket (kit §3 common block): research the top 100 resources on running autonomous multi-agent software teams, agentic coding harnesses, mobile game production pipelines, Unity mobile release management; save an annotated list and distill a working handbook. Re-read SKILLS.md at every session start and update it when you learn something.",
@@ -55,10 +55,10 @@
     "kit §3 common block",
     "kit §2 role block"
   ],
-  "branch": "claude/gigantic-journeys-governance-f0wgak",
-  "pr": null,
+  "branch": "setup/foreman-skills",
+  "pr": "https://github.com/BlissDirective/Gigantic-Journeys/pull/6",
   "created": "2026-09-15",
-  "updated": "2026-09-24",
+  "updated": "2026-09-26",
   "history": [
     {
       "date": "2026-09-15",
@@ -74,6 +74,11 @@
       "date": "2026-09-24",
       "event": "Builder authored the working handbook (projects/skills/<role>/SKILLS.md) + a curated RESOURCES.md foundation; status -> in-progress (Owner-approved). The full annotated top-100 and the re-read/update-every-session discipline remain this role's ongoing task.",
       "by": "claude-builder"
+    },
+    {
+      "date": "2026-09-26",
+      "event": "gj-operator completed the handbook. RESOURCES.md has 106 link-checked entries (title, URL, type, why-for-GJ) in six groups matching the research focus (AT-1). SKILLS.md covers ticket decomposition, routing by role, blocker detection, standups, checkpoint reports, mistakes and pre-PR checklists (AT-2). It cites agents/grok/README.md, REVIEW_RUBRIC.md and SECURITY_CHECKLIST.md by section, and points to Movement Bible §10 and Design Skills §4 where assignees touch them (AT-3). It ends with a Session log (AT-4). Branch setup/foreman-skills plus a templated PR; the change lands on main by fast-forward once the PR's CI is green (AT-5). Status -> in-review so the Coordinator can count entries (AT-1).",
+      "by": "gj-operator"
     }
   ]
 }
