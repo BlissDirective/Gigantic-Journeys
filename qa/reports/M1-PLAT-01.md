@@ -71,6 +71,7 @@ Backend coverage: staging (URL, anon, service role, ref, DB password), productio
 Gaps / ambiguities for the Owner (values not inspected):
 - `SUPABASE_PRODUCTION_SERVICE_ROLE_KEY` **and** `SUPABASE_PROD_SERVICE_ROLE_KEY` both exist — keep one.
 - `SUPABASE_SERVICE_ROLE_KEY` is unlabeled (staging or prod?) alongside `SUPABASE_STAGING_SERVICE_ROLE_KEY` — rename or delete.
+- **Resolved 2026-09-27 (Operator):** deleted `SUPABASE_PRODUCTION_SERVICE_ROLE_KEY` and the unlabeled `SUPABASE_SERVICE_ROLE_KEY`; kept `SUPABASE_PROD_SERVICE_ROLE_KEY` (matches the `SUPABASE_PROD_*` set) and `SUPABASE_STAGING_SERVICE_ROLE_KEY` (claims verified above). No workflow or code referenced any of them; the edge runtime's `SUPABASE_SERVICE_ROLE_KEY` is injected by Supabase, not GitHub.
 - No `SUPABASE_ACCESS_TOKEN` (needed for `supabase functions deploy` / `db push` from CI) and no `VERCEL_PROJECT_ID` (no project yet).
 - Outside the backend: workflows reference `secrets.UNITY_SERIAL` and `vars.IOS_MAC_RUNNER` / `vars.TESTFLIGHT_ENABLED`, which are not set (defaults may be intentional).
 - No workflow consumes the Supabase/Vercel/Inngest secrets yet.
