@@ -5,7 +5,7 @@
   "area": "UNITY",
   "owner": "gj-capture",
   "qa": "gj-qa-release",
-  "status": "in-review",
+  "status": "done",
   "priority": "P0",
   "size": "M",
   "summary": "Integrate a Unity Gaussian splat renderer (MIT or compatible; aras-p UnityGaussianSplatting lineage as the candidate) pinned by commit, with a small sample splat rendering in a test scene on the reference Android device at 30 fps. The package choice is recorded as an addendum to ADR-0001 through an AUTH (design-change) filed via the Foreman.",
@@ -57,8 +57,8 @@
     {
       "type": "design-change",
       "what": "ADR-0001 addendum: splat renderer package choice",
-      "auth_id": null,
-      "status": "pending"
+      "auth_id": "AUTH #035",
+      "status": "approved"
     }
   ],
   "references": [
@@ -94,6 +94,11 @@
       "date": "2026-09-27",
       "event": "Owner approval recorded (gj-operator). At 11:37 AM CT the Owner wrote in the operator chat, verbatim: \"Approved: ADR-0001 addendum (M0-UNITY-02)\". That approves the addendum text in governance/auth-requests/M0-UNITY-02-adr-0001-addendum.md as written. Bots may not write the AUTHORIZATION_LOG Decisions table, assign AUTH numbers, or add Pending rows (Foreman/Coordinator only). ADR-0001 is a protected path whose commit must cite APPROVED #n. So auth_required[0] stays pending. HANDOFF TO COORDINATOR: log Decision #035 (next free), paste the addendum into ADR-0001 § Addenda citing APPROVED #035, set auth_required[0] to approved with its auth_id, close AT-4, and move this ticket out of in-review.",
       "by": "gj-operator"
+    },
+    {
+      "date": "2026-09-27",
+      "event": "Coordinator closeout of the Owner-approved ADR-0001 addendum. Logged Decision #035 in governance/AUTHORIZATION_LOG.md (design-change; APPROVED by Owner 2026-09-27 11:37 AM CT, verbatim 'Approved: ADR-0001 addendum (M0-UNITY-02)') and bumped Next free number to #036. Pasted addendum 1 (splat renderer package: aras-p/UnityGaussianSplatting @ 2c6fed3, MIT; textured-mesh fallback) into ADRs/0001-engine-and-rendering.md Addenda citing APPROVED #035; auth_required[0] -> approved (AUTH #035). AT-4 now met: the ADR names the package, commit, license and the textured-mesh fallback, and this closeout commit cites APPROVED #035. AT-1/AT-2/AT-5 met (Operator); AT-3 suggested, rides the M1-UNITY-01 device pass. Independent secondary review: renderer pinned by commit SHA, MIT with bundled MIT deps (SECURITY_CHECKLIST §7.3 satisfied), no secrets, EditMode 12/12 + PlayMode 1/1; the Metal radix-sort limitation (upstream #226) is correctly scoped to M1-UNITY-01 and does not block the Editor-render M0 deliverable. in-review -> done (direct-to-main, no PR; the branch field names the work stream, M0-QA-01 precedent).",
+      "by": "coordinator"
     }
   ]
 }

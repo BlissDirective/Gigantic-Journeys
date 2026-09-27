@@ -1,6 +1,6 @@
 # AUTH request — ADR-0001 addendum: Gaussian splat renderer package (M0-UNITY-02)
 
-> **STATUS: APPROVED BY THE OWNER, 2026-09-27 11:37 AM CT. Coordinator logging pending.** The Owner wrote in the operator chat, verbatim: **"Approved: ADR-0001 addendum (M0-UNITY-02)"**. The operator relayed it; gj-operator recorded it here on 2026-09-27. This approves the addendum text below as written (no changes requested).
+> **STATUS: APPROVED BY THE OWNER, 2026-09-27 11:37 AM CT. LOGGED by the Coordinator as AUTH #035 (2026-09-27): Decisions row added, `ADRs/0001-engine-and-rendering.md` § Addenda updated, `tickets/M0-UNITY-02.json` `auth_required[0]` set to approved and the ticket closed (done). The checklist below is retained as the record.** The Owner wrote in the operator chat, verbatim: **"Approved: ADR-0001 addendum (M0-UNITY-02)"**. The operator relayed it; gj-operator recorded it here on 2026-09-27. This approves the addendum text below as written (no changes requested).
 >
 > **Coordinator, to do (Bots may not do these: `AUTHORIZATION_LOG.md` "How to use this log", AGENT_GOVERNANCE §1):**
 > 1. Log a Decisions row in `governance/AUTHORIZATION_LOG.md` with the next free number (currently **#035**): type design-change, what = ADR-0001 addendum 1 (splat renderer package, this file), decision = **APPROVED** by Owner instruction, 2026-09-27 11:37 AM CT ("Approved: ADR-0001 addendum (M0-UNITY-02)"), evidence = Owner reply in chat + this file. Then bump "Next free number".
