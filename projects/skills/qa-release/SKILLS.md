@@ -49,7 +49,7 @@ Research list: `projects/skills/qa-release/RESOURCES.md` (134 link-checked entri
 ## 3. Headless editor scripting
 
 - **Smoke task** (M0-QA-01, in-progress): `qa/scripts/editor_smoke.py` runs the pinned editor in `-batchmode` (under `xvfb-run` when there's no DISPLAY) with `-executeMethod GiganticJourneys.EditorTools.QA.EditorSmoke.Run` (`unity/Assets/Editor/QA/EditorSmoke.cs`).
-  - It opens the project, imports the sample splat, opens the sample scene, renders the camera offscreen to `qa/evidence/M0-QA-01/editor-smoke.png` and writes `qa/reports/M0-editor-smoke.md`.
+  - It opens the project, imports the sample splat, opens the sample scene, renders the camera offscreen to `qa/evidence/M0-QA-01/01-editor-smoke.png` and writes `qa/reports/M0-editor-smoke.md`.
   - Latest report (2026-09-26 08:46 CDT): PASS on 2 runs with identical results. The **import sample splat** step is **pending M0-UNITY-02**. Close M0-QA-01 after that lands.
 - **Pinned editor:** `unity/ProjectSettings/ProjectVersion.txt`, 6000.0.84f1 (78ab6fc243d5). The harness compares the installed editor to the pin and checks the iOS module (AT-1). Install with the Unity Hub CLI.
 - **Logs:** the raw editor log is **never committed**, because it can carry licensing details. `editor_smoke.py` keeps only `[GJ-SMOKE]` and error lines, after redaction (emails, serials, token/licence lines, home path). Keep that redaction list current whenever you add log capture.

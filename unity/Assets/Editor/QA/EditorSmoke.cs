@@ -345,7 +345,7 @@ namespace GiganticJourneys.EditorTools.QA
                 .Distinct()
                 .Take(64)
                 .Count();
-            var file = Path.Combine(outDir, "editor-smoke.png");
+            var file = Path.Combine(outDir, "01-editor-smoke.png");
             File.WriteAllBytes(file, tex.EncodeToPNG());
             UnityEngine.Object.DestroyImmediate(tex);
 

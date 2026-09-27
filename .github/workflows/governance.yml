@@ -2,6 +2,7 @@
 #   tickets        every tickets/*.json validates against tickets/SCHEMA.json
 #   movement-sync  config/movement.json equals Movement Bible §10 and the Unity copy
 #   auth-gate      PRs touching protected paths must cite an APPROVED #n
+#   qa-evidence    qa/evidence/ follows qa/VISUAL_QA.md §2 (naming, <= 2 MB, PNG only, privacy line)
 # The Coordinator's review is the real gate; this is the first line.
 name: governance
 
@@ -47,6 +48,16 @@ jobs:
         with:
           python-version: "3.12"
       - run: python supabase/scripts/check_rls.py
+
+  qa-evidence:
+    name: qa evidence standard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python .github/scripts/check_qa_evidence.py
 
   auth-gate:
     name: protected paths need APPROVED #n
