@@ -1,0 +1,22 @@
+{
+    "name": "GiganticJourneys.DebugOverlay",
+    "rootNamespace": "GiganticJourneys.DebugTools",
+    "references": [
+        "GiganticJourneys",
+        "Unity.InputSystem",
+        "UnityEngine.UI",
+        "Unity.RenderPipelines.Core.Runtime",
+        "Unity.RenderPipelines.Universal.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_EDITOR || DEVELOPMENT_BUILD || GJ_DEBUG"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
