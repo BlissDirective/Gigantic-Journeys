@@ -117,9 +117,41 @@ namespace GiganticJourneys.EditorTools.Splats
                 UnityEngine.Object.DestroyImmediate(creator);
             }
             var name = Path.GetFileNameWithoutExtension(plyPath);
-            return AssetDatabase.LoadAssetAtPath<GaussianSplatAsset>(
+            var asset = AssetDatabase.LoadAssetAtPath<GaussianSplatAsset>(
                 $"{outputFolder}/{name}.asset"
             );
+            if (asset != null)
+                SetContentHash(asset);
+            return asset;
+        }
+
+        /// <summary>
+        /// Replaces the converter's data hash with a hash of the data files' contents. Upstream
+        /// hashes the chunk NativeArray handle (a memory address) rather than its contents, so
+        /// its hash changes on every conversion even when the bytes are identical. The renderer
+        /// only uses the hash to notice changed data, which a content hash serves exactly.
+        /// </summary>
+        public static void SetContentHash(GaussianSplatAsset asset)
+        {
+            var hash = new Hash128((uint)asset.splatCount, (uint)asset.formatVersion, 0, 0);
+            var files = new[]
+            {
+                asset.chunkData,
+                asset.posData,
+                asset.otherData,
+                asset.colorData,
+                asset.shData,
+            };
+            foreach (var data in files)
+            {
+                if (data != null)
+                    hash.Append(data.bytes);
+            }
+            if (asset.dataHash == hash)
+                return;
+            asset.SetDataHash(hash);
+            EditorUtility.SetDirty(asset);
+            AssetDatabase.SaveAssets();
         }
 
         /// <summary>Creates the single LOD/culling settings asset if it does not exist.</summary>
