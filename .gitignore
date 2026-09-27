@@ -92,6 +92,13 @@ venv/
 # ---------------------------------------------------------------------------
 corpus/
 **/corpus/
+# ...except the corpus intake docs + manifest (text only; M0-CAPT-01). The media
+# itself lives in the private gj-corpus Modal volume, never here.
+!services/reconstruction/corpus/
+services/reconstruction/corpus/*
+!services/reconstruction/corpus/README.md
+!services/reconstruction/corpus/manifest.json
+!services/reconstruction/corpus/manifest.schema.json
 *.mp4
 *.mov
 *.MOV

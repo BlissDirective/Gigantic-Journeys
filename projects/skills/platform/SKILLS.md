@@ -113,7 +113,7 @@ Research list: `projects/skills/platform/RESOURCES.md` (104 link-checked entries
 - **On device** (M1-CAPT-01 AT-4, gj-capture): strip before the bundle is written. That means JPEG/HEIC EXIF, GPS and XMP, and MP4/MOV QuickTime location atoms (§4.1). On iOS, re-encode with ImageIO / `AVAssetExportSession` with metadata cleared.
 - **Server side** (§4.2): verify on ingest and strip again. **Reject and count** any upload still carrying location. Re-strip again at publish before the vision pass (M4-DATA-03 AT-1; SPEC §3.7).
 - **Outputs** (§4.4): packages and thumbnails carry no location or capture metadata beyond the schema (M4-PLAT-01 AT-2). Image transformations must not re-add metadata.
-- **Tests (suggested, §4.3):** fixtures with synthetically injected GPS for all four formats, generated with ExifTool/Pillow/FFmpeg, never real media (§6.5; REVIEW_RUBRIC F3). The corpus tool `services/reconstruction/tools/strip_metadata.py` (M0-CAPT-01 AT-3) **isn't on main yet**. Reuse it once it lands rather than writing a second stripper.
+- **Tests (suggested, §4.3):** fixtures with synthetically injected GPS for all four formats, generated with ExifTool/Pillow/FFmpeg, never real media (§6.5; REVIEW_RUBRIC F3). The corpus tool `services/reconstruction/tools/strip_metadata.py` (M0-CAPT-01 AT-3) is on main as of 2026-09-27, with `strip_file()` / `verify_clean()` and fixture tests for all four formats. Reuse it rather than writing a second stripper.
 
 ## 8. Mistakes to avoid
 

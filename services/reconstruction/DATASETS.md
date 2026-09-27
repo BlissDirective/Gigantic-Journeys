@@ -26,5 +26,6 @@ python -m reconstruction.spike --images ./data/mipnerf360/<scene>/images \
 ```
 
 After the public smoke test passes, switch `--images` to a consented corpus room
-and `--source corpus`. Corpus scans are Owner-supplied and consented; real user
+and `--source corpus`. Corpus captures come through the intake in `corpus/README.md`
+(Owner upload link, then strip, verify and manifest; `tools/corpus_intake.py fetch <id> --frames 2`). Corpus scans are Owner-supplied and consented; real user
 scans never go to a third party (ADR-0005 / AUTH #030).

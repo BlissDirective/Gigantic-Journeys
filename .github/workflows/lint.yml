@@ -52,6 +52,14 @@ jobs:
           python-version: "3.12"
       - name: Install pinned tooling
         run: pip install ruff==0.16.7 pip-audit==2.10.1 pytest==9.1.1 jsonschema==4.26.0
+      - name: Media tools for the strip_metadata fixture tests (M0-CAPT-01)
+        # Ubuntu archive packages (not pip): the tests generate JPEG/HEIC/MP4/MOV fixtures
+        # with synthetic GPS and assert it is stripped. GJ_REQUIRE_MEDIA_TOOLS makes a
+        # missing tool fail the run instead of skipping those tests.
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends \
+            ffmpeg libimage-exiftool-perl libheif-examples libheif-plugin-x265
       - name: ruff lint
         run: ruff check .
       - name: ruff format check
@@ -70,6 +78,8 @@ jobs:
       - name: pip-audit
         run: pip-audit --strict --progress-spinner off
       - name: pytest
+        env:
+          GJ_REQUIRE_MEDIA_TOOLS: "1"
         run: |
           if git ls-files -- '*test_*.py' '*_test.py' | grep -q .; then
             pytest -q --ignore=unity --ignore=node_modules

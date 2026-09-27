@@ -5,7 +5,7 @@
   "area": "CAPT",
   "owner": "gj-capture",
   "qa": null,
-  "status": "open",
+  "status": "in-review",
   "priority": "P1",
   "size": "M",
   "summary": "Define how the Owner's raw scans reach the pipeline without ever entering git: a manifest, a metadata-stripping tool with tests, and the storage rules (VM path now, staging bucket after the Supabase AUTH).",
@@ -56,10 +56,10 @@
     "AUTH #025",
     "design/proposals/capture-ux-coaching-v1.md"
   ],
-  "branch": null,
+  "branch": "ticket/M0-CAPT-01-corpus-intake",
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-20",
+  "updated": "2026-09-27",
   "history": [
     {
       "date": "2026-09-15",
@@ -75,6 +75,11 @@
       "date": "2026-09-20",
       "event": "sharpened under AUTH #025 (capture UX): manifest carries readiness score + coverage summary so the corpus manifest and the live upload bundle share one shape (AT-2).",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-27",
+      "event": "Implemented by gj-operator (direct commit to main): corpus/README.md (Owner capture guide + upload steps + Operator intake + storage/retention), manifest.schema.json + manifest.json (Bible §1 classes, Lego flag, readiness + coverage in the live-bundle shape, additionalProperties false, free-text PII rules; validated in CI), tools/strip_metadata.py (lossless ffmpeg remux / ExifTool, re-verified with ExifTool -ee + ffprobe) with fixture tests injecting synthetic GPS into JPEG, HEIC, MP4 and MOV, and a signed-link upload page + Modal intake app writing to the private gj-corpus Modal volume (deployed; E2E verified with synthetic media, then wiped). Storage deviates from AT-1's 'staging bucket' wording: staging Supabase is on the Free plan (50 MB per-object cap, 1 GB total), so the intake uses the Modal volume on the reconstruction account; a Supabase bucket needs a Pro upgrade (Owner decision). in-review for the non-automated AT-1 and that deviation. secondary-review: required (signed upload links).",
+      "by": "gj-operator"
     }
   ]
 }

@@ -1,0 +1,78 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gigantic Journeys - send scans</title>
+<style>
+body{font:17px -apple-system,system-ui,sans-serif;margin:0;padding:1.2rem;color:#111;max-width:34rem}
+h1{font-size:1.4rem} fieldset{border:1px solid #ccc;border-radius:12px;margin:0 0 1rem;padding:.8rem}
+legend{font-weight:600} label{display:block;padding:.35rem 0} .row{display:flex;gap:1rem;flex-wrap:wrap}
+button{font-size:1.1rem;padding:.9rem 1.4rem;border-radius:12px;border:0;background:#0a7d74;color:#fff;width:100%}
+button:disabled{background:#999} progress{width:100%;height:1.2rem} .muted{color:#555;font-size:.9rem}
+.ok{color:#0a7d74;font-weight:600} .err{color:#b00020;font-weight:600} textarea{width:100%;font:inherit}
+</style></head><body>
+<h1>Send your scans</h1>
+<p class="muted">One video at a time. Files go to the project's private storage, not to anyone else.</p>
+<fieldset><legend>1. Pick the video</legend>
+<input id="file" type="file" accept="video/*,image/heic,image/jpeg">
+<p class="muted">From Photos: tap <b>Options</b> at the top of the picker and choose <b>Current</b>
+(keeps full quality). Or pick it from Files.</p></fieldset>
+<fieldset><legend>2. What is it?</legend><div class="row">
+<label><input type="radio" name="mode" value="room"> Room</label>
+<label><input type="radio" name="mode" value="tabletop"> Tabletop build</label></div>
+<div id="room" hidden><p class="muted">Tick what is in the room:</p>
+<label><input type="checkbox" id="couch"> Couch</label>
+<label><input type="checkbox" id="coffee_table"> Coffee table</label>
+<label><input type="checkbox" id="dining_chair"> Dining chair</label>
+<label><input type="checkbox" id="bookshelf"> Bookshelf</label></div>
+<div id="table" hidden><label><input type="checkbox" id="lego"> It is a Lego build</label></div>
+</fieldset>
+<fieldset><legend>3. Light</legend>
+<label><input type="radio" name="light" value="bright-daylight"> Bright daylight</label>
+<label><input type="radio" name="light" value="bright-artificial"> Bright lamps</label>
+<label><input type="radio" name="light" value="mixed"> Mixed</label>
+<label><input type="radio" name="light" value="dim"> Dim</label></fieldset>
+<fieldset><legend>4. Check</legend>
+<label><input type="checkbox" id="privacy"> No faces, documents, screens or addresses are visible.</label>
+<label class="muted">Optional note (no names or places)<textarea id="note" maxlength="300" rows="2"></textarea></label>
+</fieldset>
+<button id="go">Upload</button>
+<p><progress id="bar" value="0" max="1" hidden></progress></p><p id="msg" role="status"></p>
+<script>
+const $=id=>document.getElementById(id);
+const token=new URLSearchParams(location.search).get("t")||"";
+const H={"X-Upload-Token":token};
+document.querySelectorAll('input[name=mode]').forEach(r=>r.onchange=()=>{
+  $("room").hidden=r.value!=="room"||!r.checked; $("table").hidden=r.value!=="tabletop"||!r.checked;});
+function val(n){const x=document.querySelector('input[name='+n+']:checked');return x?x.value:null}
+function say(t,c){$("msg").textContent=t;$("msg").className=c||""}
+async function api(path,opts,tries){
+  for(let i=0;;i++){
+    try{const r=await fetch(path,opts); if(r.status<500) return r;}catch(e){}
+    if(i>=(tries||6)) throw new Error("network");
+    await new Promise(s=>setTimeout(s,Math.min(30000,1000*2**i)));
+  }}
+$("go").onclick=async()=>{
+  const f=$("file").files[0];
+  if(!f){return say("Pick a video first.","err")}
+  const meta={name:f.name,size:f.size,mode:val("mode"),lighting:val("light"),
+    privacy_ok:$("privacy").checked,note:$("note").value,objects:{}};
+  ["couch","coffee_table","dining_chair","bookshelf","lego"].forEach(k=>meta.objects[k]=$(k).checked);
+  $("go").disabled=true; say("Starting...");
+  try{
+    let r=await api("api/start",{method:"POST",headers:{...H,"Content-Type":"application/json"},body:JSON.stringify(meta)});
+    let j=await r.json(); if(!r.ok) throw new Error(j.error||"Upload refused");
+    const id=j.id, step=j.chunk; let off=0; $("bar").hidden=false;
+    while(off<f.size){
+      r=await api("api/chunk?id="+id+"&offset="+off,{method:"PUT",headers:H,body:f.slice(off,off+step)});
+      j=await r.json();
+      if((r.status===409||r.ok)&&typeof j.received==="number"){off=j.received}
+      else throw new Error(j.error||"Upload failed");
+      $("bar").value=off/f.size; say("Uploading... "+Math.floor(100*off/f.size)+"%  (keep this page open)");
+    }
+    r=await api("api/finish?id="+id,{method:"POST",headers:H}); j=await r.json();
+    if(!r.ok) throw new Error(j.error||"Upload failed");
+    say("Done - "+f.name+" arrived safely. You can send the next one.","ok");
+    $("file").value="";
+  }catch(e){say((e.message==="network"?"Connection lost. Check Wi-Fi and tap Upload again.":e.message),"err")}
+  $("go").disabled=false;
+};
+</script></body></html>

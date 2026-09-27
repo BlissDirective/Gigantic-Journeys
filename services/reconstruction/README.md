@@ -34,6 +34,10 @@ The `reconstruction` package and its tests are **standard-library only** and run
 - **Spike (GPU box):** build the container, fetch a public dataset (`DATASETS.md` / `reconstruction.fetch_dataset`), then `python -m reconstruction.spike --images <scene>/images --trainer gsplat --rate <gpu $/hr>` (defaults: `--sfm colmap --matcher auto`; `--sfm glomap` for the global mapper). Compute target: **serverless GPU** (RunPod-flex / Modal, ~$1/scan, scale-to-zero) under the $100 cap (AUTH #031).
 - **On Modal (Operator, recommended host):** `modal run services/reconstruction/modal_app.py --images <dir> --scan-id <id> --source public` (public/corpus only; ~7 min / ~$0.19 for a 311-image room on A10G; `--gpu L40S` ~5.5 min / ~$0.23; `--profile`, `--splat-budget`, `--cpu` for experiments; `--bench` = SfM-only matcher × mapper sweep, `--train-bench-profiles` = training-only sweep, `--mesh-splats` = CPU mesh-rules sweep) — scale-to-zero GPU in Modal's cloud, image built from the `Dockerfile`. Account + token + caps setup: `OPERATOR_RUNBOOK.md`.
 
+## Corpus intake (M0-CAPT-01)
+
+The Owner's day-one corpus (M0-OWNER-01) is uploaded through a signed, expiring link into the private `gj-corpus` Modal volume. It is stripped of GPS, EXIF, XMP, QuickTime location and device tags in a Modal container (`tools/strip_metadata.py`: lossless remux, re-verified with ExifTool and ffprobe) and recorded in `corpus/manifest.json` (schema `corpus/manifest.schema.json`). The capture guide, the Owner's upload steps, the Operator commands (`tools/corpus_intake.py`), storage and retention are in **`corpus/README.md`**. Modal app: `corpus_intake_app.py`; upload page: `tools/intake_web.py`.
+
 ## Context
 - Cost & trainer analysis: `research/vendors/reconstruction-cost-and-trainer-analysis.md`
 - Spike report (fill during the spike, **render-path first**): `research/vendors/reconstruction-spike-report.md`

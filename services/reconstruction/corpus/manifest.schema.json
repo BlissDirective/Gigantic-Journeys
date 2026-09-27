@@ -1,0 +1,206 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/BlissDirective/Gigantic-Journeys/services/reconstruction/corpus/manifest.schema.json",
+  "title": "Gigantic Journeys reconstruction corpus manifest (M0-CAPT-01)",
+  "description": "One row per Owner-supplied capture. Rows describe the capture only: no GPS, no addresses, no people, no serial numbers. The raw media never enters git; storage.path points into the private gj-corpus Modal volume. The mode, device, duration, readiness and coverage fields share one shape with the live upload bundle (SPEC §3.1, design/proposals/capture-ux-coaching-v1.md §4). Every object sets additionalProperties false so no location or identity field can be added without a schema change.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "storage", "captures"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "storage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["backend", "volume", "root"],
+      "properties": {
+        "backend": { "const": "modal-volume" },
+        "volume": { "const": "gj-corpus" },
+        "root": { "const": "/corpus" }
+      }
+    },
+    "captures": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/capture" }
+    }
+  },
+  "$defs": {
+    "capture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "mode",
+        "source",
+        "captured_on",
+        "device",
+        "duration_s",
+        "lighting",
+        "objects",
+        "readiness",
+        "coverage",
+        "video",
+        "storage",
+        "privacy",
+        "notes"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^(room|tabletop)-[0-9]{2,3}$",
+          "description": "room-01..room-NN, tabletop-01..tabletop-NN; the prefix equals mode."
+        },
+        "mode": { "enum": ["room", "tabletop"] },
+        "source": {
+          "enum": ["iphone-camera-app", "gj-app"],
+          "description": "iphone-camera-app for the M0-OWNER-01 corpus; gj-app once the capture flow (M1-CAPT-01) writes bundles."
+        },
+        "captured_on": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+          "description": "Calendar date only (no time, no time zone)."
+        },
+        "device": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["model"],
+          "properties": {
+            "model": {
+              "type": ["string", "null"],
+              "maxLength": 40,
+              "pattern": "^(iPhone|iPad)[A-Za-z0-9 ]*$",
+              "description": "Marketing model only, e.g. 'iPhone 15 Pro'. Never a serial number or device name."
+            },
+            "lidar": { "type": ["boolean", "null"] }
+          }
+        },
+        "duration_s": { "type": "number", "exclusiveMinimum": 0, "maximum": 600 },
+        "lighting": {
+          "enum": ["bright-daylight", "bright-artificial", "mixed", "dim"],
+          "description": "The Owner's call at capture time; 'dim' captures are kept but flagged."
+        },
+        "objects": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Object classes visible in the capture. Rooms: the MOVEMENT_BIBLE §1 real-object examples (couch, coffee table, dining chair, bookshelf). Tabletops: whether the build is Lego (M0-OWNER-01 AT-2).",
+          "properties": {
+            "couch": { "type": "boolean" },
+            "coffee_table": { "type": "boolean" },
+            "dining_chair": { "type": "boolean" },
+            "bookshelf": { "type": "boolean" },
+            "lego": { "type": "boolean" },
+            "other": {
+              "type": "array",
+              "maxItems": 12,
+              "items": { "type": "string", "pattern": "^[a-z][a-z0-9 -]{0,29}$" },
+              "description": "Short lower-case object-class words (e.g. 'rug', 'stairs'); never names, brands, text or places."
+            }
+          }
+        },
+        "readiness": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["score", "source"],
+          "description": "Reconstruction-readiness score in [0,1] (capture-ux-coaching-v1 §3). Camera-app captures have no on-device score: score null, source not-measured, until the pipeline or a reviewer fills it.",
+          "properties": {
+            "score": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+            "source": { "enum": ["not-measured", "gj-app", "pipeline", "reviewer"] }
+          }
+        },
+        "coverage": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["summary", "fraction", "passes"],
+          "description": "Coverage summary. fraction mirrors the live bundle's painted-surface fraction (null for camera-app captures); passes counts the capture passes (room: chest-height arc + low/high pass; tabletop: low orbit + high orbit).",
+          "properties": {
+            "summary": { "type": "string", "maxLength": 200 },
+            "fraction": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+            "passes": { "type": ["integer", "null"], "minimum": 1, "maximum": 6 }
+          }
+        },
+        "video": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["container", "codec", "width", "height", "fps", "size_bytes", "sha256"],
+          "description": "Measured by ffprobe on the stripped file (width/height are the coded frame size; the display rotation is kept).",
+          "properties": {
+            "container": { "enum": ["mov", "mp4"] },
+            "codec": { "enum": ["hevc", "h264"] },
+            "width": { "type": "integer", "minimum": 1 },
+            "height": { "type": "integer", "minimum": 1 },
+            "fps": { "type": "number", "exclusiveMinimum": 0, "maximum": 240 },
+            "hdr": { "type": ["boolean", "null"] },
+            "rotation": { "enum": [0, 90, 180, 270, -90, -180, -270] },
+            "audio_kept": { "type": "boolean" },
+            "size_bytes": { "type": "integer", "minimum": 1 },
+            "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+          }
+        },
+        "storage": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path"],
+          "properties": {
+            "path": {
+              "type": "string",
+              "pattern": "^/corpus/(room|tabletop)-[0-9]{2,3}/(room|tabletop)-[0-9]{2,3}\\.(mov|mp4)$",
+              "description": "Path inside the private gj-corpus Modal volume. Never a URL, never a git path."
+            }
+          }
+        },
+        "privacy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "metadata_stripped",
+            "strip_tool",
+            "verified_with",
+            "location_found_on_intake",
+            "owner_confirmed_clear"
+          ],
+          "properties": {
+            "metadata_stripped": { "const": true },
+            "strip_tool": { "type": "string", "pattern": "^strip_metadata\\.py [0-9]+\\.[0-9]+$" },
+            "verified_with": { "type": "array", "minItems": 1, "items": { "type": "string", "maxLength": 40 } },
+            "location_found_on_intake": {
+              "type": "boolean",
+              "description": "True when the raw upload still carried GPS/location (Camera location was on). Counted per SECURITY_CHECKLIST §4.2; the stored file is clean either way."
+            },
+            "owner_confirmed_clear": {
+              "type": "boolean",
+              "description": "The Owner ticked 'no faces, documents, screens with personal data, or addresses' at upload (M0-OWNER-01 AT-3)."
+            }
+          }
+        },
+        "intake": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "received_on": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+            "warnings": { "type": "array", "items": { "type": "string", "maxLength": 200 } }
+          }
+        },
+        "notes": { "type": "string", "maxLength": 300 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "mode": { "const": "room" } } },
+          "then": {
+            "properties": {
+              "id": { "pattern": "^room-" },
+              "objects": { "required": ["couch", "coffee_table", "dining_chair", "bookshelf"] }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "mode": { "const": "tabletop" } } },
+          "then": {
+            "properties": {
+              "id": { "pattern": "^tabletop-" },
+              "objects": { "required": ["lego"] }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

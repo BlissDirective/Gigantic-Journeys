@@ -11,4 +11,11 @@
 # add them here: CI pip-installs every *requirements*.txt on a CPU runner and
 # runs pip-audit against it.
 #
+# The corpus intake tools (tools/: strip_metadata, corpus_manifest, intake_web) are
+# standard library too. They drive ffmpeg/ffprobe and ExifTool, which are system
+# packages from the Debian/Ubuntu archives: apt in the Modal intake image
+# (corpus_intake_app.py) and in CI (lint.yml). The Operator CLI
+# (tools/corpus_intake.py) also needs the `modal` client and `jsonschema`, which are
+# already in the Operator VM's .venv.
+#
 # Add any real, CI-installable dependency below with an exact == pin.

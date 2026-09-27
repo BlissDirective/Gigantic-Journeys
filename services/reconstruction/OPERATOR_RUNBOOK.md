@@ -80,8 +80,11 @@ modal run services/reconstruction/modal_app.py \
 - Success = a `.spz`/`.sog` splat + `.obj` mesh + `cost.json` (+ eval view) land in `./out`.
 
 ## Step 5 — Run a corpus room + record cost
+Corpus captures arrive through the intake (`corpus/README.md` §3; stripped and verified, in the `gj-corpus` Modal volume). Pull one to scratch space outside the repo, with frames, and run it:
 ```
-modal run services/reconstruction/modal_app.py --images ./data/<corpus-room>/images --scan-id room1 --source corpus
+python services/reconstruction/tools/corpus_intake.py fetch room-01 --out ~/gj-corpus-work --frames 2
+modal run services/reconstruction/modal_app.py --images ~/gj-corpus-work/room-01/images --scan-id room-01 --source corpus
+rm -rf ~/gj-corpus-work/room-01
 ```
 - Copy the `cost.json` per-scan numbers into `research/vendors/reconstruction-spike-report.md` §2 (stage times, full $/scan, PSNR/SSIM).
 - **Check spend before every run:** `modal billing summary` (month to date) and `modal billing report --for today --show-resources` (per app, per resource). These read-only commands work with the Operator token.
