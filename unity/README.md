@@ -37,6 +37,12 @@ Feature packages, exact-pinned: URP `com.unity.render-pipelines.universal`, Inpu
 - **Graphics APIs:** the renderer's compute shaders use DXC with wave intrinsics, so they run on Metal, Vulkan and D3D12 but **not OpenGL Core**. On a GPU-less Linux box, render with Vulkan on Mesa lavapipe (`mesa-vulkan-drivers`): `-force-vulkan -force-device-index 0`. `qa/scripts/editor_smoke.py` does this automatically.
 - **iOS:** the package's radix sort is known to glitch on Metal (upstream issue #226). Correct on-device rendering is M1-UNITY-01 (`docs/splat-render-integration.md`).
 
+## Debug overlay (M0-UNITY-04)
+- **What:** `Assets/GiganticJourneys/DebugOverlay/` (assembly `GiganticJourneys.DebugOverlay`, namespace `GiganticJourneys.DebugTools`). UI Toolkit panel, top-right inside the safe area, at most 8 % of the landscape height: fps (1 s average, p99 over 5 s), frame ms, version, git short SHA, scene, device model. **Toggle:** three-finger tap, F3, gamepad L3 + R3. **Save report** (or F4) writes `gj-perf-report-<utc>.txt` (fps p50/p99 over 60 s, device model, build) to `Application.persistentDataPath` (Documents on iOS, visible in the Files app on Development builds) and opens the iOS share sheet.
+- **Release exclusion (SECURITY_CHECKLIST §9.7, §9.8):** the assembly's define constraint is `UNITY_EDITOR || DEVELOPMENT_BUILD || GJ_DEBUG`, so a release player has no overlay code; add the `GJ_DEBUG` scripting define only to force it into a non-development build (never in committed iOS/Android defines; a test checks). `Assets/Editor/Build/BuildInfoHook.cs` keeps `GJShareSheet.mm` out of release builds and writes the SHA resource to the git-ignored `Assets/Generated/` for debug builds only. Test: `DebugOverlayReleaseExclusionTests`.
+- **TestFlight builds are release builds**, so they do not show the overlay; use a Development build for device measurements.
+- **Evidence:** `python qa/scripts/overlay_evidence.py [--ios]` builds Development + release players, checks the exclusion, and captures the overlay under Xvfb + Vulkan/lavapipe into `qa/evidence/M0-UNITY-04/`. Builds land in the git-ignored `unity/Builds/`; player builds re-serialize the URP assets (`m_PrefilterReflectionProbe*`, global settings), so `git checkout -- unity/Assets/Settings unity/Assets/UniversalRenderPipelineGlobalSettings.asset` afterwards.
+
 ## Assets layout (create on first open)
 ```
 Assets/
@@ -49,6 +55,7 @@ Assets/
       PlayMode/ GiganticJourneys.PlayMode.Tests.asmdef  (+ one smoke test)
   Settings/    URP pipeline + renderer assets (per quality tier)
   Capture/     (gj-capture — M1)
+  GiganticJourneys/DebugOverlay/  GiganticJourneys.DebugOverlay.asmdef (debug builds only, M0-UNITY-04)
   Avatar/      (gj-avatar — M2)
   UI/          (gj-design)
   StreamingAssets/  movement.json  ← added by M0-MOVE-01, byte-identical to /config/movement.json (CI checks); NOT added here

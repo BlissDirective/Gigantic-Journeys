@@ -48,7 +48,7 @@ SHOTS = {
     "safe-area.png": "03-overlay-safe-area-iphone-15-pro.png",
 }
 KEEP = re.compile(r"\[GJ-[A-Z-]+\]|error CS\d+|Exception|\bError\b")
-NOISE = ("FMOD", "[Licensing::", "Curl error", "dbus", "AT-SPI", "ALSA")
+NOISE = ("FMOD", "[Licensing::", "Curl error", "dbus", "AT-SPI", "ALSA", "CopyFiles", "% Packages/")
 REDACT = [(re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]+"), "<email>"), (re.compile(r"/home/[^/\s]+"), "~")]
 
 

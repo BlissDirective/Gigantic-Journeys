@@ -1,0 +1,22 @@
+# Gigantic Journeys performance report (debug overlay, M0-UNITY-04)
+created_utc: 2026-09-27T21:40:08Z
+window_s: 60.0
+covered_s: 12.7
+frames: 166
+fps_p50: 18.6
+fps_p99: 1.7
+fps_avg: 13.0
+frame_ms_p50: 53.8
+frame_ms_p99: 603.2
+device_model: PC
+os: Linux 6.12 Debian GNU/Linux 13 64bit
+gpu: llvmpipe (LLVM 19.1.7, 256 bits) (Vulkan)
+build_version: 1.0
+git_sha: 408e90a
+built_utc: 2026-09-27T21:38:33Z
+unity: 6000.0.84f1
+scene: SplatSample
+quality_level: High
+target_frame_rate: -1
+screen: 1280x720
+# fps_pNN = 1000 / (NN-th percentile frame time); p99 is the rate 99% of frames meet or beat.
