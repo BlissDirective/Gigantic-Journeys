@@ -1,0 +1,5 @@
+# M0-UNITY-02 evidence
+
+- `splat-sample-editor.png` (AT-2): `unity/Assets/Capture/Samples/SplatSample.unity` rendered in the Unity Editor 6000.0.84f1 (78ab6fc243d5) on the QA box (the Operator computer), 2026-09-27. Batchmode with a graphics device: Vulkan on Mesa lavapipe (llvmpipe, LLVM 19.1.7), `-force-vulkan -force-device-index 0`, under xvfb. The frame is the scene's Main Camera at 1280x720. **38,460 splats** of the procedural `gj_sample_summit` sample. Against a baseline render with the splat renderer off, 31.37% of the pixels change, so the splat itself rendered. Captured by the editor smoke task (`unity/Assets/Editor/QA/EditorSmoke.cs`, M0-QA-01), which commits separately right after this ticket.
+- Privacy: procedural content only (terrain, trees, a flag). No captured imagery, faces, documents or personal data.
+- AT-3 (suggested; fps on the Owner's iPhones): not measured. It needs a TestFlight build that includes the sample scene, and on-device iOS correctness is M1-UNITY-01 (upstream Metal sort issue #226).

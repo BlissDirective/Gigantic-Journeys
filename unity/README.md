@@ -23,6 +23,20 @@ The Gigantic Journeys Unity 6 project. This README is the **authoritative projec
 ## Pinned packages (`Packages/manifest.json`)
 Feature packages, exact-pinned: URP `com.unity.render-pipelines.universal`, Input System `com.unity.inputsystem`, Animation Rigging `com.unity.animation.rigging`, Test Framework `com.unity.test-framework`, uGUI + UI Toolkit runtime `com.unity.ugui`, plus the standard Unity 6 built-in modules. On first open the Package Manager resolves these and writes `Packages/packages-lock.json` — **commit it** so resolution is deterministic across CI/VM/runner. If PM reports a version mismatch for this editor, accept its compatible version and commit the updated `manifest.json` + `packages-lock.json`.
 
+**Third-party packages (SECURITY_CHECKLIST §7.4 record):**
+
+| Package | Pin | License | Why | Added |
+|---|---|---|---|---|
+| `org.nesnausk.gaussian-splatting` (aras-p/UnityGaussianSplatting, package.json 1.1.1) | git `?path=/package#2c6fed37da67a217367261fcfcd3316d34c73e76` (commit SHA, also in `packages-lock.json`) | MIT (`LICENSE.md` in the package; the bundled GPUSorting and TinyJson code is MIT too) | Gaussian splat rendering of environments (ADR-0001) | M0-UNITY-02, 2026-09-27; ADR-0001 addendum awaiting the Owner's AUTH (`governance/auth-requests/M0-UNITY-02-adr-0001-addendum.md`) |
+| `com.unity.modules.vr` 1.0.0 | built-in module | Unity Companion | The splat renderer references `UnityEngine.XR.XRSettings` | M0-UNITY-02 |
+
+## Gaussian splats (M0-UNITY-02)
+- **URP wiring:** `ProjectSetup.EnsureSplatFeature` adds the package's `GaussianSplatURPFeature` to the Low, Medium and High renderers (render graph, Compatibility Mode off).
+- **Sample:** `Assets/Capture/Samples/SplatSample.unity` renders `gj_sample_summit` (about 38k splats, 1.9 MB of converted data). The sample is **procedural**: `Assets/Editor/Splats/SampleSplat.cs` generates a seeded PLY into `Temp/` and converts it with the package's importer. It contains no captured imagery, and the repo never tracks `.ply`/`.spz` (repo hygiene check). Rebuild: **Gigantic Journeys → Splats → Rebuild Sample Splat + Scene**, or `-executeMethod GiganticJourneys.EditorTools.Splats.SampleSplat.Run`. Output is deterministic, so a rebuild leaves git clean.
+- **LOD and culling knobs:** one ScriptableObject, `Assets/Settings/SplatRenderSettings.asset` (`GiganticJourneys.Splats.SplatRenderSettings`), with one tier per quality level (SH order, splat and opacity scale, sort cadence, splat budget, max render distance) plus frustum culling. `SplatRenderSettingsApplier` pushes it onto each `GaussianSplatRenderer`.
+- **Graphics APIs:** the renderer's compute shaders use DXC with wave intrinsics, so they run on Metal, Vulkan and D3D12 but **not OpenGL Core**. On a GPU-less Linux box, render with Vulkan on Mesa lavapipe (`mesa-vulkan-drivers`): `-force-vulkan -force-device-index 0`. `qa/scripts/editor_smoke.py` does this automatically.
+- **iOS:** the package's radix sort is known to glitch on Metal (upstream issue #226). Correct on-device rendering is M1-UNITY-01 (`docs/splat-render-integration.md`).
+
 ## Assets layout (create on first open)
 ```
 Assets/

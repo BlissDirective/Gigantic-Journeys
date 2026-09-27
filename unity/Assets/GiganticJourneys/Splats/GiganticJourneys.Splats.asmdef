@@ -1,0 +1,16 @@
+{
+    "name": "GiganticJourneys.Splats",
+    "rootNamespace": "GiganticJourneys.Splats",
+    "references": [
+        "GaussianSplatting"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

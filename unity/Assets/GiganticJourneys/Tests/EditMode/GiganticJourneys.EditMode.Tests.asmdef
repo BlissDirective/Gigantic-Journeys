@@ -5,7 +5,10 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "GiganticJourneys",
-        "GiganticJourneys.Editor"
+        "GiganticJourneys.Editor",
+        "GiganticJourneys.Splats",
+        "GaussianSplatting",
+        "Unity.RenderPipelines.Universal.Runtime"
     ],
     "includePlatforms": [
         "Editor"

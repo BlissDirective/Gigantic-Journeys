@@ -125,6 +125,7 @@ namespace GiganticJourneys.EditorTools
                     renderer.postProcessData = postProcess;
                     EditorUtility.SetDirty(renderer);
                 }
+                EnsureSplatFeature(renderer);
 
                 var pipeline = AssetDatabase.LoadAssetAtPath<UniversalRenderPipelineAsset>(
                     pipelinePath
@@ -145,6 +146,41 @@ namespace GiganticJourneys.EditorTools
             AssetDatabase.SaveAssets();
             return result;
         }
+
+        /// <summary>
+        /// Adds the Gaussian splat renderer feature (aras-p/UnityGaussianSplatting, pinned in
+        /// Packages/manifest.json; ADR-0001 addendum, ticket M0-UNITY-02) to a URP renderer
+        /// once. The feature class is internal to the package, so it is found by name.
+        /// </summary>
+        public static bool EnsureSplatFeature(UniversalRendererData renderer)
+        {
+            var type = typeof(GaussianSplatting.Runtime.GaussianSplatRenderer).Assembly.GetType(
+                SplatFeatureType
+            );
+            if (type == null)
+                throw new InvalidOperationException($"{SplatFeatureType} not found");
+            if (renderer.rendererFeatures.Any(f => f != null && f.GetType() == type))
+                return false;
+
+            var feature = (ScriptableRendererFeature)ScriptableObject.CreateInstance(type);
+            feature.name = "GaussianSplatURPFeature";
+            AssetDatabase.AddObjectToAsset(feature, renderer);
+            AssetDatabase.TryGetGUIDAndLocalFileIdentifier(feature, out _, out long localId);
+
+            var so = new SerializedObject(renderer);
+            var features = so.FindProperty("m_RendererFeatures");
+            var map = so.FindProperty("m_RendererFeatureMap");
+            features.InsertArrayElementAtIndex(features.arraySize);
+            features.GetArrayElementAtIndex(features.arraySize - 1).objectReferenceValue = feature;
+            map.InsertArrayElementAtIndex(map.arraySize);
+            map.GetArrayElementAtIndex(map.arraySize - 1).longValue = localId;
+            so.ApplyModifiedPropertiesWithoutUndo();
+            renderer.SetDirty();
+            EditorUtility.SetDirty(renderer);
+            return true;
+        }
+
+        public const string SplatFeatureType = "GaussianSplatting.Runtime.GaussianSplatURPFeature";
 
         static void ApplyQualityTiers(UniversalRenderPipelineAsset[] assets)
         {
