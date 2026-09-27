@@ -89,6 +89,11 @@
       "date": "2026-09-27",
       "event": "Follow-up (gj-operator): the sample asset's m_DataHash changed on every re-import even though the data bytes were identical. The upstream converter hashes the chunk NativeArray handle, a memory address, rather than its contents. SampleSplat.ConvertPly now sets a content hash over the five data files (SampleSplat.SetContentHash); the renderer uses the hash only to detect changed data. Rebuilds and the M0-QA-01 smoke now leave the committed sample byte-identical, .asset included.",
       "by": "gj-operator"
+    },
+    {
+      "date": "2026-09-27",
+      "event": "Owner approval recorded (gj-operator). At 11:37 AM CT the Owner wrote in the operator chat, verbatim: \"Approved: ADR-0001 addendum (M0-UNITY-02)\". That approves the addendum text in governance/auth-requests/M0-UNITY-02-adr-0001-addendum.md as written. Bots may not write the AUTHORIZATION_LOG Decisions table, assign AUTH numbers, or add Pending rows (Foreman/Coordinator only). ADR-0001 is a protected path whose commit must cite APPROVED #n. So auth_required[0] stays pending. HANDOFF TO COORDINATOR: log Decision #035 (next free), paste the addendum into ADR-0001 § Addenda citing APPROVED #035, set auth_required[0] to approved with its auth_id, close AT-4, and move this ticket out of in-review.",
+      "by": "gj-operator"
     }
   ]
 }
