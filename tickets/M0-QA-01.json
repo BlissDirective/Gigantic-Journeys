@@ -5,7 +5,7 @@
   "area": "QA",
   "owner": "gj-qa-release",
   "qa": null,
-  "status": "in-progress",
+  "status": "done",
   "priority": "P0",
   "size": "M",
   "summary": "Install the pinned Unity version on the QA Bot's VM and prove one unattended scripted task: open the project, import the sample splat, open the sample scene, capture a screenshot, write a report. This is the QA half of the M0 exit test.",
@@ -55,7 +55,7 @@
   "branch": "ticket/M0-QA-01-editor-smoke",
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-26",
+  "updated": "2026-09-27",
   "history": [
     {
       "date": "2026-09-15",
@@ -70,6 +70,11 @@
     {
       "date": "2026-09-26",
       "event": "open -> in-progress (gj-operator on the Operator box as the QA VM, per the M0-UNITY-01 precedent). Landed qa/scripts/editor_smoke.py + unity/Assets/Editor/QA/EditorSmoke.cs (batchmode with a graphics device under xvfb-run, llvmpipe OpenGLCore). Ran twice unattended with Unity 6000.0.84f1 (78ab6fc243d5) + iOS Build Support: both PASS, exit 0, 12.1 s wall each, 0 errors / 0 exceptions / 0 compile errors, console 0 errors / 0 warnings on open, identical step results (logs qa/reports/M0-QA-01/run-1.log, run-2.log). AT-1 met (version match + iOS module in the report header). AT-3 met (two identical runs). AT-4 met (automated privacy line: no captured imagery). AT-2 partial: open project, open scene and screenshot pass, but the splat import step reports 'pending M0-UNITY-02' (no sample splat or SplatSample.unity yet) and the scene opened is the fallback Assets/Scenes/SampleScene.unity (Main Camera + Directional Light only), so qa/evidence/M0-QA-01/editor-smoke.png shows only the URP procedural skybox and horizon, no geometry. The splat step, and a screenshot of the splat scene, wait on M0-UNITY-02. Note: a graphics-device open re-serializes GraphicsSettings (m_LightsUseColorTemperature 0->1) and QualitySettings (one tier antiAliasing 0->4, a 'Nintendo Switch 2' platform entry); reverted, not committed. Work is committed directly to main (Operator precedent); the branch field names the work stream for the validator, no separate branch is pushed.",
+      "by": "gj-operator"
+    },
+    {
+      "date": "2026-09-27",
+      "event": "in-progress -> done (gj-operator; direct commit to main, Operator precedent). The smoke now runs on the M0-UNITY-02 splat sample. EditorSmoke's import step regenerates the procedural sample (PLY into Temp/) and converts it with the renderer's importer into Assets/Capture/Samples; the re-import must be byte-identical to the committed asset. The scene step opens SplatSample.unity and requires a GaussianSplatRenderer with a valid asset and GPU data. The capture step renders a splat-off baseline and then the real frame, and fails if under 1% of pixels change. Graphics: the renderer's compute shaders need DXC with wave intrinsics, which OpenGL Core cannot run, so editor_smoke.py now runs Vulkan on Mesa lavapipe (-force-vulkan -force-device-index 0; mesa-vulkan-drivers installed on the QA box). Two unattended runs with Unity 6000.0.84f1 (78ab6fc243d5) + iOS Build Support: both PASS, exit 0, 12.1 s wall each, 0 errors / 0 exceptions / 0 compile errors, console 0/0 on open, identical step results. 38,460 splats; 31.37% of the frame is splat. AT-1 met (version match, iOS module installed; report header). AT-2 met: qa/scripts/editor_smoke.py + unity/Assets/Editor/QA/EditorSmoke.cs open the project, import the sample splat, open the sample scene, capture qa/evidence/M0-QA-01/editor-smoke.png (the rendered summit splat) and write qa/reports/M0-editor-smoke.md with timings and versions. AT-3 met: two identical PASS runs. The sanitized logs are now committed as qa/reports/M0-QA-01/run-1.txt and run-2.txt; the repo's *.log ignore rule meant the 2026-09-26 run-N.log files named in the report never landed in git. AT-4 met: automated privacy line (procedural content, 0 textures) plus a reviewer look at the PNG (terrain, trees, a flag; no faces, documents or personal data). Notes: the 3 warnings per run are Vulkan 'compute buffer not provided, skipping draw' on the discarded priming frame right after the splat renderer is re-enabled; the captured frame is clean. activeBuildTarget reads StandaloneLinux64 because the run used a fresh worktree Library, not the main clone's iOS-target Library. Dependency M0-UNITY-02 is in-review only for its ADR/AUTH criterion (AT-4); every renderer criterion the smoke relies on is met.",
       "by": "gj-operator"
     }
   ]

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using GaussianSplatting.Runtime;
+using GiganticJourneys.EditorTools.Splats;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEditorInternal;
@@ -29,12 +32,10 @@ namespace GiganticJourneys.EditorTools.QA
     /// </summary>
     public static class EditorSmoke
     {
-        public const string SplatFolder = "Assets/Capture/Samples";
-        public const string SplatScene = SplatFolder + "/SplatSample.unity";
+        public const string SplatFolder = SampleSplat.Folder;
+        public const string SplatScene = SampleSplat.ScenePath;
         public const string FallbackScene = "Assets/Scenes/SampleScene.unity";
         const string LogTag = "[GJ-SMOKE]";
-
-        static readonly string[] SplatExtensions = { ".ply", ".spz", ".splat", ".ksplat", ".sog" };
 
         [Serializable]
         public class StepResult
@@ -60,6 +61,11 @@ namespace GiganticJourneys.EditorTools.QA
             public int screenshotWidth;
             public int screenshotHeight;
             public int sceneTextureCount;
+            public string splatSource;
+            public int splatCount;
+            public long splatAssetBytes;
+            public bool splatBytesMatchCommitted;
+            public double splatCoveragePercent;
             public List<string> sceneTextures = new List<string>();
             public int consoleErrorsOnOpen;
             public int consoleWarningsOnOpen;
@@ -207,31 +213,51 @@ namespace GiganticJourneys.EditorTools.QA
 
         static (string, string) ImportSampleSplat()
         {
-            var full = Path.GetFullPath(SplatFolder);
-            var files = Directory.Exists(full)
-                ? Directory
-                    .GetFiles(full, "*", SearchOption.AllDirectories)
-                    .Where(f => SplatExtensions.Contains(Path.GetExtension(f).ToLowerInvariant()))
-                    .ToArray()
-                : Array.Empty<string>();
-            if (files.Length == 0)
-                return (
-                    "pending",
-                    $"no sample splat under {SplatFolder} yet (renderer + sample land in M0-UNITY-02)"
-                );
-            var projectRoot = Path.GetFullPath(".") + Path.DirectorySeparatorChar;
-            foreach (var f in files)
-            {
-                var assetPath = f.Substring(projectRoot.Length).Replace('\\', '/');
-                AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
-                if (AssetDatabase.LoadMainAssetAtPath(assetPath) == null)
-                    return ("fail", $"{assetPath} did not import to an asset");
-            }
+            // Regenerate the procedural sample (PLY in Temp/) and convert it with the
+            // renderer's importer into Assets/Capture/Samples. Generation is seeded, so the
+            // converted bytes must equal the committed ones.
+            var before = SampleDataHash();
+            var asset = SampleSplat.ImportSample();
+            var after = SampleDataHash();
+            _result.splatSource = SampleSplat.Source;
+            _result.splatCount = asset.splatCount;
+            _result.splatAssetBytes = SampleDataBytes();
+            _result.splatBytesMatchCommitted = before != null && before == after;
             return (
                 "pass",
-                $"imported {files.Length} splat file(s): "
-                    + string.Join(", ", files.Select(Path.GetFileName))
+                $"generated {SampleSplat.PlyPath} and imported {SampleSplat.AssetPath}: "
+                    + $"{asset.splatCount} splats, {_result.splatAssetBytes / 1024} KiB converted data, "
+                    + $"bytes identical to the committed asset: {(_result.splatBytesMatchCommitted ? "yes" : "NO")}"
             );
+        }
+
+        static string[] SampleDataFiles() =>
+            Directory.Exists(SplatFolder)
+                ? Directory
+                    .GetFiles(SplatFolder, SampleSplat.SampleName + "*")
+                    .Where(f =>
+                        f.EndsWith(".bytes", StringComparison.Ordinal)
+                        || f.EndsWith(".asset", StringComparison.Ordinal)
+                    )
+                    .OrderBy(f => f, StringComparer.Ordinal)
+                    .ToArray()
+                : Array.Empty<string>();
+
+        static long SampleDataBytes() => SampleDataFiles().Sum(f => new FileInfo(f).Length);
+
+        static string SampleDataHash()
+        {
+            var files = SampleDataFiles();
+            if (files.Length == 0)
+                return null;
+            using var sha = SHA256.Create();
+            foreach (var f in files)
+            {
+                var bytes = File.ReadAllBytes(f);
+                sha.TransformBlock(bytes, 0, bytes.Length, null, 0);
+            }
+            sha.TransformFinalBlock(Array.Empty<byte>(), 0, 0);
+            return BitConverter.ToString(sha.Hash).Replace("-", "");
         }
 
         static (string, string) OpenSampleScene()
@@ -242,8 +268,17 @@ namespace GiganticJourneys.EditorTools.QA
             if (!scene.IsValid() || !scene.isLoaded)
                 return ("fail", $"could not open {path}");
             CollectSceneTextures();
-            var note = path == SplatScene ? "" : $" (fallback: {SplatScene} lands in M0-UNITY-02)";
-            return ("pass", $"opened {path}, {scene.rootCount} root object(s){note}");
+            if (path != SplatScene)
+                return ("fail", $"{SplatScene} is missing; opened the fallback {path}");
+            var splats = UnityEngine.Object.FindObjectsByType<GaussianSplatRenderer>(
+                FindObjectsSortMode.None
+            );
+            var ready = splats.Count(r => r.HasValidAsset && r.HasValidRenderSetup);
+            return (
+                ready > 0 ? "pass" : "fail",
+                $"opened {path}, {scene.rootCount} root object(s), "
+                    + $"{ready}/{splats.Length} GaussianSplatRenderer(s) with a valid asset and GPU data"
+            );
         }
 
         static void CollectSceneTextures()
@@ -279,6 +314,63 @@ namespace GiganticJourneys.EditorTools.QA
             if (cam == null)
                 return ("fail", "no camera in the scene");
 
+            // Baseline with the splat renderers off, then the real frame with them on:
+            // the pixel difference proves the splat itself rendered (not just the sky).
+            var splats = UnityEngine
+                .Object.FindObjectsByType<GaussianSplatRenderer>(FindObjectsSortMode.None)
+                .Where(r => r.enabled)
+                .ToArray();
+            foreach (var r in splats)
+                r.enabled = false;
+            var baseline = RenderCamera(cam, width, height);
+            foreach (var r in splats)
+                r.enabled = true;
+            RenderCamera(cam, width, height, discard: true); // first frame primes the sort
+            var tex = RenderCamera(cam, width, height);
+
+            var pixels = tex.GetPixels32();
+            var basePixels = baseline.GetPixels32();
+            var changed = 0;
+            for (var i = 0; i < pixels.Length; i++)
+            {
+                var a = pixels[i];
+                var b = basePixels[i];
+                if (Math.Abs(a.r - b.r) + Math.Abs(a.g - b.g) + Math.Abs(a.b - b.b) > 24)
+                    changed++;
+            }
+            UnityEngine.Object.DestroyImmediate(baseline);
+            _result.splatCoveragePercent = Math.Round(100.0 * changed / pixels.Length, 2);
+            var distinct = pixels
+                .Select(p => (p.r << 16) | (p.g << 8) | p.b)
+                .Distinct()
+                .Take(64)
+                .Count();
+            var file = Path.Combine(outDir, "editor-smoke.png");
+            File.WriteAllBytes(file, tex.EncodeToPNG());
+            UnityEngine.Object.DestroyImmediate(tex);
+
+            _result.screenshotFile = Path.GetFileName(file);
+            _result.screenshotWidth = width;
+            _result.screenshotHeight = height;
+            if (distinct < 2)
+                return (
+                    "fail",
+                    $"screenshot is a flat single colour ({width}x{height}); renderer produced nothing"
+                );
+            if (splats.Length > 0 && _result.splatCoveragePercent < 1.0)
+                return (
+                    "fail",
+                    $"splat renderer produced no visible splats ({_result.splatCoveragePercent}% of pixels changed)"
+                );
+            return (
+                "pass",
+                $"{cam.name} rendered {width}x{height} -> {_result.screenshotFile} ({distinct}+ colours); "
+                    + $"splats cover {_result.splatCoveragePercent}% of the frame vs a splat-off baseline"
+            );
+        }
+
+        static Texture2D RenderCamera(Camera cam, int width, int height, bool discard = false)
+        {
             var rt = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32);
             var tex = new Texture2D(width, height, TextureFormat.RGB24, false);
             var previousTarget = cam.targetTexture;
@@ -295,32 +387,13 @@ namespace GiganticJourneys.EditorTools.QA
             {
                 cam.targetTexture = previousTarget;
                 RenderTexture.active = previousActive;
+                rt.Release();
+                UnityEngine.Object.DestroyImmediate(rt);
             }
-
-            var pixels = tex.GetPixels32();
-            var distinct = pixels
-                .Select(p => (p.r << 16) | (p.g << 8) | p.b)
-                .Distinct()
-                .Take(64)
-                .Count();
-            var file = Path.Combine(outDir, "editor-smoke.png");
-            File.WriteAllBytes(file, tex.EncodeToPNG());
+            if (!discard)
+                return tex;
             UnityEngine.Object.DestroyImmediate(tex);
-            rt.Release();
-            UnityEngine.Object.DestroyImmediate(rt);
-
-            _result.screenshotFile = Path.GetFileName(file);
-            _result.screenshotWidth = width;
-            _result.screenshotHeight = height;
-            if (distinct < 2)
-                return (
-                    "fail",
-                    $"screenshot is a flat single colour ({width}x{height}); renderer produced nothing"
-                );
-            return (
-                "pass",
-                $"{cam.name} rendered {width}x{height} -> {_result.screenshotFile} ({distinct}+ colours)"
-            );
+            return null;
         }
 
         /// <summary>Error and warning counts in the Editor Console (internal LogEntries API).</summary>

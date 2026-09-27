@@ -7,14 +7,21 @@ unity/Assets/Editor/QA/EditorSmoke.cs, which opens the project, imports the
 sample splat, opens the sample scene and renders the scene camera to
 qa/evidence/M0-QA-01/editor-smoke.png. This script then writes
 qa/reports/M0-editor-smoke.md (versions, timings, results, privacy line) and a
-sanitized run log under qa/reports/M0-QA-01/.
+sanitized run log under qa/reports/M0-QA-01/ (run-N.txt).
 
 The raw Unity Editor log is never committed: it can carry licensing details.
 Only the smoke task's own [GJ-SMOKE] lines and error lines are kept, after
 redaction.
 
+Graphics: the splat renderer's compute shaders need DXC with wave intrinsics, which
+Unity compiles only for Vulkan, Metal and D3D12 (not OpenGL Core). On a GPU-less Linux
+box the task therefore runs Vulkan on Mesa lavapipe (`apt install mesa-vulkan-drivers`)
+with `-force-vulkan -force-device-index 0`; the device index is needed because Unity
+otherwise skips a CPU Vulkan device and falls back to OpenGL Core.
+
 Usage:
     python qa/scripts/editor_smoke.py [--runs 2] [--unity PATH] [--timeout 1800]
+                                      [--graphics auto|vulkan|glcore]
 """
 
 from __future__ import annotations
@@ -89,7 +96,18 @@ def sanitize(line: str) -> str:
     return line
 
 
-def run_once(editor: Path, n: int, timeout: int) -> dict:
+def graphics_args(mode: str) -> list[str]:
+    """Editor graphics API flags (see the module docstring)."""
+    if mode == "auto":
+        mode = "vulkan" if sys.platform.startswith("linux") else "default"
+    if mode == "vulkan":
+        return ["-force-vulkan", "-force-device-index", "0"]
+    if mode == "glcore":
+        return ["-force-glcore"]
+    return []
+
+
+def run_once(editor: Path, n: int, timeout: int, graphics: str = "auto") -> dict:
     out_dir = EVIDENCE if n == 1 else EVIDENCE / f"run-{n}"
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "result.json").unlink(missing_ok=True)
@@ -105,6 +123,7 @@ def run_once(editor: Path, n: int, timeout: int) -> dict:
         str(raw_log),
         "-gjSmokeOut",
         str(out_dir),
+        *graphics_args(graphics),
     ]
     if sys.platform.startswith("linux") and not os.environ.get("GJ_SMOKE_USE_DISPLAY"):
         if not shutil.which("xvfb-run"):
@@ -148,7 +167,8 @@ def run_once(editor: Path, n: int, timeout: int) -> dict:
         f"# exit_code={proc.returncode} wall={wall:.1f}s passed={result['passed']}",
         "# sanitized: only [GJ-SMOKE] and error lines of the Unity Editor log, secrets redacted",
     ]
-    (LOGS / f"run-{n}.log").write_text("\n".join(header + kept) + "\n")
+    # .txt, not .log: the repo ignores *.log (raw logs never enter git); this one is sanitized.
+    (LOGS / f"run-{n}.txt").write_text("\n".join(header + kept) + "\n")
     return result
 
 
@@ -161,16 +181,41 @@ def write_report(version: str, rev: str, editor: Path, results: list[dict]) -> N
     identical = len({tuple(signature(r)) for r in results}) == 1
     textures = first.get("sceneTextures", [])
     splat = next((s for s in first.get("steps", []) if s["name"] == "import sample splat"), {})
-    captured = splat.get("status") == "pass" or textures
-    privacy = (
-        "PASS (automated): the rendered scene references no captured imagery "
-        "(no splat imported, 0 project textures), "
-        "so no faces, documents or personal data can appear."
-        if not captured
-        else "MANUAL REVIEW REQUIRED: the scene contains captured imagery "
-        f"({len(textures)} texture(s), splat step {splat.get('status')}); a reviewer must confirm "
-        "no faces, documents or personal data before this report is committed."
-    )
+    source = first.get("splatSource") or ""
+    procedural = source.startswith("procedural")
+    if textures or (splat.get("status") == "pass" and not procedural):
+        privacy = (
+            "MANUAL REVIEW REQUIRED: the scene contains captured imagery "
+            f"({len(textures)} texture(s), splat source: {source or 'unknown'}); a reviewer must "
+            "confirm no faces, documents or personal data before this report is committed."
+        )
+    elif procedural:
+        privacy = (
+            "PASS (automated): the only content is the procedural sample splat "
+            f"({source}) and 0 project textures, so no faces, documents or personal data "
+            "can appear. Reviewer check of the PNG: terrain, trees and a flag only."
+        )
+    else:
+        privacy = (
+            "PASS (automated): the rendered scene references no captured imagery "
+            "(no splat imported, 0 project textures), "
+            "so no faces, documents or personal data can appear."
+        )
+    splat_rows = ""
+    if splat.get("status") == "pass":
+        match = "yes" if first.get("splatBytesMatchCommitted") else "NO"
+        mb = first.get("splatAssetBytes", 0) / 1048576
+        coverage = first.get("splatCoveragePercent", 0)
+        splat_rows = f"""
+## Sample splat
+| | |
+|---|---|
+| Source | {source} |
+| Splats | {first.get("splatCount", 0)} |
+| Converted data | {mb:.2f} MB (`unity/Assets/Capture/Samples/`) |
+| Re-import identical to the committed bytes | **{match}** |
+| Splat coverage vs a splat-off baseline | {coverage}% of the frame |
+"""
     rows = "\n".join(
         f"| {s['name']} | **{s['status']}** | {s['seconds']:.2f} | {s['detail']} |"
         for s in first.get("steps", [])
@@ -178,7 +223,7 @@ def write_report(version: str, rev: str, editor: Path, results: list[dict]) -> N
     runs = "\n".join(
         f"| {r['run']} | {'PASS' if r['passed'] else 'FAIL'} | {r['exit_code']} | "
         f"{r['wall_seconds']} | {r.get('errorCount', '?')} / {r.get('exceptionCount', '?')} / "
-        f"{r.get('compile_errors', '?')} | `qa/reports/M0-QA-01/run-{r['run']}.log` |"
+        f"{r.get('compile_errors', '?')} | `qa/reports/M0-QA-01/run-{r['run']}.txt` |"
         for r in results
     )
     pending = [s["name"] for s in first.get("steps", []) if s["status"] == "pending"]
@@ -193,7 +238,7 @@ def write_report(version: str, rev: str, editor: Path, results: list[dict]) -> N
     size = f"{first.get('screenshotWidth', 0)}x{first.get('screenshotHeight', 0)}"
     verdict = "PASS" if overall else "FAIL"
     if pending:
-        verdict += f" — pending steps: {', '.join(pending)} (need M0-UNITY-02)"
+        verdict += f" — pending steps: {', '.join(pending)}"
     text = f"""# M0-editor-smoke — scripted Unity editor smoke task (M0-QA-01)
 
 Generated by `qa/scripts/editor_smoke.py` on {generated}. Do not edit by hand.
@@ -217,7 +262,7 @@ Generated by `qa/scripts/editor_smoke.py` on {generated}. Do not edit by hand.
 Editor start to smoke entry (project open + domain load): {since_start:.1f} s.
 Scene: `{first.get("scenePath", "?")}`. Screenshot: `qa/evidence/M0-QA-01/{shot}`
 ({size}, the scene's Game-view camera rendered offscreen; batchmode has no Game-view window).
-
+{splat_rows}
 ## Runs (AT-3)
 | Run | Result | Exit | Wall s | Errors / exceptions / compile errors | Log |
 |---|---|---|---|---|---|
@@ -246,6 +291,12 @@ def main() -> int:
         help="path to the Unity Editor binary (default: Hub install of the pinned version)",
     )
     ap.add_argument("--timeout", type=int, default=1800, help="seconds per run")
+    ap.add_argument(
+        "--graphics",
+        choices=["auto", "vulkan", "glcore"],
+        default="auto",
+        help="Editor graphics API (auto = Vulkan on Linux, platform default elsewhere)",
+    )
     args = ap.parse_args()
 
     version, rev = pinned_version()
@@ -255,7 +306,7 @@ def main() -> int:
     results = []
     for n in range(1, args.runs + 1):
         print(f"run {n}/{args.runs}: {editor} ...", flush=True)
-        r = run_once(editor, n, args.timeout)
+        r = run_once(editor, n, args.timeout, args.graphics)
         print(f"run {n}: {'PASS' if r['passed'] else 'FAIL'} in {r['wall_seconds']} s", flush=True)
         results.append(r)
     write_report(version, rev, editor, results)

@@ -1,0 +1,8 @@
+# M0-QA-01 editor smoke run 2 (2026-09-27 09:22 CDT)
+# exit_code=0 wall=12.1s passed=True
+# sanitized: only [GJ-SMOKE] and error lines of the Unity Editor log, secrets redacted
+[GJ-SMOKE] open project: pass (0.00s) domain loaded 5.8s after Editor start; compile errors: none; console on open: 0 error(s), 0 warning(s)
+[GJ-SMOKE] import sample splat: pass (0.98s) generated Temp/GJSampleSplat/gj_sample_summit.ply and imported Assets/Capture/Samples/gj_sample_summit.asset: 38460 splats, 1919 KiB converted data, bytes identical to the committed asset: yes
+[GJ-SMOKE] open sample scene: pass (0.29s) opened Assets/Capture/Samples/SplatSample.unity, 3 root object(s), 1/1 GaussianSplatRenderer(s) with a valid asset and GPU data
+[GJ-SMOKE] capture screenshot: pass (0.64s) Main Camera rendered 1280x720 -> editor-smoke.png (64+ colours); splats cover 31.37% of the frame vs a splat-off baseline
+[GJ-SMOKE] result: PASS
