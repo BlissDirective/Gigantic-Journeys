@@ -65,7 +65,7 @@ jobs:
       linux: ${{ steps.lanes.outputs.linux }}
       macos: ${{ steps.lanes.outputs.macos }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - id: p
         env:
           CI_ENABLED: ${{ vars.UNITY_CI_ENABLED }}
@@ -110,7 +110,7 @@ jobs:
     if: needs.preflight.outputs.run == 'true' && needs.preflight.outputs.linux == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           lfs: true
       - name: Free disk space for the Unity image
@@ -166,7 +166,7 @@ jobs:
     if: ${{ !cancelled() && needs.preflight.outputs.run == 'true' && needs.preflight.outputs.macos == 'true' }}
     runs-on: ${{ vars.IOS_MAC_RUNNER || 'macos-14' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           lfs: true
       - uses: actions/cache@v4
