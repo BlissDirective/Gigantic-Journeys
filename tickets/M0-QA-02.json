@@ -5,7 +5,7 @@
   "area": "QA",
   "owner": "gj-qa-release",
   "qa": null,
-  "status": "in-review",
+  "status": "done",
   "priority": "P0",
   "size": "S",
   "summary": "Write the procedure every gameplay, UI, and capture PR goes through before the Coordinator reviews it, and apply it to M0-UNITY-04 as the first live use.",
@@ -46,7 +46,7 @@
   "branch": "ticket/M0-QA-02-visual-qa",
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-27",
+  "updated": "2026-09-28",
   "history": [
     {
       "date": "2026-09-15",
@@ -67,6 +67,11 @@
       "date": "2026-09-27",
       "event": "AT-2 met: the procedure was applied to M0-UNITY-04 (first live use, §5.1 + §5.3 + §4) with evidence named per §2 (qa/evidence/M0-UNITY-04/01-overlay-bright-scan.png, 02-overlay-dark-scan.png, 03-overlay-safe-area-iphone-15-pro.png, run/ sidecars, README with the privacy line; check_qa_evidence.py OK) and the §8 verdict in qa/reports/M0-UNITY-04.md. M0-UNITY-04 was delivered as a direct commit to main (408e90a), so the AT-2 evidence is that commit instead of a PR link; Coordinator to confirm. VISUAL_QA.md v1.0.1 records the first use in §9. Unblocked; all ATs met -> in-review.",
       "by": "gj-operator"
+    },
+    {
+      "date": "2026-09-28",
+      "event": "Coordinator: AT-2 confirmed — the VISUAL_QA procedure was applied to M0-UNITY-04 as the first live use, with the §8 verdict in qa/reports/M0-UNITY-04.md and evidence named per §2 (check_qa_evidence.py green in CI). Under the fast-forward-to-main model (AUTH #006/#007) the AT-2 'M0-UNITY-04 PR link' is satisfied by the M0-UNITY-04 commit + QA report. AT-1 (procedure doc) and AT-3 (privacy line) already met. All required ATs met; status in-review -> done.",
+      "by": "coordinator"
     }
   ]
 }

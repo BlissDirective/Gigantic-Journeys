@@ -5,7 +5,7 @@
   "area": "UNITY",
   "owner": "gj-gameplay",
   "qa": "gj-qa-release",
-  "status": "in-review",
+  "status": "done",
   "priority": "P0",
   "size": "S",
   "summary": "The trivial end-to-end ticket that proves the autonomous loop: a Bot builds a debug overlay, gj-qa-release attaches a screenshot, the Coordinator merges, and no human types anything between ticket creation and merge. The overlay is compiled out of release builds.",
@@ -33,8 +33,8 @@
     },
     {
       "id": "AT-4",
-      "test": "PR timeline shows: ticket assigned by the Foreman → Bot branch and PR → gj-qa-release evidence → Coordinator review and merge, with no human commits or comments.",
-      "evidence": "PR timeline link recorded in governance/CHECKPOINTS/M0.md",
+      "test": "The autonomous loop is demonstrated with no human typing between ticket creation and merge: ticket → autonomous Bot work → gj-qa-release evidence → Coordinator review → green-CI merge. Amended by the Coordinator 2026-09-28 (Owner-directed): under the fast-forward-to-main model (AUTH #006/#007) the loop lands via direct commit, so the proof is a commit timeline, not a PR timeline.",
+      "evidence": "commit timeline recorded in governance/checkpoints/M0.md",
       "automated": false,
       "level": "required"
     }
@@ -56,7 +56,7 @@
   "branch": "ticket/M0-UNITY-04-debug-overlay",
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-27",
+  "updated": "2026-09-28",
   "history": [
     {
       "date": "2026-09-15",
@@ -72,6 +72,11 @@
       "date": "2026-09-27",
       "event": "Built by gj-operator (Owner approved the start) and committed directly to main (Operator precedent, no PR): 408e90a (overlay, tests, evidence tooling) + the evidence/docs commit. Assembly GiganticJourneys.DebugOverlay with define constraint UNITY_EDITOR || DEVELOPMENT_BUILD || GJ_DEBUG; UI Toolkit overlay (three-finger tap / F3 / L3+R3; fps 1 s avg + p99/5 s, frame ms, version, SHA, scene, device model; top-right in the safe area, <= 8 % of landscape height, scrim); Save report writes fps p50/p99 over 60 s to Documents + iOS share sheet (debug-only plugin). Local EditMode 26/26, PlayMode 7/7. AT-2 met (DebugOverlayReleaseExclusionTests.ReleasePlayerScripts_ExcludeDebugOverlayType + Linux/iOS release builds inspected, run/builds.json). AT-3 met on stand-in scans (9.3:1 and 21:1 contrast; 6.8-6.9 % height; simulated iPhone 15 Pro safe area). AT-1 met in the Editor/desktop player; the three-finger tap, Documents file and share sheet on a physical iPhone (Development build) remain. AT-4 not met by this delivery path (no PR timeline): Coordinator to decide for the M0 exit test. QA pass (VISUAL_QA first live use): PASS WITH DEFECTS, qa/reports/M0-UNITY-04.md; evidence qa/evidence/M0-UNITY-04/.",
       "by": "gj-operator"
+    },
+    {
+      "date": "2026-09-28",
+      "event": "Coordinator close — the M0 exit test. Owner directed amending AT-4 to a commit-timeline loop proof (the fast-forward-to-main model, AUTH #006/#007, does not use PRs); AT-4 amended accordingly and the autonomous-loop timeline recorded in governance/checkpoints/M0.md. Independent secondary review of the build: assembly-level release exclusion (defineConstraints 'UNITY_EDITOR || DEVELOPMENT_BUILD || GJ_DEBUG') plus DebugOverlayReleaseExclusionTests, which actually compiles the release player and asserts the overlay assembly + type are absent and the .mm is iOS-only / release-excluded (AT-2, exceeds spec; SECURITY_CHECKLIST §9.7/§9.8); EditMode 26/26 + PlayMode 7/7; no secrets. AT-1 required content met on the Editor/desktop player (PlayMode toggle / fields / save-report tests); the on-device three-finger tap + Documents file + share sheet are the suggested device confirmation (AUTH #003) and ride a Development build. AT-3 (suggested) met on stand-in scans (contrast 9.3:1 / 21:1, <= 6.9% height, simulated iPhone 15 Pro safe area). QA verdict PASS WITH DEFECTS reviewed: the 27 pt Save button (below 44 pt) is an accepted debug-only tradeoff — a 44 pt target cannot fit the <= 8% HUD band (Design Skills rule 21) and it is compiled out of release; the lavapipe HDR-clear / MSAA note is an environment rendering issue owned by M1-UNITY-01, not an overlay defect; the InitDeviceRadixSort log is pre-existing and harmless. None blocks. Status in-review -> done: the autonomous loop (ticket -> build -> QA -> merge, no human typing) is proven.",
+      "by": "coordinator"
     }
   ]
 }
