@@ -161,3 +161,10 @@ Operator reports its build number; build numbers are the workflow run number), t
 overlay, tap **Save report**, confirm the share sheet, and check the file under Files → On My iPhone →
 Gigantic Journeys. Send the screenshot and report (or AirDrop them) to the Operator, who files them as
 `04-overlay-device-<model>.png` + `run/perf-report-<model>.txt`.
+
+**Status 2026-09-28 (after TestFlight was switched on):** the internal-debug build hasn't been uploaded yet. The
+TestFlight lane stops at export because the App Store Connect API key has no access to cloud-managed distribution
+certificates (run 36470704670). The Owner has to generate a key with the Admin role (PROGRESS Owner item 13). After
+that the Operator dispatches `lane=macos, flavor=internal-debug`. The release-flavor assertion has already passed on
+CI: `[GJ-FLAVOR] ... overlay IL2CPP output absent, GJShareSheet.mm absent (expected absent)` (runs 36467562336 and
+36470704670).

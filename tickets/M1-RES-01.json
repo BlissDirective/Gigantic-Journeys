@@ -55,12 +55,17 @@
   "branch": null,
   "pr": null,
   "created": "2026-09-16",
-  "updated": "2026-09-16",
+  "updated": "2026-09-28",
   "history": [
     {
       "date": "2026-09-16",
       "event": "created by the Coordinator (M1 decomposition)",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-28",
+      "event": "Compute budget recommendation by gj-operator (research/tier2/compute-budget-2026-10.md): Modal list prices verified (A100 80 GB $2.50/h, H100 $3.95/h, A10G $1.10/h; CPU $0.0473/core-h, memory $0.008/GiB-h; $30/month Starter credit). Tier 2 month 1 low/expected/high $301/$451/$1,017 (estimated hours; SPEC §5 line $400-1,000); recommended month-1 spend AUTH $500. Reconstruction prototype (measured $0.185/room on A10G) $12/$45/$246. Recommended Modal workspace budget $75/month now, $575/month once this ticket's AUTH is approved. Recommendation only; spend limit not changed; status stays blocked.",
+      "by": "gj-operator"
     }
   ]
 }

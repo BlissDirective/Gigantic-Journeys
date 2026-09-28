@@ -51,7 +51,7 @@
   "branch": null,
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-24",
+  "updated": "2026-09-28",
   "history": [
     {
       "date": "2026-09-15",
@@ -61,6 +61,11 @@
     {
       "date": "2026-09-24",
       "event": "Operator completed. Apple Developer Program (Individual; renews 2027-01-17); App Store Connect API key (App Manager) + issuer + .p8 stored as GitHub Actions secrets ASC_KEY_ID / ASC_ISSUER_ID / ASC_KEY_P8_BASE64; Team ID in the APPLE_TEAM_ID GH variable; Bundle ID com.sparkforgelabs.giganticjourneys; app record 'Gigantic Journeys' (app 6815794301); internal TestFlight group created. The .p8 is never in the repo or chat. TESTFLIGHT_ENABLED stays off until M0-UNITY-01 merges. The iOS build + TestFlight workflow (.github/workflows/ios-build.yml) is already in place and verified.",
+      "by": "gj-operator"
+    },
+    {
+      "date": "2026-09-28",
+      "event": "First TestFlight runs after the Owner had TESTFLIGHT_ENABLED set to true (gj-operator). Run 36467562336 failed at the signed archive: automatic signing needed a Development profile, and the team has no devices. Fixed in 52893d4 (archive unsigned, sign only at export). Run 36470704670 archived successfully but export failed with 'Cloud signing permission error' / 'No signing certificate iOS Distribution found': the ASC API key has no access to cloud-managed distribution certificates. Owner action (PROGRESS item 13): create a Team key with the Admin role and replace the secrets ASC_KEY_ID + ASC_KEY_P8_BASE64. No upload yet.",
       "by": "gj-operator"
     }
   ]
