@@ -1,6 +1,6 @@
 # Visual QA procedure and evidence standard
 
-`qa/VISUAL_QA.md` · v1.0 · 2026-09-27 · Owner: gj-qa-release · Ticket M0-QA-02 · Sources: Design Skills §4 (pre-PR design checklist), SPEC §6 and §11 (AUTH #003), `.github/ISSUE_TEMPLATE/defect.md`, `.github/PULL_REQUEST_TEMPLATE.md`, plan §4 step 3, kit §3.7.
+`qa/VISUAL_QA.md` · v1.0.1 · 2026-09-27 · Owner: gj-qa-release · Ticket M0-QA-02 · Sources: Design Skills §4 (pre-PR design checklist), SPEC §6 and §11 (AUTH #003), `.github/ISSUE_TEMPLATE/defect.md`, `.github/PULL_REQUEST_TEMPLATE.md`, plan §4 step 3, kit §3.7.
 
 Every **gameplay, UI, and capture** PR goes through this pass before the Coordinator reviews it. Other PRs (services, docs, CI) skip it unless they change something on screen.
 
@@ -141,7 +141,7 @@ Privacy: the evidence contains no faces, addresses, documents, or screens with p
 
 ## 9. First live use: M0-UNITY-04 (debug overlay)
 
-M0-UNITY-04 is the loop-proving ticket (M0 exit test). As of 2026-09-27 it is **open, with no branch or PR**, so this procedure cannot be applied to it yet (M0-QA-02 AT-2 is blocked on it). When its PR opens, QA applies §5.1 + §5.3 (it is a UI overlay) + §4. Planned evidence set, `qa/evidence/M0-UNITY-04/`:
+M0-UNITY-04 is the loop-proving ticket (M0 exit test). **Applied 2026-09-27** (§5.1 + §5.3 + §4) on commit `408e90a`, delivered as a direct commit to main, so the verdict lives in `qa/reports/M0-UNITY-04.md` instead of a PR comment. Delivered: `01-overlay-bright-scan.png`, `02-overlay-dark-scan.png`, `03-overlay-safe-area-iphone-15-pro.png` (simulated safe area, rendered by a Development Linux player rather than the Device Simulator), `run/` sidecars; the device shot and device report (rows 04 and perf-report below) wait for an Owner iPhone. Planned evidence set, `qa/evidence/M0-UNITY-04/`:
 
 | File | Shows | AT |
 |---|---|---|
@@ -158,4 +158,5 @@ Clips: overlay toggle (≤ 30 s), attached to the PR. The Editor shots can come 
 
 | Date | Version | Change |
 |---|---|---|
+| 2026-09-27 | 1.0.1 | §9: first live use recorded (M0-UNITY-04 evidence set, verdict in `qa/reports/M0-UNITY-04.md`) |
 | 2026-09-27 | 1.0 | Created (M0-QA-02). Existing evidence renamed to the rule (`M0-QA-01/01-editor-smoke.png`, `M0-UNITY-02/01-splat-sample-editor.png`); `check_qa_evidence.py` + CI job added |

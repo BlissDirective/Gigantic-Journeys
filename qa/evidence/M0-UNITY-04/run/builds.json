@@ -1,0 +1,62 @@
+{
+  "unityVersion": "6000.0.84f1",
+  "builds": [
+    {
+      "name": "linux-development",
+      "target": "StandaloneLinux64",
+      "development": true,
+      "result": "Succeeded",
+      "outputPath": "/workspace/gj-unity04/unity/Builds/overlay/linux-development/gj.x86_64",
+      "seconds": 21.6,
+      "overlayAssemblyPresent": true,
+      "overlayTypeNamePresent": true,
+      "sharePluginPresent": false,
+      "managedAssemblies": [
+        "GiganticJourneys.DebugOverlay.dll",
+        "GiganticJourneys.dll",
+        "GiganticJourneys.Splats.dll"
+      ]
+    },
+    {
+      "name": "linux-release",
+      "target": "StandaloneLinux64",
+      "development": false,
+      "result": "Succeeded",
+      "outputPath": "/workspace/gj-unity04/unity/Builds/overlay/linux-release/gj.x86_64",
+      "seconds": 12.6,
+      "overlayAssemblyPresent": false,
+      "overlayTypeNamePresent": false,
+      "sharePluginPresent": false,
+      "managedAssemblies": [
+        "GiganticJourneys.dll",
+        "GiganticJourneys.Splats.dll"
+      ]
+    },
+    {
+      "name": "ios-development",
+      "target": "iOS",
+      "development": true,
+      "result": "Succeeded",
+      "outputPath": "/workspace/gj-unity04/unity/Builds/overlay/ios-development",
+      "seconds": 25.1,
+      "overlayAssemblyPresent": true,
+      "overlayTypeNamePresent": true,
+      "sharePluginPresent": true,
+      "managedAssemblies": []
+    },
+    {
+      "name": "ios-release",
+      "target": "iOS",
+      "development": false,
+      "result": "Succeeded",
+      "outputPath": "/workspace/gj-unity04/unity/Builds/overlay/ios-release",
+      "seconds": 20.8,
+      "overlayAssemblyPresent": false,
+      "overlayTypeNamePresent": false,
+      "sharePluginPresent": false,
+      "managedAssemblies": []
+    }
+  ],
+  "passed": true,
+  "exit_code": 0
+}

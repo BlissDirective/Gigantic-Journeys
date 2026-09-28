@@ -5,7 +5,7 @@
   "area": "UNITY",
   "owner": "gj-gameplay",
   "qa": "gj-qa-release",
-  "status": "open",
+  "status": "in-review",
   "priority": "P0",
   "size": "S",
   "summary": "The trivial end-to-end ticket that proves the autonomous loop: a Bot builds a debug overlay, gj-qa-release attaches a screenshot, the Coordinator merges, and no human types anything between ticket creation and merge. The overlay is compiled out of release builds.",
@@ -53,10 +53,10 @@
     "kit START M0 exit test",
     "plan M0 ('add a debug menu')"
   ],
-  "branch": null,
+  "branch": "ticket/M0-UNITY-04-debug-overlay",
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-15",
+  "updated": "2026-09-27",
   "history": [
     {
       "date": "2026-09-15",
@@ -67,6 +67,11 @@
       "date": "2026-09-15",
       "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-27",
+      "event": "Built by gj-operator (Owner approved the start) and committed directly to main (Operator precedent, no PR): 408e90a (overlay, tests, evidence tooling) + the evidence/docs commit. Assembly GiganticJourneys.DebugOverlay with define constraint UNITY_EDITOR || DEVELOPMENT_BUILD || GJ_DEBUG; UI Toolkit overlay (three-finger tap / F3 / L3+R3; fps 1 s avg + p99/5 s, frame ms, version, SHA, scene, device model; top-right in the safe area, <= 8 % of landscape height, scrim); Save report writes fps p50/p99 over 60 s to Documents + iOS share sheet (debug-only plugin). Local EditMode 26/26, PlayMode 7/7. AT-2 met (DebugOverlayReleaseExclusionTests.ReleasePlayerScripts_ExcludeDebugOverlayType + Linux/iOS release builds inspected, run/builds.json). AT-3 met on stand-in scans (9.3:1 and 21:1 contrast; 6.8-6.9 % height; simulated iPhone 15 Pro safe area). AT-1 met in the Editor/desktop player; the three-finger tap, Documents file and share sheet on a physical iPhone (Development build) remain. AT-4 not met by this delivery path (no PR timeline): Coordinator to decide for the M0 exit test. QA pass (VISUAL_QA first live use): PASS WITH DEFECTS, qa/reports/M0-UNITY-04.md; evidence qa/evidence/M0-UNITY-04/.",
+      "by": "gj-operator"
     }
   ]
 }

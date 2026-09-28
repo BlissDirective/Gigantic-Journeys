@@ -71,6 +71,7 @@ Backend coverage: staging (URL, anon, service role, ref, DB password), productio
 Gaps / ambiguities for the Owner (values not inspected):
 - `SUPABASE_PRODUCTION_SERVICE_ROLE_KEY` **and** `SUPABASE_PROD_SERVICE_ROLE_KEY` both exist — keep one.
 - `SUPABASE_SERVICE_ROLE_KEY` is unlabeled (staging or prod?) alongside `SUPABASE_STAGING_SERVICE_ROLE_KEY` — rename or delete.
+- **Resolved 2026-09-27 (Operator):** deleted `SUPABASE_PRODUCTION_SERVICE_ROLE_KEY` and the unlabeled `SUPABASE_SERVICE_ROLE_KEY`; kept `SUPABASE_PROD_SERVICE_ROLE_KEY` (matches the `SUPABASE_PROD_*` set) and `SUPABASE_STAGING_SERVICE_ROLE_KEY` (claims verified above). No workflow or code referenced any of them; the edge runtime's `SUPABASE_SERVICE_ROLE_KEY` is injected by Supabase, not GitHub.
 - No `SUPABASE_ACCESS_TOKEN` (needed for `supabase functions deploy` / `db push` from CI) and no `VERCEL_PROJECT_ID` (no project yet).
 - Outside the backend: workflows reference `secrets.UNITY_SERIAL` and `vars.IOS_MAC_RUNNER` / `vars.TESTFLIGHT_ENABLED`, which are not set (defaults may be intentional).
 - No workflow consumes the Supabase/Vercel/Inngest secrets yet.
@@ -81,7 +82,7 @@ Gaps / ambiguities for the Owner (values not inspected):
 
 ## 7. Smoke test
 
-`supabase/scripts/staging_smoke.py` (unit tests: `supabase/scripts/tests/test_staging_smoke.py`). Latest run: `qa/reports/STAGING-smoke.md` — **9 PASS · 0 FAIL · 3 PENDING** (Apple sign-in, Google sign-in, edge-function deploy).
+`supabase/scripts/staging_smoke.py` (unit tests: `supabase/scripts/tests/test_staging_smoke.py`). Latest run: `qa/reports/STAGING-smoke.md` — **12 PASS · 0 FAIL · 0 PENDING** (2026-09-27; was 9/0/3 on 2026-09-26).
 
 ## 8. Acceptance summary
 
@@ -90,8 +91,27 @@ Gaps / ambiguities for the Owner (values not inspected):
 | AT-1 reachable, keys are staging | met |
 | AT-2 migrations applied | met |
 | AT-3 RLS every table + probe | met |
-| AT-4 auth settings | email/anon met; **Apple + Google pending Owner OAuth clients** |
-| AT-5 edge function deployed | **pending — needs a Supabase access token (Owner/CI)** |
+| AT-4 auth settings | met (2026-09-27; §9) |
+| AT-5 edge function deployed | met (2026-09-27; §9) |
 | AT-6 Vercel + Inngest | met (accounts verified; deploy is M1-PIPE-01) |
 | AT-7 CI secrets by name | met (ambiguities listed) |
 | AT-8 no secrets in repo | met (secret-scan) |
+
+## 9. Sign-in providers, access token, edge function (2026-09-27)
+
+Operator: gj-operator · 2026-09-27, ~1:55–2:30 PM CT. The Owner completed the Google sign-in step only; no password was typed by the Operator. Values are stored only in GitHub secrets and the VM `.env.local` (names below).
+
+| Item | State |
+|---|---|
+| Google Cloud project "Gigantic Journeys" | created; OAuth consent screen External, **Testing** (only listed test users can sign in until published) |
+| Google web client `gj-supabase-staging` | origin + redirect = the staging project's `/auth/v1/callback`; `GOOGLE_OAUTH_CLIENT_ID_STAGING`, `SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET` |
+| Apple App ID `com.sparkforgelabs.giganticjourneys` | Sign in with Apple enabled (primary) |
+| Apple Services ID `com.sparkforgelabs.giganticjourneys.web.staging` | domain = staging project host, return URL = `/auth/v1/callback` |
+| Sign in with Apple key | variable `SIWA_KEY_ID`; `.p8` in secret `SIWA_KEY_P8_BASE64` |
+| Apple client secret (ES256 JWT) | `SUPABASE_AUTH_EXTERNAL_APPLE_SECRET`; **expires 2027-03-26** (Apple 6-month max) — regenerate and re-save before then |
+| Supabase STAGING providers | Google enabled; Apple enabled with client IDs = Services ID, bundle ID |
+| `SUPABASE_ACCESS_TOKEN` | staging-scoped (Project Settings + Edge Functions r/w), expires 2027-09-25; lacks `auth_config_write`, so provider settings are dashboard-only |
+| `environment-urls` | deployed to STAGING (`supabase functions deploy --use-api`), verify_jwt on; 401 without a user JWT |
+| Inngest `staging` environment | created; `INNGEST_STAGING_EVENT_KEY`, `INNGEST_STAGING_SIGNING_KEY` |
+
+Smoke: `qa/reports/STAGING-smoke.md` — 12 PASS · 0 FAIL · 0 PENDING.

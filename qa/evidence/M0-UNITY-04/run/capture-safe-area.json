@@ -1,0 +1,47 @@
+{
+  "set": "safe-area",
+  "unityVersion": "6000.0.84f1",
+  "graphicsDevice": "Vulkan (llvmpipe (LLVM 19.1.7, 256 bits))",
+  "deviceModel": "PC",
+  "gitSha": "408e90a",
+  "scene": "SplatSample",
+  "developmentBuild": true,
+  "reportFile": "",
+  "errorCount": 0,
+  "errors": [],
+  "shots": [
+    {
+      "name": "safe-area",
+      "postExposure": 0.0,
+      "background": {
+        "r": 0.5299999713897705,
+        "g": 0.6800000071525574,
+        "b": 0.8399999737739563,
+        "a": 1.0
+      },
+      "screenWidth": 2556,
+      "screenHeight": 1179,
+      "safeArea": {
+        "serializedVersion": "2",
+        "x": 177.0,
+        "y": 63.0,
+        "width": 2202.0,
+        "height": 1116.0
+      },
+      "overlayRect": {
+        "serializedVersion": "2",
+        "x": 1646.0,
+        "y": 6.0,
+        "width": 727.0,
+        "height": 80.0
+      },
+      "overlayHeightFraction": 0.06785411387681961,
+      "insideSafeArea": true,
+      "anchoredTopRight": true,
+      "statsText": "13.9 fps (1 s)  \u00b7  p99 11.1 (5 s)  \u00b7  71.8 ms",
+      "infoText": "v1.0  \u00b7  408e90a  \u00b7  SplatSample  \u00b7  PC",
+      "file": "03-overlay-safe-area-iphone-15-pro.png"
+    }
+  ],
+  "exit_code": 0
+}

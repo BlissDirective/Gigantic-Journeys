@@ -5,7 +5,7 @@
   "area": "PLAT",
   "owner": "gj-operator",
   "qa": null,
-  "status": "blocked",
+  "status": "in-review",
   "priority": "P0",
   "size": "M",
   "summary": "Verify the 2026-09-24 account setup end to end and bring STAGING to a usable state for M1: staging Supabase reachable with the .env.local URL + anon key, approved migrations applied with RLS on every table, auth settings per SECURITY_CHECKLIST §9.3, the Vercel and Inngest accounts usable, CI secrets present by name, and a repeatable staging smoke test. Production is never touched (production keys are CI-only, §1.4).",
@@ -89,10 +89,7 @@
   "depends_on": [
     "M0-PLAT-01"
   ],
-  "blocked_by": [
-    "Owner: Apple + Google OAuth clients for Supabase Auth (AT-4)",
-    "Owner/CI: Supabase access token to deploy edge functions to staging (AT-5)"
-  ],
+  "blocked_by": [],
   "references": [
     "AUTH #011",
     "AUTH #012",
@@ -100,10 +97,10 @@
     "AUTH #034",
     "ADR-0002"
   ],
-  "branch": null,
+  "branch": "ticket/M1-PLAT-01-staging-standup",
   "pr": null,
   "created": "2026-09-26",
-  "updated": "2026-09-26",
+  "updated": "2026-09-27",
   "history": [
     {
       "date": "2026-09-26",
@@ -113,6 +110,11 @@
     {
       "date": "2026-09-26",
       "event": "Verified staging: auth health 200; anon + staging service-role keys decode to the staging ref. Applied the AUTH #034 migration (20260926120000_m1_environments_staging) to STAGING via the session pooler in one transaction and recorded it in supabase_migrations.schema_migrations. Smoke 9 PASS / 0 FAIL / 3 PENDING (Apple, Google, edge-function deploy). Two-user + anon RLS probe (rolled back) passed. Vercel token + Inngest prod signing key authenticate; no GJ Vercel project and no Inngest app synced yet (deploy is M1-PIPE-01). GH secrets present by name, with ambiguous duplicates flagged. AT-1/2/3/6/7/8 met; AT-4/AT-5 blocked on the Owner. Evidence qa/reports/M1-PLAT-01.md.",
+      "by": "gj-operator"
+    },
+    {
+      "date": "2026-09-27",
+      "event": "Unblocked and all required ATs met. Apple and Google sign-in created and enabled on STAGING: Google Cloud project 'Gigantic Journeys' (consent screen External, Testing) with web client gj-supabase-staging; Apple Services ID com.sparkforgelabs.giganticjourneys.web.staging + Sign in with Apple key (Supabase client IDs = Services ID + bundle ID), client-secret JWT valid until 2027-03-26 (regenerate before then from SIWA_KEY_P8_BASE64). A staging-only SUPABASE_ACCESS_TOKEN (Project Settings + Edge Functions) was added and environment-urls deployed to STAGING (verify_jwt on). An Inngest staging environment was created (INNGEST_STAGING_* secrets). Smoke 12 PASS / 0 FAIL / 0 PENDING (AT-4, AT-5 met). Secrets by name only: GOOGLE_OAUTH_CLIENT_ID_STAGING, SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET, SUPABASE_AUTH_EXTERNAL_APPLE_SECRET, SIWA_KEY_P8_BASE64, SUPABASE_ACCESS_TOKEN, INNGEST_STAGING_EVENT_KEY, INNGEST_STAGING_SIGNING_KEY; variables SIWA_KEY_ID, SIWA_SERVICES_ID_STAGING. Evidence qa/reports/M1-PLAT-01.md §9.",
       "by": "gj-operator"
     }
   ]

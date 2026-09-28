@@ -8,7 +8,8 @@
         "GiganticJourneys.Editor",
         "GiganticJourneys.Splats",
         "GaussianSplatting",
-        "Unity.RenderPipelines.Universal.Runtime"
+        "Unity.RenderPipelines.Universal.Runtime",
+        "GiganticJourneys.DebugOverlay"
     ],
     "includePlatforms": [
         "Editor"
