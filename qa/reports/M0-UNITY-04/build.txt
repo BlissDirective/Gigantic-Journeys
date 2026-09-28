@@ -1,17 +1,17 @@
 # M0-UNITY-04 build: sanitized excerpt ([GJ-*] and error lines only)
-[GJ-BUILDINFO] debug build: wrote Assets/Generated/Resources/gj_build_info.txt (git 408e90a)
+[GJ-BUILDINFO] debug build: wrote Assets/Generated/Resources/gj_build_info.txt (git fadeb33)
 ArgumentException: Kernel 'InitDeviceRadixSort' not found.
-[GJ-OVERLAY-BUILD] linux-development: Succeeded in 21.6s -> /workspace/gj-unity04/unity/Builds/overlay/linux-development/gj.x86_64
+[GJ-OVERLAY-BUILD] linux-development: Succeeded in 91.2s -> /workspace/gj-wt/unity/Builds/overlay/linux-development/gj.x86_64
 [GJ-BUILDINFO] release build: no build-info resource, no Documents sharing
 ArgumentException: Kernel 'InitDeviceRadixSort' not found.
-[GJ-OVERLAY-BUILD] linux-release: Succeeded in 12.6s -> /workspace/gj-unity04/unity/Builds/overlay/linux-release/gj.x86_64
+[GJ-OVERLAY-BUILD] linux-release: Succeeded in 15.5s -> /workspace/gj-wt/unity/Builds/overlay/linux-release/gj.x86_64
 [GJ-BURST] iOS Burst AOT ENABLED (committed ProjectSettings/BurstAotSettings_iOS.json; host LinuxEditor)
-[GJ-BUILDINFO] debug build: wrote Assets/Generated/Resources/gj_build_info.txt (git 408e90a)
+[GJ-BUILDINFO] debug build: wrote Assets/Generated/Resources/gj_build_info.txt (git fadeb33)
 ArgumentException: Kernel 'InitDeviceRadixSort' not found.
 [GJ-BUILDINFO] iOS debug build: Documents visible in the Files app
-[GJ-OVERLAY-BUILD] ios-development: Succeeded in 25.1s -> /workspace/gj-unity04/unity/Builds/overlay/ios-development
+[GJ-OVERLAY-BUILD] ios-development: Succeeded in 50.9s -> /workspace/gj-wt/unity/Builds/overlay/ios-development
 [GJ-BURST] iOS Burst AOT ENABLED (committed ProjectSettings/BurstAotSettings_iOS.json; host LinuxEditor)
 [GJ-BUILDINFO] release build: no build-info resource, no Documents sharing
 ArgumentException: Kernel 'InitDeviceRadixSort' not found.
-[GJ-OVERLAY-BUILD] ios-release: Succeeded in 20.8s -> /workspace/gj-unity04/unity/Builds/overlay/ios-release
+[GJ-OVERLAY-BUILD] ios-release: Succeeded in 56.6s -> /workspace/gj-wt/unity/Builds/overlay/ios-release
 [GJ-OVERLAY-BUILD] result: PASS

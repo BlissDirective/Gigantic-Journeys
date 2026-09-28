@@ -43,6 +43,7 @@ namespace GiganticJourneys.Tests
             InputSystem.settings.editorInputBehaviorInPlayMode = _editorBehavior;
             InputSystem.settings.backgroundBehavior = _background;
             DebugOverlay.SafeAreaOverride = null;
+            DebugOverlay.PixelsPerPointOverride = null;
             if (_overlay != null)
             {
                 _overlay.SetVisible(false);
@@ -116,6 +117,103 @@ namespace GiganticJourneys.Tests
                 Is.GreaterThanOrEqualTo(0.6f),
                 "scrim"
             );
+        }
+
+        [UnityTest]
+        public IEnumerator SaveButton_BelowPanel_AtLeast44Points_InsideSafeArea(
+            [Values(1f, 2f, 3f)] float pixelsPerPoint
+        )
+        {
+            // Notched-phone-like safe area, as in the layout test, at 1x/2x/3x screen scale.
+            float w = Screen.width;
+            float h = Screen.height;
+            var safe = new Rect(w * 0.07f, h * 0.05f, w * 0.86f, h * 0.95f);
+            DebugOverlay.SafeAreaOverride = safe;
+            DebugOverlay.PixelsPerPointOverride = pixelsPerPoint;
+            _overlay.SetVisible(true);
+            yield return null;
+            yield return null;
+            yield return null;
+            var panel = _overlay.Box.worldBound;
+            var button = _overlay.SaveButton.worldBound;
+            var landscapeH = Mathf.Min(w, h);
+            Assert.That(button.height, Is.GreaterThan(0f), "button laid out");
+            Assert.That(
+                panel.height,
+                Is.LessThanOrEqualTo(landscapeH * DebugOverlay.LandscapeHeightFraction),
+                "the panel alone stays inside the 8 % band"
+            );
+            Assert.That(
+                _overlay.SaveButton.parent,
+                Is.Not.SameAs(_overlay.Box),
+                "button is not inside the panel"
+            );
+            Assert.That(
+                button.yMin,
+                Is.GreaterThanOrEqualTo(panel.yMax - 0.5f),
+                "button sits below the panel"
+            );
+            Assert.That(
+                button.height / pixelsPerPoint,
+                Is.GreaterThanOrEqualTo(DebugOverlay.MinTouchTargetPoints - 0.01f),
+                "button height >= 44 pt"
+            );
+            Assert.That(
+                button.width / pixelsPerPoint,
+                Is.GreaterThanOrEqualTo(DebugOverlay.MinTouchTargetPoints - 0.01f),
+                "button width >= 44 pt"
+            );
+            Assert.That(
+                button.xMax,
+                Is.LessThanOrEqualTo(safe.xMax + 0.5f),
+                "inside the safe area (right)"
+            );
+            Assert.That(
+                button.yMax,
+                Is.LessThanOrEqualTo(h - safe.yMin + 0.5f),
+                "inside the safe area (bottom)"
+            );
+            Assert.That(
+                Mathf.Abs(button.xMax - panel.xMax),
+                Is.LessThan(1f),
+                "right-aligned with the panel (top-right placement)"
+            );
+            Assert.That(
+                button.yMin - panel.yMax,
+                Is.LessThan(landscapeH * 0.02f),
+                "directly below"
+            );
+        }
+
+        [UnityTest]
+        public IEnumerator F4_SavesReport_WhileVisible()
+        {
+            var keyboard = InputSystem.AddDevice<Keyboard>();
+            keyboard.MakeCurrent();
+            string saved = null;
+            _overlay.ReportSaved += p => saved = p;
+            try
+            {
+                InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.F4));
+                yield return null;
+                yield return null;
+                Assert.That(saved, Is.Null, "F4 does nothing while the overlay is hidden");
+                InputSystem.QueueStateEvent(keyboard, new KeyboardState());
+                yield return null;
+                _overlay.SetVisible(true);
+                yield return null;
+                InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.F4));
+                yield return null;
+                yield return null;
+                Assert.That(saved, Is.Not.Null, "F4 saves a report while visible");
+                Assert.That(File.Exists(saved), Is.True);
+                InputSystem.QueueStateEvent(keyboard, new KeyboardState());
+                yield return null;
+            }
+            finally
+            {
+                InputSystem.RemoveDevice(keyboard);
+            }
         }
 
         [UnityTest]

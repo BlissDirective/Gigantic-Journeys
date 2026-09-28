@@ -66,15 +66,15 @@ capture runs (0 errors / 0 exceptions, `capture-*.json`) · ✅ evidence follows
 ✅ Profiler line present ("not measured", §4).
 §5.3: ✅ screenshots on bright and dark stand-ins (n/a cluttered: no corpus scan yet; the overlay sits over sky) ·
 ✅ contrast measured on the PNGs: 9.3:1 (bright), 21:1 (dark) ≥ 4.5:1 · n/a glass fallback (opaque scrim, no glass) ·
-✅ safe-area insets respected (simulated iPhone 15 Pro, 03) · touch target: the Save report button is 80 px tall at
-1179 px = 27 pt, **below the 44 pt guideline** (accepted for a debug-only control inside the 8 % HUD band, see note) ·
+✅ safe-area insets respected (simulated iPhone 15 Pro, 03) · touch target: the Save report button was 80 px tall at
+1179 px = 27 pt, **below the 44 pt guideline** (fixed 2026-09-28, see "Follow-up: 44 pt Save button" below) ·
 ✅ one primary action (Save report) · n/a waits (report write is instant) · n/a deuteranopia (no state colours) ·
 ✅ copy is short ("Save report", "Saved <file>").
 
 Notes for the Coordinator:
 - **Touch target vs 8 % rule.** At 8 % of 1179 px the whole overlay is ≤ 94 px (31 pt), so a 44 pt button cannot fit
   inside the HUD band that Design Skills rule 21 asks for. The button is debug-only (compiled out of release). If the
-  Owner prefers 44 pt, the button would have to sit below the band while visible.
+  Owner prefers 44 pt, the button would have to sit below the band while visible. **→ Done 2026-09-28** (below).
 - **S4 environment note (not an overlay defect):** on the Linux Development player under lavapipe, the URP camera
   clear is lost on the HDR color buffer (black background) and 4x MSAA logs a render-pass sample-count error. The
   capture mode turns HDR and MSAA off for evidence. Worth a look in M1-UNITY-01 (splat render integration), which
@@ -87,3 +87,39 @@ Notes for the Coordinator:
    by design; a Development build from the macOS lane or Xcode is needed).
 2. Three-finger tap → overlay; tap **Save report** → share sheet; confirm the file in Files → On My iPhone →
    Gigantic Journeys. Screenshot `04-overlay-device-<model>.png` + `perf-report-<model>.txt` into this folder.
+
+## Follow-up: 44 pt Save button (2026-09-28, gj-operator)
+
+Owner/operator request: move **Save report** below the panel and make it a ≥ 44 × 44 pt touch target (Apple HIG),
+safe-area aware, keeping the top-right placement and the F4 shortcut. The ticket stays **done** (the Coordinator
+closed it 2026-09-28 before this follow-up; the change resolves the one accepted QA defect and is recorded in the
+ticket history, not a reopen).
+
+**What changed** (`DebugOverlay.cs`): the panel and the button now sit in one container anchored top-right inside
+the safe area; the panel (scrim + two text lines) keeps the ≤ 8 % cap, and the button is right-aligned directly
+**below** it (one padding gap) with `minWidth = minHeight = ceil(44 pt × pixels-per-point)`. Pixels per point is the
+iOS screen scale estimated as `round(Screen.dpi / 163)` clamped to 1–3 (iPhone 15 Pro 460 dpi → 3×, SE/11 326 → 2×,
+iPad 264 → 2×, desktop/unknown → 1×); `DebugOverlay.PixelsPerPointOverride` lets QA/tests simulate a device. The
+button shows only while the overlay is visible, so it sits outside the HUD band only while debugging (Design Skills
+rule 21 applies to the panel). Same scrim as the panel plus a 1 px light edge. F4 still saves while visible.
+
+| Measurement (simulated iPhone 15 Pro landscape, 2556×1179, 3×) | Before (`408e90a`) | After |
+|---|---|---|
+| Save button position | inside the panel, right of the text | below the panel, right-aligned, inside the safe area |
+| Save button size | ≈ 80 px tall = **27 pt** (width text-sized) | **218 × 132 px = 72.7 × 44 pt** at (2155, 92) |
+| Panel | 727 × 80 px, 6.8 % of height | 525 × 80 px, **6.8 %** of height (narrower: button moved out) |
+| Desktop 1280×720 (1×) | button inside the 50 px panel | panel 50 px (6.9 %); button 119 × 44 px = 44 pt tall, below it |
+
+Evidence (regenerated with `python qa/scripts/overlay_evidence.py --ios`, working tree on `fadeb33` + this change,
+so the overlay shows `fadeb33`): `qa/evidence/M0-UNITY-04/03-overlay-safe-area-iphone-15-pro.png` (the 44 pt button
+under the panel, inside the yellow safe-area guide), `01-`/`02-` (bright/dark scans), measured rects in
+`run/capture-*.json` (`saveButtonRect`, `saveButtonWidthPt/HeightPt`, `saveButtonBelowPanel`,
+`saveButtonInsideSafeArea`, `saveButtonMeets44pt`, all true); the script now fails the capture if any of these is
+false. `run/builds.json`: Linux + iOS Development/release builds re-checked, release still excludes the overlay.
+
+Tests (local, Unity 6000.0.84f1, `-batchmode -nographics`): **EditMode 34/34** (new
+`EstimatePixelsPerPoint_MatchesIosScreenScale` ×7, `MinTouchTarget_Is44Points`), **PlayMode 11/11** (new
+`SaveButton_BelowPanel_AtLeast44Points_InsideSafeArea` at 1×/2×/3× — asserts the button is not inside the panel,
+its top is at or below the panel's bottom, width and height ≥ 44 pt, inside the safe area, right-aligned with the
+panel, and the panel alone still ≤ 8 %; new `F4_SavesReport_WhileVisible`). Results:
+`M0-UNITY-04/editmode-results.xml`, `M0-UNITY-04/playmode-results.xml`.

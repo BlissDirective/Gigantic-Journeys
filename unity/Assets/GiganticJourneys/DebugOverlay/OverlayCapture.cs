@@ -20,7 +20,8 @@ namespace GiganticJourneys.DebugTools
     /// scene (URP post exposure, standing in for bright and dark scans), saves a
     /// performance report through the overlay's own button handler, and quits.</item>
     /// <item><c>-gjOverlaySet safe-area</c>: applies the iPhone 15 Pro landscape
-    /// safe-area insets (59/59 pt sides, 21 pt bottom at 3x, scaled to the window),
+    /// safe-area insets (59/59 pt sides, 21 pt bottom at 3x, scaled to the window)
+    /// and its 3x screen scale (for the 44 pt Save button),
     /// draws the safe area and the 8 % line as guides, and captures.</item>
     /// </list>
     /// Writes <c>&lt;name&gt;.png</c> files plus <c>capture.json</c> with the measured layout.
@@ -35,6 +36,7 @@ namespace GiganticJourneys.DebugTools
         public const float RefHeight = 1179f;
         public const float RefInsetSide = 177f;
         public const float RefInsetBottom = 63f;
+        public const float RefPixelsPerPoint = 3f;
 
         [Serializable]
         public class Shot
@@ -49,6 +51,13 @@ namespace GiganticJourneys.DebugTools
             public float overlayHeightFraction; // of the landscape screen height
             public bool insideSafeArea;
             public bool anchoredTopRight;
+            public float pixelsPerPoint;
+            public Rect saveButtonRect; // panel coordinates, origin top-left, pixels
+            public float saveButtonWidthPt;
+            public float saveButtonHeightPt;
+            public bool saveButtonBelowPanel;
+            public bool saveButtonInsideSafeArea;
+            public bool saveButtonMeets44pt;
             public string statsText;
             public string infoText;
             public string file;
@@ -149,6 +158,7 @@ namespace GiganticJourneys.DebugTools
                     Screen.width - 2f * RefInsetSide * sx,
                     Screen.height - RefInsetBottom * sy
                 );
+                DebugOverlay.PixelsPerPointOverride = RefPixelsPerPoint * sy;
                 AddGuides(overlay);
             }
             overlay.SetVisible(true);
@@ -206,6 +216,8 @@ namespace GiganticJourneys.DebugTools
             var landscapeH = Mathf.Min(Screen.width, Screen.height);
             var safeTop = Screen.height - safe.yMax;
             var safeRight = safe.xMax;
+            var b = overlay.SaveButton.worldBound;
+            var ppp = DebugOverlay.PixelsPerPoint;
             var s = new Shot
             {
                 name = name,
@@ -224,13 +236,27 @@ namespace GiganticJourneys.DebugTools
                 anchoredTopRight =
                     safeRight - r.xMax <= landscapeH * 0.02f
                     && r.yMin - safeTop <= landscapeH * 0.02f,
+                pixelsPerPoint = ppp,
+                saveButtonRect = b,
+                saveButtonWidthPt = b.width / ppp,
+                saveButtonHeightPt = b.height / ppp,
+                saveButtonBelowPanel = b.yMin >= r.yMax - 0.5f,
+                saveButtonInsideSafeArea =
+                    b.xMin >= safe.xMin - 0.5f
+                    && b.xMax <= safeRight + 0.5f
+                    && b.yMin >= safeTop - 0.5f
+                    && b.yMax <= Screen.height - safe.yMin + 0.5f,
+                saveButtonMeets44pt =
+                    b.width / ppp >= DebugOverlay.MinTouchTargetPoints - 0.01f
+                    && b.height / ppp >= DebugOverlay.MinTouchTargetPoints - 0.01f,
                 statsText = overlay.StatsLabel.text,
                 infoText = overlay.InfoLabel.text,
                 file = file,
             };
             _result.shots.Add(s);
             Debug.Log(
-                $"{LogTag} captured {file}: overlay {r} = {s.overlayHeightFraction:P1} of height"
+                $"{LogTag} captured {file}: overlay {r} = {s.overlayHeightFraction:P1} of height; "
+                    + $"save button {b} = {s.saveButtonWidthPt:0.#}x{s.saveButtonHeightPt:0.#} pt"
             );
         }
 

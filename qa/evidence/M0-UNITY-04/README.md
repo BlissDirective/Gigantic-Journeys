@@ -1,9 +1,11 @@
 # M0-UNITY-04 evidence — debug overlay
 
 Standard: `qa/VISUAL_QA.md` (M0-QA-02), first live use. Captured 2026-09-27 4:40 PM CT by gj-operator (QA hat)
-with `python qa/scripts/overlay_evidence.py --ios`. QA verdict and checklist: `qa/reports/M0-UNITY-04.md`.
+with `python qa/scripts/overlay_evidence.py --ios`; **re-captured 2026-09-28 1:07 PM CT** after the 44 pt Save
+button follow-up (button moved below the panel; the overlay now shows `fadeb33`, the base of that change). QA verdict and checklist: `qa/reports/M0-UNITY-04.md`.
 
-Build for every screenshot: commit `408e90a` (the overlay commit; the overlay shows this SHA), Development
+Build for every screenshot: originally commit `408e90a`; the current PNGs are from the 2026-09-28 follow-up
+(working tree on `fadeb33` + the button change; the overlay shows `fadeb33`), Development
 Linux player of `Assets/Capture/Samples/SplatSample.unity`, Unity `6000.0.84f1`, host Debian 13 x86_64 under
 Xvfb, **Vulkan on Mesa lavapipe** (`llvmpipe (LLVM 19.1.7)`, a CPU rasterizer). The capture mode
 (`OverlayCapture.cs`, Development builds only) shows the overlay, lets 6 s of frame stats build up, then
@@ -12,7 +14,7 @@ captures. MSAA and HDR are off on the camera for these captures only, because la
 
 - `01-overlay-bright-scan.png`: 1280x720. The overlay over a **bright-scan stand-in**: near-white sky
   behind it plus +1 EV post exposure. Shows fps (1 s average), p99 over 5 s, frame ms, version `v1.0`,
-  SHA `408e90a`, scene `SplatSample`, device model (`PC` on a Linux desktop; `iPhone16,1`-style
+  SHA (`408e90a` originally, `fadeb33` in the re-capture), scene `SplatSample`, device model (`PC` on a Linux desktop; `iPhone16,1`-style
   identifiers on iOS). Scrim `#474747` behind white text measured on this PNG: **9.3:1**. Height 50 px =
   **6.9 %** of 720. (AT-1, AT-3)
 - `02-overlay-dark-scan.png`: 1280x720. The same over a **dark-scan stand-in**: near-black sky plus -3 EV.
@@ -20,8 +22,10 @@ captures. MSAA and HDR are off on the camera for these captures only, because la
 - `03-overlay-safe-area-iphone-15-pro.png`: rendered at 2556x1179 (iPhone 15 Pro landscape pixels),
   downscaled 50 % to keep it under 2 MB. The **iPhone 15 Pro landscape safe area is simulated** (177 px
   side insets, 63 px bottom inset = 59/59/21 pt at 3x) through `DebugOverlay.SafeAreaOverride`. QA guides:
-  yellow = safe area, magenta = 8 % of the screen height. Overlay rect 1646,6 727x80 px: **inside the safe
-  area, anchored top-right, 6.8 % of the height**. (AT-3)
+  yellow = safe area, magenta = 8 % of the screen height. Overlay rect (original) 1646,6 727x80 px: **inside the safe
+  area, anchored top-right, 6.8 % of the height** (re-capture: panel 1848,6 525x80 px, 6.8 %). The **Save report
+  button** sits directly below the panel, right-aligned, inside the safe area: 2155,92 218x132 px = **72.7 x 44 pt**
+  at the simulated 3x scale (before: ~27 pt tall inside the panel). (AT-1, AT-3, HIG 44 pt)
 - `run/builds.json`: Development and release players built and inspected (AT-2, build level).
   Linux: `GiganticJourneys.DebugOverlay.dll` in Development only; no `DebugOverlay` string in any release
   `GiganticJourneys*.dll`. iOS Xcode exports: the overlay's IL2CPP output and `GJShareSheet.mm` in

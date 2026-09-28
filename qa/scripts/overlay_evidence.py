@@ -9,7 +9,8 @@
 2. Runs the Development player under a virtual X display with Vulkan on Mesa
    lavapipe in the overlay's QA capture mode (OverlayCapture.cs): the overlay over
    a bright and a dark exposure of the scene at 1280x720, and at 2556x1179 with the
-   iPhone 15 Pro landscape safe-area insets simulated (AT-1, AT-3). The capture
+   iPhone 15 Pro landscape safe-area insets and 3x scale simulated (AT-1, AT-3),
+   checking the Save report button sits below the panel at >= 44 x 44 pt. The capture
    mode also presses the overlay's "Save report" handler, so the saved report is
    evidence that the action works (lavapipe numbers are not performance data).
 3. Copies the PNGs to qa/evidence/M0-UNITY-04/ under the VISUAL_QA names and the
@@ -177,7 +178,12 @@ def main() -> int:
         (run_dir / f"capture-{shot_set}.json").write_text(json.dumps(result, indent=2) + "\n")
         good = result["exit_code"] == 0 and result.get("errorCount", 1) == 0 and result["shots"]
         good = good and all(
-            s["insideSafeArea"] and s["overlayHeightFraction"] <= 0.08 for s in result["shots"]
+            s["insideSafeArea"]
+            and s["overlayHeightFraction"] <= 0.08
+            and s.get("saveButtonBelowPanel")
+            and s.get("saveButtonInsideSafeArea")
+            and s.get("saveButtonMeets44pt")
+            for s in result["shots"]
         )
         print(f"capture {shot_set}: {'PASS' if good else 'FAIL'} ({len(result['shots'])} shot(s))")
         ok &= bool(good)

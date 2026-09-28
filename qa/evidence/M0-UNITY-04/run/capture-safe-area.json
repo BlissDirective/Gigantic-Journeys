@@ -3,7 +3,7 @@
   "unityVersion": "6000.0.84f1",
   "graphicsDevice": "Vulkan (llvmpipe (LLVM 19.1.7, 256 bits))",
   "deviceModel": "PC",
-  "gitSha": "408e90a",
+  "gitSha": "fadeb33",
   "scene": "SplatSample",
   "developmentBuild": true,
   "reportFile": "",
@@ -30,16 +30,29 @@
       },
       "overlayRect": {
         "serializedVersion": "2",
-        "x": 1646.0,
+        "x": 1848.0,
         "y": 6.0,
-        "width": 727.0,
+        "width": 525.0,
         "height": 80.0
       },
       "overlayHeightFraction": 0.06785411387681961,
       "insideSafeArea": true,
       "anchoredTopRight": true,
-      "statsText": "13.9 fps (1 s)  \u00b7  p99 11.1 (5 s)  \u00b7  71.8 ms",
-      "infoText": "v1.0  \u00b7  408e90a  \u00b7  SplatSample  \u00b7  PC",
+      "pixelsPerPoint": 3.0,
+      "saveButtonRect": {
+        "serializedVersion": "2",
+        "x": 2155.0,
+        "y": 92.0,
+        "width": 218.0,
+        "height": 132.0
+      },
+      "saveButtonWidthPt": 72.66666412353516,
+      "saveButtonHeightPt": 44.0,
+      "saveButtonBelowPanel": true,
+      "saveButtonInsideSafeArea": true,
+      "saveButtonMeets44pt": true,
+      "statsText": "12.8 fps (1 s)  \u00b7  p99 8.6 (5 s)  \u00b7  77.9 ms",
+      "infoText": "v1.0  \u00b7  fadeb33  \u00b7  SplatSample  \u00b7  PC",
       "file": "03-overlay-safe-area-iphone-15-pro.png"
     }
   ],

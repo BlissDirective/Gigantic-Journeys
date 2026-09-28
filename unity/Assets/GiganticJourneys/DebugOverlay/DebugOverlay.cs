@@ -16,7 +16,10 @@ namespace GiganticJourneys.DebugTools
     /// inside the safe area, never taller than 8 % of the landscape screen height
     /// (Design Skills rule 21), on a dark scrim so it reads over bright and dark
     /// scans (rule 1). A "Save report" button writes the 60 s performance report
-    /// (<see cref="PerformanceReport"/>) and opens the iOS share sheet.
+    /// (<see cref="PerformanceReport"/>) and opens the iOS share sheet. The button
+    /// sits right-aligned directly below the panel (outside the 8 % band, only while
+    /// the overlay is visible) so it can be a full 44 x 44 pt touch target (Apple
+    /// HIG minimum) without making the panel taller.
     ///
     /// Toggle: three-finger tap (device), F3 (keyboard, Editor), L3 + R3 together
     /// (gamepad). F4 saves a report while the overlay is visible.
@@ -39,6 +42,12 @@ namespace GiganticJourneys.DebugTools
         public const float P99WindowSeconds = 5f;
         public const float RefreshSeconds = 0.25f;
         public const float StatusSeconds = 3f;
+
+        /// <summary>Apple HIG minimum touch target, in points.</summary>
+        public const float MinTouchTargetPoints = 44f;
+
+        /// <summary>1 pt = 1/163 inch on the iPhone reference density.</summary>
+        public const float PointsReferenceDpi = 163f;
         const string LogTag = "[GJ-DEBUG]";
 
         /// <summary>The running overlay, created automatically after the first scene loads.</summary>
@@ -50,9 +59,36 @@ namespace GiganticJourneys.DebugTools
         /// <summary>QA and tests: a simulated safe area in screen pixels (origin bottom-left).</summary>
         public static Rect? SafeAreaOverride;
 
+        /// <summary>QA and tests: pixels per point (the iOS screen scale, e.g. 3 on an iPhone 15 Pro).</summary>
+        public static float? PixelsPerPointOverride;
+
+        /// <summary>Pixels per point used for touch-target sizing.</summary>
+        public static float PixelsPerPoint =>
+            PixelsPerPointOverride ?? EstimatePixelsPerPoint(Screen.dpi);
+
+        /// <summary>
+        /// The iOS screen scale from the screen density: round(dpi / 163), clamped to 1..3
+        /// (iPhone 15 Pro 460 dpi -> 3, iPhone SE 326 -> 2, iPad 264 -> 2); 1 when the
+        /// density is unknown (0) or desktop-like, so a desktop pixel counts as a point.
+        /// </summary>
+        public static float EstimatePixelsPerPoint(float dpi)
+        {
+            if (dpi <= 0f || float.IsNaN(dpi) || float.IsInfinity(dpi))
+                return 1f;
+            return Mathf.Clamp(Mathf.Round(dpi / PointsReferenceDpi), 1f, 3f);
+        }
+
+        /// <summary>Minimum touch-target edge in screen pixels (44 pt at <see cref="PixelsPerPoint"/>).</summary>
+        public static float MinTouchTargetPixels => MinTouchTargetPoints * PixelsPerPoint;
+
         public FrameStats Stats { get; } = new FrameStats();
         public bool Visible { get; private set; }
         public UIDocument Document { get; private set; }
+
+        /// <summary>Anchored top-right in the safe area: the panel, then the Save button below it.</summary>
+        public VisualElement Container { get; private set; }
+
+        /// <summary>The panel (scrim + text), capped at 8 % of the landscape height.</summary>
         public VisualElement Box { get; private set; }
         public Label StatsLabel { get; private set; }
         public Label InfoLabel { get; private set; }
@@ -66,6 +102,7 @@ namespace GiganticJourneys.DebugTools
 
         readonly ThreeFingerTapDetector _tap = new ThreeFingerTapDetector();
         PanelSettings _panel;
+        float _lastPixelsPerPoint;
         float _nextRefresh;
         float _statusUntil;
         string _status;
@@ -80,6 +117,7 @@ namespace GiganticJourneys.DebugTools
             Instance = null;
             AutoCreate = true;
             SafeAreaOverride = null;
+            PixelsPerPointOverride = null;
         }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -154,8 +192,18 @@ namespace GiganticJourneys.DebugTools
                 Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
             );
 
+            Container = new VisualElement
+            {
+                name = "gj-debug-overlay-root",
+                pickingMode = PickingMode.Ignore,
+            };
+            Container.style.position = Position.Absolute;
+            Container.style.flexDirection = FlexDirection.Column;
+            Container.style.alignItems = Align.FlexEnd;
+
             Box = new VisualElement { name = "gj-debug-overlay", pickingMode = PickingMode.Ignore };
-            Box.style.position = Position.Absolute;
+            Box.style.position = Position.Relative;
+            Box.style.flexShrink = 0;
             Box.style.flexDirection = FlexDirection.Row;
             Box.style.alignItems = Align.Stretch;
             Box.style.overflow = Overflow.Hidden;
@@ -176,14 +224,18 @@ namespace GiganticJourneys.DebugTools
                 text = "Save report",
             };
             SaveButton.style.color = Color.white;
-            SaveButton.style.backgroundColor = new Color(1f, 1f, 1f, 0.2f);
             SaveButton.style.unityTextAlign = TextAnchor.MiddleCenter;
             SaveButton.style.flexShrink = 0;
-            SetBorder(SaveButton, 0f);
+            SaveButton.style.backgroundColor = new Color(0f, 0f, 0f, 0.72f); // same scrim as the panel
+            SetBorder(SaveButton, 1f);
+            var edge = new Color(1f, 1f, 1f, 0.6f);
+            SaveButton.style.borderLeftColor = SaveButton.style.borderRightColor = edge;
+            SaveButton.style.borderTopColor = SaveButton.style.borderBottomColor = edge;
 
             Box.Add(column);
-            Box.Add(SaveButton);
-            root.Add(Box);
+            Container.Add(Box);
+            Container.Add(SaveButton);
+            root.Add(Container);
         }
 
         static Label MakeLabel(string name)
@@ -213,7 +265,10 @@ namespace GiganticJourneys.DebugTools
             e.style.borderBottomLeftRadius = e.style.borderBottomRightRadius = r;
         }
 
-        /// <summary>Anchors the box top-right inside the safe area and sizes it from the screen.</summary>
+        /// <summary>
+        /// Anchors the panel top-right inside the safe area, sizes it from the screen, and puts
+        /// the Save button right-aligned below it at >= 44 x 44 pt.
+        /// </summary>
         void ApplyLayout()
         {
             float sw = Screen.width;
@@ -222,13 +277,17 @@ namespace GiganticJourneys.DebugTools
             _lastScreenW = Screen.width;
             _lastScreenH = Screen.height;
             _lastSafe = safe;
+            var ppp = PixelsPerPoint;
+            _lastPixelsPerPoint = ppp;
+            var touch = Mathf.Ceil(MinTouchTargetPoints * ppp);
 
             var landscapeH = Mathf.Min(sw, sh);
             var font = Mathf.Max(8f, Mathf.Floor(landscapeH * FontFraction));
             var pad = Mathf.Max(2f, Mathf.Round(landscapeH * PaddingFraction));
 
-            Box.style.top = Mathf.Max(0f, sh - safe.yMax) + pad;
-            Box.style.right = Mathf.Max(0f, sw - safe.xMax) + pad;
+            Container.style.top = Mathf.Max(0f, sh - safe.yMax) + pad;
+            Container.style.right = Mathf.Max(0f, sw - safe.xMax) + pad;
+            Container.style.maxWidth = Mathf.Max(0f, safe.width - 2f * pad);
             Box.style.maxHeight = Mathf.Floor(landscapeH * LandscapeHeightFraction) - pad;
             Box.style.maxWidth = Mathf.Max(0f, safe.width - 2f * pad);
             Box.style.paddingLeft = Box.style.paddingRight = pad * 2f;
@@ -240,12 +299,17 @@ namespace GiganticJourneys.DebugTools
             InfoLabel.style.maxWidth = Mathf.Max(0f, sw * 0.5f);
 
             SaveButton.style.fontSize = font;
-            SaveButton.style.marginLeft = pad * 2f;
-            SaveButton.style.marginRight = SaveButton.style.marginTop = 0;
+            SaveButton.style.minWidth = touch;
+            SaveButton.style.minHeight = touch;
+            SaveButton.style.marginTop = pad;
+            SaveButton.style.marginLeft = SaveButton.style.marginRight = 0;
             SaveButton.style.marginBottom = 0;
-            SaveButton.style.paddingLeft = SaveButton.style.paddingRight = pad * 2f;
+            SaveButton.style.paddingLeft = SaveButton.style.paddingRight = Mathf.Max(
+                pad * 3f,
+                touch * 0.25f
+            );
             SaveButton.style.paddingTop = SaveButton.style.paddingBottom = 0;
-            SetRadius(SaveButton, pad * 1.5f);
+            SetRadius(SaveButton, pad * 2f);
         }
 
         public void Toggle() => SetVisible(!Visible);
@@ -257,7 +321,10 @@ namespace GiganticJourneys.DebugTools
                 _status = null;
             if (Box == null)
                 return;
-            Box.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+            var display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+            Container.style.display = display;
+            Box.style.display = display;
+            SaveButton.style.display = display;
             if (visible)
             {
                 ApplyLayout();
@@ -273,7 +340,12 @@ namespace GiganticJourneys.DebugTools
             if (!Visible)
                 return;
             var safe = SafeAreaOverride ?? Screen.safeArea;
-            if (Screen.width != _lastScreenW || Screen.height != _lastScreenH || safe != _lastSafe)
+            if (
+                Screen.width != _lastScreenW
+                || Screen.height != _lastScreenH
+                || safe != _lastSafe
+                || !Mathf.Approximately(PixelsPerPoint, _lastPixelsPerPoint)
+            )
                 ApplyLayout();
             if (now >= _nextRefresh)
                 Refresh();

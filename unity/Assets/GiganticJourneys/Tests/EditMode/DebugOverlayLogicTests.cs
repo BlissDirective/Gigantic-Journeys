@@ -136,5 +136,23 @@ namespace GiganticJourneys.Tests
             StringAssert.Contains("fps_p50: 60.0", text);
             StringAssert.DoesNotContain("device_name", text);
         }
+
+        [TestCase(460f, 3f)] // iPhone 15 Pro
+        [TestCase(476f, 3f)] // iPhone 13 mini
+        [TestCase(326f, 2f)] // iPhone SE / 11
+        [TestCase(264f, 2f)] // iPad
+        [TestCase(96f, 1f)] // desktop
+        [TestCase(0f, 1f)] // unknown density
+        [TestCase(800f, 3f)] // clamped
+        public void EstimatePixelsPerPoint_MatchesIosScreenScale(float dpi, float expected)
+        {
+            Assert.That(DebugOverlay.EstimatePixelsPerPoint(dpi), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void MinTouchTarget_Is44Points()
+        {
+            Assert.That(DebugOverlay.MinTouchTargetPoints, Is.EqualTo(44f));
+        }
     }
 }

@@ -1,6 +1,6 @@
 # M0-UNITY-04 capture-scans: sanitized excerpt ([GJ-*] and error lines only)
 [GJ-OVERLAY-QA] capture mode: set scans
-[GJ-OVERLAY-QA] captured bright-scan.png: overlay (x:822.00, y:4.00, width:454.00, height:50.00) = 6.9 % of height
-[GJ-OVERLAY-QA] captured dark-scan.png: overlay (x:832.00, y:4.00, width:444.00, height:50.00) = 6.9 % of height
-[GJ-DEBUG] performance report saved: gj-perf-report-20260927-214008.txt
+[GJ-OVERLAY-QA] captured bright-scan.png: overlay (x:939.00, y:4.00, width:337.00, height:50.00) = 6.9 % of height; save button (x:1157.00, y:58.00, width:119.00, height:44.00) = 119x44 pt
+[GJ-OVERLAY-QA] captured dark-scan.png: overlay (x:949.00, y:4.00, width:327.00, height:50.00) = 6.9 % of height; save button (x:1157.00, y:58.00, width:119.00, height:44.00) = 119x44 pt
+[GJ-DEBUG] performance report saved: gj-perf-report-20260928-180709.txt
 [GJ-OVERLAY-QA] done: 2 shot(s), 0 error(s)

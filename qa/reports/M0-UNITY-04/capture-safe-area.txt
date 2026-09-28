@@ -1,4 +1,4 @@
 # M0-UNITY-04 capture-safe-area: sanitized excerpt ([GJ-*] and error lines only)
 [GJ-OVERLAY-QA] capture mode: set safe-area
-[GJ-OVERLAY-QA] captured safe-area.png: overlay (x:1646.00, y:6.00, width:727.00, height:80.00) = 6.8 % of height
+[GJ-OVERLAY-QA] captured safe-area.png: overlay (x:1848.00, y:6.00, width:525.00, height:80.00) = 6.8 % of height; save button (x:2155.00, y:92.00, width:218.00, height:132.00) = 72.7x44 pt
 [GJ-OVERLAY-QA] done: 1 shot(s), 0 error(s)
