@@ -5,7 +5,7 @@
   "area": "SKILL",
   "owner": "gj-avatar",
   "qa": null,
-  "status": "in-review",
+  "status": "merged",
   "priority": "P1",
   "size": "M",
   "summary": "First task before any ticket (kit §3 common block): research the top 100 resources on image-to-3D avatar pipelines, parametric body models, auto-rigging, likeness preservation, uncanny valley at small scale, texture baking for mobile, biometric privacy requirements (BIPA); save an annotated list and distill a working handbook. Re-read SKILLS.md at every session start and update it when you learn something.",
@@ -58,7 +58,7 @@
   "branch": "setup/avatar-skills",
   "pr": "https://github.com/BlissDirective/Gigantic-Journeys/pull/10",
   "created": "2026-09-15",
-  "updated": "2026-09-26",
+  "updated": "2026-09-28",
   "history": [
     {
       "date": "2026-09-15",
@@ -79,6 +79,11 @@
       "date": "2026-09-26",
       "event": "gj-operator completed the handbook. RESOURCES.md has 104 link-checked entries (title, URL, type, why-for-GJ) grouped by the kit research focus (AT-1). SKILLS.md covers the capture flow, head/body merge, retopo and bake budgets, rig validation, the consent gate and deletion, and likeness confirmation UX, each split explicitly into v1 (curated roster, no biometric, AUTH #020/#024) and V2, plus mistakes to avoid and pre-PR checklists (AT-2). Its §1 cites agents/grok/README.md, REVIEW_RUBRIC.md and SECURITY_CHECKLIST.md by section, and the Movement Bible / Design Skills sections by number where the role touches them (AT-3). It ends with a Session log (AT-4). Branch setup/avatar-skills plus a templated PR; the change lands on main by fast-forward once the PR's CI is green (AT-5). Status -> in-review so the Coordinator can count entries (AT-1).",
       "by": "gj-operator"
+    },
+    {
+      "date": "2026-09-28",
+      "event": "Independent secondary review (Coordinator, via a review subagent, 2026-09-28), grounded against AUTHORIZATION_LOG, SPEC, REVIEW_RUBRIC and SECURITY_CHECKLIST. RESOURCES.md >=100 entries with title/URL/type/why in role-focus groups, 0 duplicate URLs and 0 placeholders (AT-1); SKILLS.md covers the role playbook (AT-2), cites agents/grok/README.md + REVIEW_RUBRIC.md + SECURITY_CHECKLIST.md and the Movement Bible / Design Skills sections by number where the role touches them (AT-3), and ends with a Session log (AT-4); setup/<role>-skills branch + templated PR, lint + secret-scan green, no secrets or vendor keys (AT-5). No governance contradiction with the locked stack (pre-made-character v1 / no biometric AUTH #020/#024; self-host gsplat AUTH #030/#032; Builder+Coordinator+Operator model, Cursor + 8-bot team retired, AUTH #006/#027; schemas NOT frozen -- M0-DATA-01 / M1-DATA-01 open; moderation/ranking AUTH #026). ATs met; the top-100 re-read is ongoing role discipline (Session log), not a merge gate. The v1/V2 split (curated 8-character roster, no biometric in v1; capture/consent/likeness framed as V2) is exemplary; it also flags the stale services/avatar/README.md (pre-AUTH #020) for a separate cleanup. Status in-review -> merged.",
+      "by": "coordinator"
     }
   ]
 }

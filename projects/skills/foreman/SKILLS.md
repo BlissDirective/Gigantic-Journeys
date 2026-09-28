@@ -14,7 +14,7 @@ Research list: `projects/skills/foreman/RESOURCES.md`.
 | Branch names, commit message form `<ticket-id>: <what>`, 2-hour push cadence | `agents/grok/README.md` §4 |
 | PR template, evidence standard, outright-reject list | `agents/grok/README.md` §5, `.github/PULL_REQUEST_TEMPLATE.md` |
 | AUTH REQUEST format and triggers (spend, account, protected paths) | `agents/grok/README.md` §6, `.github/scripts/auth_gate.py` |
-| CHECKPOINT template | `agents/grok/README.md` §7, `governance/CHECKPOINTS/README.md` |
+| CHECKPOINT template | `agents/grok/README.md` §7 |
 | Standups, BLOCKER and DEFECT issues | `agents/grok/README.md` §8 |
 | Review rows A–H; B rows block | `governance/REVIEW_RUBRIC.md` |
 | Secret hygiene, least privilege, milestone security gates | `governance/SECURITY_CHECKLIST.md` §1, §8, §12 |
@@ -73,7 +73,7 @@ Rules: use evidence links, not adjectives. Keep it to five lines. Repeat nothing
 ## 6. Writing checkpoint reports
 
 - At milestone end all feature work halts. Collect a 5-line summary per active domain: done, evidence, open PRs, risks, recommendation (`agents/grok/README.md` §7).
-- Write `governance/CHECKPOINTS/M<n>.md` in the exact template from `governance/CHECKPOINTS/README.md`, on branch `checkpoint/M<n>` (tickets M0-FORE-04, M1-FORE-01, M4-FORE-01). The M0 readiness review in `governance/checkpoints/M0.md` shows the level of evidence expected.
+- Write `governance/checkpoints/M<n>.md` in the exact template from `agents/grok/README.md` §7, on branch `checkpoint/M<n>` (tickets M0-FORE-04, M1-FORE-01, M4-FORE-01). The M0 readiness review in `governance/checkpoints/M0.md` shows the level of evidence expected.
 - **Security notes** list the SECURITY_CHECKLIST §12 rows due at this checkpoint (M0: 1.1–1.6, 8.1, 8.2) with their state.
 - **Spend** is measured against approved caps: the $50/day agent+API cap (kit §7, SECURITY_CHECKLIST §8.5) and per-AUTH caps such as the #031 $100 reconstruction spike. Figures come from the spike report and the vendor dashboards, never from estimates.
 - End with "Awaiting: Coordinator REVIEW, then Owner RESUME." Feature work resumes only after `RESUME M<n+1>`.
@@ -119,7 +119,7 @@ git pull --rebase && gh run list -L 10    # push only when no Unity workflow is 
 
 ## 10. Pointers
 
-`CLAUDE.md` · `SPEC.md` §8, §11 · `PROGRESS.md` · `BACKLOG.md` · `governance/{AGENT_GOVERNANCE,REVIEW_RUBRIC,SECURITY_CHECKLIST,AUTHORIZATION_LOG}.md` · `governance/CHECKPOINTS/` · `agents/grok/README.md` · `agents/grok/roles/gj-operator.md` · `agents/claude/{COORDINATOR,BUILDER,SKILLS}.md` · `.github/workflows/` · `tickets/validate.py` · `context/GIGANTIC_JOURNEYS_PROMPT_KIT.md` §2, §4, §6.
+`CLAUDE.md` · `SPEC.md` §8, §11 · `PROGRESS.md` · `BACKLOG.md` · `governance/{AGENT_GOVERNANCE,REVIEW_RUBRIC,SECURITY_CHECKLIST,AUTHORIZATION_LOG}.md` · `governance/checkpoints/` · `agents/grok/README.md` · `agents/grok/roles/gj-operator.md` · `agents/claude/{COORDINATOR,BUILDER,SKILLS}.md` · `.github/workflows/` · `tickets/validate.py` · `context/GIGANTIC_JOURNEYS_PROMPT_KIT.md` §2, §4, §6.
 
 ## Session log
 

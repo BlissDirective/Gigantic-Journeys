@@ -105,7 +105,7 @@ Research list: `projects/skills/qa-release/RESOURCES.md` (134 link-checked entri
   - **gj-qa-release verifies the lane on its first real TestFlight run (M1) and records findings in `qa/`.** No such record exists yet.
 - **TestFlight ops:** use the separate ops account with no production secrets (§8.4). Fill in what-to-test notes per build. External groups trigger Beta App Review. Watch the tester feedback and crash logs. Builds expire, so keep a current one in the cohort.
 - **Pre-submission (M5)** — SPEC §9 and SECURITY_CHECKLIST §12 M5 row:
-  - [ ] Every SPEC §9 definition-of-done item has evidence linked from `governance/CHECKPOINTS/M5.md`.
+  - [ ] Every SPEC §9 definition-of-done item has evidence linked from `governance/checkpoints/M5.md`.
   - [ ] Privacy nutrition labels match the real data flows, including the crash SDK (§9.6; SPEC §9 item 6). The privacy manifest is present for the app and each SDK.
   - [ ] In-app account deletion works end to end (§6.4; Apple requirement).
   - [ ] 13+ age gate (§5.6); age-rating questionnaire consistent with UGC.

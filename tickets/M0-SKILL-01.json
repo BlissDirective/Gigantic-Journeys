@@ -5,7 +5,7 @@
   "area": "SKILL",
   "owner": "gj-foreman",
   "qa": null,
-  "status": "in-review",
+  "status": "merged",
   "priority": "P0",
   "size": "M",
   "summary": "First task before any ticket (kit §3 common block): research the top 100 resources on running autonomous multi-agent software teams, agentic coding harnesses, mobile game production pipelines, Unity mobile release management; save an annotated list and distill a working handbook. Re-read SKILLS.md at every session start and update it when you learn something.",
@@ -58,7 +58,7 @@
   "branch": "setup/foreman-skills",
   "pr": "https://github.com/BlissDirective/Gigantic-Journeys/pull/6",
   "created": "2026-09-15",
-  "updated": "2026-09-26",
+  "updated": "2026-09-28",
   "history": [
     {
       "date": "2026-09-15",
@@ -79,6 +79,11 @@
       "date": "2026-09-26",
       "event": "gj-operator completed the handbook. RESOURCES.md has 106 link-checked entries (title, URL, type, why-for-GJ) in six groups matching the research focus (AT-1). SKILLS.md covers ticket decomposition, routing by role, blocker detection, standups, checkpoint reports, mistakes and pre-PR checklists (AT-2). It cites agents/grok/README.md, REVIEW_RUBRIC.md and SECURITY_CHECKLIST.md by section, and points to Movement Bible §10 and Design Skills §4 where assignees touch them (AT-3). It ends with a Session log (AT-4). Branch setup/foreman-skills plus a templated PR; the change lands on main by fast-forward once the PR's CI is green (AT-5). Status -> in-review so the Coordinator can count entries (AT-1).",
       "by": "gj-operator"
+    },
+    {
+      "date": "2026-09-28",
+      "event": "Independent secondary review (Coordinator, via a review subagent, 2026-09-28), grounded against AUTHORIZATION_LOG, SPEC, REVIEW_RUBRIC and SECURITY_CHECKLIST. RESOURCES.md >=100 entries with title/URL/type/why in role-focus groups, 0 duplicate URLs and 0 placeholders (AT-1); SKILLS.md covers the role playbook (AT-2), cites agents/grok/README.md + REVIEW_RUBRIC.md + SECURITY_CHECKLIST.md and the Movement Bible / Design Skills sections by number where the role touches them (AT-3), and ends with a Session log (AT-4); setup/<role>-skills branch + templated PR, lint + secret-scan green, no secrets or vendor keys (AT-5). No governance contradiction with the locked stack (pre-made-character v1 / no biometric AUTH #020/#024; self-host gsplat AUTH #030/#032; Builder+Coordinator+Operator model, Cursor + 8-bot team retired, AUTH #006/#027; schemas NOT frozen -- M0-DATA-01 / M1-DATA-01 open; moderation/ranking AUTH #026). ATs met; the top-100 re-read is ongoing role discipline (Session log), not a merge gate. Coordinator fixed the governance/CHECKPOINTS -> governance/checkpoints casing and the broken CHECKPOINTS/README.md ref (the template lives at agents/grok/README.md §7). Status in-review -> merged.",
+      "by": "coordinator"
     }
   ]
 }
