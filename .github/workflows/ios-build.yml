@@ -281,17 +281,28 @@ jobs:
           set -euo pipefail
           cd build/iOS/GiganticJourneys
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" Info.plist || echo "::warning::could not set CFBundleVersion in Info.plist; gj-qa-release to confirm the build-number path on first run"
-      - name: Archive with cloud-managed signing
+      # The archive is built unsigned and signed once, at export, with an App Store
+      # (distribution) profile via cloud-managed signing. A signed archive would
+      # need an iOS App Development profile, which Apple only issues when the team
+      # has a registered device ("Your team has no devices from which to generate
+      # a provisioning profile", first TestFlight run 36467562336, 2026-09-28).
+      - name: Archive (unsigned; signed at export)
         run: |
           set -euo pipefail
           cd build/iOS/GiganticJourneys
           xcodebuild -project Unity-iPhone.xcodeproj -scheme Unity-iPhone -configuration Release -sdk iphoneos \
             -archivePath ../GiganticJourneys.xcarchive archive \
-            -allowProvisioningUpdates \
-            -authenticationKeyPath "$HOME/private_keys/AuthKey_${ASC_KEY_ID}.p8" \
-            -authenticationKeyID "$ASC_KEY_ID" -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
-            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" CODE_SIGN_STYLE=Automatic
-      - name: Export the .ipa
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" CODE_SIGN_STYLE=Automatic \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=""
+          # Export derives capability entitlements from the archived binary's signature,
+          # so an unsigned archive would lose them: ad-hoc sign with the project's
+          # entitlements first when there are any (none today).
+          ent=$(find . -maxdepth 3 -name '*.entitlements' -not -path './DerivedData/*' | head -n1)
+          if [ -n "$ent" ]; then
+            codesign --force --sign - --entitlements "$ent" ../GiganticJourneys.xcarchive/Products/Applications/*.app
+            echo "ad-hoc signed the archived app with $ent before export"
+          fi
+      - name: Export the .ipa (App Store distribution signing, cloud-managed)
         run: |
           set -euo pipefail
           internal_only=""
