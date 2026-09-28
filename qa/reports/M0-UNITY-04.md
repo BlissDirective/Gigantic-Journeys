@@ -123,3 +123,41 @@ Tests (local, Unity 6000.0.84f1, `-batchmode -nographics`): **EditMode 34/34** (
 its top is at or below the panel's bottom, width and height ≥ 44 pt, inside the safe area, right-aligned with the
 panel, and the panel alone still ≤ 8 %; new `F4_SavesReport_WhileVisible`). Results:
 `M0-UNITY-04/editmode-results.xml`, `M0-UNITY-04/playmode-results.xml`.
+
+## Owner device test (AT-1 device part): recommended method (2026-09-28, gj-operator)
+
+TestFlight builds are release builds, so the overlay is compiled out of them by design. Three ways to get the overlay
+onto the Owner's iPhone were compared against this repository's CI: `ios-build.yml` (Linux export plus a macOS
+player lane on free GitHub macOS runners, public repo), the App Store Connect API key secrets (`ASC_KEY_ID`,
+`ASC_ISSUER_ID`, `ASC_KEY_P8_BASE64`), Team `8WPC4F429C`, bundle `com.sparkforgelabs.giganticjourneys`, an existing
+app record with an internal TestFlight group on automatic distribution, and no Mac apart from the runners.
+
+| Option | What it takes | Owner action | Cost | Verdict |
+|---|---|---|---|---|
+| **(a) TestFlight internal-debug flavor** (GJ_DEBUG define, same bundle ID, uploaded as *internal-testing-only*) | A dispatch input on `ios-build.yml`; `GJ_DEBUG` added to the iOS defines in the runner's checkout only; export option `testFlightInternalTestingOnly` | Install the build from the TestFlight app (already an internal tester) | $0 (free macOS runners; no new account, app record or bundle ID) | **Recommended** |
+| (b) Ad hoc / Development-signed IPA via a link | Owner's UDID; register the device and create an ad hoc profile through the ASC API; host the IPA and an `itms-services` manifest over HTTPS | Send the UDID (Finder/Apple Configurator on a Mac, or a UDID-profile site); open an install link; repeat for every new device | $0, but the IPA can't go on the public repo's Releases/Pages (the build would be public), so it needs private hosting (a new account or spend) | Workable fallback, more friction |
+| (c) The Owner builds from Xcode on a Mac | A Mac with Xcode, the repo, Unity 6000.0.84f1 + iOS module, signing | Everything, by hand | A Mac (none available) | Not viable |
+
+**Why (a) fits the ticket.** AT-2 says the overlay is excluded from *release* builds **via the GJ_DEBUG scripting
+define**. The assembly's constraint is `UNITY_EDITOR || DEVELOPMENT_BUILD || GJ_DEBUG`, and
+`GjDebugDefine_ForcesOverlayIntoNonDevelopmentPlayer` already covers a GJ_DEBUG build, so the define-gated build is
+the designed escape hatch. The committed ProjectSettings stay release-clean (`ReleaseDefines_DoNotForceGjDebug`
+still passes), and SECURITY_CHECKLIST §9.7/§9.8 ("debug overlay compiled out", "CI checks release flags") gets
+stronger: every macOS-lane build now **asserts** the overlay is absent (release) or present (internal-debug) in the
+exported Xcode project (`.github/scripts/ios_debug_flavor.py`). Apple marks an internal-testing-only build so it
+can't be submitted to App Review or external testers, so a debug build can't reach the App Store by accident.
+
+**Checked locally.** An iOS export with `GJ_DEBUG` added to the iPhone defines the same way the workflow does it:
+the non-development iOS build contains the overlay's IL2CPP output and `GJShareSheet.mm`, and BuildInfoHook
+treats it as a debug build (SHA resource). The Linux release build stays clean.
+
+**Implemented** (committed with green CI): `ios-build.yml` dispatch input `flavor: release | internal-debug`
+(the macOS lane), the define step, the present/absent assertion, and the internal-only export option. **No upload
+was made in this step.** Uploads need `TESTFLIGHT_ENABLED=true` (step 3).
+
+**What the Owner does:** nothing to set up. Once an internal-debug build has been uploaded (the Operator dispatches
+`ios-build` with `lane=macos, flavor=internal-debug`), open **TestFlight** on the iPhone, install that build (the
+Operator reports its build number; build numbers are the workflow run number), three-finger tap to show the
+overlay, tap **Save report**, confirm the share sheet, and check the file under Files → On My iPhone →
+Gigantic Journeys. Send the screenshot and report (or AirDrop them) to the Operator, who files them as
+`04-overlay-device-<model>.png` + `run/perf-report-<model>.txt`.

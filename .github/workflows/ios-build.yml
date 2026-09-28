@@ -22,6 +22,16 @@
 #     player lane's Xcode project with Xcode cloud-managed signing using the
 #     App Store Connect API key, export, and upload through fastlane pilot.
 #     Internal testers with automatic distribution receive every build.
+# Flavors (macOS lane; dispatch input "flavor", ticket M0-UNITY-04 AT-1):
+#   - release (default, and every push): the debug overlay must be ABSENT from
+#     the Xcode project (checked by .github/scripts/ios_debug_flavor.py;
+#     SECURITY_CHECKLIST 9.7/9.8).
+#   - internal-debug: adds the GJ_DEBUG scripting define in this runner's
+#     checkout only (committed ProjectSettings stay release-clean), asserts the
+#     overlay + share-sheet plugin are PRESENT, and exports the build as
+#     TestFlight internal-testing-only (testFlightInternalTestingOnly), so it can
+#     never be submitted to App Review or external testers. Same bundle ID and
+#     app record; the Owner installs it from TestFlight like any other build.
 # Secrets (CI-only, added by the Owner, ticket M0-REPO-05): ASC_KEY_ID,
 # ASC_ISSUER_ID, ASC_KEY_P8_BASE64. Variable: APPLE_TEAM_ID.
 # The build number is the workflow run number. gj-qa-release verifies the
@@ -46,6 +56,11 @@ on:
         type: choice
         options: [macos, linux]
         default: macos
+      flavor:
+        description: "release = App Store build, overlay compiled out; internal-debug = GJ_DEBUG build with the debug overlay, uploaded (when TestFlight is on) as internal-testing-only"
+        type: choice
+        options: [release, internal-debug]
+        default: release
 
 permissions:
   contents: read
@@ -172,9 +187,12 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: unity/Library
-          key: LibraryMac-ios-${{ hashFiles('unity/Assets/**', 'unity/Packages/**', 'unity/ProjectSettings/**') }}
+          key: LibraryMac-ios-${{ inputs.flavor == 'internal-debug' && 'debug-' || '' }}${{ hashFiles('unity/Assets/**', 'unity/Packages/**', 'unity/ProjectSettings/**') }}
           restore-keys: |
             LibraryMac-ios-
+      - name: Internal-debug flavor adds GJ_DEBUG (this runner's checkout only)
+        if: ${{ inputs.flavor == 'internal-debug' }}
+        run: python3 .github/scripts/ios_debug_flavor.py add-define unity/ProjectSettings/ProjectSettings.asset
       - name: Committed iOS Burst state must be ENABLED
         run: |
           set -euo pipefail
@@ -206,6 +224,10 @@ jobs:
           lipo -info "$lib" || true
           echo "[GJ-BURST] Burst AOT ENABLED: $lib is $size bytes with $syms exported code symbols"
           echo "::notice::Burst AOT ENABLED: lib_burst_generated.a $size bytes, $syms code symbols"
+      - name: Debug overlay present only in the internal-debug flavor
+        env:
+          EXPECT: ${{ inputs.flavor == 'internal-debug' && 'present' || 'absent' }}
+        run: python3 .github/scripts/ios_debug_flavor.py check build/iOS/GiganticJourneys --expect "$EXPECT"
       - name: xcodebuild (unsigned compile check)
         run: |
           set -euo pipefail
@@ -231,6 +253,7 @@ jobs:
       ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
       APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID }}
       BUILD_NUMBER: ${{ github.run_number }}
+      FLAVOR: ${{ inputs.flavor || 'release' }}
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -271,6 +294,11 @@ jobs:
       - name: Export the .ipa
         run: |
           set -euo pipefail
+          internal_only=""
+          if [ "$FLAVOR" = "internal-debug" ]; then
+            internal_only="<key>testFlightInternalTestingOnly</key><true/>"
+            echo "::notice::internal-debug flavor: exported as TestFlight internal-testing-only (debug overlay included)"
+          fi
           cat > ExportOptions.plist <<EOF
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -279,6 +307,7 @@ jobs:
             <key>destination</key><string>export</string>
             <key>signingStyle</key><string>automatic</string>
             <key>teamID</key><string>${APPLE_TEAM_ID}</string>
+            ${internal_only}
           </dict></plist>
           EOF
           xcodebuild -exportArchive -archivePath build/iOS/GiganticJourneys.xcarchive \

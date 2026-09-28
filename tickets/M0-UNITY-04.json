@@ -82,6 +82,11 @@
       "date": "2026-09-28",
       "event": "Follow-up by gj-operator (Owner request via operator chat): the 'Save report' button moved out of the panel to sit right-aligned directly below it, at >= 44 x 44 pt (minWidth/minHeight = 44 pt x pixels-per-point, iOS scale estimated as round(dpi/163) clamped 1..3), inside the safe area, top-right placement kept; F4 still saves while visible. Resolves the one accepted QA defect (27 pt button). Simulated iPhone 15 Pro 3x: button 218x132 px = 72.7x44 pt below a 6.8 % panel (before ~27 pt inside the panel). Local EditMode 34/34, PlayMode 11/11 (new SaveButton_BelowPanel_AtLeast44Points_InsideSafeArea x3, F4_SavesReport_WhileVisible, EstimatePixelsPerPoint_MatchesIosScreenScale x7, MinTouchTarget_Is44Points). Evidence regenerated (qa/evidence/M0-UNITY-04/03-overlay-safe-area-iphone-15-pro.png); qa/reports/M0-UNITY-04.md 'Follow-up: 44 pt Save button'. Status unchanged (done).",
       "by": "gj-operator"
+    },
+    {
+      "date": "2026-09-28",
+      "event": "AT-1 device-test method assessed by gj-operator: recommended a TestFlight internal-debug flavor (GJ_DEBUG added to the iOS defines in the CI runner's checkout only; exported with testFlightInternalTestingOnly so it cannot reach App Review/external testers; same bundle ID/app record; $0; no UDID or Mac). ios-build.yml gained dispatch input flavor: release | internal-debug and a macOS-lane assertion (.github/scripts/ios_debug_flavor.py) that the overlay is absent from release builds and present in internal-debug ones. Alternatives (ad hoc IPA via UDID; Xcode on a Mac) in qa/reports/M0-UNITY-04.md. Owner action: install the internal-debug build from TestFlight once uploaded (PROGRESS Owner item 12).",
+      "by": "gj-operator"
     }
   ]
 }
