@@ -21,6 +21,13 @@ def test_user_scans_are_rejected_locally_and_in_the_container():
     fns = _functions()
     assert "require_offsite_source" in _calls(fns["main"])
     assert "require_offsite_source" in _calls(fns["reconstruct"])
+    assert "require_offsite_source" in _calls(fns["reconstruct_clip"])
+
+
+def test_corpus_functions_validate_clip_ids():
+    fns = _functions()
+    assert "_check_clip_id" in _calls(fns["extract_clip_frames"])
+    assert "_check_clip_id" in _calls(fns["reconstruct_clip"])
 
 
 def _attr_calls(name: str) -> list[ast.Call]:
@@ -36,10 +43,11 @@ def test_build_context_is_pinned_to_the_service_dir():
     calls = _attr_calls("dockerfile_commands")
     assert len(calls) == 1
     assert "context_dir" in {k.arg for k in calls[0].keywords}
-    # The package is mounted from the service dir only, never the repo root.
+    # The package is mounted from the service dir only, never the repo root
+    # (CUDA image + the CPU frames image).
     mounts = _attr_calls("add_local_dir")
-    assert len(mounts) == 1
-    assert ast.unparse(mounts[0].args[0]) == "_HERE / 'reconstruction'"
+    assert len(mounts) == 2
+    assert {ast.unparse(m.args[0]) for m in mounts} == {"_HERE / 'reconstruction'"}
 
 
 def _dockerfile_layers():

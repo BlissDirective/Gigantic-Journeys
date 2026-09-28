@@ -101,6 +101,7 @@ services/reconstruction/corpus/*
 !services/reconstruction/corpus/manifest.schema.json
 !services/reconstruction/corpus/open_video_corpus.json
 !services/reconstruction/corpus/OPEN_VIDEO_ATTRIBUTION.md
+!services/reconstruction/corpus/open_video_recon_results.json
 *.mp4
 *.mov
 *.MOV

@@ -161,6 +161,7 @@ class _ColmapFrontEnd:
         use_gpu: bool = True,
         matcher: str = "auto",
         clock: Callable[[], float] = time.monotonic,
+        max_features: int = 0,
     ) -> None:
         if matcher not in MATCHER_CHOICES:
             raise ReconstructionError(
@@ -169,6 +170,10 @@ class _ColmapFrontEnd:
         self.use_gpu = use_gpu
         self.matcher = matcher
         self._clock = clock
+        # 0 = COLMAP's default (8192 SIFT features per image). Dense video
+        # frames need fewer: their long tracks make bundle adjustment the
+        # bottleneck (open-video corpus run, 2026-09-28).
+        self.max_features = max_features
 
     def _timed(self, timings: dict[str, float], step: str, argv: list[str]) -> None:
         started = self._clock()
@@ -201,6 +206,11 @@ class _ColmapFrontEnd:
                 "--ImageReader.single_camera",
                 "1",
                 *extract_flags,
+                *(
+                    ["--SiftExtraction.max_num_features", str(self.max_features)]
+                    if self.max_features
+                    else []
+                ),
             ],
         )
         matcher = resolve_matcher(self.matcher, scan.image_count)
@@ -212,6 +222,7 @@ class _ColmapFrontEnd:
             "matcher": matcher,
             "matcher_requested": self.matcher,
             "gpu_features": self.use_gpu,
+            "max_features": self.max_features or 8192,
             **timings,
             "sfm_s": round(sum(timings.values()), 2),
             "input_images": scan.image_count,
@@ -295,13 +306,17 @@ DEFAULT_MATCHER = "auto"
 
 
 def select_sfm(
-    name: str = DEFAULT_SFM, *, use_gpu: bool = True, matcher: str = DEFAULT_MATCHER
+    name: str = DEFAULT_SFM,
+    *,
+    use_gpu: bool = True,
+    matcher: str = DEFAULT_MATCHER,
+    max_features: int = 0,
 ) -> SfM:
     """Return the SfM adapter for ``name`` ("colmap" or "glomap")."""
     if name == "glomap":
-        return GlomapSfM(use_gpu=use_gpu, matcher=matcher)
+        return GlomapSfM(use_gpu=use_gpu, matcher=matcher, max_features=max_features)
     if name == "colmap":
-        return ColmapSfM(use_gpu=use_gpu, matcher=matcher)
+        return ColmapSfM(use_gpu=use_gpu, matcher=matcher, max_features=max_features)
     raise ReconstructionError(f"unknown sfm {name!r}; expected one of {SFM_CHOICES}")
 
 

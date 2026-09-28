@@ -65,7 +65,7 @@
   "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-09-18",
-  "updated": "2026-09-26",
+  "updated": "2026-09-28",
   "history": [
     {
       "date": "2026-09-18",
@@ -95,6 +95,11 @@
     {
       "date": "2026-09-26",
       "event": "Operator: training speed-up, hard splat cap, stable collision mesh (Owner-approved pass, 2:26 PM CT). Profiled the train stage (~80 s of unused in-training evals, a 31 s one-value-at-a-time PLY export, a separate ns-eval reload, and a 30k schedule cut at 15k) and benchmarked 8 Splatfacto profiles plus 4 GPU tiers from the same poses on the Mip-NeRF 360 room (public, 311 images_4). New default: profile scaled-10k-dense (10k iterations, schedule scaled from 30k, densify_grad_thresh 0.0006, no in-training evals) on A10G. Pipeline 9.7 -> 6.9 min, train stage ~389 -> ~210 s, $0.26 -> $0.185 per room, PSNR/SSIM/LPIPS 31.30/0.930/0.095 over 4 runs (was 31.30/0.932/0.092). L40S is fastest (5.5 min) but +20% cost; L4 and A100 were not cheaper. The 2M splat budget is now enforced: a densification growth limit (ns_train_capped) plus a post-train hard cap by rendered contribution (ns_finish, which also replaces ns-export + ns-eval), and the run fails if the PLY is over budget. A 200K stress budget held (growth limit: 198K splats, 31.05 dB; prune only: exactly 200,000). The collision mesh is now cleaned before Poisson (opacity, dense-cell scene box, scale, statistical outliers, voxel downsample), cropped and decimated to 100K triangles: 3.71-3.80 MB across all 23 meshes of the pass (was 3.8-46 MB), and run-to-run Chamfer halved against a plain percentile box. cost.json stays within ~2% of Modal's bill and now records GPU tier, profile, cap counts and mesh stats. Spend ~$3.55 (credits; month ~$7.2 of the $20 limit). Recorded in the spike report. Status stays in-progress (corpus room, AT-2 iOS render, AT-4 decision note open).",
+      "by": "gj-operator"
+    },
+    {
+      "date": "2026-09-28",
+      "event": "Operator (Owner-approved, 2026-09-28): reconstructed all 15 active open-video corpus clips (M0-OWNER-01 rev 2) on Modal A10G. New corpus mode in modal_app.py (--corpus): CPU ffmpeg frame extraction inside Modal from recommended_segments only (<=2 fps, <=300/400 frames, 1600 px, sharpest-of-3 + blur reject; reconstruction/video_frames.py), then GPU reconstruct_clip reading/writing the private gj-corpus volume (/open-video-recon/<slug>/: spz, ply, collision.obj, sparse, renders, preview, run.json). Video SfM defaults: GLOMAP + sequential matching + 4096 SIFT features (the pilot's incremental mapper on 196 dense frames did not finish in 25 min; GLOMAP bench 196/196). Results: 15/15 runs completed, 14 usable (5 good, 3 usable, 4 partial coverage, 2 weak), penthouse-apartment-fpv failed (wrong poses, PSNR 14.4, also with incremental COLMAP). Canonical clips $4.73 measured ($0.19-0.63 each); whole job $7.62 per-app billing (workspace metered 7.00 -> 17.48, now ~$17.5 of the ~$20 limit, all credits). Report qa/reports/M1-CAPT-03-open-video-recon.md; results services/reconstruction/corpus/open_video_recon_results.json. Status unchanged.",
       "by": "gj-operator"
     }
   ]

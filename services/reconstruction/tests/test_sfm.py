@@ -133,3 +133,19 @@ def test_default_adapter_is_incremental_with_auto_matcher(tmp_path, monkeypatch)
     ]
     assert poses.stats["matcher"] == "exhaustive"
     assert poses.stats["matcher_requested"] == "auto"
+
+
+def test_max_features_caps_sift_extraction(tmp_path, monkeypatch):
+    calls: list[list[str]] = []
+    monkeypatch.setattr(sfm_module, "require", lambda tool: f"/usr/bin/{tool}")
+    monkeypatch.setattr(subprocess, "run", _fake_run(calls))
+    scan = ScanInput(scan_id="s1", image_dir=tmp_path, image_count=3, source=Source.CORPUS)
+    poses = select_sfm("glomap", matcher="sequential", max_features=4096).run(
+        scan, tmp_path / "work"
+    )
+    extract = calls[0]
+    assert extract[-2:] == ["--SiftExtraction.max_num_features", "4096"]
+    assert poses.stats["max_features"] == 4096
+    calls.clear()
+    ColmapSfM(matcher="exhaustive").run(scan, tmp_path / "work2")
+    assert "--SiftExtraction.max_num_features" not in calls[0]

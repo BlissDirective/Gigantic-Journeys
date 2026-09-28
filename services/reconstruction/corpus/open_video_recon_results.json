@@ -1,0 +1,935 @@
+{
+  "schema": "gj-open-video-recon-results/1",
+  "tickets": [
+    "M1-CAPT-03",
+    "M1-PIPE-01"
+  ],
+  "run_date": "2026-09-28",
+  "run_by": "gj-operator (Grok Bot)",
+  "description": "Reconstruction of the 15 active open-video corpus clips (M0-OWNER-01 revision 2) on Modal. Frames extracted from recommended_segments only, inside Modal; outputs stay in the private gj-corpus volume.",
+  "pipeline": {
+    "frames": "ffmpeg, recommended_segments only, <=2 fps (<=300 frames; 400 for >240 s), 1600 px long side, sharpest of every 3 candidates, windows <0.3x median sharpness dropped",
+    "sfm": "COLMAP 4.1.1 GPU SIFT (4096 features) + sequential matching (loop detection) + GLOMAP global_mapper",
+    "train": "nerfstudio Splatfacto scaled-10k-dense (10k iterations), 2M splat cap",
+    "eval": "held-out every 8th registered frame (PSNR/SSIM/LPIPS of the capped model)",
+    "gpu": "A10G, 8 cores, 16 GiB",
+    "code": "services/reconstruction/modal_app.py --corpus"
+  },
+  "outputs_root": "gj-corpus:/open-video-recon/<slug>/ (<slug>.spz, splat.ply, collision.obj, sparse/, renders/, preview.jpg, run.json, frames/, frames.json)",
+  "experiments": {
+    "_pass1": "gj-corpus:/open-video-recon/_pass1/office-warehouse-fpv (2 fps, replaced by the 4 fps run)",
+    "_pass2": "gj-corpus:/open-video-recon/_pass2/{penthouse-apartment-fpv (incremental COLMAP, PSNR 14.1), modern-church-fpv (4 fps, PSNR 20.4)} (not better, not canonical)",
+    "pilot": "tabletop/lego-paranal-observatory at 3 fps / 8192 features / exhaustive / incremental mapper: mapper did not finish in 25 min (stopped); SfM-only bench on the same 196 frames: GLOMAP 196/196 registered but 873 s SfM"
+  },
+  "cost": {
+    "canonical_clips_measured_usd": 4.73,
+    "job_billing_usd": {
+      "per_app_report_today": 7.62,
+      "workspace_summary_delta": 10.48,
+      "note": "workspace metered went 7.00 -> 17.48 during the job; the per-app daily report sums to 7.62 (gap likely reporting lag). Includes pilots, the SfM bench and pass-2 retries."
+    },
+    "prices": "A10G $1.10/h + $0.0473/core-h + $0.008/GiB-h"
+  },
+  "clips": [
+    {
+      "clip_id": "rooms/abandoned-farmhouse",
+      "category": "room",
+      "status": "ok",
+      "verdict": "weak",
+      "note": "5 short segments, 37% registered, PSNR 17.7 (dark, cluttered, cuts).",
+      "frames": {
+        "used": 129,
+        "candidates": 417,
+        "target_fps": 2.0,
+        "usable_s": 69.4,
+        "resolution": [
+          1600,
+          900
+        ]
+      },
+      "sfm": {
+        "mapper": "global",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "registered_images": 48,
+        "points": 15315,
+        "mean_track_length": 4.970944,
+        "mean_reprojection_error_px": 0.533106,
+        "sfm_s": 89.05
+      },
+      "registration_pct": 37.2,
+      "quality": {
+        "psnr": 17.7449,
+        "ssim": 0.7615,
+        "lpips": 0.4058,
+        "eval_views": 6
+      },
+      "splat_count": 414878,
+      "package_bytes": 12163976,
+      "mesh_triangles": 100000,
+      "stage_seconds": {
+        "sfm": 89.59,
+        "train": 398.19,
+        "compress": 3.64,
+        "mesh": 26.02
+      },
+      "function_wall_s": 585.0,
+      "gpu": "A10G",
+      "cost_usd": {
+        "gpu": 0.1788,
+        "cpu": 0.0615,
+        "memory": 0.0208,
+        "frames_cpu": 0.0043,
+        "total": 0.2653
+      },
+      "config": {
+        "sfm": "glomap",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "profile": "default (scaled-10k-dense)",
+        "splat_budget": 2000000
+      },
+      "outputs": "gj-corpus:/open-video-recon/abandoned-farmhouse/"
+    },
+    {
+      "clip_id": "rooms/art-museum-galleries-eric-carle",
+      "category": "room",
+      "status": "ok",
+      "verdict": "usable-partial",
+      "note": "Clean renders, but only 40% registered: one gallery stretch of the walk.",
+      "frames": {
+        "used": 281,
+        "candidates": 900,
+        "target_fps": 1.4159,
+        "usable_s": 211.88,
+        "resolution": [
+          1600,
+          900
+        ]
+      },
+      "sfm": {
+        "mapper": "global",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "registered_images": 111,
+        "points": 11930,
+        "mean_track_length": 6.728751,
+        "mean_reprojection_error_px": 0.754975,
+        "sfm_s": 103.48
+      },
+      "registration_pct": 39.5,
+      "quality": {
+        "psnr": 29.2514,
+        "ssim": 0.9285,
+        "lpips": 0.1564,
+        "eval_views": 14
+      },
+      "splat_count": 479192,
+      "package_bytes": 12516059,
+      "mesh_triangles": 99999,
+      "stage_seconds": {
+        "sfm": 103.76,
+        "train": 370.07,
+        "compress": 2.25,
+        "mesh": 5.91
+      },
+      "function_wall_s": 563.9,
+      "gpu": "A10G",
+      "cost_usd": {
+        "gpu": 0.1723,
+        "cpu": 0.0593,
+        "memory": 0.0201,
+        "frames_cpu": 0.0096,
+        "total": 0.2612
+      },
+      "config": {
+        "sfm": "glomap",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "profile": "default (scaled-10k-dense)",
+        "splat_budget": 2000000
+      },
+      "outputs": "gj-corpus:/open-video-recon/art-museum-galleries-eric-carle/"
+    },
+    {
+      "clip_id": "tabletop/fantasy-diorama-dock-platform",
+      "category": "tabletop",
+      "status": "ok",
+      "verdict": "usable",
+      "note": "68% registered; soft in places.",
+      "frames": {
+        "used": 84,
+        "candidates": 275,
+        "target_fps": 2.0,
+        "usable_s": 45.8,
+        "resolution": [
+          1600,
+          900
+        ]
+      },
+      "sfm": {
+        "mapper": "global",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "registered_images": 57,
+        "points": 21204,
+        "mean_track_length": 5.781409,
+        "mean_reprojection_error_px": 0.670705,
+        "sfm_s": 59.72
+      },
+      "registration_pct": 67.9,
+      "quality": {
+        "psnr": 22.2475,
+        "ssim": 0.7788,
+        "lpips": 0.1789,
+        "eval_views": 8
+      },
+      "splat_count": 631494,
+      "package_bytes": 16265168,
+      "mesh_triangles": 99999,
+      "stage_seconds": {
+        "sfm": 60.02,
+        "train": 484.1,
+        "compress": 3.84,
+        "mesh": 29.42
+      },
+      "function_wall_s": 610.8,
+      "gpu": "A10G",
+      "cost_usd": {
+        "gpu": 0.1866,
+        "cpu": 0.0644,
+        "memory": 0.0217,
+        "frames_cpu": 0.0034,
+        "total": 0.2761
+      },
+      "config": {
+        "sfm": "glomap",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "profile": "default (scaled-10k-dense)",
+        "splat_budget": 2000000
+      },
+      "outputs": "gj-corpus:/open-video-recon/fantasy-diorama-dock-platform/"
+    },
+    {
+      "clip_id": "rooms/historic-house-eldon-house",
+      "category": "room",
+      "status": "ok",
+      "verdict": "good",
+      "note": "Long walkthrough, 86% registered; SfM was the slowest (14 min).",
+      "frames": {
+        "used": 291,
+        "candidates": 900,
+        "target_fps": 1.3309,
+        "usable_s": 225.41,
+        "resolution": [
+          1600,
+          900
+        ]
+      },
+      "sfm": {
+        "mapper": "global",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "registered_images": 249,
+        "points": 40879,
+        "mean_track_length": 17.289097,
+        "mean_reprojection_error_px": 0.357067,
+        "sfm_s": 846.13
+      },
+      "registration_pct": 85.6,
+      "quality": {
+        "psnr": 25.2893,
+        "ssim": 0.8337,
+        "lpips": 0.2703,
+        "eval_views": 32
+      },
+      "splat_count": 503254,
+      "package_bytes": 13112624,
+      "mesh_triangles": 100000,
+      "stage_seconds": {
+        "sfm": 846.61,
+        "train": 435.89,
+        "compress": 2.75,
+        "mesh": 9.45
+      },
+      "function_wall_s": 1392.5,
+      "gpu": "A10G",
+      "cost_usd": {
+        "gpu": 0.4255,
+        "cpu": 0.1464,
+        "memory": 0.0495,
+        "frames_cpu": 0.0121,
+        "total": 0.6335
+      },
+      "config": {
+        "sfm": "glomap",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "profile": "default (scaled-10k-dense)",
+        "splat_budget": 2000000
+      },
+      "outputs": "gj-corpus:/open-video-recon/historic-house-eldon-house/"
+    },
+    {
+      "clip_id": "tabletop/lego-paranal-observatory",
+      "category": "tabletop",
+      "status": "ok",
+      "verdict": "good",
+      "note": "Sharp, faithful; 2 of 3 shots joined (64%).",
+      "frames": {
+        "used": 132,
+        "candidates": 390,
+        "target_fps": 2.0,
+        "usable_s": 64.96,
+        "resolution": [
+          1600,
+          900
+        ]
+      },
+      "sfm": {
+        "mapper": "global",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "registered_images": 85,
+        "points": 20105,
+        "mean_track_length": 14.785327,
+        "mean_reprojection_error_px": 0.376111,
+        "sfm_s": 142.72
+      },
+      "registration_pct": 64.4,
+      "quality": {
+        "psnr": 35.5785,
+        "ssim": 0.9726,
+        "lpips": 0.0341,
+        "eval_views": 11
+      },
+      "splat_count": 237876,
+      "package_bytes": 9188925,
+      "mesh_triangles": 100000,
+      "stage_seconds": {
+        "sfm": 143.09,
+        "train": 380.43,
+        "compress": 1.73,
+        "mesh": 10.1
+      },
+      "function_wall_s": 553.6,
+      "gpu": "A10G",
+      "cost_usd": {
+        "gpu": 0.1692,
+        "cpu": 0.0582,
+        "memory": 0.0197,
+        "frames_cpu": 0.0027,
+        "total": 0.2498
+      },
+      "config": {
+        "sfm": "glomap",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "profile": "default (scaled-10k-dense)",
+        "splat_budget": 2000000
+      },
+      "outputs": "gj-corpus:/open-video-recon/lego-paranal-observatory/"
+    },
+    {
+      "clip_id": "tabletop/lego-theed-diorama",
+      "category": "tabletop",
+      "status": "ok",
+      "verdict": "usable",
+      "note": "97% registered; PSNR 21.7 (fine detail, orbit at distance).",
+      "frames": {
+        "used": 237,
+        "candidates": 900,
+        "target_fps": 1.7329,
+        "usable_s": 173.12,
+        "resolution": [
+          1600,
+          900
+        ]
+      },
+      "sfm": {
+        "mapper": "global",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "registered_images": 229,
+        "points": 48978,
+        "mean_track_length": 7.477459,
+        "mean_reprojection_error_px": 0.791508,
+        "sfm_s": 463.8
+      },
+      "registration_pct": 96.6,
+      "quality": {
+        "psnr": 21.6584,
+        "ssim": 0.8189,
+        "lpips": 0.2621,
+        "eval_views": 29
+      },
+      "splat_count": 464574,
+      "package_bytes": 12677978,
+      "mesh_triangles": 99999,
+      "stage_seconds": {
+        "sfm": 464.45,
+        "train": 382.81,
+        "compress": 2.9,
+        "mesh": 8.53
+      },
+      "function_wall_s": 954.8,
+      "gpu": "A10G",
+      "cost_usd": {
+        "gpu": 0.2917,
+        "cpu": 0.1004,
+        "memory": 0.0339,
+        "frames_cpu": 0.0032,
+        "total": 0.4293
+      },
+      "config": {
+        "sfm": "glomap",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "profile": "default (scaled-10k-dense)",
+        "splat_budget": 2000000
+      },
+      "outputs": "gj-corpus:/open-video-recon/lego-theed-diorama/"
+    },
+    {
+      "clip_id": "rooms/medieval-great-hall-winchester",
+      "category": "room",
+      "status": "ok",
+      "verdict": "usable",
+      "note": "3 segments; 55% registered (one continuous part).",
+      "frames": {
+        "used": 175,
+        "candidates": 664,
+        "target_fps": 2.0,
+        "usable_s": 110.62,
+        "resolution": [
+          1600,
+          900
+        ]
+      },
+      "sfm": {
+        "mapper": "global",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "registered_images": 97,
+        "points": 23909,
+        "mean_track_length": 6.970848,
+        "mean_reprojection_error_px": 0.795089,
+        "sfm_s": 216.34
+      },
+      "registration_pct": 55.4,
+      "quality": {
+        "psnr": 24.5189,
+        "ssim": 0.8139,
+        "lpips": 0.3272,
+        "eval_views": 13
+      },
+      "splat_count": 660011,
+      "package_bytes": 15959142,
+      "mesh_triangles": 100000,
+      "stage_seconds": {
+        "sfm": 216.69,
+        "train": 441.07,
+        "compress": 3.03,
+        "mesh": 15.33
+      },
+      "function_wall_s": 716.0,
+      "gpu": "A10G",
+      "cost_usd": {
+        "gpu": 0.2188,
+        "cpu": 0.0753,
+        "memory": 0.0255,
+        "frames_cpu": 0.005,
+        "total": 0.3245
+      },
+      "config": {
+        "sfm": "glomap",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "profile": "default (scaled-10k-dense)",
+        "splat_budget": 2000000
+      },
+      "outputs": "gj-corpus:/open-video-recon/medieval-great-hall-winchester/"
+    },
+    {
+      "clip_id": "rooms/mediterranean-country-home",
+      "category": "room",
+      "status": "ok",
+      "verdict": "usable-partial",
+      "note": "60% registered; walls/sky soft (white, low texture).",
+      "frames": {
+        "used": 148,
+        "candidates": 451,
+        "target_fps": 2.0,
+        "usable_s": 75.24,
+        "resolution": [
+          1600,
+          900
+        ]
+      },
+      "sfm": {
+        "mapper": "global",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "registered_images": 89,
+        "points": 30925,
+        "mean_track_length": 5.785384,
+        "mean_reprojection_error_px": 0.562792,
+        "sfm_s": 92.32
+      },
+      "registration_pct": 60.1,
+      "quality": {
+        "psnr": 22.4681,
+        "ssim": 0.8469,
+        "lpips": 0.2499,
+        "eval_views": 12
+      },
+      "splat_count": 584541,
+      "package_bytes": 14705135,
+      "mesh_triangles": 100000,
+      "stage_seconds": {
+        "sfm": 92.67,
+        "train": 408.88,
+        "compress": 2.85,
+        "mesh": 16.68
+      },
+      "function_wall_s": 569.2,
+      "gpu": "A10G",
+      "cost_usd": {
+        "gpu": 0.1739,
+        "cpu": 0.0599,
+        "memory": 0.0202,
+        "frames_cpu": 0.0043,
+        "total": 0.2583
+      },
+      "config": {
+        "sfm": "glomap",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "profile": "default (scaled-10k-dense)",
+        "splat_budget": 2000000
+      },
+      "outputs": "gj-corpus:/open-video-recon/mediterranean-country-home/"
+    },
+    {
+      "clip_id": "tabletop/model-village-museum-case",
+      "category": "tabletop",
+      "status": "ok",
+      "verdict": "good",
+      "note": "100% registered; slight softness.",
+      "frames": {
+        "used": 207,
+        "candidates": 635,
+        "target_fps": 2.0,
+        "usable_s": 105.89,
+        "resolution": [
+          1600,
+          900
+        ]
+      },
+      "sfm": {
+        "mapper": "global",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "registered_images": 207,
+        "points": 71915,
+        "mean_track_length": 5.69311,
+        "mean_reprojection_error_px": 0.626359,
+        "sfm_s": 134.79
+      },
+      "registration_pct": 100.0,
+      "quality": {
+        "psnr": 24.6238,
+        "ssim": 0.8379,
+        "lpips": 0.2367,
+        "eval_views": 26
+      },
+      "splat_count": 272701,
+      "package_bytes": 9539317,
+      "mesh_triangles": 100000,
+      "stage_seconds": {
+        "sfm": 135.24,
+        "train": 378.26,
+        "compress": 1.82,
+        "mesh": 6.74
+      },
+      "function_wall_s": 601.6,
+      "gpu": "A10G",
+      "cost_usd": {
+        "gpu": 0.1838,
+        "cpu": 0.0632,
+        "memory": 0.0214,
+        "frames_cpu": 0.0095,
+        "total": 0.278
+      },
+      "config": {
+        "sfm": "glomap",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "profile": "default (scaled-10k-dense)",
+        "splat_budget": 2000000
+      },
+      "outputs": "gj-corpus:/open-video-recon/model-village-museum-case/"
+    },
+    {
+      "clip_id": "rooms/modern-church-fpv",
+      "category": "room",
+      "status": "ok",
+      "verdict": "usable-partial",
+      "note": "25% registered (fast FPV); the registered part renders well. 4 fps retry did not help (PSNR 20.4).",
+      "frames": {
+        "used": 227,
+        "candidates": 684,
+        "target_fps": 2.0,
+        "usable_s": 114.0,
+        "resolution": [
+          1600,
+          900
+        ]
+      },
+      "sfm": {
+        "mapper": "global",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "registered_images": 56,
+        "points": 15136,
+        "mean_track_length": 6.22496,
+        "mean_reprojection_error_px": 0.473457,
+        "sfm_s": 66.38
+      },
+      "registration_pct": 24.7,
+      "quality": {
+        "psnr": 24.3205,
+        "ssim": 0.8748,
+        "lpips": 0.1809,
+        "eval_views": 7
+      },
+      "splat_count": 186435,
+      "package_bytes": 7446301,
+      "mesh_triangles": 99999,
+      "stage_seconds": {
+        "sfm": 66.69,
+        "train": 359.03,
+        "compress": 1.19,
+        "mesh": 10.32
+      },
+      "function_wall_s": 503.7,
+      "gpu": "A10G",
+      "cost_usd": {
+        "gpu": 0.1539,
+        "cpu": 0.0529,
+        "memory": 0.0179,
+        "frames_cpu": 0.0019,
+        "total": 0.2267
+      },
+      "config": {
+        "sfm": "glomap",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "profile": "default (scaled-10k-dense)",
+        "splat_budget": 2000000
+      },
+      "outputs": "gj-corpus:/open-video-recon/modern-church-fpv/"
+    },
+    {
+      "clip_id": "rooms/mosque-prayer-hall-umayyad",
+      "category": "room",
+      "status": "ok",
+      "verdict": "good",
+      "note": "100% registered; large hall reconstructs well.",
+      "frames": {
+        "used": 206,
+        "candidates": 618,
+        "target_fps": 2.0,
+        "usable_s": 103.0,
+        "resolution": [
+          1600,
+          900
+        ]
+      },
+      "sfm": {
+        "mapper": "global",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "registered_images": 206,
+        "points": 8782,
+        "mean_track_length": 21.903667,
+        "mean_reprojection_error_px": 0.533922,
+        "sfm_s": 419.33
+      },
+      "registration_pct": 100.0,
+      "quality": {
+        "psnr": 24.6745,
+        "ssim": 0.8442,
+        "lpips": 0.1441,
+        "eval_views": 26
+      },
+      "splat_count": 589628,
+      "package_bytes": 15249444,
+      "mesh_triangles": 100000,
+      "stage_seconds": {
+        "sfm": 419.74,
+        "train": 489.76,
+        "compress": 2.9,
+        "mesh": 11.19
+      },
+      "function_wall_s": 997.8,
+      "gpu": "A10G",
+      "cost_usd": {
+        "gpu": 0.3049,
+        "cpu": 0.1049,
+        "memory": 0.0355,
+        "frames_cpu": 0.0067,
+        "total": 0.452
+      },
+      "config": {
+        "sfm": "glomap",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "profile": "default (scaled-10k-dense)",
+        "splat_budget": 2000000
+      },
+      "outputs": "gj-corpus:/open-video-recon/mosque-prayer-hall-umayyad/"
+    },
+    {
+      "clip_id": "rooms/office-warehouse-fpv",
+      "category": "room",
+      "status": "ok",
+      "verdict": "weak",
+      "note": "Fast FPV, 21% registered, streaky. Kept the 4 fps retry (PSNR 19.5 vs 17.8).",
+      "frames": {
+        "used": 222,
+        "candidates": 708,
+        "target_fps": 4.0,
+        "usable_s": 59.0,
+        "resolution": [
+          1600,
+          900
+        ]
+      },
+      "sfm": {
+        "mapper": "global",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "registered_images": 47,
+        "points": 7872,
+        "mean_track_length": 4.797129,
+        "mean_reprojection_error_px": 0.394341,
+        "sfm_s": 44.7
+      },
+      "registration_pct": 21.2,
+      "quality": {
+        "psnr": 19.4746,
+        "ssim": 0.8088,
+        "lpips": 0.2581,
+        "eval_views": 6
+      },
+      "splat_count": 388340,
+      "package_bytes": 11326936,
+      "mesh_triangles": 100000,
+      "stage_seconds": {
+        "sfm": 44.98,
+        "train": 387.85,
+        "compress": 2.14,
+        "mesh": 17.32
+      },
+      "function_wall_s": 523.1,
+      "gpu": "A10G",
+      "cost_usd": {
+        "gpu": 0.1598,
+        "cpu": 0.055,
+        "memory": 0.0186,
+        "frames_cpu": 0.0059,
+        "total": 0.2393
+      },
+      "config": {
+        "sfm": "glomap",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "profile": "default (scaled-10k-dense)",
+        "splat_budget": 2000000
+      },
+      "outputs": "gj-corpus:/open-video-recon/office-warehouse-fpv/"
+    },
+    {
+      "clip_id": "rooms/penthouse-apartment-fpv",
+      "category": "room",
+      "status": "ok",
+      "verdict": "fail",
+      "note": "Poses wrong (render is mush, PSNR 14.4) with both GLOMAP and incremental COLMAP: fast FPV through white, glassy, low-texture rooms.",
+      "frames": {
+        "used": 212,
+        "candidates": 700,
+        "target_fps": 2.0,
+        "usable_s": 116.63,
+        "resolution": [
+          1600,
+          900
+        ]
+      },
+      "sfm": {
+        "mapper": "global",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "registered_images": 188,
+        "points": 21928,
+        "mean_track_length": 5.200246,
+        "mean_reprojection_error_px": 0.834133,
+        "sfm_s": 102.57
+      },
+      "registration_pct": 88.7,
+      "quality": {
+        "psnr": 14.4102,
+        "ssim": 0.7334,
+        "lpips": 0.6456,
+        "eval_views": 24
+      },
+      "splat_count": 170256,
+      "package_bytes": 6814848,
+      "mesh_triangles": 99999,
+      "stage_seconds": {
+        "sfm": 102.89,
+        "train": 349.55,
+        "compress": 1.03,
+        "mesh": 9.7
+      },
+      "function_wall_s": 526.0,
+      "gpu": "A10G",
+      "cost_usd": {
+        "gpu": 0.1607,
+        "cpu": 0.0553,
+        "memory": 0.0187,
+        "frames_cpu": 0.0054,
+        "total": 0.2401
+      },
+      "config": {
+        "sfm": "glomap",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "profile": "default (scaled-10k-dense)",
+        "splat_budget": 2000000
+      },
+      "outputs": "gj-corpus:/open-video-recon/penthouse-apartment-fpv/"
+    },
+    {
+      "clip_id": "rooms/public-library-reading-room",
+      "category": "room",
+      "status": "ok",
+      "verdict": "good",
+      "note": "Short 21 s pan; small but clean reconstruction.",
+      "frames": {
+        "used": 43,
+        "candidates": 129,
+        "target_fps": 2.0,
+        "usable_s": 21.42,
+        "resolution": [
+          1600,
+          900
+        ]
+      },
+      "sfm": {
+        "mapper": "global",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "registered_images": 43,
+        "points": 8865,
+        "mean_track_length": 15.258094,
+        "mean_reprojection_error_px": 0.483772,
+        "sfm_s": 181.81
+      },
+      "registration_pct": 100.0,
+      "quality": {
+        "psnr": 34.1118,
+        "ssim": 0.9701,
+        "lpips": 0.0307,
+        "eval_views": 6
+      },
+      "splat_count": 275881,
+      "package_bytes": 9177331,
+      "mesh_triangles": 99999,
+      "stage_seconds": {
+        "sfm": 182.26,
+        "train": 371.93,
+        "compress": 2.32,
+        "mesh": 11.63
+      },
+      "function_wall_s": 600.9,
+      "gpu": "A10G",
+      "cost_usd": {
+        "gpu": 0.1836,
+        "cpu": 0.0632,
+        "memory": 0.0214,
+        "frames_cpu": 0.0009,
+        "total": 0.2691
+      },
+      "config": {
+        "sfm": "glomap",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "profile": "default (scaled-10k-dense)",
+        "splat_budget": 2000000
+      },
+      "outputs": "gj-corpus:/open-video-recon/public-library-reading-room/"
+    },
+    {
+      "clip_id": "tabletop/tudor-dollhouse",
+      "category": "tabletop",
+      "status": "ok",
+      "verdict": "usable-partial",
+      "note": "Only 26% registered: 659 s tour of many rooms at 0.54 fps; one room set reconstructed.",
+      "frames": {
+        "used": 357,
+        "candidates": 1200,
+        "target_fps": 0.6069,
+        "usable_s": 659.08,
+        "resolution": [
+          1600,
+          900
+        ]
+      },
+      "sfm": {
+        "mapper": "global",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "registered_images": 91,
+        "points": 13491,
+        "mean_track_length": 9.400786,
+        "mean_reprojection_error_px": 0.565383,
+        "sfm_s": 149.95
+      },
+      "registration_pct": 25.5,
+      "quality": {
+        "psnr": 26.2235,
+        "ssim": 0.8874,
+        "lpips": 0.1831,
+        "eval_views": 12
+      },
+      "splat_count": 598926,
+      "package_bytes": 14771056,
+      "mesh_triangles": 99999,
+      "stage_seconds": {
+        "sfm": 150.26,
+        "train": 445.8,
+        "compress": 2.85,
+        "mesh": 9.78
+      },
+      "function_wall_s": 721.0,
+      "gpu": "A10G",
+      "cost_usd": {
+        "gpu": 0.2203,
+        "cpu": 0.0758,
+        "memory": 0.0256,
+        "frames_cpu": 0.0077,
+        "total": 0.3294
+      },
+      "config": {
+        "sfm": "glomap",
+        "matcher": "sequential",
+        "max_features": 4096,
+        "profile": "default (scaled-10k-dense)",
+        "splat_budget": 2000000
+      },
+      "outputs": "gj-corpus:/open-video-recon/tudor-dollhouse/"
+    }
+  ]
+}
