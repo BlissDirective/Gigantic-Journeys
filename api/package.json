@@ -10,7 +10,7 @@
   "scripts": {
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "node --import tsx --test src/pipeline.test.ts",
+    "test": "node --import tsx --test \"src/**/*.test.ts\"",
     "dev": "tsx src/server.ts"
   },
   "dependencies": {

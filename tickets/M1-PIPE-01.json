@@ -5,7 +5,7 @@
   "area": "PIPE",
   "owner": "gj-platform",
   "qa": "gj-qa-release",
-  "status": "open",
+  "status": "in-progress",
   "priority": "P0",
   "size": "L",
   "summary": "Replace the M0 stub steps with the real durable workflow: reconstruct (Luma), scene graph, journey generation, and package assembly, each idempotent and retry-safe with timeouts and classified errors.",
@@ -45,17 +45,27 @@
   ],
   "references": [
     "SPEC §3.10",
-    "kit §4"
+    "kit §4",
+    "ADR-0005",
+    "AUTH #034",
+    "supabase/migrations/20260926120000_m1_environments_staging.sql",
+    "supabase/functions/environment-urls/",
+    "M1-CAPT-02"
   ],
-  "branch": null,
+  "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-09-16",
-  "updated": "2026-09-16",
+  "updated": "2026-09-28",
   "history": [
     {
       "date": "2026-09-16",
       "event": "created by the Coordinator (M1 decomposition)",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-28",
+      "event": "Builder (AUTH #027): reconstruct step made real. Added the ports (ReconstructionService / ObjectStorage / EnvironmentStore in src/services.ts) + in-memory fakes (src/fakes.ts); fetch-based Supabase adapters (service-role Storage upload + environments PATCH, src/adapters.supabase.ts) and a Modal web-endpoint reconstruction client (src/adapters.modal.ts) — NO new npm dependency, so the audit surface is unchanged; src/deps.ts selects real adapters vs fakes from the environment. reconstruct now runs the self-host backend, stores splat + collision mesh (+ thumbnail) in the private 'environments' bucket under the owner-prefixed path {user_id}/{environment_id}/..., and writes splat_object/mesh_object/thumbnail_object/splat_count/package_bytes + status on the environments row (AUTH #034 schema); delivery stays signed-URL-only via the environment-urls edge function. Error classification (src/errors.ts): retryable vs terminal; the Inngest wrapper maps a terminal error to NonRetriableError and drives the row to 'failed'; the off-site guard (a real user scan is never sent off-site, ADR-0005 / AUTH #030) is terminal, mirroring reconstruction/models.py. Every external call site is timeout-bounded (TIMEOUTS_MS + withTimeout/AbortSignal). Tests: 17 pass (src/pipeline.test.ts ordering/idempotency/retry-propagation/timeouts + src/services.test.ts persistence-order/classification/off-site-guard/withTimeout/Modal+Supabase adapters via a stubbed fetch); npm run lint + typecheck + test green; no secrets. AT-2 met (tests + lint/typecheck/test green, package-lock unchanged). AT-3 met (no secret in repo; every vendor call site has a timeout). AT-1 PARTLY: the durable workflow + persistence are real and unit-proven, but a live scan.submitted -> stored-environment run needs the Modal web endpoint exposed and environment-urls deployed to staging (Operator, M1-CAPT-02). scenegraph + journey stay honest stubs (blocked by M1-DATA-01 schema freeze + the M1-SCEN tickets). Status open -> in-progress.",
+      "by": "claude-builder"
     }
   ]
 }
