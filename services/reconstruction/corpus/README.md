@@ -2,7 +2,7 @@
 
 `services/reconstruction/corpus/` · M0-CAPT-01 · Owner: gj-capture · Operator: gj-operator · Used by M0-OWNER-01 (10 rooms + 5 tabletops) and the M1 reconstruction work (M1-CAPT-03).
 
-**Rule zero: raw media never enters git.** This folder holds only this README, `manifest.json` and `manifest.schema.json`. `.gitignore` ignores everything else here. CI `secret-scan / repo hygiene` fails any commit that tracks `.mov/.mp4/.m4v/.heic/.ply/.splat/.spz`. The videos live in the project's private Modal volume `gj-corpus` (on the same Modal account as the reconstruction pipeline, AUTH #033). They never go to a third-party share, the Operator VM's repo checkout, or Supabase (see "Why not the Supabase staging bucket" below).
+**Rule zero: raw media never enters git.** This folder holds only this README, `manifest.json`, `manifest.schema.json`, and the open-license stand-in record `open_video_corpus.json` + `OPEN_VIDEO_ATTRIBUTION.md` (§7). `.gitignore` ignores everything else here. CI `secret-scan / repo hygiene` fails any commit that tracks `.mov/.mp4/.m4v/.heic/.ply/.splat/.spz`. The videos live in the project's private Modal volume `gj-corpus` (on the same Modal account as the reconstruction pipeline, AUTH #033). They never go to a third-party share, the Operator VM's repo checkout, or Supabase (see "Why not the Supabase staging bucket" below).
 
 ---
 
@@ -110,3 +110,18 @@ AT-1 anticipated a "staging bucket once Supabase exists". Staging now exists, bu
 - §6.5: the corpus is Owner-supplied and consented. Bots handle only stripped corpus files, never user media. Real user scans never use this path.
 - §6.3 / ADR-0005: reconstruction is corpus-only on our own infrastructure. No managed bridge is used.
 - §1: the only secret (the link-signing key) lives in a Modal secret; nothing is committed. §7: the tools are standard library only (no new pip dependency); ffmpeg/ExifTool come from the Debian/Ubuntu archives in the Modal image and CI.
+
+## 7. Open-license stand-in corpus (`/open-video`, Owner decision 2026-09-28)
+
+For M0-OWNER-01 the Owner chose to source the day-one corpus from free, open-license online videos instead of filming it, and to keep it in this same private Modal volume (not Supabase). These clips are **not** Owner captures, so they do not go through the intake, do not get `manifest.json` rows (that schema describes Owner/app captures only) and live in their own namespace:
+
+| What | Where |
+|---|---|
+| Video (as downloaded; the ESO clip is trimmed with a stream copy) | `gj-corpus:/open-video/rooms/<slug>/source.mp4`, `gj-corpus:/open-video/tabletop/<slug>/source.mp4` |
+| Per-clip record (source page, direct file URL, creator, license + URL, attribution, resolution/duration/fps, sha256, why it suits reconstruction, caveats) | `.../<slug>/meta.json` |
+| Whole-set manifest and credits | `gj-corpus:/open-video/MANIFEST.json`, `gj-corpus:/open-video/ATTRIBUTION.md` |
+| Git record (text only, same content) | `open_video_corpus.json`, `OPEN_VIDEO_ATTRIBUTION.md` (this folder) |
+
+Licenses accepted: CC0, CC BY, CC BY-SA (flagged), Pexels License, Pixabay Content License, Mixkit Stock Video **Free** License (Mixkit "Restricted" items are non-commercial and were rejected). No NC, ND or editorial-only material. The current set uses Pexels (10), Pixabay (3), Mixkit Free (1) and CC BY 4.0 ESO (1); only the ESO clip legally requires attribution ("F. Snik/Leiden University/ESO"), which must be shown wherever that clip or a render derived from it is shown publicly.
+
+Use them like any corpus video: `modal volume get gj-corpus /open-video/rooms/<slug>/source.mp4 ~/gj-corpus-work/<slug>/` (outside the repo), extract frames, run the M1-CAPT-03 pipeline, delete the scratch copy. Check the `sha256` in `meta.json`, and read `caveats` first: several clips are portrait, short (8–15 s) or single-pass, and the glassware clip is a deliberate transparent-object stress case.

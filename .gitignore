@@ -99,6 +99,8 @@ services/reconstruction/corpus/*
 !services/reconstruction/corpus/README.md
 !services/reconstruction/corpus/manifest.json
 !services/reconstruction/corpus/manifest.schema.json
+!services/reconstruction/corpus/open_video_corpus.json
+!services/reconstruction/corpus/OPEN_VIDEO_ATTRIBUTION.md
 *.mp4
 *.mov
 *.MOV

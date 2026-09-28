@@ -185,8 +185,17 @@ def test_cli_validates(capsys):
 
 def test_schema_and_manifest_are_the_only_committed_corpus_files():
     # README + manifest + schema are text; the media never lives in the repo.
+    # The open-license video stand-in corpus (M0-OWNER-01) adds a text manifest and
+    # an attribution note; its clips live only in the gj-corpus Modal Volume.
     names = {p.name for p in cm.CORPUS_DIR.iterdir() if not p.name.startswith(".")}
-    assert names <= {"README.md", "manifest.json", "manifest.schema.json"}, names
+    allowed = {
+        "README.md",
+        "manifest.json",
+        "manifest.schema.json",
+        "open_video_corpus.json",
+        "OPEN_VIDEO_ATTRIBUTION.md",
+    }
+    assert names <= allowed, names
 
 
 def test_example_rows_do_not_mutate_shared_fixture():
