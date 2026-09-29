@@ -2,7 +2,7 @@
 
 `governance/AUTHORIZATION_LOG.md` · Maintained by the Coordinator. The only record of what the Owner has authorized. A PR that touches a protected path cites `APPROVED #n` from this log; CI (`auth-gate`) checks the reference and the Coordinator checks the substance.
 
-Numbering is sequential across all types. **Next free number: #036**. The Coordinator assigns numbers when logging; the Owner may reply `APPROVED: <what>` without a number. The **M0 AUTH batch (#008–#017) is APPROVED** (Owner, 2026-09-17); #016 is amended to $0 (in-house legal review, no external spend). Request blocks: `governance/auth-requests/M0-batch.md`.
+Numbering is sequential across all types. **Next free number: #043**. #036–#042 are reserved in the Pending table (awaiting the Owner); on approval each moves to Decisions with its reserved number. The Coordinator assigns numbers when logging; the Owner may reply `APPROVED: <what>` without a number. The **M0 AUTH batch (#008–#017) is APPROVED** (Owner, 2026-09-17); #016 is amended to $0 (in-house legal review, no external spend). Request blocks: `governance/auth-requests/M0-batch.md`.
 
 ## Decisions
 
@@ -49,7 +49,13 @@ Numbering is sequential across all types. **Next free number: #036**. The Coordi
 
 | # | Filed | Type | What | Cost | Requested by | Blocks | Status |
 |---|---|---|---|---|---|---|---|
-| — | | | (none — #035 approved and logged 2026-09-27; see Decisions) | | | | |
+| #036 | 2026-09-28 | design-change (`config/movement.json` + `movement.schema.json` + Bible §10) | `movement.json` **`intent` + `camera`** sections — the stick/intent + follow-camera numbers the Bible already specifies in prose; two values are new and need the Owner's eye: `stickDeadzone` 0.1 and camera `blendSec` 0.25 | $0 | gj-operator (M0-UNITY-03 AT-7) | closes M0-UNITY-03 / M0-MOVE-01 | **PROPOSED — awaiting Owner** (`auth-requests/M0-UNITY-03-movement-json-intent-camera.md`) |
+| #037 | 2026-09-29 | design-change (`data/schemas/`) | Freeze **scene_graph / traversal_graph / environment_spec v1.0.0** (JSON Schema 2020-12, fixtures + cross-doc checker + 51 tests) | $0 | gj-operator (M1-DATA-01) | M1-GAME-01, M1-SCEN-02, M4-PLAT-01, M4-DATA-02 | **PROPOSED — awaiting Owner** (`auth-requests/M1-DATA-01-schema-freeze.md`) |
+| #038 | 2026-09-29 | schema / table creation (SECURITY_CHECKLIST §2.5; security-sensitive → 2nd review, #007) | **7 M4 social tables** (publishes, ratings, reports, leaderboard_times, moderation_actions, user_blocks, rate_limit_rules) + RLS + per-account/device rate limits; staging first | $0 (free tier) | gj-operator (M4-DATA-01) | M4-DATA-02/03, M4-GAME-01/02, M4-PLAT-01 | **PROPOSED — awaiting Owner** (`auth-requests/M4-DATA-01-social-migration.md`) |
+| #039 | 2026-09-29 | account + spend + architecture (ADR-0005 compute host) | Adopt **RunPod** as the reconstruction GPU host (Operator benchmark: 3–4.5× cheaper than Modal at equal quality); keep the `ReconstructionService` port so Modal stays a fallback (no lock-in) | usage-based (~¼ of Modal); under the $50/day cap | Coordinator (from Operator benchmark) | cheaper reconstruction at scale | **PROPOSED — awaiting Owner** |
+| #040 | 2026-09-29 | spend | **Tier-2 research compute — $500/month** (pausable when the core build needs the budget; standing-limit line) | $500/mo | gj-operator (M0-SCEN-01 / M1-RES-01) | unblocks M1-RES-01 | **PROPOSED — awaiting Owner** |
+| #041 | 2026-09-29 | account (token) | **GitHub classic PAT** scoped to `read:packages` + `write:packages` only, ≤90-day expiry, CI/VM secrets only — to host the private reconstruction image in GHCR | $0 | gj-operator | private recon image hosting (feeds #039) | **PROPOSED — awaiting Owner** |
+| #042 | 2026-09-29 | design-change (`design/DESIGN_SYSTEM.md`) | **Decision-6 refinements:** "your character" copy (align AUTH #020), per-screen orientation policy, HUD tap-target rule (passive readout ≤8% band; interactive controls ≥44 pt), lighter image-forward browse cards | $0 | gj-operator (M0-DSGN-01) | M0-DSGN-01 / M0-DSGN-02 | **PROPOSED — awaiting Owner** |
 
 Deferred (file when needed): trademark filing in classes 9 and 41 (~$250–350/class, after traction); an iPhone Duo development device ($1,999–3,199, only if on-device Duo verification is wanted); Tier 2 GPU compute ($400–1,000/mo, monthly line from M1). The App Store Connect app record that reserves the name needs no AUTH — it runs on the already-held Apple Developer account (checklist §0).
 
