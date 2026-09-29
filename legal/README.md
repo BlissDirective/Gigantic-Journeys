@@ -7,7 +7,7 @@ Privacy policy, BIPA consent copy, retention schedule, vendor data-retention ter
 ## Files
 | File | What | Ticket |
 |---|---|---|
-| `PRIVACY_POLICY.md` | Public privacy policy (data classes, biometric handling, rights) | — |
+| `PRIVACY_POLICY.md` | Public privacy policy, DRAFT v0.2 for the v1 scope (no biometric; data table from the retention schedule; processors; publishing + moderation; rights; V2 appendix) | — (BACKLOG) |
 | `BIPA_CONSENT.md` | Biometric consent screen, learn-more sheet, consent record, statute mapping | M0-LEGAL-01 |
 | `RETENTION_SCHEDULE.md` | Publishable retention & destruction schedule (DRAFT v0.2, one row per SPEC §7 class) | M0-LEGAL-02 |
 | `DELETION_FLOW.md` | Per-user delete-all specification: entry point, steps per class, processor deletion + receipts, 30 days, staging test (DRAFT v0.1) | M0-LEGAL-02 |

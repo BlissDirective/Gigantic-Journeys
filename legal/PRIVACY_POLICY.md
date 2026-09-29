@@ -1,86 +1,152 @@
-# Gigantic Journeys — Privacy Policy (DRAFT)
+# Gigantic Journeys: Privacy Policy (DRAFT)
 
-> **v1 scope note (AUTH #020, 2026-09-18):** v1 collects **no biometric data** — the avatar is a pre-made character, there is no face or body capture. **§3 (biometric handling) applies to the V2 custom-avatar feature only.** In v1 the sensitive user media is room/tabletop **scans** (processed on our own infrastructure); the rest of this policy applies as written.
+**Status: DRAFT v0.2 · 2026-09-29 · NOT YET IN FORCE.** This is an engineering draft, not legal advice. The Owner's in-house
+legal team reviews it before M5 (AUTH #016; SPEC §9.6). Bracketed `[…]` fields are placeholders for the Owner or counsel.
 
-**Status: DRAFT v0.1 · 2026-09-17 · NOT YET IN FORCE.** This is an engineering draft prepared by the Coordinator to operationalize `SPEC.md` §7 and `governance/SECURITY_CHECKLIST.md` §4–§6. **It is not legal advice.** Counsel must review and approve it before any real user data is processed (biometric consent goes live at M2; full sign-off is an M5 gate — `SECURITY_CHECKLIST §5.5`, SPEC §9.6). Bracketed `[…]` fields are placeholders the Owner fills.
+**v0.2 changes (from v0.1, 2026-09-17):** rewritten for the v1 scope under AUTH #020 / ADR-0006.
+- v1 has **no face or body capture and no biometric processing**; characters are pre-made.
+- The data table now follows [`RETENTION_SCHEDULE.md`](RETENTION_SCHEDULE.md) v0.2, and deletion links [`DELETION_FLOW.md`](DELETION_FLOW.md).
+- Telemetry is described from the frozen schema v1.0.0 and the proposed App Store privacy label (`data/schemas/README.md`).
+- Processors are updated: reconstruction runs on our own infrastructure (ADR-0005). Luma was dropped, and the avatar vendor is V2 only.
+- Publishing and moderation (SPEC §3.7, AUTH #026) and people in frame (AUTH #025) are added.
 
-Publisher: **SparkForge Labs** ([entity form + state to confirm — AUTH account track]). App: **Gigantic Journeys** (`com.sparkforgelabs.giganticjourneys`). Contact: **[privacy@giganticjourneys.com — mailbox to create]**. Effective date: **[on publish]**.
+The v0.1 biometric text moves to the V2 appendix and to [`BIPA_CONSENT.md`](BIPA_CONSENT.md).
+
+Publisher: **SparkForge Labs** ([entity form and state to confirm]). App: **Gigantic Journeys** (`com.sparkforgelabs.giganticjourneys`).
+Contact: **[privacy@giganticjourneys.com, mailbox to create]**. Effective date: **[on publish]**.
 
 ---
 
-## 1. What this app does, in one paragraph
+## 1. What this app does
 
-Gigantic Journeys turns a place you scan — a room or a tabletop build — into a tiny playable world, and turns a photo of you into a small 1:12 avatar that journeys through it. To do that, the app processes **photographs and video of your physical space** and, only after your explicit consent, **photographs of your face and body** to generate an avatar. This policy explains exactly what is collected, how long it is kept, who processes it, and how you delete it.
+Gigantic Journeys turns a place you capture (a room or a tabletop build) into a small playable world that a pre-made
+character climbs through. To do that, we process **video of your physical space**. We **don't** collect photos of your face or
+body, and we don't process biometric data. This policy explains what we collect, why, how long we keep it, who processes
+it, and how you delete it.
 
 ## 2. The data we process
 
-This mirrors the authoritative table in `SPEC.md §7`. "Derived assets" means the reconstructed world/avatar the app builds from your capture; "source media" means the raw photos/video you captured.
+This table follows our published [retention schedule](RETENTION_SCHEDULE.md).
+- **Source media** means the video and motion data you capture.
+- **Derived assets** means the 3D environment we build from it.
 
-| Data class | Collected when | Why | Retained until | How it is deleted |
+| Data | When | Why | How long | How it is deleted |
 |---|---|---|---|---|
-| Raw scan video, poses, depth | you scan a space | to reconstruct the environment | derived assets exist; failed jobs ≤ 7 days | automatically; and by per-user delete-all |
-| **Face and body photos (biometric)** | avatar creation, **after consent only** | to generate your avatar (a vendor job) | until the avatar is generated | **immediately after generation** — on device, in storage, and at the vendor; a deletion receipt (no media) is logged |
-| Derived environment assets (splat, mesh, graph, spec, thumbnail) | reconstruction | so you can play and publish | while you keep it; published copies while published | per-user delete-all; unpublish removes from feeds immediately |
-| Avatar assets (head mesh, textures, body parameters) | avatar creation | so your avatar persists | while your account exists | per-user delete-all |
-| Consent records (policy version, timestamp, locale, text hash, stated retention) | at consent | legal proof of consent | as long as legally required, then destroyed | per the retention schedule |
-| Telemetry events (frozen schema, pseudonymous id; **no GPS, no email, no media, no free text**) | during play | crash/quality/usage improvement | raw events per the retention schedule; aggregates kept | per-user delete-all |
-| Correction events ("fix this label") | when you tap to correct | to improve the app, **training opt-in only** | derived data only | opt-out stops future use; delete-all removes |
-| Ratings, reports, leaderboard times | community actions | the public leaderboard and moderation | while the environment/account exists | with the environment or the account |
+| **Capture video and motion data** (camera poses, depth, gravity; no location) | You capture a place | To rebuild it in 3D | Until your environment is built, **at most 24 hours** after upload; failed builds **at most 7 days** | Automatically, and by Delete my data |
+| **Your environments** (3D model, collision shape, route data, thumbnail) | After a capture is rebuilt | So you can play and, if you choose, publish | While you keep them. Published copies stay while published. | Delete an environment (immediate) or Delete my data. Unpublishing removes it from browse immediately. |
+| **Character choice and purchases** | You pick a character or buy a cosmetic | So your choices persist and purchases can be restored | While your account exists | Delete my data. Apple keeps its own purchase records. |
+| **Account** (a sign-in identifier from Sign in with Apple or Google; a relay email only if you share one) | You create an account | To keep your environments and purchases yours | While your account exists | Delete my data (we also revoke the Apple sign-in token) |
+| **Gameplay and quality events** (a pseudonymous id; play, capture, route, rating and correction events; performance numbers. **No location, no email, no photos or video, no free text.**) | While you use the app | To fix crashes, improve capture quality and tune journeys | Raw events **[N days; proposal 90]**; totals without your id are kept | Delete my data removes your raw events and rotates your id |
+| **Corrections** ("fix this label") | You correct a label | To improve the app. Used for training **only if you opt in** (§5). | Derived data only | Opt out stops future use; Delete my data removes them |
+| **Ratings, reports and leaderboard times** | You rate, report or finish a timed route | Rankings, leaderboards and moderation | While the environment exists | With the environment, or your own rows with Delete my data |
+| **Consent and terms records** (policy version, time, locale, a hash of the text you accepted) | You accept the terms or this policy | Proof of what you agreed to | **[period set by counsel]** | Destroyed when that period ends. Kept after Delete my data, without any content, as legal proof. |
 
-We do **not** collect precise location. **GPS and EXIF/location metadata are stripped from every image and video on your device before upload, and stripped again on the server** (`SECURITY_CHECKLIST §4`).
+**Location:** we don't collect precise location. GPS and other location metadata are **removed on your phone before
+upload and checked again on our servers**; an upload that still carries location is rejected.
 
-## 3. Biometric data — special handling (Illinois BIPA, Texas CUBI, Washington MHMDA)
+**People in your capture:** the app coaches you to capture spaces, not people. It doesn't detect or recognise faces. Your
+captures are processed only on our own infrastructure. Anything you choose to **publish** also passes our moderation check
+(§4) before anyone else can see it.
 
-Your face and body photos are **biometric information**. Because of that:
+## 3. How we build your environment
 
-- **Consent first.** No face or body photo leaves your device, and no avatar-generation job is created, until you have given **written, informed consent** in a separate, explicit step (not bundled into onboarding, terms, or the camera permission). See `legal/BIPA_CONSENT.md`.
-- **A published retention & destruction schedule.** We keep a public schedule (`legal/RETENTION_SCHEDULE.md`) and destroy biometric source media on the timeline it states — here, **immediately after your avatar is generated**.
-- **No sale, no profit, no disclosure.** We do not sell, lease, trade, or otherwise profit from your biometric data, and we do not disclose it except to the avatar-generation processor that creates your avatar, under contract, or as required by law.
-- **Training is separate and off by default.** We never use your biometric data or derived avatar data to train models unless you turn on a **separate** training opt-in (§4), which concerns derived data only.
-- **Withdrawal and deletion.** You can withdraw consent and delete everything from Settings at any time (§6).
+Your capture is uploaded over an encrypted connection to private storage. It is rebuilt on **computers we control**
+(rented cloud computers that keep nothing after the job; see §6), and the source video is deleted as soon as the build
+succeeds. No third-party reconstruction service processes your captures. A separate test corpus, made of open-licence
+and consented videos, is used to develop the app and is never mixed with your data.
 
-The exact statutory requirements are mapped to app behavior in `legal/BIPA_CONSENT.md §5`. Counsel confirms scope and wording before M2.
+## 4. Publishing, browsing and moderation
 
-## 4. Training opt-in (separate, default off)
+Environments are **private unless you publish them**. When you publish one:
+- **Location data is stripped again.**
+- **An automated check** looks at the published environment and its thumbnail. Environments waiting for it show "Under
+  review" and only you can play them.
+- **Anyone can report** an environment. A person reviews reports and appeals, seeing only the published thumbnail and
+  environment, never your source video.
+- **Other players see** your environment, a display name or id **[until profiles exist, an id]**, play counts, ratings and
+  route times. You can unpublish at any time.
+- **You can block players**, and we act on abusive content (see the [Terms of Service](TERMS_OF_SERVICE.md)).
 
-Improving the app (for example, the surface classifier retrained post-launch, SPEC §M6) uses **only derived, de-identified data from users who explicitly opt in**, and **never** raw photos or video. The toggle is separate from consent and is **off by default**. Opting out stops future use; delete-all removes your prior contributions.
+## 5. Training opt-in (separate, off by default)
 
-## 5. Who else processes your data (sub-processors)
+With your permission, we may use **derived, de-identified data** (such as your label corrections) to improve the app's
+understanding of surfaces. We **never** train on your raw video. The switch is separate from everything else and **off by
+default**. Turning it off stops future use; Delete my data removes past contributions.
 
-We use a small set of vendors strictly to run the service. Each has a data-processing agreement and retention/deletion terms on file **before it touches user data** (`SECURITY_CHECKLIST §6.3`). A vendor that trains on customer data by default is not used without an opt-out in place.
+## 6. Who processes your data for us
 
-| Processor | Purpose | Data it sees |
+Each processor works under a data-processing agreement with retention and deletion terms on file **before it touches your
+data**. We don't use vendors that train on customer data by default.
+
+| Processor | Purpose | What it handles |
 |---|---|---|
-| **Luma** | scan → 3D reconstruction | raw scan video/poses/depth (not faces) |
-| **[Meshy or Tripo — one, confirmed at M2]** | avatar head generation | face/body photos, transiently, deleted immediately after the job |
-| **Supabase** | auth, database, storage | account, derived assets, consent records, telemetry |
-| **Apple** | app distribution, IAP, TestFlight | account/purchase data per Apple's policy |
+| **Supabase** | Accounts, database, private file storage | Account, environments, consent records, gameplay events, ratings, reports |
+| **Modal** (rented GPU compute) | Runs our reconstruction software | Your capture, **only for the duration of the job**; nothing is kept afterwards |
+| **Inngest** | Coordinates background jobs | Job ids and status; no media |
+| **Apple** | App distribution, in-app purchases, Sign in with Apple | Purchase and sign-in data under Apple's policy |
+| **Google** (if you use Google sign-in) | Sign-in | Sign-in data under Google's policy |
+| **[Moderation vision check provider, if external; confirm in M4]** | The automated check on published environments | The published thumbnail and environment only |
 
-The current sub-processor list is maintained in `legal/vendors/`. We update it here before adding a processor.
+We list any change in [`legal/vendors/`](vendors/) and update this table before adding a processor.
 
-## 6. Your rights and how to exercise them
+## 7. Your choices and rights
 
-- **Delete everything (one tap).** Settings → Delete my data removes every data class in this policy from your device, our storage, and our vendors, and completes within **30 days** (`SECURITY_CHECKLIST §5.4, §6`). Biometric source media is already deleted immediately after avatar generation.
-- **Withdraw consent (one tap).** Stops all future biometric processing and deletes derived avatar data on request.
-- **Access / correct / opt out of training** from Settings.
-- Depending on where you live (e.g., Illinois, Texas, Washington, California, EEA/UK), you may have additional rights; contact **[privacy@giganticjourneys.com]** and we will honor applicable law. We do not discriminate against you for exercising a right.
+- **Delete my data (one tap, in Settings).** This deletes your account, environments, captures, gameplay events,
+  corrections and your own ratings, reports and times, including copies at our processors. It finishes **within 30 days**,
+  and backups expire within **[the backup window]**. The steps are in [`DELETION_FLOW.md`](DELETION_FLOW.md).
+- **Delete one environment or unpublish it** at any time.
+- **Training opt-in:** on or off in Settings (§5).
+- Depending on where you live (for example California, the EEA or the UK) you may have more rights, such as access or
+  correction. Contact **[privacy@giganticjourneys.com]** and we will honour the law that applies. We won't treat you
+  differently for using a privacy right.
 
-## 7. Children
+**App Store privacy details (proposed; see `data/schemas/README.md`):**
+- **Identifiers:** User ID (pseudonymous).
+- **Usage Data:** Product Interaction.
+- **Diagnostics:** performance data.
 
-Gigantic Journeys is **13+**. We do not knowingly collect data from anyone under 13 and there is a **13+ age gate before consent** (`SECURITY_CHECKLIST §5.6`). No COPPA scope in v1 (SPEC §4).
+All are linked to your account and none are used for tracking. **Not collected:** location, contact info, contacts, photos or videos, device ID.
 
-## 8. Security
+## 8. Children
 
-TLS in transit; storage buckets private by default with signed, short-lived URLs; row-level security on every database table; production keys held only in our build system, never on any workstation or agent. Full controls: `governance/SECURITY_CHECKLIST.md`.
+Gigantic Journeys is for players **13 and older**. An age check runs before an account is created. We don't knowingly
+collect data from anyone under 13, and we delete it if we learn we have.
 
-## 9. Changes to this policy
+## 9. Security
 
-We version this policy. A material change (especially to biometric handling) **re-prompts you for consent** before it applies to your biometric data (`SECURITY_CHECKLIST §5.5`). The version and date are shown at the top.
+- Data is encrypted in transit.
+- Storage is private by default, and files are shared only through links that expire within 15 minutes.
+- Every database table is protected by row-level security.
+- Production keys live only in our build system.
 
-## 10. Contact
+The full list of controls is in `governance/SECURITY_CHECKLIST.md`.
 
-**[privacy@giganticjourneys.com]** — privacy requests and questions. **[Postal address — required by some app stores/laws; to add.]**
+## 10. Changes to this policy
+
+This policy is versioned. We tell you in the app before a material change applies, and the version and date appear at the top.
+
+## 11. Contact
+
+**[privacy@giganticjourneys.com]** for privacy requests and questions. **[Postal address, required by some app stores and laws; to add.]**
 
 ---
 
-*Drafting notes for counsel (delete before publishing): confirm entity + governing state; confirm MHMDA applicability to identity-biometrics; confirm the biometric destruction timeline satisfies BIPA "≤ 3 years since last interaction" and CUBI "≤ 1 year after purpose"; confirm sub-processor disclosures; confirm required California/EEA disclosures if those users are in scope; set the postal contact.*
+## Appendix: V2 custom avatars (not part of v1)
+
+A later version may offer a custom avatar made from photos of you. If it ships:
+- Face and body photos become **biometric data**, processed only after a separate, written consent (`BIPA_CONSENT.md`).
+- They are deleted immediately after the avatar is generated, on the device, in storage and at the vendor.
+- They are never sold and never used for training.
+
+This policy will be updated, and you will be asked for consent, before any such feature processes your data.
+
+---
+
+*Drafting notes for counsel (delete before publishing):*
+- *Confirm the entity and the governing state.*
+- *Set the raw-telemetry TTL, the consent-record period and the backup window (RETENTION_SCHEDULE §4).*
+- *Confirm that the 24 h / 7 d raw-media promise is publishable.*
+- *Confirm the California (CCPA/CPRA "sale/share": none) and EEA/UK disclosures, including the legal bases and international transfers (Modal and Supabase regions).*
+- *Confirm the moderation-provider disclosure once M4 picks one.*
+- *Confirm whether display names or ids are shown on leaderboards (M4-DATA-01).*
+- *Set the postal contact.*
