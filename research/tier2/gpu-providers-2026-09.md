@@ -4,6 +4,10 @@
 created and no money was spent. Adding a vendor or a spend line needs the Owner's AUTH (SPEC §5, M1-RES-01 AT-3).
 Companion to `research/tier2/compute-budget-2026-10.md`.
 
+**Update 2026-09-28 (evening):** the Owner then authorized a Runpod account funded with $50 prepaid (auto-pay off,
+Secure Cloud only, open-license corpus only until the real-scan policy is settled). The ~$2 validation benchmark from
+§5 step 6 has been run. See **§7 Measured on Runpod**.
+
 ## 0. Why this exists
 
 - The Modal **Starter** workspace has a **$20/month spend limit** plus the $30/month free credit. The dashboard shows
@@ -266,3 +270,135 @@ Not re-verified today, stated from general knowledge and marked as such in the t
 - Azure per-minute billing.
 - SageMaker premium.
 - GCP on-demand GPU VM prices (the page is JS-rendered and timed out).
+
+## 7. Measured on Runpod (2026-09-28, 8:30–10:00 PM CT, gj-operator)
+
+This is the §5 step 6 validation. Nothing else from the §5 migration was done: no backend switch, no serverless
+handler, no storage move.
+
+**Setup**
+- **Hosts.** Runpod **Secure Cloud** pods (`cloudType=SECURE`), US datacenters only, on-demand, no network volume.
+  - **RTX A6000 48 GB** at $0.53/h in `US-TX-1`.
+  - **RTX 4090 24 GB** at $0.74/h in `US-NC-1`.
+  - Both hosts had a ~13.6–17.9 vCPU cgroup quota (the API reported 16–18 vCPUs), 62–71 GB RAM, and NVIDIA driver
+    570/595.
+  - **A40 was not used.** At launch it had no Secure stock in any US datacenter; Runpod showed it only in `CA-MTL-1`
+    and `EU-SE-1`. The RTX A6000 is the same GA102 / sm_86 / 48 GB class, at +$0.04/h.
+- **Launcher.** `services/reconstruction/tools/runpod_bench.py`, run from the Operator VM over the REST/GraphQL API,
+  with one pod per GPU. It does the following:
+  - Pre-flight budget check: worst case = $/h × max runtime.
+  - Ephemeral SSH key, generated per run.
+  - Terminates each pod in a `finally` block, plus atexit / SIGINT / SIGTERM handlers.
+  - In-pod watchdog: the pod runs `runpodctl remove pod` itself at the 50-min max runtime, and again 5 min after its
+    job if the launcher has not removed it.
+  - Detached local watchdog as a further backstop.
+  - The in-pod job is `tools/runpod_job.py`.
+- **Image: fallback, not the private GHCR image.** Pushing to `ghcr.io/blissdirective/gj-recon` was **denied**: the
+  Operator PAT is fine-grained and has no `packages` scope, and GHCR accepts only classic PATs. Pulling a private GHCR
+  package from Runpod needs the same kind of token, so no registry credential was created. Each pod instead ran
+  `tools/runpod_setup.sh` on the public `nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04` image (the Dockerfile's base).
+  - Same pins as the Dockerfile: torch 2.4.1 cu124, gsplat 1.4.0, nerfstudio 1.1.5, open3d 0.18.0, COLMAP 4.1.1 CUDA
+    (conda-forge), splat-transform 3.6.4, pinned vocab tree.
+  - Differences: **Python 3.10** instead of 3.11, and gsplat from its **prebuilt cp310 wheel** instead of our sm_80/86/89
+    source compile.
+  - Install took **173–225 s per pod**, and boot-to-SSH took 22–33 s. Both are billed but **excluded** from the
+    per-scene numbers below. That is ≈ $0.03–0.05 per pod, paid once per batch.
+- **Data.**
+  - Mip-NeRF 360 `room` / `images_4` (311 images, `--source public`) was read inside the pod straight from the public
+    `360_v2.zip` using HTTP range requests: 80 MB and 24 requests, not the 12 GB archive.
+  - Two open-video corpus clips (`--source corpus`) used the **same frames** that the Modal `--corpus` mode extracted
+    (`extract_clip_frames`): `tabletop/lego-paranal-observatory` (132 frames) and `rooms/mosque-prayer-hall-umayyad`
+    (206 frames). They were copied from `gj-corpus:/open-video-recon/<slug>/frames` to the VM with
+    `modal volume get`, then over SSH to the pod. **No Modal token was put in any pod.**
+- **Pipeline.** Same code and defaults as Modal:
+  - Room: CUDA COLMAP, GPU SIFT, GPU exhaustive matching, incremental mapper.
+  - Clips: GLOMAP global mapper, sequential matching, 4096 features.
+  - Both: `scaled-10k-dense`, 2M cap, cleaned mesh.
+  - Quality is `ns-eval` on the held-out views: 39 for the room, 11 for lego, 26 for the mosque.
+- **Cost.** Pipeline wall time × the pod's $/h. Runpod's price already includes vCPU and RAM, so it compares with
+  Modal's full GPU + CPU + memory figure.
+
+**Results** (one run per GPU per scene; Modal A10G = spike-report averages for the room, and the 2026-09-28 corpus run
+for the clips)
+
+| Scene | Host | SfM min | Train min | Total min | $ / scene | PSNR / SSIM / LPIPS | Registered |
+|---|---|---|---|---|---|---|---|
+| room (311 img, incremental) | Modal A10G + 8 cores + 16 GiB ($1.73/h all-in) | 3.1 | 3.5 | 6.9 | **$0.185** | 31.30 / 0.930 / 0.095 | 311/311 |
+| room | Runpod **RTX A6000** ($0.53/h) | 2.61 | 2.81 | 5.73 | **$0.051** | 31.32 / 0.930 / 0.095 | 311/311 |
+| room | Runpod **RTX 4090** ($0.74/h) | 2.86 | 1.92 | 5.10 | **$0.063** | 31.20 / 0.932 / 0.095 | 311/311 |
+| lego-paranal-observatory (132 fr, GLOMAP) | Modal A10G | 2.38 | 6.34 | 8.92 | $0.250 | 35.58 / 0.973 / 0.034 | 85/132 (64.4 %) |
+| lego-paranal-observatory | Runpod RTX A6000 | 1.83 | 4.62 | 6.75 | $0.060 | 35.76 / 0.973 / 0.034 | 85/132 |
+| lego-paranal-observatory | Runpod RTX 4090 | 1.84 | 2.32 | 4.45 | $0.055 | 35.47 / 0.974 / 0.034 | 85/132 |
+| mosque-prayer-hall-umayyad (206 fr, GLOMAP) | Modal A10G | 7.00 | 8.16 | 15.39 | $0.452 | 24.67 / 0.844 / 0.144 | 206/206 |
+| mosque-prayer-hall-umayyad | Runpod RTX A6000 | 5.26 | 5.70 | 11.28 | $0.100 | 24.51 / 0.842 / 0.145 | 206/206 |
+| mosque-prayer-hall-umayyad | Runpod RTX 4090 | 5.67 | 3.05 | 9.02 | $0.111 | 24.49 / 0.844 / 0.145 | 206/206 |
+
+How to read the table:
+- **Total** = SfM + train + compress + mesh.
+- Modal clip totals are the sum of the stages. The Modal function wall time was 9.2 and 16.6 min, and its $ includes
+  the frames CPU job (under $0.01).
+- Runpod "Train" includes the cap, eval and export, as on Modal.
+- Raw JSON: launcher output under `/workspace/runpod-out*` on the Operator VM. It is not committed.
+
+**Findings**
+1. **Runpod Secure is 2.9–4.5× cheaper per scene than Modal A10G and takes 17–50 % less wall time, with the same quality.**
+   - Room: $0.051–0.063 vs $0.185.
+   - Clips: $0.055–0.111 vs $0.25–0.45.
+   - PSNR is within ±0.2 dB, which is the run-to-run noise seen on Modal. SSIM and LPIPS are unchanged, splat counts
+     are the same (404–596K), and the registration rate is identical.
+2. **The RTX 4090 trains fastest.** Training is 1.8–2.7× faster than the A10G and 1.5–2× faster than the A6000
+   (room 115 s, lego 139 s, mosque 183 s). That makes it the fastest per scene overall.
+   - The A6000 is slightly cheaper on the room ($0.051 vs $0.063), because SfM, which is CPU-bound, is a larger share
+     there. The two are cost-equal on the clips.
+3. **SfM is CPU-bound, so the GPU hardly matters for it.**
+   - The incremental / global mapper is 80–90 % of SfM time: 135–156 s on the room, 87 s on lego, 289–306 s on the
+     mosque.
+   - Runpod SfM was 8–25 % faster than Modal's 8 reserved cores, because the pods have a 13–17-core quota.
+4. **Pitfall (measured, fixed): thread oversubscription.** Runpod containers see all **128 host cores** but get a
+   ~14–18-core CFS quota. COLMAP, Open3D and torch size their thread pools from the host core count, so they thrash
+   the quota.
+   - First attempt: the room's incremental mapper took **8.0 min instead of 2.3–2.6 min**, and the Open3D mesh step ran
+     for more than 5 min instead of about 15 s. That run was aborted.
+   - Fix, in `runpod_job.limit_threads`, which is **pod-only** (Modal is unchanged):
+     - read the cgroup quota; hosts differ between cgroup v1 and v2;
+     - pin the process to N CPUs;
+     - set `OMP/MKL/OPENBLAS_NUM_THREADS`;
+     - add a `colmap` shim that appends `--*.num_threads N`.
+   - Any future Runpod backend needs the same fix.
+5. **Operational notes.**
+   - Secure stock varies by GPU and region: A40 had none in the US; the 4090 and L40S are the most available.
+   - A pod-create `allowedCudaVersions` filter made every request fail with "no instances available". The launcher
+     checks the driver inside the pod instead.
+   - Runpod's API edge rejects the default Python-urllib User-Agent (HTTP 403).
+   - Runpod injects a pod-scoped API key and `runpodctl`, so pod self-termination works.
+   - After termination, the account's `currentSpendPerHr` takes about a minute to fall to $0.
+
+**Spend** (from the GraphQL `clientBalance`)
+- **$1.40 total**: $50.00 → **$48.60**, against the $6 cap for this task. Of that:
+  - ≈ $0.09 on two launches that failed on a shell-quoting bug, plus create-then-delete availability probes;
+  - ≈ $0.46 on the oversubscribed first run (aborted);
+  - ≈ $0.61 on the A6000 run, plus one 4090 run killed mid-job by the launcher's own end-of-run sweep. The sweep now
+    touches only its own pods;
+  - ≈ $0.24 on the final 4090 run.
+- A clean re-run of this benchmark (two pods, 3 scenes each) costs about $0.50.
+- After the runs: **0 pods, $0/h**.
+
+**Recommendation**
+- **Corpus overflow: RTX 4090 Secure ($0.74/h).**
+  - Fastest per scene: 4.5–9 min.
+  - ≈ $0.06–0.11 per scene, 3–4.5× cheaper than Modal A10G.
+  - Best Secure availability of the sub-$1 GPUs.
+  - Batch several scenes per pod so the ~4 min of setup (or image pull) is amortized.
+  - Use the **RTX A6000 / A40 (48 GB, $0.49–0.53/h)** when a scene needs more than 24 GB of VRAM (very large captures
+    or budgets above 2M splats), or when the 4090 is out of stock.
+- **Tier 2.**
+  - For work that fits in 48 GB, use the A6000 / A40 at about $0.50/h. These measurements show it trains ~1.25–1.4×
+    faster than the A10G.
+  - For the 80 GB-class research hours in the compute budget, use **A100 80 GB Secure ($1.59/h)** as in §4. It was not
+    benchmarked here.
+  - H100 still needs sm_90 added to the Dockerfile's gsplat compile.
+- **Before any production use:**
+  1. Get a **classic PAT with `read:packages` / `write:packages`** (Owner). Alternatively, a workflow can push with
+     `GITHUB_TOKEN` and a classic read-only PAT can serve as the Runpod registry credential. Then the private
+     `gj-recon` image replaces the 3–4 min install, and sm_90 can be added in the same build.
+  2. Port `limit_threads` into the backend-neutral CLI (§5 step 1).
