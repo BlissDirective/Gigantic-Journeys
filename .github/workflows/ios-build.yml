@@ -214,6 +214,9 @@ jobs:
           targetPlatform: iOS
           buildName: GiganticJourneys
           cacheUnityInstallationOnMac: true
+          # internal-debug edits ProjectSettings.asset in this checkout (GJ_DEBUG),
+          # which game-ci's semantic versioning otherwise rejects as a dirty branch.
+          allowDirtyBuild: ${{ inputs.flavor == 'internal-debug' }}
       - name: Burst AOT library is in the Xcode project
         run: |
           set -euo pipefail
