@@ -1,0 +1,14 @@
+{
+    "name": "GJ.Movement.Shared",
+    "rootNamespace": "GiganticJourneys.Movement",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

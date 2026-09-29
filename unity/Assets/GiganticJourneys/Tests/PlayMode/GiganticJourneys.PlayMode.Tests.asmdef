@@ -6,7 +6,11 @@
         "UnityEditor.TestRunner",
         "GiganticJourneys",
         "GiganticJourneys.DebugOverlay",
-        "Unity.InputSystem"
+        "Unity.InputSystem",
+        "GJ.Movement.Shared",
+        "GJ.Intent",
+        "GJ.TraversalQuery",
+        "GJ.Movement.Controller"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

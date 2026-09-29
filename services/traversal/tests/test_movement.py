@@ -58,3 +58,21 @@ def test_frozen_config_is_immutable() -> None:
     cfg = movement.load()
     with pytest.raises(dataclasses.FrozenInstanceError):
         cfg.avatarHeightA = 2.0
+
+
+def test_flatten_matches_shared_fixture() -> None:
+    """C#/Python agreement (M0-MOVE-01 AT-4): the Unity test reads the same fixture."""
+    expected = json.loads(movement.FIXTURE.read_text(encoding="utf-8"))
+    flat = movement.flatten(movement.load())
+    assert flat == expected, "regenerate: python services/traversal/movement.py --write-fixture"
+    assert len(flat) == len(_valid_dict_paths(_valid_dict()))
+
+
+def _valid_dict_paths(data: dict, prefix: str = "") -> list[str]:
+    paths: list[str] = []
+    for key, value in data.items():
+        if isinstance(value, dict):
+            paths += _valid_dict_paths(value, f"{prefix}{key}.")
+        else:
+            paths.append(f"{prefix}{key}")
+    return paths

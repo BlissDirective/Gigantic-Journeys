@@ -1,0 +1,17 @@
+{
+    "name": "GJ.TraversalQuery",
+    "rootNamespace": "GiganticJourneys.Movement.Query",
+    "references": [
+        "GJ.Movement.Shared",
+        "GJ.Intent"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

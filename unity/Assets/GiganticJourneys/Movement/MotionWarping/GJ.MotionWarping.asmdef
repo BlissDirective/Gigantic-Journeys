@@ -1,0 +1,19 @@
+{
+    "name": "GJ.MotionWarping",
+    "rootNamespace": "GiganticJourneys.Movement.Warping",
+    "references": [
+        "GJ.Movement.Shared",
+        "GJ.Intent",
+        "GJ.TraversalQuery",
+        "GJ.AnimationSelection"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

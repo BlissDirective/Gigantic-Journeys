@@ -1,0 +1,22 @@
+{
+    "name": "GJ.Movement.Controller",
+    "rootNamespace": "GiganticJourneys.Movement.Controller",
+    "references": [
+        "GJ.Movement.Shared",
+        "GJ.Intent",
+        "GJ.TraversalQuery",
+        "GJ.AnimationSelection",
+        "GJ.MotionWarping",
+        "GJ.Procedural",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

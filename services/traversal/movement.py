@@ -181,6 +181,33 @@ def _build(cls: type, data: Any, path: str) -> Any:
     return cls(**kwargs)
 
 
+def flatten(config: Any, prefix: str = "") -> dict[str, float | bool]:
+    """Every constant by dotted JSON path (``"jump.coyoteMs"``), sorted by path.
+
+    The shared C#/Python agreement fixture (M0-MOVE-01 AT-4,
+    ``tests/fixtures/movement_expected.json``) is this mapping; the Unity EditMode test
+    ``MovementConfigFixtureTests`` compares ``MovementConfig.Values`` against the same file.
+    """
+    out: dict[str, float | bool] = {}
+    for f in fields(config):
+        value = getattr(config, f.name)
+        path = f"{prefix}{f.name}"
+        if is_dataclass(value):
+            out.update(flatten(value, f"{path}."))
+        else:
+            out[path] = value if isinstance(value, bool) else float(value)
+    return dict(sorted(out.items()))
+
+
+FIXTURE = Path(__file__).resolve().parent / "tests" / "fixtures" / "movement_expected.json"
+
+
+def write_fixture(path: Path = FIXTURE) -> None:
+    """Regenerate the agreement fixture after an AUTH-approved movement.json change."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(flatten(load()), indent=2) + "\n", encoding="utf-8")
+
+
 def loads(data: dict[str, Any]) -> MovementConfig:
     """Build a :class:`MovementConfig` from an already-parsed dict."""
     return _build(MovementConfig, data, "movement")
@@ -198,3 +225,14 @@ def load(path: str | Path | None = None) -> MovementConfig:
     except json.JSONDecodeError as exc:
         raise MovementConfigError(f"{target} is not valid JSON: {exc}") from exc
     return loads(data)
+
+
+if __name__ == "__main__":
+    import sys
+
+    if sys.argv[1:] == ["--write-fixture"]:
+        write_fixture()
+        print(f"wrote {FIXTURE}")
+    else:
+        print("usage: python services/traversal/movement.py --write-fixture")
+        sys.exit(2)

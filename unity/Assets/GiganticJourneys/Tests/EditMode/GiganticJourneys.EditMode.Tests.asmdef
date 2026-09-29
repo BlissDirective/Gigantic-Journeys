@@ -9,7 +9,14 @@
         "GiganticJourneys.Splats",
         "GaussianSplatting",
         "Unity.RenderPipelines.Universal.Runtime",
-        "GiganticJourneys.DebugOverlay"
+        "GiganticJourneys.DebugOverlay",
+        "GJ.Movement.Shared",
+        "GJ.Intent",
+        "GJ.TraversalQuery",
+        "GJ.AnimationSelection",
+        "GJ.MotionWarping",
+        "GJ.Procedural",
+        "GJ.Movement.Controller"
     ],
     "includePlatforms": [
         "Editor"

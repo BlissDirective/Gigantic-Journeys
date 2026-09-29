@@ -1,0 +1,20 @@
+{
+    "name": "GJ.Procedural",
+    "rootNamespace": "GiganticJourneys.Movement.Procedural",
+    "references": [
+        "GJ.Movement.Shared",
+        "GJ.Intent",
+        "GJ.TraversalQuery",
+        "GJ.AnimationSelection",
+        "GJ.MotionWarping"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
