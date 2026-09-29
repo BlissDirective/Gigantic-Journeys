@@ -22,10 +22,13 @@ repos:
       - id: check-json
       - id: check-yaml
       - id: check-merge-conflict
+      # Unity-serialized assets, Unity test-result XML and machine-written corpus manifests
+      # keep the bytes their writers produce (Unity rewrites them on every save), so the
+      # whitespace fixers skip them; CSharpier governs the C# under unity/.
       - id: end-of-file-fixer
-        exclude: '^(design|context)/'
+        exclude: '^(design|context|unity)/|^qa/reports/.*\.xml$|^services/reconstruction/corpus/.*\.json$'
       - id: trailing-whitespace
-        exclude: '^(design|context)/|\.md$'
+        exclude: '^(design|context|unity)/|\.md$|^qa/reports/.*\.xml$|^services/reconstruction/corpus/.*\.json$'
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.16.7

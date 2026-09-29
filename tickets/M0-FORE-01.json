@@ -5,7 +5,7 @@
   "area": "FORE",
   "owner": "gj-foreman",
   "qa": null,
-  "status": "open",
+  "status": "blocked",
   "priority": "P0",
   "size": "S",
   "summary": "Clone the repo to the VM, create .env.local from .env.example, prove that secrets cannot reach git, install pre-commit, and record tool versions. Evidence is redacted output only.",
@@ -50,10 +50,10 @@
   "references": [
     "kit §2 setup task 1"
   ],
-  "branch": null,
+  "branch": "ticket/M0-FORE-01-vm-bootstrap",
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-15",
+  "updated": "2026-09-29",
   "history": [
     {
       "date": "2026-09-15",
@@ -64,6 +64,15 @@
       "date": "2026-09-15",
       "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-29",
+      "event": "Evidence in qa/reports/M0-FORE-01.md: AT-1 PASS (.env.local ignored, only .env.example tracked; placeholder wording superseded by the staging creds), AT-2 pre-commit run --all-files green after fixing .pre-commit-config.yaml (whitespace fixers were rewriting 153 Unity-serialized/test-XML/corpus files; now excluded), AT-3 versions recorded but Node 20.19.2 < 22, AT-4 PASS. → blocked on two box decisions (hook install in the shared clone; Node 22)",
+      "by": "gj-operator"
     }
+  ],
+  "blocked_by": [
+    "Owner/Coordinator: install the pre-commit hook in the shared main clone (affects every agent on the box)?",
+    "Owner/Coordinator: upgrade the box Node 20.19.2 to Node 22 (AT-3 requires >= 22; needs root or a user-level install that changes PATH for all agents)"
   ]
 }
