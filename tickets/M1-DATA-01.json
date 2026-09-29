@@ -5,7 +5,7 @@
   "area": "DATA",
   "owner": "gj-scenegraph",
   "qa": "gj-data",
-  "status": "open",
+  "status": "blocked",
   "priority": "P0",
   "size": "M",
   "summary": "Define and freeze the three data contracts the scene-graph service produces and the Unity runtime and validator consume. Freeze needs an AUTH (design-change); later changes need another.",
@@ -61,15 +61,24 @@
     "SPEC §3.3, §3.4",
     "kit §3.2"
   ],
-  "branch": null,
+  "branch": "ticket/M1-DATA-01-schema-freeze",
   "pr": null,
   "created": "2026-09-16",
-  "updated": "2026-09-16",
+  "updated": "2026-09-29",
   "history": [
     {
       "date": "2026-09-16",
       "event": "created by the Coordinator (M1 decomposition)",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-29",
+      "event": "Draft ready (gj-operator): design/proposals/m1-data-01-schemas/ holds scene_graph / traversal_graph / environment_spec v1.0.0 (JSON Schema 2020-12; Bible §4 classes, §9 materials, A units; verb→tier table per SPEC §3.4; margin 0.85; beats introduce→develop→twist→resolve with beat 1 T0-only; template fallback; package-relative assets), check_consistency.py (cross-document rules), a synthetic desk fixture set + 15 invalid fixtures, 51 pytest cases. Freeze AUTH request filed (governance/auth-requests/M1-DATA-01-schema-freeze.md). → blocked on the AUTH + AT-4 review",
+      "by": "gj-operator"
     }
+  ],
+  "blocked_by": [
+    "Freeze AUTH (design-change) proposed in governance/auth-requests/M1-DATA-01-schema-freeze.md; awaiting the Owner",
+    "AT-4 review by gj-gameplay + gj-platform of design/proposals/m1-data-01-schemas/"
   ]
 }

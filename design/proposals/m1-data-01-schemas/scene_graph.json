@@ -1,0 +1,381 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/BlissDirective/Gigantic-Journeys/data/schemas/scene_graph.json",
+  "title": "Gigantic Journeys scene graph v1.0.0 (proposal)",
+  "description": "Output of scene understanding (SPEC §3.3; M1-SCEN-01/02): the cleaned environment as classified, measured surfaces in A units. Consumed by the affordance library / traversal-graph export (M1-SCEN-03) and packaged for the Unity runtime.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "environment_id",
+    "generator",
+    "capture_mode",
+    "scale",
+    "frame",
+    "bounds",
+    "floor_height_A",
+    "spawn",
+    "surfaces"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0",
+      "description": "Semver of this schema (proposal v1.0.0; frozen only once the M1-DATA-01 AUTH is approved)."
+    },
+    "environment_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "environments.id (AUTH #034 table)."
+    },
+    "generator": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{1,39}$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        }
+      },
+      "required": [
+        "name",
+        "version"
+      ],
+      "description": "Service + version that produced this document (reproducibility)."
+    },
+    "capture_mode": {
+      "type": "string",
+      "enum": [
+        "room",
+        "tabletop"
+      ]
+    },
+    "scale": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "multiplier": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1000,
+          "description": "Scale multiplier: 12 = 1:12 (SPEC §3.3 default); tuned for small builds so studs are climbable."
+        },
+        "method": {
+          "type": "string",
+          "enum": [
+            "default",
+            "inferred-furniture",
+            "inferred-studs",
+            "inferred-other"
+          ],
+          "description": "How the multiplier was chosen."
+        },
+        "metres_per_A": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 10,
+          "description": "Real metres per A at this scale (avatar 1.75 m real / multiplier)."
+        }
+      },
+      "required": [
+        "method",
+        "metres_per_A",
+        "multiplier"
+      ]
+    },
+    "frame": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "units": {
+          "const": "A"
+        },
+        "up": {
+          "const": "+y"
+        },
+        "handedness": {
+          "const": "left"
+        }
+      },
+      "required": [
+        "handedness",
+        "units",
+        "up"
+      ],
+      "description": "Coordinate conventions, fixed so every consumer agrees (Unity: left-handed, +y up)."
+    },
+    "bounds": {
+      "$ref": "#/$defs/aabb"
+    },
+    "floor_height_A": {
+      "type": "number",
+      "minimum": -10000,
+      "maximum": 10000,
+      "description": "y of the environment floor (room floor or table top)."
+    },
+    "spawn": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "position": {
+          "$ref": "#/$defs/vec3"
+        },
+        "facing_deg": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 360
+        },
+        "surface_id": {
+          "type": "string",
+          "pattern": "^surface-[0-9]{1,6}$",
+          "description": "Surface the avatar spawns on."
+        }
+      },
+      "required": [
+        "facing_deg",
+        "position",
+        "surface_id"
+      ]
+    },
+    "surfaces": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20000,
+      "items": {
+        "$ref": "#/$defs/surface"
+      }
+    }
+  },
+  "$defs": {
+    "vec3": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "number",
+          "minimum": -100000,
+          "maximum": 100000
+        },
+        {
+          "type": "number",
+          "minimum": -100000,
+          "maximum": 100000
+        },
+        {
+          "type": "number",
+          "minimum": -100000,
+          "maximum": 100000
+        }
+      ],
+      "items": false,
+      "minItems": 3,
+      "maxItems": 3,
+      "description": "[x, y, z] in A units, environment-local, +y up (Unity convention)."
+    },
+    "unit3": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        },
+        {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        },
+        {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        }
+      ],
+      "items": false,
+      "minItems": 3,
+      "maxItems": 3,
+      "description": "Unit vector [x, y, z]."
+    },
+    "aabb": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "min": {
+          "$ref": "#/$defs/vec3"
+        },
+        "max": {
+          "$ref": "#/$defs/vec3"
+        }
+      },
+      "required": [
+        "max",
+        "min"
+      ],
+      "description": "Axis-aligned bounds in A units."
+    },
+    "surface": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^surface-[0-9]{1,6}$",
+          "description": "Stable id within the environment (also used by correction_submitted.surface_id)."
+        },
+        "class": {
+          "type": "string",
+          "enum": [
+            "walkable-hard",
+            "walkable-soft",
+            "walkable-narrow",
+            "ledge",
+            "rung",
+            "stud",
+            "textured-vertical",
+            "pole",
+            "overhang",
+            "slope",
+            "wall-smooth",
+            "soft-hanging",
+            "void",
+            "hazard-none"
+          ],
+          "description": "Bible §4 surface class."
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Classifier confidence in `class`."
+        },
+        "material": {
+          "type": "string",
+          "enum": [
+            "wood",
+            "tile-stone",
+            "carpet-rug",
+            "fabric-cushion",
+            "lego-plastic",
+            "paper-cardboard",
+            "metal",
+            "glass",
+            "plant",
+            "curtain",
+            "unknown"
+          ],
+          "description": "Bible §9 feedback-matrix material (vision pass)."
+        },
+        "semantic": {
+          "type": "string",
+          "pattern": "^[a-z][a-z-]{1,31}$",
+          "description": "Coarse object label from the vision pass (e.g. 'table', 'bookshelf'); generated, never user text."
+        },
+        "centroid": {
+          "$ref": "#/$defs/vec3"
+        },
+        "normal": {
+          "$ref": "#/$defs/unit3"
+        },
+        "bounds": {
+          "$ref": "#/$defs/aabb"
+        },
+        "area_A2": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100000000.0
+        },
+        "measurements": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "width_A": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10000,
+              "description": "Narrowest walkable width (walkable-narrow < narrowWidthA 0.5)."
+            },
+            "top_height_A": {
+              "type": "number",
+              "minimum": -10000,
+              "maximum": 10000,
+              "description": "Height of the surface top above the environment floor."
+            },
+            "edge_length_A": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10000,
+              "description": "Length of the usable edge (ledges, wall-run faces)."
+            },
+            "slope_deg": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 90,
+              "description": "Surface inclination from horizontal."
+            },
+            "spacing_A": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "description": "Hold pitch: rung spacing, stud pitch (0.055A for Lego), hold density for textured-vertical."
+            },
+            "diameter_A": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "description": "Pole/rung diameter."
+            },
+            "headroom_A": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10000,
+              "description": "Clear height above a walkable surface (crouch when < crouchHeadroomA 1.1)."
+            }
+          },
+          "required": [
+            "top_height_A"
+          ],
+          "description": "Measurements in A units; only those relevant to the class are present."
+        },
+        "mesh": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "submesh": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 65535
+            },
+            "triangle_start": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "triangle_count": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "submesh",
+            "triangle_count",
+            "triangle_start"
+          ],
+          "description": "Where the surface's triangles live in the collision mesh."
+        }
+      },
+      "required": [
+        "id",
+        "class",
+        "confidence",
+        "material",
+        "centroid",
+        "normal",
+        "bounds",
+        "area_A2",
+        "measurements",
+        "mesh"
+      ]
+    }
+  }
+}

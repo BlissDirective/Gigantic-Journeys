@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0.0",
+  "environment_id": "3c2b1a09-8f7e-4d6c-b5a4-938271605f4e",
+  "generator": {
+    "name": "gj-journey",
+    "version": "0.1.0"
+  },
+  "capture_mode": "tabletop",
+  "scale_multiplier": 12,
+  "assets": {
+    "splat": "splat.spz",
+    "collision_mesh": "collision.glb",
+    "scene_graph": "scene_graph.json",
+    "traversal_graph": "traversal_graph.json",
+    "thumbnail": "thumbnail.webp"
+  },
+  "spawn": {
+    "node_id": "node-1",
+    "position": [
+      -15,
+      0,
+      0
+    ],
+    "facing_deg": 90
+  },
+  "summit": {
+    "node_id": "node-4",
+    "position": [
+      -4,
+      2.0,
+      0
+    ],
+    "height_A": 2.0,
+    "true_peak": false
+  },
+  "routes": [
+    {
+      "id": "route-1",
+      "rank": 1,
+      "relative_difficulty": "easy",
+      "global_difficulty": 9,
+      "highest_tier": "T1",
+      "distinct_t2plus_verbs": 0,
+      "tightest_margin": 0.7,
+      "total_climb_A": 2.0,
+      "commit_points": 0,
+      "required_tool": null,
+      "template_fallback": true,
+      "par_time_s": 12.0,
+      "beats": [
+        {
+          "index": 1,
+          "role": "introduce",
+          "edge_ids": [
+            "edge-1",
+            "edge-2"
+          ],
+          "max_tier": "T0",
+          "teaches": null
+        },
+        {
+          "index": 2,
+          "role": "resolve",
+          "edge_ids": [
+            "edge-3"
+          ],
+          "max_tier": "T1",
+          "teaches": "precision-jump"
+        }
+      ]
+    }
+  ],
+  "vistas": [],
+  "generation": {
+    "seed": 1234567,
+    "retries": 3,
+    "template_fallback": true,
+    "validator": {
+      "margin": 0.85,
+      "movement_config_sha256": "19f2dac80b29c8fdbe4b02d8f2a89e81fef4a3a5969e16dc89a8ddb910e84e4e",
+      "passed": true
+    }
+  }
+}

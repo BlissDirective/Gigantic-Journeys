@@ -1,0 +1,198 @@
+{
+  "schema_version": "1.0.0",
+  "environment_id": "3c2b1a09-8f7e-4d6c-b5a4-938271605f4e",
+  "generator": {
+    "name": "gj-journey",
+    "version": "0.1.0"
+  },
+  "capture_mode": "tabletop",
+  "scale_multiplier": 12,
+  "assets": {
+    "splat": "splat.spz",
+    "collision_mesh": "collision.glb",
+    "scene_graph": "scene_graph.json",
+    "traversal_graph": "traversal_graph.json",
+    "thumbnail": "thumbnail.webp"
+  },
+  "spawn": {
+    "node_id": "node-1",
+    "position": [
+      -15,
+      0,
+      0
+    ],
+    "facing_deg": 90
+  },
+  "summit": {
+    "node_id": "node-6",
+    "position": [
+      0,
+      5.0,
+      2.5
+    ],
+    "height_A": 5.0,
+    "true_peak": false
+  },
+  "routes": [
+    {
+      "id": "route-1",
+      "rank": 1,
+      "relative_difficulty": "easy",
+      "global_difficulty": 18,
+      "highest_tier": "T2",
+      "distinct_t2plus_verbs": 2,
+      "tightest_margin": 0.7,
+      "total_climb_A": 5.0,
+      "commit_points": 0,
+      "required_tool": null,
+      "template_fallback": false,
+      "par_time_s": 21.5,
+      "beats": [
+        {
+          "index": 1,
+          "role": "introduce",
+          "edge_ids": [
+            "edge-1",
+            "edge-2"
+          ],
+          "max_tier": "T1",
+          "teaches": null
+        },
+        {
+          "index": 2,
+          "role": "develop",
+          "edge_ids": [
+            "edge-3"
+          ],
+          "max_tier": "T1",
+          "teaches": "precision-jump"
+        },
+        {
+          "index": 3,
+          "role": "twist",
+          "edge_ids": [
+            "edge-4"
+          ],
+          "max_tier": "T2",
+          "teaches": "stud-climb"
+        },
+        {
+          "index": 4,
+          "role": "resolve",
+          "edge_ids": [
+            "edge-5"
+          ],
+          "max_tier": "T2",
+          "teaches": null
+        }
+      ]
+    },
+    {
+      "id": "route-2",
+      "rank": 2,
+      "relative_difficulty": "medium",
+      "global_difficulty": 27,
+      "highest_tier": "T2",
+      "distinct_t2plus_verbs": 2,
+      "tightest_margin": 0.83,
+      "total_climb_A": 5.0,
+      "commit_points": 1,
+      "required_tool": null,
+      "template_fallback": false,
+      "par_time_s": 19.0,
+      "beats": [
+        {
+          "index": 1,
+          "role": "introduce",
+          "edge_ids": [
+            "edge-1",
+            "edge-2"
+          ],
+          "max_tier": "T0",
+          "teaches": null
+        },
+        {
+          "index": 2,
+          "role": "develop",
+          "edge_ids": [
+            "edge-6"
+          ],
+          "max_tier": "T0",
+          "teaches": "running-jump"
+        },
+        {
+          "index": 3,
+          "role": "twist",
+          "edge_ids": [
+            "edge-11"
+          ],
+          "max_tier": "T2",
+          "teaches": "stud-climb"
+        },
+        {
+          "index": 4,
+          "role": "resolve",
+          "edge_ids": [
+            "edge-12"
+          ],
+          "max_tier": "T2",
+          "teaches": null
+        }
+      ]
+    }
+  ],
+  "vistas": [
+    {
+      "id": "vista-1",
+      "node_id": "node-3",
+      "position": [
+        -6,
+        1.2,
+        0
+      ],
+      "look_at": [
+        0,
+        4,
+        2
+      ],
+      "access_tier": "T0",
+      "scores": {
+        "viewshed": 0.62,
+        "framing": 0.55,
+        "access": 0.95,
+        "spread": 0.7
+      }
+    },
+    {
+      "id": "vista-2",
+      "node_id": "node-4",
+      "position": [
+        -4,
+        2.0,
+        0
+      ],
+      "look_at": [
+        6,
+        5,
+        -2
+      ],
+      "access_tier": "T1",
+      "scores": {
+        "viewshed": 0.71,
+        "framing": 0.66,
+        "access": 0.8,
+        "spread": 0.5
+      }
+    }
+  ],
+  "generation": {
+    "seed": 1234567,
+    "retries": 0,
+    "template_fallback": false,
+    "validator": {
+      "margin": 0.85,
+      "movement_config_sha256": "19f2dac80b29c8fdbe4b02d8f2a89e81fef4a3a5969e16dc89a8ddb910e84e4e",
+      "passed": true
+    }
+  }
+}

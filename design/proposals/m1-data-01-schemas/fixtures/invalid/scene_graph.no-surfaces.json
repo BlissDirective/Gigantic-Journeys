@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0.0",
+  "environment_id": "3c2b1a09-8f7e-4d6c-b5a4-938271605f4e",
+  "generator": {
+    "name": "gj-scenegraph",
+    "version": "0.1.0"
+  },
+  "capture_mode": "tabletop",
+  "scale": {
+    "multiplier": 12,
+    "method": "inferred-studs",
+    "metres_per_A": 0.1458
+  },
+  "frame": {
+    "units": "A",
+    "up": "+y",
+    "handedness": "left"
+  },
+  "bounds": {
+    "min": [
+      -20,
+      0,
+      -12
+    ],
+    "max": [
+      20,
+      9,
+      12
+    ]
+  },
+  "floor_height_A": 0,
+  "spawn": {
+    "position": [
+      -15,
+      0,
+      0
+    ],
+    "facing_deg": 90,
+    "surface_id": "surface-1"
+  },
+  "surfaces": []
+}

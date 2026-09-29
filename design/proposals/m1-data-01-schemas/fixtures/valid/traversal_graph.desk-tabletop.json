@@ -1,0 +1,287 @@
+{
+  "schema_version": "1.0.0",
+  "environment_id": "3c2b1a09-8f7e-4d6c-b5a4-938271605f4e",
+  "generator": {
+    "name": "gj-traversal",
+    "version": "0.1.0"
+  },
+  "movement": {
+    "config_sha256": "19f2dac80b29c8fdbe4b02d8f2a89e81fef4a3a5969e16dc89a8ddb910e84e4e",
+    "margin": 0.85
+  },
+  "nodes": [
+    {
+      "id": "node-1",
+      "surface_id": "surface-1",
+      "position": [
+        -15,
+        0,
+        0
+      ],
+      "kind": "stance",
+      "plantable": false
+    },
+    {
+      "id": "node-2",
+      "surface_id": "surface-1",
+      "position": [
+        -7.5,
+        0,
+        0
+      ],
+      "kind": "stance",
+      "plantable": false
+    },
+    {
+      "id": "node-3",
+      "surface_id": "surface-2",
+      "position": [
+        -6,
+        1.2,
+        0
+      ],
+      "kind": "stance",
+      "plantable": false
+    },
+    {
+      "id": "node-4",
+      "surface_id": "surface-3",
+      "position": [
+        -4,
+        2.0,
+        0
+      ],
+      "kind": "stance",
+      "plantable": true
+    },
+    {
+      "id": "node-5",
+      "surface_id": "surface-4",
+      "position": [
+        0,
+        3.5,
+        1.9
+      ],
+      "kind": "climb",
+      "plantable": false
+    },
+    {
+      "id": "node-6",
+      "surface_id": "surface-5",
+      "position": [
+        0,
+        5.0,
+        2.5
+      ],
+      "kind": "stance",
+      "plantable": true
+    },
+    {
+      "id": "node-7",
+      "surface_id": "surface-1",
+      "position": [
+        3.5,
+        0,
+        -2
+      ],
+      "kind": "stance",
+      "plantable": false
+    },
+    {
+      "id": "node-8",
+      "surface_id": "surface-7",
+      "position": [
+        6,
+        6.0,
+        -2
+      ],
+      "kind": "anchor",
+      "plantable": false
+    },
+    {
+      "id": "node-9",
+      "surface_id": "surface-7",
+      "position": [
+        6,
+        6.1,
+        -2.2
+      ],
+      "kind": "stance",
+      "plantable": true
+    },
+    {
+      "id": "node-10",
+      "surface_id": "surface-4",
+      "position": [
+        0,
+        4.4,
+        1.9
+      ],
+      "kind": "climb",
+      "plantable": false
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-1",
+      "from": "node-1",
+      "to": "node-2",
+      "verb": "walk",
+      "tier": "T0",
+      "distance_A": 7.5,
+      "rise_A": 0,
+      "margin_used": 0.0,
+      "cost": 6.3,
+      "commit": false,
+      "prerequisites": {}
+    },
+    {
+      "id": "edge-2",
+      "from": "node-2",
+      "to": "node-3",
+      "verb": "mantle",
+      "tier": "T0",
+      "distance_A": 1.0,
+      "rise_A": 1.2,
+      "margin_used": 0.61,
+      "cost": 2.0,
+      "commit": false,
+      "prerequisites": {}
+    },
+    {
+      "id": "edge-3",
+      "from": "node-3",
+      "to": "node-4",
+      "verb": "precision-jump",
+      "tier": "T1",
+      "distance_A": 1.0,
+      "rise_A": 0.8,
+      "margin_used": 0.7,
+      "cost": 3.5,
+      "commit": false,
+      "prerequisites": {}
+    },
+    {
+      "id": "edge-4",
+      "from": "node-4",
+      "to": "node-5",
+      "verb": "stud-climb",
+      "tier": "T2",
+      "distance_A": 4.0,
+      "rise_A": 1.5,
+      "margin_used": 0.3,
+      "cost": 6.0,
+      "commit": false,
+      "prerequisites": {}
+    },
+    {
+      "id": "edge-5",
+      "from": "node-5",
+      "to": "node-6",
+      "verb": "climb-up",
+      "tier": "T2",
+      "distance_A": 0.6,
+      "rise_A": 1.5,
+      "margin_used": 0.4,
+      "cost": 2.5,
+      "commit": false,
+      "prerequisites": {}
+    },
+    {
+      "id": "edge-6",
+      "from": "node-3",
+      "to": "node-5",
+      "verb": "running-jump",
+      "tier": "T0",
+      "distance_A": 2.0,
+      "rise_A": 0.3,
+      "margin_used": 0.83,
+      "cost": 3.0,
+      "commit": true,
+      "prerequisites": {
+        "run_up_A": 1.5
+      }
+    },
+    {
+      "id": "edge-7",
+      "from": "node-2",
+      "to": "node-7",
+      "verb": "run",
+      "tier": "T0",
+      "distance_A": 11.2,
+      "rise_A": 0,
+      "margin_used": 0.0,
+      "cost": 4.0,
+      "commit": false,
+      "prerequisites": {}
+    },
+    {
+      "id": "edge-8",
+      "from": "node-7",
+      "to": "node-8",
+      "verb": "grapple-ascend",
+      "tier": "T3",
+      "distance_A": 2.5,
+      "rise_A": 6.0,
+      "margin_used": 0.62,
+      "cost": 9.0,
+      "commit": false,
+      "prerequisites": {
+        "tool": "grapple",
+        "anchor_ledge_A": 0.4
+      }
+    },
+    {
+      "id": "edge-9",
+      "from": "node-8",
+      "to": "node-9",
+      "verb": "climb-up",
+      "tier": "T2",
+      "distance_A": 0.3,
+      "rise_A": 0.1,
+      "margin_used": 0.1,
+      "cost": 1.5,
+      "commit": false,
+      "prerequisites": {}
+    },
+    {
+      "id": "edge-10",
+      "from": "node-6",
+      "to": "node-4",
+      "verb": "controlled-drop",
+      "tier": "T1",
+      "distance_A": 4.2,
+      "rise_A": -3.0,
+      "margin_used": 0.4,
+      "cost": 2.0,
+      "commit": false,
+      "prerequisites": {}
+    },
+    {
+      "id": "edge-11",
+      "from": "node-5",
+      "to": "node-10",
+      "verb": "stud-climb",
+      "tier": "T2",
+      "distance_A": 0.9,
+      "rise_A": 0.9,
+      "margin_used": 0.3,
+      "cost": 2.0,
+      "commit": false,
+      "prerequisites": {}
+    },
+    {
+      "id": "edge-12",
+      "from": "node-10",
+      "to": "node-6",
+      "verb": "climb-up",
+      "tier": "T2",
+      "distance_A": 0.6,
+      "rise_A": 0.6,
+      "margin_used": 0.35,
+      "cost": 1.5,
+      "commit": false,
+      "prerequisites": {}
+    }
+  ]
+}
