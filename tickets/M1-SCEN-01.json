@@ -5,7 +5,7 @@
   "area": "SCEN",
   "owner": "gj-scenegraph",
   "qa": "gj-qa-release",
-  "status": "open",
+  "status": "in-progress",
   "priority": "P0",
   "size": "M",
   "summary": "First scene-graph stage: clean the reconstruction mesh into a watertight collision mesh suitable for traversal.",
@@ -44,15 +44,20 @@
   "references": [
     "SPEC §3.3"
   ],
-  "branch": null,
+  "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-09-16",
-  "updated": "2026-09-16",
+  "updated": "2026-09-29",
   "history": [
     {
       "date": "2026-09-16",
       "event": "created by the Coordinator (M1 decomposition)",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-29",
+      "event": "Builder (AUTH #027, gj-scenegraph hat): built services/scenegraph/ — the traversal-quality mesh-cleanup stage. Pure standard library (no Open3D/numpy): parses the reconstruction collision OBJ, removes disconnected floaters (vertex union-find components; the largest is always kept), fills small holes and caps the open ceiling (boundary-loop fan fill; large side openings are left as doorways unless --fill-all-holes), and reports watertightness + per-step stats. Files: scenegraph/mesh.py (Mesh + OBJ read/write + edge/boundary helpers), scenegraph/cleanup.py (CleanupConfig + clean_mesh + floater/hole/ceiling ops), scenegraph/cli.py, tests (11 pass: floater / small-hole / ceiling-cap / large-side-opening / watertight / degenerate / OBJ round-trip / face-format), requirements.txt (stdlib-only), README. ruff + format + pytest green. AT-2 (synthetic-mesh unit tests) and AT-3 (deps pinned; pure stdlib -> pip-audit trivially clean) met. AT-1 (before/after renders on 3 corpus rooms) rides the Operator's reconstruction runs on the corpus (needs the corpus scans + GPU). Status open -> in-progress.",
+      "by": "claude-builder"
     }
   ]
 }

@@ -1,0 +1,5 @@
+# services/scenegraph — the scene-graph stage (M1-SCEN).
+# M1-SCEN-01 (mesh cleanup) is pure standard library: no runtime dependencies, so
+# there is nothing to pin and pip-audit is trivially clean. Later stages that need
+# heavy geometry/ML libraries will add them behind adapters + a Dockerfile, the way
+# services/reconstruction does, so the orchestration + tests stay import-light.

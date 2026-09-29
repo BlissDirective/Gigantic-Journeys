@@ -17,8 +17,8 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 
 | Status | Count |
 |---|---|
-| open | 35 |
-| in-progress | 2 |
+| open | 34 |
+| in-progress | 3 |
 | in-review | 9 |
 | changes-requested | 0 |
 | blocked | 6 |
@@ -128,7 +128,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | M1-PIPE-01 | Inngest pipeline: real steps for reconstruct → scenegraph → journey → package | gj-platform | P0 | in-progress | M0-PIPE-01 | claude/gigantic-journeys-governance-f0wgak |
 | M1-PLAT-01 | Backend staging stand-up: Supabase staging (AUTH #011), Vercel (#012), Inngest (#013) verified | gj-operator | P0 | in-review | M0-PLAT-01 | — |
 | M1-QA-01 | M1 exit-test harness: 10 fresh scans to reachable summit + two routes | gj-qa-release | P0 | open | M1-GAME-02, M1-SCEN-04, M1-CAPT-01 | — |
-| M1-SCEN-01 | Mesh cleanup: hole fill, ceiling cap, floater removal | gj-scenegraph | P0 | open | M1-CAPT-02 | — |
+| M1-SCEN-01 | Mesh cleanup: hole fill, ceiling cap, floater removal | gj-scenegraph | P0 | in-progress | M1-CAPT-02 | claude/gigantic-journeys-governance-f0wgak |
 | M1-SCEN-02 | Surface classification, measurement, scale inference, material and semantic labels | gj-scenegraph | P0 | open | M1-SCEN-01, M1-DATA-01 | — |
 | M1-SCEN-03 | Affordance library and traversal-graph export | gj-scenegraph | P0 | open | M1-SCEN-02 | — |
 | M1-SCEN-04 | Summit designation, route generation, vista selection | gj-scenegraph | P0 | open | M1-SCEN-03, M1-SCEN-05 | — |
