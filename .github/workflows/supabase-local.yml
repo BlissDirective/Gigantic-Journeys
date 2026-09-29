@@ -25,7 +25,7 @@ concurrency:
 env:
   SUPABASE_CLI_VERSION: "2.118.0"
   # Local-dev default connection (documented CLI default, not a credential). The start log
-  # drops any line mentioning a key/secret/JWT so even the local demo keys are not archived.
+  # drops any line mentioning a key/secret/JWT/publishable key (and fails if one survives) so even the local demo keys are not archived.
   LOCAL_DB_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
 
 jobs:
@@ -43,7 +43,12 @@ jobs:
           set -o pipefail
           npx --yes "supabase@${SUPABASE_CLI_VERSION}" start \
             -x studio,imgproxy,edge-runtime,logflare,vector,supavisor 2>&1 \
-            | grep -viE 'key|secret|jwt|token' | tee supabase-start.log
+            | grep -viE 'key|secret|jwt|token|publishable|password|sb_[a-z]+_|eyJ' | tee supabase-start.log
+          # Belt and braces: the local stack's keys are static CLI defaults, not project secrets,
+          # but none may reach the public log or artifact (M0-PLAT-01 AT-5).
+          if grep -qE 'sb_(publishable|secret)_|eyJ' supabase-start.log; then
+            echo "::error::a key-like string survived the log filter"; exit 1
+          fi
       - name: Migrations applied
         run: |
           set -o pipefail
