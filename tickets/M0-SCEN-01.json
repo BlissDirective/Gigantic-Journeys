@@ -5,7 +5,7 @@
   "area": "SCEN",
   "owner": "gj-scenegraph",
   "qa": null,
-  "status": "open",
+  "status": "in-review",
   "priority": "P1",
   "size": "S",
   "summary": "Write the charter for the funded Tier 2 research track so its first prototype can start in M1 with an approved monthly budget: goals, SPEC §5 metrics with measurement procedures, the standing-ticket and report formats, and the reading list.",
@@ -48,10 +48,10 @@
     "kit §3.2",
     "kit §7"
   ],
-  "branch": null,
+  "branch": "ticket/M0-SCEN-01-tier2-charter",
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-15",
+  "updated": "2026-09-29",
   "history": [
     {
       "date": "2026-09-15",
@@ -62,6 +62,11 @@
       "date": "2026-09-15",
       "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-29",
+      "event": "research/tier2/README.md charter v1.0: goals; R1–R6 each with corpus subset, device, duration and tester count; standing M<n>-RES-01 ticket format; monthly compute AUTH REQUEST template (provider/GPU hourly, hours, per-scan runs); checkpoint report template (per-scan cost, mobile frame-time, plausibility); M1 prototype plan with expected cost ($301/$451/$1,017, recommend $500); reading list (Gaussian Grouping lineage, VR-GS, DecoupledGaussian, tet-embedded, XPBD, 2026 scene-level physics) with relevance notes; explicit no-M0-compute statement. Owner Q: R3 says Android but v1 is iOS-only. → in-review",
+      "by": "gj-operator"
     }
   ]
 }
