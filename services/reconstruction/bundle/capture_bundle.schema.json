@@ -1,0 +1,249 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/BlissDirective/Gigantic-Journeys/services/reconstruction/bundle/capture_bundle.schema.json",
+  "title": "Gigantic Journeys capture bundle manifest v1.0 (M1-CAPT-01)",
+  "description": "manifest.json at the root of the bundle the app writes after a guided capture and uploads for reconstruction (SPEC §3.1 upload contract; design/proposals/capture-ux-coaching-v1.md §4). The bundle directory holds manifest.json, the stripped video, frames.jsonl (one line per recorded frame, see $defs/frame) and, when the device has LiDAR, depth/<frame>.bin. mode, source, captured_on, device, duration_s, readiness and coverage have the same shape as a row of the corpus manifest (services/reconstruction/corpus/manifest.schema.json), so corpus and live scans share one contract. Every object sets additionalProperties false, so no location or identity field can be added without a schema change. Units: metres, seconds, ARKit world space (right-handed, +Y up, gravity-aligned).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "scan_id",
+    "mode",
+    "source",
+    "captured_on",
+    "device",
+    "duration_s",
+    "readiness",
+    "coverage",
+    "video",
+    "camera",
+    "world",
+    "frames",
+    "depth",
+    "passes",
+    "privacy"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "scan_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "description": "Random UUIDv4 minted on device; the only link between the bundle and the environments row."
+    },
+    "mode": { "enum": ["room", "tabletop"] },
+    "source": { "const": "gj-app" },
+    "captured_on": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "description": "Calendar date only (no time, no time zone)."
+    },
+    "device": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model", "lidar"],
+      "properties": {
+        "model": {
+          "type": ["string", "null"],
+          "maxLength": 40,
+          "pattern": "^(iPhone|iPad)[A-Za-z0-9 ,]*$",
+          "description": "Hardware model identifier or marketing name only (e.g. 'iPhone16,1'). Never the device name or a serial."
+        },
+        "lidar": { "type": "boolean" }
+      }
+    },
+    "duration_s": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 600,
+      "description": "Active capture time (recording, excluding interruptions)."
+    },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["score", "source", "components", "weakest"],
+      "description": "On-device reconstruction-readiness score (SPEC §3.1 quality gate). The score is advisory: the gate never hard-stops ('Upload anyway').",
+      "properties": {
+        "score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "source": { "const": "gj-app" },
+        "components": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["coverage", "parallax", "sharpness", "light", "tracking"],
+          "properties": {
+            "coverage": { "$ref": "#/$defs/unit" },
+            "parallax": { "$ref": "#/$defs/unit" },
+            "sharpness": { "$ref": "#/$defs/unit" },
+            "light": { "$ref": "#/$defs/unit" },
+            "tracking": { "$ref": "#/$defs/unit" }
+          }
+        },
+        "weakest": {
+          "enum": ["none", "coverage", "parallax", "sharpness", "light", "tracking", "duration"],
+          "description": "The signal the gate coached on ('none' when every component cleared its bar)."
+        }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary", "fraction", "passes", "map"],
+      "properties": {
+        "summary": { "type": "string", "maxLength": 200 },
+        "fraction": { "$ref": "#/$defs/unit" },
+        "passes": { "type": "integer", "minimum": 1, "maximum": 6 },
+        "map": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "azimuth_bins", "elevation_bins", "elevation_min_deg", "elevation_max_deg", "painted"],
+          "description": "Coverage map the live wash was driven by. room: view directions from the capture centroid (azimuth x elevation). tabletop: camera positions around the build centre (orbit azimuth x height band). painted is one string per elevation row (low to high), one character per azimuth bin: '1' painted, '0' not.",
+          "properties": {
+            "kind": { "enum": ["view-sphere", "orbit"] },
+            "azimuth_bins": { "type": "integer", "minimum": 4, "maximum": 72 },
+            "elevation_bins": { "type": "integer", "minimum": 1, "maximum": 12 },
+            "elevation_min_deg": { "type": "number", "minimum": -90, "maximum": 90 },
+            "elevation_max_deg": { "type": "number", "minimum": -90, "maximum": 90 },
+            "painted": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 12,
+              "items": { "type": "string", "pattern": "^[01]{4,72}$" }
+            }
+          }
+        }
+      }
+    },
+    "video": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["file", "container", "codec", "width", "height", "fps", "frame_count"],
+      "properties": {
+        "file": { "enum": ["video.mov", "video.mp4"] },
+        "container": { "enum": ["mov", "mp4"] },
+        "codec": { "enum": ["hevc", "h264"] },
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 },
+        "fps": { "type": "number", "exclusiveMinimum": 0, "maximum": 240 },
+        "frame_count": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "camera": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["image_width", "image_height", "intrinsics"],
+      "description": "Camera model for frames.jsonl. intrinsics are the capture-resolution pinhole values; a frame overrides them only if ARKit reports a change (e.g. refocus).",
+      "properties": {
+        "image_width": { "type": "integer", "minimum": 1 },
+        "image_height": { "type": "integer", "minimum": 1 },
+        "intrinsics": { "$ref": "#/$defs/intrinsics" }
+      }
+    },
+    "world": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alignment", "up", "gravity", "metric_scale"],
+      "properties": {
+        "alignment": { "const": "gravity", "description": "ARWorldAlignment.gravity: +Y is up." },
+        "up": { "$ref": "#/$defs/vec3" },
+        "gravity": { "$ref": "#/$defs/vec3", "description": "Mean gravity direction (unit vector) in world space." },
+        "metric_scale": { "const": "arkit-metres", "description": "Poses are metric (ARKit VIO; LiDAR when present)." }
+      }
+    },
+    "frames": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["file", "count", "accepted", "tracking_normal_fraction"],
+      "properties": {
+        "file": { "const": "frames.jsonl" },
+        "count": { "type": "integer", "minimum": 1 },
+        "accepted": { "type": "integer", "minimum": 0, "description": "Frames not rejected by the blur gate." },
+        "tracking_normal_fraction": { "$ref": "#/$defs/unit" }
+      }
+    },
+    "depth": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["dir", "format", "width", "height", "count"],
+          "properties": {
+            "dir": { "const": "depth" },
+            "format": { "const": "float16-le-metres" },
+            "width": { "type": "integer", "minimum": 1 },
+            "height": { "type": "integer", "minimum": 1 },
+            "count": { "type": "integer", "minimum": 1 }
+          }
+        }
+      ],
+      "description": "LiDAR scene depth, one file per depth-carrying frame (depth/<index>.bin); null without LiDAR."
+    },
+    "passes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 6,
+      "description": "Recording passes (a resume after an interruption or relocalization starts a new pass; M1-CAPT-04 appends 'add a pass' passes).",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["first_frame", "last_frame", "reason"],
+        "properties": {
+          "first_frame": { "type": "integer", "minimum": 0 },
+          "last_frame": { "type": "integer", "minimum": 0 },
+          "reason": { "enum": ["start", "resume", "relocalized", "add-pass"] }
+        }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["metadata_stripped", "location_recorded"],
+      "properties": {
+        "metadata_stripped": { "const": true, "description": "GPS/EXIF/location atoms removed from the video on device before the bundle was written (SPEC §3.1; re-verified server-side, SECURITY_CHECKLIST §4.4)." },
+        "location_recorded": { "const": false, "description": "The capture never requested or stored location." }
+      }
+    }
+  },
+  "$defs": {
+    "unit": { "type": "number", "minimum": 0, "maximum": 1 },
+    "vec3": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": { "type": "number" }
+    },
+    "intrinsics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fx", "fy", "cx", "cy"],
+      "properties": {
+        "fx": { "type": "number", "exclusiveMinimum": 0 },
+        "fy": { "type": "number", "exclusiveMinimum": 0 },
+        "cx": { "type": "number", "minimum": 0 },
+        "cy": { "type": "number", "minimum": 0 }
+      }
+    },
+    "frame": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["i", "t", "pose", "tracking", "sharpness", "luma", "accepted"],
+      "description": "One line of frames.jsonl.",
+      "properties": {
+        "i": { "type": "integer", "minimum": 0, "description": "Video frame index." },
+        "t": { "type": "number", "minimum": 0, "description": "Seconds since the first frame (video presentation time)." },
+        "pose": {
+          "type": "array",
+          "minItems": 16,
+          "maxItems": 16,
+          "items": { "type": "number" },
+          "description": "camera-to-world 4x4, column-major (ARKit ARCamera.transform)."
+        },
+        "intrinsics": { "$ref": "#/$defs/intrinsics" },
+        "tracking": { "enum": ["normal", "limited", "not-available"] },
+        "sharpness": { "type": "number", "minimum": 0, "description": "Variance of the Laplacian of the downsampled luma." },
+        "luma": { "$ref": "#/$defs/unit", "description": "Mean luma of the downsampled frame." },
+        "accepted": { "type": "boolean", "description": "false when the blur gate rejected the frame." },
+        "depth": { "type": "boolean", "description": "true when depth/<i>.bin exists." }
+      }
+    }
+  }
+}

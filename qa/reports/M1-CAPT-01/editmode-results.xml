@@ -1,0 +1,888 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="134" result="Passed" total="134" passed="134" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:38:10Z" duration="17.1741235">
+  <test-suite type="TestSuite" id="1000" name="Gigantic Journeys" fullname="Gigantic Journeys" runstate="Runnable" testcasecount="134" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:38:10Z" duration="17.174124" total="134" passed="134" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1154" name="GiganticJourneys.EditMode.Tests.dll" fullname="/workspace/gj/unity/Library/ScriptAssemblies/GiganticJourneys.EditMode.Tests.dll" runstate="Runnable" testcasecount="134" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:38:10Z" duration="17.168864" total="134" passed="134" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="3080378" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1155" name="GiganticJourneys" fullname="GiganticJourneys" runstate="Runnable" testcasecount="134" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:38:10Z" duration="17.168544" total="134" passed="134" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1156" name="Tests" fullname="GiganticJourneys.Tests" runstate="Runnable" testcasecount="134" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:38:10Z" duration="17.167570" total="134" passed="134" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1157" name="Capture" fullname="GiganticJourneys.Tests.Capture" runstate="Runnable" testcasecount="39" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.183586" total="39" passed="39" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1111" name="CaptureBundleWriterTests" fullname="GiganticJourneys.Tests.Capture.CaptureBundleWriterTests" classname="GiganticJourneys.Tests.Capture.CaptureBundleWriterTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.055306" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1116" name="EmptyCaptureCannotBeBundled" fullname="GiganticJourneys.Tests.Capture.CaptureBundleWriterTests.EmptyCaptureCannotBeBundled" methodname="EmptyCaptureCannotBeBundled" classname="GiganticJourneys.Tests.Capture.CaptureBundleWriterTests" runstate="Runnable" seed="1517262955" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.011130" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1114" name="FramesAreOneLinePerFrameWithARigidPose" fullname="GiganticJourneys.Tests.Capture.CaptureBundleWriterTests.FramesAreOneLinePerFrameWithARigidPose" methodname="FramesAreOneLinePerFrameWithARigidPose" classname="GiganticJourneys.Tests.Capture.CaptureBundleWriterTests" runstate="Runnable" seed="2138223854" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.012343" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1112" name="ManifestHasEveryContractSectionAndNoLocation" fullname="GiganticJourneys.Tests.Capture.CaptureBundleWriterTests.ManifestHasEveryContractSectionAndNoLocation" methodname="ManifestHasEveryContractSectionAndNoLocation" classname="GiganticJourneys.Tests.Capture.CaptureBundleWriterTests" runstate="Runnable" seed="247161410" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.005490" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1119" name="MatchesTheGoldenBundle" fullname="GiganticJourneys.Tests.Capture.CaptureBundleWriterTests.MatchesTheGoldenBundle" classname="GiganticJourneys.Tests.Capture.CaptureBundleWriterTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.007788" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1117" name="MatchesTheGoldenBundle(&quot;synthetic-room-lidar&quot;,Room,True)" fullname="GiganticJourneys.Tests.Capture.CaptureBundleWriterTests.MatchesTheGoldenBundle(&quot;synthetic-room-lidar&quot;,Room,True)" methodname="MatchesTheGoldenBundle" classname="GiganticJourneys.Tests.Capture.CaptureBundleWriterTests" runstate="Runnable" seed="694833178" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.002880" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1118" name="MatchesTheGoldenBundle(&quot;synthetic-tabletop&quot;,Tabletop,False)" fullname="GiganticJourneys.Tests.Capture.CaptureBundleWriterTests.MatchesTheGoldenBundle(&quot;synthetic-tabletop&quot;,Tabletop,False)" methodname="MatchesTheGoldenBundle" classname="GiganticJourneys.Tests.Capture.CaptureBundleWriterTests" runstate="Runnable" seed="1528083901" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.003576" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="1113" name="NoLidar_WritesNullDepthAndNoDepthFrames" fullname="GiganticJourneys.Tests.Capture.CaptureBundleWriterTests.NoLidar_WritesNullDepthAndNoDepthFrames" methodname="NoLidar_WritesNullDepthAndNoDepthFrames" classname="GiganticJourneys.Tests.Capture.CaptureBundleWriterTests" runstate="Runnable" seed="7486383" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.002373" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1115" name="OutputIsDeterministic" fullname="GiganticJourneys.Tests.Capture.CaptureBundleWriterTests.OutputIsDeterministic" methodname="OutputIsDeterministic" classname="GiganticJourneys.Tests.Capture.CaptureBundleWriterTests" runstate="Runnable" seed="1367643649" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.007453" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1120" name="CaptureMetersTests" fullname="GiganticJourneys.Tests.Capture.CaptureMetersTests" classname="GiganticJourneys.Tests.Capture.CaptureMetersTests" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.013130" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1125" name="BlurGate_RejectsABurstWithoutDraggingTheMedianDown" fullname="GiganticJourneys.Tests.Capture.CaptureMetersTests.BlurGate_RejectsABurstWithoutDraggingTheMedianDown" methodname="BlurGate_RejectsABurstWithoutDraggingTheMedianDown" classname="GiganticJourneys.Tests.Capture.CaptureMetersTests" runstate="Runnable" seed="1062614664" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.000950" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1121" name="LaplacianVariance_IsHighForDetailAndZeroForFlat" fullname="GiganticJourneys.Tests.Capture.CaptureMetersTests.LaplacianVariance_IsHighForDetailAndZeroForFlat" methodname="LaplacianVariance_IsHighForDetailAndZeroForFlat" classname="GiganticJourneys.Tests.Capture.CaptureMetersTests" runstate="Runnable" seed="1321904489" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.001175" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1127" name="LightMeter_BriefDipDoesNotShowTheCard" fullname="GiganticJourneys.Tests.Capture.CaptureMetersTests.LightMeter_BriefDipDoesNotShowTheCard" methodname="LightMeter_BriefDipDoesNotShowTheCard" classname="GiganticJourneys.Tests.Capture.CaptureMetersTests" runstate="Runnable" seed="551338423" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.000310" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1126" name="LightMeter_ShowsTheCardOnceAfterSustainedDark" fullname="GiganticJourneys.Tests.Capture.CaptureMetersTests.LightMeter_ShowsTheCardOnceAfterSustainedDark" methodname="LightMeter_ShowsTheCardOnceAfterSustainedDark" classname="GiganticJourneys.Tests.Capture.CaptureMetersTests" runstate="Runnable" seed="1406428297" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.000243" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1133" name="Parallax_GrowsWithBaselineAndSaturates" fullname="GiganticJourneys.Tests.Capture.CaptureMetersTests.Parallax_GrowsWithBaselineAndSaturates" methodname="Parallax_GrowsWithBaselineAndSaturates" classname="GiganticJourneys.Tests.Capture.CaptureMetersTests" runstate="Runnable" seed="1026890419" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.000209" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1128" name="Room_FullSweepPaintsNearlyEverything" fullname="GiganticJourneys.Tests.Capture.CaptureMetersTests.Room_FullSweepPaintsNearlyEverything" methodname="Room_FullSweepPaintsNearlyEverything" classname="GiganticJourneys.Tests.Capture.CaptureMetersTests" runstate="Runnable" seed="1703621121" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.001358" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1130" name="Room_PaintedRowsMatchTheGridAndTheFraction" fullname="GiganticJourneys.Tests.Capture.CaptureMetersTests.Room_PaintedRowsMatchTheGridAndTheFraction" methodname="Room_PaintedRowsMatchTheGridAndTheFraction" classname="GiganticJourneys.Tests.Capture.CaptureMetersTests" runstate="Runnable" seed="1111259263" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.000825" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1129" name="Room_PartialSweepPointsTheArrowAtTheUnseenSide" fullname="GiganticJourneys.Tests.Capture.CaptureMetersTests.Room_PartialSweepPointsTheArrowAtTheUnseenSide" methodname="Room_PartialSweepPointsTheArrowAtTheUnseenSide" classname="GiganticJourneys.Tests.Capture.CaptureMetersTests" runstate="Runnable" seed="278673055" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.001806" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1122" name="SpeedMeter_GoodPaceStaysTeal" fullname="GiganticJourneys.Tests.Capture.CaptureMetersTests.SpeedMeter_GoodPaceStaysTeal" methodname="SpeedMeter_GoodPaceStaysTeal" classname="GiganticJourneys.Tests.Capture.CaptureMetersTests" runstate="Runnable" seed="1490493048" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.000425" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1124" name="SpeedMeter_TabletopIsStricterThanRoom" fullname="GiganticJourneys.Tests.Capture.CaptureMetersTests.SpeedMeter_TabletopIsStricterThanRoom" methodname="SpeedMeter_TabletopIsStricterThanRoom" classname="GiganticJourneys.Tests.Capture.CaptureMetersTests" runstate="Runnable" seed="1395715261" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.000218" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1123" name="SpeedMeter_TooFastTurnsAmberWithOneHapticThenTheHintAfterASecond" fullname="GiganticJourneys.Tests.Capture.CaptureMetersTests.SpeedMeter_TooFastTurnsAmberWithOneHapticThenTheHintAfterASecond" methodname="SpeedMeter_TooFastTurnsAmberWithOneHapticThenTheHintAfterASecond" classname="GiganticJourneys.Tests.Capture.CaptureMetersTests" runstate="Runnable" seed="898030106" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.000372" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1131" name="Tabletop_FindsTheBuildCentreAndPaintsBothHeights" fullname="GiganticJourneys.Tests.Capture.CaptureMetersTests.Tabletop_FindsTheBuildCentreAndPaintsBothHeights" methodname="Tabletop_FindsTheBuildCentreAndPaintsBothHeights" classname="GiganticJourneys.Tests.Capture.CaptureMetersTests" runstate="Runnable" seed="1770309011" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.001669" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1132" name="Tabletop_OnlyTheLowCircleLeavesTheHighBandUnseen" fullname="GiganticJourneys.Tests.Capture.CaptureMetersTests.Tabletop_OnlyTheLowCircleLeavesTheHighBandUnseen" methodname="Tabletop_OnlyTheLowCircleLeavesTheHighBandUnseen" classname="GiganticJourneys.Tests.Capture.CaptureMetersTests" runstate="Runnable" seed="669184109" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.001631" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1134" name="Tracking_AsksToRelocalizeOnlyAfterASustainedLoss" fullname="GiganticJourneys.Tests.Capture.CaptureMetersTests.Tracking_AsksToRelocalizeOnlyAfterASustainedLoss" methodname="Tracking_AsksToRelocalizeOnlyAfterASustainedLoss" classname="GiganticJourneys.Tests.Capture.CaptureMetersTests" runstate="Runnable" seed="1301735699" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.000301" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1135" name="CaptureSessionTests" fullname="GiganticJourneys.Tests.Capture.CaptureSessionTests" classname="GiganticJourneys.Tests.Capture.CaptureSessionTests" runstate="Runnable" testcasecount="18" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.114352" total="18" passed="18" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1147" name="ActionsInTheWrongStateAreRefusedNotThrown" fullname="GiganticJourneys.Tests.Capture.CaptureSessionTests.ActionsInTheWrongStateAreRefusedNotThrown" methodname="ActionsInTheWrongStateAreRefusedNotThrown" classname="GiganticJourneys.Tests.Capture.CaptureSessionTests" runstate="Runnable" seed="237061367" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.001142" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1142" name="BlurBurst_TicksAndIsExcludedFromCoverage" fullname="GiganticJourneys.Tests.Capture.CaptureSessionTests.BlurBurst_TicksAndIsExcludedFromCoverage" methodname="BlurBurst_TicksAndIsExcludedFromCoverage" classname="GiganticJourneys.Tests.Capture.CaptureSessionTests" runstate="Runnable" seed="960327480" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.016401" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1141" name="DarkCapture_ShowsTheCardOnce_AndTheGateSaysTurnOnALamp" fullname="GiganticJourneys.Tests.Capture.CaptureSessionTests.DarkCapture_ShowsTheCardOnce_AndTheGateSaysTurnOnALamp" methodname="DarkCapture_ShowsTheCardOnce_AndTheGateSaysTurnOnALamp" classname="GiganticJourneys.Tests.Capture.CaptureSessionTests" runstate="Runnable" seed="535936304" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.014819" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1139" name="DoneAt60Seconds_EvenWithLowCoverage" fullname="GiganticJourneys.Tests.Capture.CaptureSessionTests.DoneAt60Seconds_EvenWithLowCoverage" methodname="DoneAt60Seconds_EvenWithLowCoverage" classname="GiganticJourneys.Tests.Capture.CaptureSessionTests" runstate="Runnable" seed="192511619" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.013321" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1140" name="Finish_WithGapsGoesThroughTheMissedCornerCheck_AndUploadAnywayIsAlwaysThere" fullname="GiganticJourneys.Tests.Capture.CaptureSessionTests.Finish_WithGapsGoesThroughTheMissedCornerCheck_AndUploadAnywayIsAlwaysThere" methodname="Finish_WithGapsGoesThroughTheMissedCornerCheck_AndUploadAnywayIsAlwaysThere" classname="GiganticJourneys.Tests.Capture.CaptureSessionTests" runstate="Runnable" seed="1614821230" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.006012" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1149" name="FirstRunCoachThroughShowsOnce" fullname="GiganticJourneys.Tests.Capture.CaptureSessionTests.FirstRunCoachThroughShowsOnce" methodname="FirstRunCoachThroughShowsOnce" classname="GiganticJourneys.Tests.Capture.CaptureSessionTests" runstate="Runnable" seed="32658367" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.000861" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1137" name="GoodRoomCapture_UnlocksDoneAndLooksReady" fullname="GiganticJourneys.Tests.Capture.CaptureSessionTests.GoodRoomCapture_UnlocksDoneAndLooksReady" methodname="GoodRoomCapture_UnlocksDoneAndLooksReady" classname="GiganticJourneys.Tests.Capture.CaptureSessionTests" runstate="Runnable" seed="962278620" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.006971" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1138" name="GoodTabletopCapture_LooksReady" fullname="GiganticJourneys.Tests.Capture.CaptureSessionTests.GoodTabletopCapture_LooksReady" methodname="GoodTabletopCapture_LooksReady" classname="GiganticJourneys.Tests.Capture.CaptureSessionTests" runstate="Runnable" seed="463176023" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.006156" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1146" name="Interruption_OffersResumeOrStartOver" fullname="GiganticJourneys.Tests.Capture.CaptureSessionTests.Interruption_OffersResumeOrStartOver" methodname="Interruption_OffersResumeOrStartOver" classname="GiganticJourneys.Tests.Capture.CaptureSessionTests" runstate="Runnable" seed="232514094" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.007628" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1151" name="LongCapture_TurnsTheRingAmberAndCoachesDuration" fullname="GiganticJourneys.Tests.Capture.CaptureSessionTests.LongCapture_TurnsTheRingAmberAndCoachesDuration" methodname="LongCapture_TurnsTheRingAmberAndCoachesDuration" classname="GiganticJourneys.Tests.Capture.CaptureSessionTests" runstate="Runnable" seed="392924903" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.014261" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1153" name="PassesNeverExceedTheBundleLimit" fullname="GiganticJourneys.Tests.Capture.CaptureSessionTests.PassesNeverExceedTheBundleLimit" methodname="PassesNeverExceedTheBundleLimit" classname="GiganticJourneys.Tests.Capture.CaptureSessionTests" runstate="Runnable" seed="1632456474" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.002215" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1152" name="ReadinessWeightsSumToOne" fullname="GiganticJourneys.Tests.Capture.CaptureSessionTests.ReadinessWeightsSumToOne" methodname="ReadinessWeightsSumToOne" classname="GiganticJourneys.Tests.Capture.CaptureSessionTests" runstate="Runnable" seed="728794881" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.000199" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1150" name="ReconstructionFailure_GivesAFreeRetryInTheSameMode" fullname="GiganticJourneys.Tests.Capture.CaptureSessionTests.ReconstructionFailure_GivesAFreeRetryInTheSameMode" methodname="ReconstructionFailure_GivesAFreeRetryInTheSameMode" classname="GiganticJourneys.Tests.Capture.CaptureSessionTests" runstate="Runnable" seed="698149981" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.000266" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1136" name="RecordingWaitsForTracking" fullname="GiganticJourneys.Tests.Capture.CaptureSessionTests.RecordingWaitsForTracking" methodname="RecordingWaitsForTracking" classname="GiganticJourneys.Tests.Capture.CaptureSessionTests" runstate="Runnable" seed="1637265775" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.000251" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1148" name="RetakeFromTheGateOrPreview_ClearsAndKeepsTheMode" fullname="GiganticJourneys.Tests.Capture.CaptureSessionTests.RetakeFromTheGateOrPreview_ClearsAndKeepsTheMode" methodname="RetakeFromTheGateOrPreview_ClearsAndKeepsTheMode" classname="GiganticJourneys.Tests.Capture.CaptureSessionTests" runstate="Runnable" seed="1115928625" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.005487" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1143" name="ShakyCapture_GateCoachesSlowingDown" fullname="GiganticJourneys.Tests.Capture.CaptureSessionTests.ShakyCapture_GateCoachesSlowingDown" methodname="ShakyCapture_GateCoachesSlowingDown" classname="GiganticJourneys.Tests.Capture.CaptureSessionTests" runstate="Runnable" seed="695250560" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.004897" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1144" name="TooFast_HapticThenSlowDownHint" fullname="GiganticJourneys.Tests.Capture.CaptureSessionTests.TooFast_HapticThenSlowDownHint" methodname="TooFast_HapticThenSlowDownHint" classname="GiganticJourneys.Tests.Capture.CaptureSessionTests" runstate="Runnable" seed="1774160815" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.005191" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1145" name="TrackingLoss_RelocalizesAndKeepsCoverage" fullname="GiganticJourneys.Tests.Capture.CaptureSessionTests.TrackingLoss_RelocalizesAndKeepsCoverage" methodname="TrackingLoss_RelocalizesAndKeepsCoverage" classname="GiganticJourneys.Tests.Capture.CaptureSessionTests" runstate="Runnable" seed="1633664222" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.005774" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+          </test-suite>
+          <test-suite type="TestFixture" id="1001" name="DebugOverlayLogicTests" fullname="GiganticJourneys.Tests.DebugOverlayLogicTests" classname="GiganticJourneys.Tests.DebugOverlayLogicTests" runstate="Runnable" testcasecount="16" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.044550" total="16" passed="16" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1008" name="BuildInfo_ParsesKeyValueResource" fullname="GiganticJourneys.Tests.DebugOverlayLogicTests.BuildInfo_ParsesKeyValueResource" methodname="BuildInfo_ParsesKeyValueResource" classname="GiganticJourneys.Tests.DebugOverlayLogicTests" runstate="Runnable" seed="1602073859" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.035607" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1017" name="EstimatePixelsPerPoint_MatchesIosScreenScale" fullname="GiganticJourneys.Tests.DebugOverlayLogicTests.EstimatePixelsPerPoint_MatchesIosScreenScale" classname="GiganticJourneys.Tests.DebugOverlayLogicTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.001370" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1010" name="EstimatePixelsPerPoint_MatchesIosScreenScale(460.0f,3.0f)" fullname="GiganticJourneys.Tests.DebugOverlayLogicTests.EstimatePixelsPerPoint_MatchesIosScreenScale(460.0f,3.0f)" methodname="EstimatePixelsPerPoint_MatchesIosScreenScale" classname="GiganticJourneys.Tests.DebugOverlayLogicTests" runstate="Runnable" seed="1436773600" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.000384" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1011" name="EstimatePixelsPerPoint_MatchesIosScreenScale(476.0f,3.0f)" fullname="GiganticJourneys.Tests.DebugOverlayLogicTests.EstimatePixelsPerPoint_MatchesIosScreenScale(476.0f,3.0f)" methodname="EstimatePixelsPerPoint_MatchesIosScreenScale" classname="GiganticJourneys.Tests.DebugOverlayLogicTests" runstate="Runnable" seed="2083716506" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.000072" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1012" name="EstimatePixelsPerPoint_MatchesIosScreenScale(326.0f,2.0f)" fullname="GiganticJourneys.Tests.DebugOverlayLogicTests.EstimatePixelsPerPoint_MatchesIosScreenScale(326.0f,2.0f)" methodname="EstimatePixelsPerPoint_MatchesIosScreenScale" classname="GiganticJourneys.Tests.DebugOverlayLogicTests" runstate="Runnable" seed="616007724" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.000036" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1013" name="EstimatePixelsPerPoint_MatchesIosScreenScale(264.0f,2.0f)" fullname="GiganticJourneys.Tests.DebugOverlayLogicTests.EstimatePixelsPerPoint_MatchesIosScreenScale(264.0f,2.0f)" methodname="EstimatePixelsPerPoint_MatchesIosScreenScale" classname="GiganticJourneys.Tests.DebugOverlayLogicTests" runstate="Runnable" seed="479159072" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.000033" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1014" name="EstimatePixelsPerPoint_MatchesIosScreenScale(96.0f,1.0f)" fullname="GiganticJourneys.Tests.DebugOverlayLogicTests.EstimatePixelsPerPoint_MatchesIosScreenScale(96.0f,1.0f)" methodname="EstimatePixelsPerPoint_MatchesIosScreenScale" classname="GiganticJourneys.Tests.DebugOverlayLogicTests" runstate="Runnable" seed="1896938564" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.000031" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1015" name="EstimatePixelsPerPoint_MatchesIosScreenScale(0.0f,1.0f)" fullname="GiganticJourneys.Tests.DebugOverlayLogicTests.EstimatePixelsPerPoint_MatchesIosScreenScale(0.0f,1.0f)" methodname="EstimatePixelsPerPoint_MatchesIosScreenScale" classname="GiganticJourneys.Tests.DebugOverlayLogicTests" runstate="Runnable" seed="976066492" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.000032" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1016" name="EstimatePixelsPerPoint_MatchesIosScreenScale(800.0f,3.0f)" fullname="GiganticJourneys.Tests.DebugOverlayLogicTests.EstimatePixelsPerPoint_MatchesIosScreenScale(800.0f,3.0f)" methodname="EstimatePixelsPerPoint_MatchesIosScreenScale" classname="GiganticJourneys.Tests.DebugOverlayLogicTests" runstate="Runnable" seed="557537689" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.000034" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1005" name="FrameStats_KeepsSixtySecondsAtMaxRate_AndIgnoresBadSamples" fullname="GiganticJourneys.Tests.DebugOverlayLogicTests.FrameStats_KeepsSixtySecondsAtMaxRate_AndIgnoresBadSamples" methodname="FrameStats_KeepsSixtySecondsAtMaxRate_AndIgnoresBadSamples" classname="GiganticJourneys.Tests.DebugOverlayLogicTests" runstate="Runnable" seed="1706689952" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.001113" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1003" name="FrameStats_P99_CatchesHitches_AverageDoesNot" fullname="GiganticJourneys.Tests.DebugOverlayLogicTests.FrameStats_P99_CatchesHitches_AverageDoesNot" methodname="FrameStats_P99_CatchesHitches_AverageDoesNot" classname="GiganticJourneys.Tests.DebugOverlayLogicTests" runstate="Runnable" seed="1093862431" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.000438" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1002" name="FrameStats_SteadyRate_AverageAndPercentilesMatch" fullname="GiganticJourneys.Tests.DebugOverlayLogicTests.FrameStats_SteadyRate_AverageAndPercentilesMatch" methodname="FrameStats_SteadyRate_AverageAndPercentilesMatch" classname="GiganticJourneys.Tests.DebugOverlayLogicTests" runstate="Runnable" seed="2115718114" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.000287" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1004" name="FrameStats_WindowsOnlyCountRecentFrames" fullname="GiganticJourneys.Tests.DebugOverlayLogicTests.FrameStats_WindowsOnlyCountRecentFrames" methodname="FrameStats_WindowsOnlyCountRecentFrames" classname="GiganticJourneys.Tests.DebugOverlayLogicTests" runstate="Runnable" seed="339737033" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.000268" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1018" name="MinTouchTarget_Is44Points" fullname="GiganticJourneys.Tests.DebugOverlayLogicTests.MinTouchTarget_Is44Points" methodname="MinTouchTarget_Is44Points" classname="GiganticJourneys.Tests.DebugOverlayLogicTests" runstate="Runnable" seed="237779677" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.000088" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1009" name="PerformanceReport_HasTheOwnersFields_AndNoDeviceName" fullname="GiganticJourneys.Tests.DebugOverlayLogicTests.PerformanceReport_HasTheOwnersFields_AndNoDeviceName" methodname="PerformanceReport_HasTheOwnersFields_AndNoDeviceName" classname="GiganticJourneys.Tests.DebugOverlayLogicTests" runstate="Runnable" seed="752087276" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.002948" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1006" name="ThreeFingerTap_FiresOncePerGesture" fullname="GiganticJourneys.Tests.DebugOverlayLogicTests.ThreeFingerTap_FiresOncePerGesture" methodname="ThreeFingerTap_FiresOncePerGesture" classname="GiganticJourneys.Tests.DebugOverlayLogicTests" runstate="Runnable" seed="1081005535" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.000312" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1007" name="ThreeFingerTap_IgnoresSlowGatherAndTwoFingers" fullname="GiganticJourneys.Tests.DebugOverlayLogicTests.ThreeFingerTap_IgnoresSlowGatherAndTwoFingers" methodname="ThreeFingerTap_IgnoresSlowGatherAndTwoFingers" classname="GiganticJourneys.Tests.DebugOverlayLogicTests" runstate="Runnable" seed="689967379" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:53Z" duration="0.000140" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1019" name="DebugOverlayReleaseExclusionTests" fullname="GiganticJourneys.Tests.DebugOverlayReleaseExclusionTests" classname="GiganticJourneys.Tests.DebugOverlayReleaseExclusionTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:38:10Z" duration="16.710776" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1021" name="DevelopmentPlayerScripts_IncludeDebugOverlay" fullname="GiganticJourneys.Tests.DebugOverlayReleaseExclusionTests.DevelopmentPlayerScripts_IncludeDebugOverlay" methodname="DevelopmentPlayerScripts_IncludeDebugOverlay" classname="GiganticJourneys.Tests.DebugOverlayReleaseExclusionTests" runstate="Runnable" seed="1973149660" result="Passed" start-time="2026-09-29 03:37:53Z" end-time="2026-09-29 03:37:58Z" duration="4.549978" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1022" name="GjDebugDefine_ForcesOverlayIntoNonDevelopmentPlayer" fullname="GiganticJourneys.Tests.DebugOverlayReleaseExclusionTests.GjDebugDefine_ForcesOverlayIntoNonDevelopmentPlayer" methodname="GjDebugDefine_ForcesOverlayIntoNonDevelopmentPlayer" classname="GiganticJourneys.Tests.DebugOverlayReleaseExclusionTests" runstate="Runnable" seed="1496710653" result="Passed" start-time="2026-09-29 03:37:58Z" end-time="2026-09-29 03:38:05Z" duration="6.847556" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1023" name="OverlayAssembly_HasDebugDefineConstraint" fullname="GiganticJourneys.Tests.DebugOverlayReleaseExclusionTests.OverlayAssembly_HasDebugDefineConstraint" methodname="OverlayAssembly_HasDebugDefineConstraint" classname="GiganticJourneys.Tests.DebugOverlayReleaseExclusionTests" runstate="Runnable" seed="186625541" result="Passed" start-time="2026-09-29 03:38:05Z" end-time="2026-09-29 03:38:05Z" duration="0.002457" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1024" name="ReleaseDefines_DoNotForceGjDebug" fullname="GiganticJourneys.Tests.DebugOverlayReleaseExclusionTests.ReleaseDefines_DoNotForceGjDebug" methodname="ReleaseDefines_DoNotForceGjDebug" classname="GiganticJourneys.Tests.DebugOverlayReleaseExclusionTests" runstate="Runnable" seed="354737823" result="Passed" start-time="2026-09-29 03:38:05Z" end-time="2026-09-29 03:38:05Z" duration="0.001891" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1020" name="ReleasePlayerScripts_ExcludeDebugOverlayType" fullname="GiganticJourneys.Tests.DebugOverlayReleaseExclusionTests.ReleasePlayerScripts_ExcludeDebugOverlayType" methodname="ReleasePlayerScripts_ExcludeDebugOverlayType" classname="GiganticJourneys.Tests.DebugOverlayReleaseExclusionTests" runstate="Runnable" seed="832674492" result="Passed" start-time="2026-09-29 03:38:05Z" end-time="2026-09-29 03:38:10Z" duration="5.149950" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1025" name="SharePlugin_IsIosOnly_AndExcludedFromReleaseBuilds" fullname="GiganticJourneys.Tests.DebugOverlayReleaseExclusionTests.SharePlugin_IsIosOnly_AndExcludedFromReleaseBuilds" methodname="SharePlugin_IsIosOnly_AndExcludedFromReleaseBuilds" classname="GiganticJourneys.Tests.DebugOverlayReleaseExclusionTests" runstate="Runnable" seed="953400587" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.002591" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1029" name="IntentLayerTests" fullname="GiganticJourneys.Tests.IntentLayerTests" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" testcasecount="25" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.042993" total="25" passed="25" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1056" name="Aggregator_StrongestStickWins_AnyJumpCounts" fullname="GiganticJourneys.Tests.IntentLayerTests.Aggregator_StrongestStickWins_AnyJumpCounts" methodname="Aggregator_StrongestStickWins_AnyJumpCounts" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" seed="252338558" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.001937" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1043" name="Buffer_IsConsumedOnce" fullname="GiganticJourneys.Tests.IntentLayerTests.Buffer_IsConsumedOnce" methodname="Buffer_IsConsumedOnce" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" seed="1039667615" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.006857" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1042" name="Buffer_PressBeforeLandingFiresOnLanding" fullname="GiganticJourneys.Tests.IntentLayerTests.Buffer_PressBeforeLandingFiresOnLanding" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.003562" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1038" name="Buffer_PressBeforeLandingFiresOnLanding(0.05f,True)" fullname="GiganticJourneys.Tests.IntentLayerTests.Buffer_PressBeforeLandingFiresOnLanding(0.05f,True)" methodname="Buffer_PressBeforeLandingFiresOnLanding" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" seed="428595767" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000666" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1039" name="Buffer_PressBeforeLandingFiresOnLanding(0.115f,True)" fullname="GiganticJourneys.Tests.IntentLayerTests.Buffer_PressBeforeLandingFiresOnLanding(0.115f,True)" methodname="Buffer_PressBeforeLandingFiresOnLanding" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" seed="1906300622" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000268" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1040" name="Buffer_PressBeforeLandingFiresOnLanding(0.125f,False)" fullname="GiganticJourneys.Tests.IntentLayerTests.Buffer_PressBeforeLandingFiresOnLanding(0.125f,False)" methodname="Buffer_PressBeforeLandingFiresOnLanding" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" seed="277497152" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000103" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1041" name="Buffer_PressBeforeLandingFiresOnLanding(0.3f,False)" fullname="GiganticJourneys.Tests.IntentLayerTests.Buffer_PressBeforeLandingFiresOnLanding(0.3f,False)" methodname="Buffer_PressBeforeLandingFiresOnLanding" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" seed="1047368715" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000130" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1037" name="Coyote_DoesNotGrantASecondJump" fullname="GiganticJourneys.Tests.IntentLayerTests.Coyote_DoesNotGrantASecondJump" methodname="Coyote_DoesNotGrantASecondJump" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" seed="553391756" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000218" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1036" name="Coyote_JumpAfterWalkingOffAnEdge" fullname="GiganticJourneys.Tests.IntentLayerTests.Coyote_JumpAfterWalkingOffAnEdge" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.006113" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1032" name="Coyote_JumpAfterWalkingOffAnEdge(0.05f,True)" fullname="GiganticJourneys.Tests.IntentLayerTests.Coyote_JumpAfterWalkingOffAnEdge(0.05f,True)" methodname="Coyote_JumpAfterWalkingOffAnEdge" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" seed="1990439300" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000694" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1033" name="Coyote_JumpAfterWalkingOffAnEdge(0.095f,True)" fullname="GiganticJourneys.Tests.IntentLayerTests.Coyote_JumpAfterWalkingOffAnEdge(0.095f,True)" methodname="Coyote_JumpAfterWalkingOffAnEdge" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" seed="1373381594" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000170" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1034" name="Coyote_JumpAfterWalkingOffAnEdge(0.105f,False)" fullname="GiganticJourneys.Tests.IntentLayerTests.Coyote_JumpAfterWalkingOffAnEdge(0.105f,False)" methodname="Coyote_JumpAfterWalkingOffAnEdge" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" seed="608100338" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000217" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1035" name="Coyote_JumpAfterWalkingOffAnEdge(0.2f,False)" fullname="GiganticJourneys.Tests.IntentLayerTests.Coyote_JumpAfterWalkingOffAnEdge(0.2f,False)" methodname="Coyote_JumpAfterWalkingOffAnEdge" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" seed="1800615886" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000269" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1054" name="FloatingStick_OriginAtFirstTouch_ClampsToRadius" fullname="GiganticJourneys.Tests.IntentLayerTests.FloatingStick_OriginAtFirstTouch_ClampsToRadius" methodname="FloatingStick_OriginAtFirstTouch_ClampsToRadius" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" seed="1243719576" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.001012" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1052" name="Gait_RunHeld1Point5Seconds_BecomesSprint_AndResets" fullname="GiganticJourneys.Tests.IntentLayerTests.Gait_RunHeld1Point5Seconds_BecomesSprint_AndResets" methodname="Gait_RunHeld1Point5Seconds_BecomesSprint_AndResets" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" seed="435900921" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.003979" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1053" name="Gait_SpeedsComeFromMovementJson" fullname="GiganticJourneys.Tests.IntentLayerTests.Gait_SpeedsComeFromMovementJson" methodname="Gait_SpeedsComeFromMovementJson" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" seed="1451676949" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000381" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1051" name="Gait_StickBands_Bible31" fullname="GiganticJourneys.Tests.IntentLayerTests.Gait_StickBands_Bible31" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.006263" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1044" name="Gait_StickBands_Bible31(0.05f,Idle)" fullname="GiganticJourneys.Tests.IntentLayerTests.Gait_StickBands_Bible31(0.05f,Idle)" methodname="Gait_StickBands_Bible31" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" seed="1990590202" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000548" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1045" name="Gait_StickBands_Bible31(0.3f,Walk)" fullname="GiganticJourneys.Tests.IntentLayerTests.Gait_StickBands_Bible31(0.3f,Walk)" methodname="Gait_StickBands_Bible31" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" seed="861251187" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000188" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1046" name="Gait_StickBands_Bible31(0.39f,Walk)" fullname="GiganticJourneys.Tests.IntentLayerTests.Gait_StickBands_Bible31(0.39f,Walk)" methodname="Gait_StickBands_Bible31" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" seed="1572414284" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000305" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1047" name="Gait_StickBands_Bible31(0.4f,Jog)" fullname="GiganticJourneys.Tests.IntentLayerTests.Gait_StickBands_Bible31(0.4f,Jog)" methodname="Gait_StickBands_Bible31" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" seed="1836470099" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000134" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1048" name="Gait_StickBands_Bible31(0.85f,Jog)" fullname="GiganticJourneys.Tests.IntentLayerTests.Gait_StickBands_Bible31(0.85f,Jog)" methodname="Gait_StickBands_Bible31" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" seed="791616085" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000154" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1049" name="Gait_StickBands_Bible31(0.9f,Run)" fullname="GiganticJourneys.Tests.IntentLayerTests.Gait_StickBands_Bible31(0.9f,Run)" methodname="Gait_StickBands_Bible31" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" seed="472623451" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000106" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1050" name="Gait_StickBands_Bible31(1.0f,Run)" fullname="GiganticJourneys.Tests.IntentLayerTests.Gait_StickBands_Bible31(1.0f,Run)" methodname="Gait_StickBands_Bible31" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" seed="1879112446" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000137" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1031" name="GroundedPress_FiresImmediately" fullname="GiganticJourneys.Tests.IntentLayerTests.GroundedPress_FiresImmediately" methodname="GroundedPress_FiresImmediately" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" seed="1796456065" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000180" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1055" name="TouchLayout_StickInLeftThird_JumpPadLowRight" fullname="GiganticJourneys.Tests.IntentLayerTests.TouchLayout_StickInLeftThird_JumpPadLowRight" methodname="TouchLayout_StickInLeftThird_JumpPadLowRight" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" seed="983104453" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000904" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1057" name="Trajectory_PredictsSixTenthsOfASecondAhead" fullname="GiganticJourneys.Tests.IntentLayerTests.Trajectory_PredictsSixTenthsOfASecondAhead" methodname="Trajectory_PredictsSixTenthsOfASecondAhead" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" seed="1449298532" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.003062" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1030" name="Windows_ComeFromMovementJson" fullname="GiganticJourneys.Tests.IntentLayerTests.Windows_ComeFromMovementJson" methodname="Windows_ComeFromMovementJson" classname="GiganticJourneys.Tests.IntentLayerTests" runstate="Runnable" seed="598422492" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000637" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1026" name="IosBurstSettingsTests" fullname="GiganticJourneys.Tests.IosBurstSettingsTests" classname="GiganticJourneys.Tests.IosBurstSettingsTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.004612" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1028" name="DisableFlagIsOptInAndParsed" fullname="GiganticJourneys.Tests.IosBurstSettingsTests.DisableFlagIsOptInAndParsed" methodname="DisableFlagIsOptInAndParsed" classname="GiganticJourneys.Tests.IosBurstSettingsTests" runstate="Runnable" seed="1801680899" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.001431" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1027" name="IosBurstIsCommittedEnabled" fullname="GiganticJourneys.Tests.IosBurstSettingsTests.IosBurstIsCommittedEnabled" methodname="IosBurstIsCommittedEnabled" classname="GiganticJourneys.Tests.IosBurstSettingsTests" runstate="Runnable" seed="329668892" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000512" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1058" name="LocomotionMotorTests" fullname="GiganticJourneys.Tests.LocomotionMotorTests" classname="GiganticJourneys.Tests.LocomotionMotorTests" runstate="Runnable" testcasecount="16" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.024040" total="16" passed="16" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1070" name="Assist_AddsTheJumpBonus" fullname="GiganticJourneys.Tests.LocomotionMotorTests.Assist_AddsTheJumpBonus" methodname="Assist_AddsTheJumpBonus" classname="GiganticJourneys.Tests.LocomotionMotorTests" runstate="Runnable" seed="2019085630" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.003251" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1072" name="BufferedJump_FiresOnLanding_InTheMotor" fullname="GiganticJourneys.Tests.LocomotionMotorTests.BufferedJump_FiresOnLanding_InTheMotor" methodname="BufferedJump_FiresOnLanding_InTheMotor" classname="GiganticJourneys.Tests.LocomotionMotorTests" runstate="Runnable" seed="557849030" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.002297" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1063" name="GaitCap_HoldsRunBelowSprint" fullname="GiganticJourneys.Tests.LocomotionMotorTests.GaitCap_HoldsRunBelowSprint" methodname="GaitCap_HoldsRunBelowSprint" classname="GiganticJourneys.Tests.LocomotionMotorTests" runstate="Runnable" seed="880426840" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000650" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1062" name="GroundSpeed_Over5Seconds_WithinTwoPercent" fullname="GiganticJourneys.Tests.LocomotionMotorTests.GroundSpeed_Over5Seconds_WithinTwoPercent" classname="GiganticJourneys.Tests.LocomotionMotorTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.004925" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1059" name="GroundSpeed_Over5Seconds_WithinTwoPercent(0.3f,Walk)" fullname="GiganticJourneys.Tests.LocomotionMotorTests.GroundSpeed_Over5Seconds_WithinTwoPercent(0.3f,Walk)" methodname="GroundSpeed_Over5Seconds_WithinTwoPercent" classname="GiganticJourneys.Tests.LocomotionMotorTests" runstate="Runnable" seed="1533350887" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000743" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1060" name="GroundSpeed_Over5Seconds_WithinTwoPercent(0.6f,Jog)" fullname="GiganticJourneys.Tests.LocomotionMotorTests.GroundSpeed_Over5Seconds_WithinTwoPercent(0.6f,Jog)" methodname="GroundSpeed_Over5Seconds_WithinTwoPercent" classname="GiganticJourneys.Tests.LocomotionMotorTests" runstate="Runnable" seed="103481420" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000465" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1061" name="GroundSpeed_Over5Seconds_WithinTwoPercent(1.0f,Run)" fullname="GiganticJourneys.Tests.LocomotionMotorTests.GroundSpeed_Over5Seconds_WithinTwoPercent(1.0f,Run)" methodname="GroundSpeed_Over5Seconds_WithinTwoPercent" classname="GiganticJourneys.Tests.LocomotionMotorTests" runstate="Runnable" seed="581884819" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000363" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1067" name="JogJump_IsARunningJump" fullname="GiganticJourneys.Tests.LocomotionMotorTests.JogJump_IsARunningJump" methodname="JogJump_IsARunningJump" classname="GiganticJourneys.Tests.LocomotionMotorTests" runstate="Runnable" seed="1288602658" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000482" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1069" name="JumpWithoutStick_GoesStraightUp" fullname="GiganticJourneys.Tests.LocomotionMotorTests.JumpWithoutStick_GoesStraightUp" methodname="JumpWithoutStick_GoesStraightUp" classname="GiganticJourneys.Tests.LocomotionMotorTests" runstate="Runnable" seed="1942724972" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000331" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1071" name="NoAirControl_ArcIsCommittedAtTakeoff" fullname="GiganticJourneys.Tests.LocomotionMotorTests.NoAirControl_ArcIsCommittedAtTakeoff" methodname="NoAirControl_ArcIsCommittedAtTakeoff" classname="GiganticJourneys.Tests.LocomotionMotorTests" runstate="Runnable" seed="1879164621" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000283" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1066" name="RunningJump_Height1Point2A_Distance2Point4A_WithinFivePercent" fullname="GiganticJourneys.Tests.LocomotionMotorTests.RunningJump_Height1Point2A_Distance2Point4A_WithinFivePercent" methodname="RunningJump_Height1Point2A_Distance2Point4A_WithinFivePercent" classname="GiganticJourneys.Tests.LocomotionMotorTests" runstate="Runnable" seed="400330209" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000475" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1064" name="Sprint_Over5Seconds_WithinTwoPercent" fullname="GiganticJourneys.Tests.LocomotionMotorTests.Sprint_Over5Seconds_WithinTwoPercent" methodname="Sprint_Over5Seconds_WithinTwoPercent" classname="GiganticJourneys.Tests.LocomotionMotorTests" runstate="Runnable" seed="1481098986" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000568" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1068" name="SprintJump_Distance3A_WithinFivePercent" fullname="GiganticJourneys.Tests.LocomotionMotorTests.SprintJump_Distance3A_WithinFivePercent" methodname="SprintJump_Distance3A_WithinFivePercent" classname="GiganticJourneys.Tests.LocomotionMotorTests" runstate="Runnable" seed="41886245" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000880" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1065" name="StandingJump_Height1Point1A_Distance1Point2A_WithinFivePercent" fullname="GiganticJourneys.Tests.LocomotionMotorTests.StandingJump_Height1Point1A_Distance1Point2A_WithinFivePercent" methodname="StandingJump_Height1Point1A_Distance1Point2A_WithinFivePercent" classname="GiganticJourneys.Tests.LocomotionMotorTests" runstate="Runnable" seed="1635979977" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000347" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1075" name="VerbRegistry_HigherPriorityProviderWins_WithoutCoreChanges" fullname="GiganticJourneys.Tests.LocomotionMotorTests.VerbRegistry_HigherPriorityProviderWins_WithoutCoreChanges" methodname="VerbRegistry_HigherPriorityProviderWins_WithoutCoreChanges" classname="GiganticJourneys.Tests.LocomotionMotorTests" runstate="Runnable" seed="1898090076" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000749" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1073" name="Verbs_IdleWalkAirborneFall" fullname="GiganticJourneys.Tests.LocomotionMotorTests.Verbs_IdleWalkAirborneFall" methodname="Verbs_IdleWalkAirborneFall" classname="GiganticJourneys.Tests.LocomotionMotorTests" runstate="Runnable" seed="1218381847" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.001934" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1074" name="WalkingOffAnEdge_IsAirborneThenFall" fullname="GiganticJourneys.Tests.LocomotionMotorTests.WalkingOffAnEdge_IsAirborneThenFall" methodname="WalkingOffAnEdge_IsAirborneThenFall" classname="GiganticJourneys.Tests.LocomotionMotorTests" runstate="Runnable" seed="1808278213" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000367" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1076" name="MovementArchitectureTests" fullname="GiganticJourneys.Tests.MovementArchitectureTests" classname="GiganticJourneys.Tests.MovementArchitectureTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.075638" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1077" name="AllLayerAssembliesExist" fullname="GiganticJourneys.Tests.MovementArchitectureTests.AllLayerAssembliesExist" methodname="AllLayerAssembliesExist" classname="GiganticJourneys.Tests.MovementArchitectureTests" runstate="Runnable" seed="2128982976" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.004389" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1078" name="AsmdefReferences_PointOnlyDownward" fullname="GiganticJourneys.Tests.MovementArchitectureTests.AsmdefReferences_PointOnlyDownward" methodname="AsmdefReferences_PointOnlyDownward" classname="GiganticJourneys.Tests.MovementArchitectureTests" runstate="Runnable" seed="129433206" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.003552" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1079" name="CompiledAssemblies_PointOnlyDownward" fullname="GiganticJourneys.Tests.MovementArchitectureTests.CompiledAssemblies_PointOnlyDownward" methodname="CompiledAssemblies_PointOnlyDownward" classname="GiganticJourneys.Tests.MovementArchitectureTests" runstate="Runnable" seed="1901886186" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.003023" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1081" name="NoMovementOrCameraLiteral_OutsideTheConfig" fullname="GiganticJourneys.Tests.MovementArchitectureTests.NoMovementOrCameraLiteral_OutsideTheConfig" methodname="NoMovementOrCameraLiteral_OutsideTheConfig" classname="GiganticJourneys.Tests.MovementArchitectureTests" runstate="Runnable" seed="652738702" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.010076" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1080" name="SharedAssembly_HoldsTheContractTypes" fullname="GiganticJourneys.Tests.MovementArchitectureTests.SharedAssembly_HoldsTheContractTypes" methodname="SharedAssembly_HoldsTheContractTypes" classname="GiganticJourneys.Tests.MovementArchitectureTests" runstate="Runnable" seed="872921362" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000364" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1082" name="MovementConfigTests" fullname="GiganticJourneys.Tests.MovementConfigTests" classname="GiganticJourneys.Tests.MovementConfigTests" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.042734" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1086" name="CSharpAndPython_AgreeOnEveryConstant_SharedFixture" fullname="GiganticJourneys.Tests.MovementConfigTests.CSharpAndPython_AgreeOnEveryConstant_SharedFixture" methodname="CSharpAndPython_AgreeOnEveryConstant_SharedFixture" classname="GiganticJourneys.Tests.MovementConfigTests" runstate="Runnable" seed="797467196" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.009110" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1092" name="DuplicateKey_AndMalformedJson_AreHardErrors" fullname="GiganticJourneys.Tests.MovementConfigTests.DuplicateKey_AndMalformedJson_AreHardErrors" methodname="DuplicateKey_AndMalformedJson_AreHardErrors" classname="GiganticJourneys.Tests.MovementConfigTests" runstate="Runnable" seed="1078719727" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.001441" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1085" name="EveryJsonLeaf_IsReadIntoATypedField" fullname="GiganticJourneys.Tests.MovementConfigTests.EveryJsonLeaf_IsReadIntoATypedField" methodname="EveryJsonLeaf_IsReadIntoATypedField" classname="GiganticJourneys.Tests.MovementConfigTests" runstate="Runnable" seed="1669852340" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.007110" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1089" name="ExtraKey_IsAHardError_NamingThePath" fullname="GiganticJourneys.Tests.MovementConfigTests.ExtraKey_IsAHardError_NamingThePath" methodname="ExtraKey_IsAHardError_NamingThePath" classname="GiganticJourneys.Tests.MovementConfigTests" runstate="Runnable" seed="1859831520" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.001626" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1090" name="ExtraTopLevelKey_IsAHardError" fullname="GiganticJourneys.Tests.MovementConfigTests.ExtraTopLevelKey_IsAHardError" methodname="ExtraTopLevelKey_IsAHardError" classname="GiganticJourneys.Tests.MovementConfigTests" runstate="Runnable" seed="546853291" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.003368" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1093" name="MissingFile_IsAHardError" fullname="GiganticJourneys.Tests.MovementConfigTests.MissingFile_IsAHardError" methodname="MissingFile_IsAHardError" classname="GiganticJourneys.Tests.MovementConfigTests" runstate="Runnable" seed="229721967" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.001357" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1087" name="MissingKey_IsAHardError_NamingThePath" fullname="GiganticJourneys.Tests.MovementConfigTests.MissingKey_IsAHardError_NamingThePath" methodname="MissingKey_IsAHardError_NamingThePath" classname="GiganticJourneys.Tests.MovementConfigTests" runstate="Runnable" seed="503616953" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.002504" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1088" name="MissingSection_IsAHardError" fullname="GiganticJourneys.Tests.MovementConfigTests.MissingSection_IsAHardError" methodname="MissingSection_IsAHardError" classname="GiganticJourneys.Tests.MovementConfigTests" runstate="Runnable" seed="1919554719" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.001971" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1083" name="ShippedFile_LoadsIntoTypedFields" fullname="GiganticJourneys.Tests.MovementConfigTests.ShippedFile_LoadsIntoTypedFields" methodname="ShippedFile_LoadsIntoTypedFields" classname="GiganticJourneys.Tests.MovementConfigTests" runstate="Runnable" seed="1829113231" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.003558" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1084" name="StartupConfig_IsTheShippedFile" fullname="GiganticJourneys.Tests.MovementConfigTests.StartupConfig_IsTheShippedFile" methodname="StartupConfig_IsTheShippedFile" classname="GiganticJourneys.Tests.MovementConfigTests" runstate="Runnable" seed="1710905106" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.002334" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1094" name="StrictJson_ParsesStandardValues" fullname="GiganticJourneys.Tests.MovementConfigTests.StrictJson_ParsesStandardValues" methodname="StrictJson_ParsesStandardValues" classname="GiganticJourneys.Tests.MovementConfigTests" runstate="Runnable" seed="1808683960" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000841" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1091" name="WrongType_IsAHardError" fullname="GiganticJourneys.Tests.MovementConfigTests.WrongType_IsAHardError" methodname="WrongType_IsAHardError" classname="GiganticJourneys.Tests.MovementConfigTests" runstate="Runnable" seed="101476799" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.001157" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1095" name="MovementScaleTests" fullname="GiganticJourneys.Tests.MovementScaleTests" classname="GiganticJourneys.Tests.MovementScaleTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.004925" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1098" name="Ballistics_ApexAndRangeMatchTheRequest" fullname="GiganticJourneys.Tests.MovementScaleTests.Ballistics_ApexAndRangeMatchTheRequest" methodname="Ballistics_ApexAndRangeMatchTheRequest" classname="GiganticJourneys.Tests.MovementScaleTests" runstate="Runnable" seed="1681419009" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000335" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1097" name="Gravity_FollowsBibleSection1" fullname="GiganticJourneys.Tests.MovementScaleTests.Gravity_FollowsBibleSection1" methodname="Gravity_FollowsBibleSection1" classname="GiganticJourneys.Tests.MovementScaleTests" runstate="Runnable" seed="577227741" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000280" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1096" name="OneToTwelve_DefaultAvatar_IsAbout14Point6Centimeters" fullname="GiganticJourneys.Tests.MovementScaleTests.OneToTwelve_DefaultAvatar_IsAbout14Point6Centimeters" methodname="OneToTwelve_DefaultAvatar_IsAbout14Point6Centimeters" classname="GiganticJourneys.Tests.MovementScaleTests" runstate="Runnable" seed="556994383" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000802" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1099" name="ProjectSettingsSmokeTests" fullname="GiganticJourneys.Tests.ProjectSettingsSmokeTests" classname="GiganticJourneys.Tests.ProjectSettingsSmokeTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.006653" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1102" name="BootSceneIsFirstEnabledBuildScene" fullname="GiganticJourneys.Tests.ProjectSettingsSmokeTests.BootSceneIsFirstEnabledBuildScene" methodname="BootSceneIsFirstEnabledBuildScene" classname="GiganticJourneys.Tests.ProjectSettingsSmokeTests" runstate="Runnable" seed="286381027" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.001192" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1100" name="IosBundleIdIsTheStoreId" fullname="GiganticJourneys.Tests.ProjectSettingsSmokeTests.IosBundleIdIsTheStoreId" methodname="IosBundleIdIsTheStoreId" classname="GiganticJourneys.Tests.ProjectSettingsSmokeTests" runstate="Runnable" seed="1528366091" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000632" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1101" name="IosUsesMetalOnlyAndIl2Cpp" fullname="GiganticJourneys.Tests.ProjectSettingsSmokeTests.IosUsesMetalOnlyAndIl2Cpp" methodname="IosUsesMetalOnlyAndIl2Cpp" classname="GiganticJourneys.Tests.ProjectSettingsSmokeTests" runstate="Runnable" seed="1190895041" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.001196" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1103" name="UrpIsTheDefaultRenderPipeline" fullname="GiganticJourneys.Tests.ProjectSettingsSmokeTests.UrpIsTheDefaultRenderPipeline" methodname="UrpIsTheDefaultRenderPipeline" classname="GiganticJourneys.Tests.ProjectSettingsSmokeTests" runstate="Runnable" seed="472660274" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000512" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1104" name="SplatRendererTests" fullname="GiganticJourneys.Tests.SplatRendererTests" classname="GiganticJourneys.Tests.SplatRendererTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.020429" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1107" name="EveryUrpRendererHasTheSplatFeature" fullname="GiganticJourneys.Tests.SplatRendererTests.EveryUrpRendererHasTheSplatFeature" methodname="EveryUrpRendererHasTheSplatFeature" classname="GiganticJourneys.Tests.SplatRendererTests" runstate="Runnable" seed="624082529" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.006755" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1110" name="LodSettingsCoverEveryQualityTier" fullname="GiganticJourneys.Tests.SplatRendererTests.LodSettingsCoverEveryQualityTier" methodname="LodSettingsCoverEveryQualityTier" classname="GiganticJourneys.Tests.SplatRendererTests" runstate="Runnable" seed="1025496343" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.001755" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1105" name="RendererPackageIsPinnedToACommitSha" fullname="GiganticJourneys.Tests.SplatRendererTests.RendererPackageIsPinnedToACommitSha" methodname="RendererPackageIsPinnedToACommitSha" classname="GiganticJourneys.Tests.SplatRendererTests" runstate="Runnable" seed="743735503" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000817" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1106" name="RendererPackageLicenseIsMit" fullname="GiganticJourneys.Tests.SplatRendererTests.RendererPackageLicenseIsMit" methodname="RendererPackageLicenseIsMit" classname="GiganticJourneys.Tests.SplatRendererTests" runstate="Runnable" seed="1994300617" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000811" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1109" name="SampleSceneReferencesTheSampleAndSettings" fullname="GiganticJourneys.Tests.SplatRendererTests.SampleSceneReferencesTheSampleAndSettings" methodname="SampleSceneReferencesTheSampleAndSettings" classname="GiganticJourneys.Tests.SplatRendererTests" runstate="Runnable" seed="1412079255" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.000813" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1108" name="SampleSplatIsSmallAndLoadable" fullname="GiganticJourneys.Tests.SplatRendererTests.SampleSplatIsSmallAndLoadable" methodname="SampleSplatIsSmallAndLoadable" classname="GiganticJourneys.Tests.SplatRendererTests" runstate="Runnable" seed="1492447509" result="Passed" start-time="2026-09-29 03:38:10Z" end-time="2026-09-29 03:38:10Z" duration="0.003874" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Saving results to: /home/box/.config/unity3d/SparkForge Labs/Gigantic Journeys/TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

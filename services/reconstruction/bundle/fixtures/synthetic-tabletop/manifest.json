@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0",
+  "scan_id": "0b6f7c1e-4d2a-4c1b-9e3f-5a6b7c8d9e0f",
+  "mode": "tabletop",
+  "source": "gj-app",
+  "captured_on": "2026-09-29",
+  "device": {
+    "model": "iPhone16,1",
+    "lidar": false
+  },
+  "duration_s": 11.4667,
+  "readiness": {
+    "score": 0.8069,
+    "source": "gj-app",
+    "components": {
+      "coverage": 0.4722,
+      "parallax": 1,
+      "sharpness": 1,
+      "light": 1,
+      "tracking": 0.9167
+    },
+    "weakest": "coverage"
+  },
+  "coverage": {
+    "summary": "tabletop orbit: 47% painted over 2 pass(es)",
+    "fraction": 0.4722,
+    "passes": 2,
+    "map": {
+      "kind": "orbit",
+      "azimuth_bins": 18,
+      "elevation_bins": 2,
+      "elevation_min_deg": -10,
+      "elevation_max_deg": 70,
+      "painted": [
+        "111111110111111111",
+        "000000000000000000"
+      ]
+    }
+  },
+  "video": {
+    "file": "video.mov",
+    "container": "mov",
+    "codec": "hevc",
+    "width": 1920,
+    "height": 1440,
+    "fps": 30,
+    "frame_count": 2400
+  },
+  "camera": {
+    "image_width": 1920,
+    "image_height": 1440,
+    "intrinsics": {
+      "fx": 1450.5,
+      "fy": 1450.5,
+      "cx": 960.2,
+      "cy": 719.8
+    }
+  },
+  "world": {
+    "alignment": "gravity",
+    "up": [0, 1, 0],
+    "gravity": [0, -1, 0],
+    "metric_scale": "arkit-metres"
+  },
+  "frames": {
+    "file": "frames.jsonl",
+    "count": 180,
+    "accepted": 180,
+    "tracking_normal_fraction": 0.9167
+  },
+  "depth": null,
+  "passes": [
+    {
+      "first_frame": 0,
+      "last_frame": 89,
+      "reason": "start"
+    },
+    {
+      "first_frame": 90,
+      "last_frame": 179,
+      "reason": "relocalized"
+    }
+  ],
+  "privacy": {
+    "metadata_stripped": true,
+    "location_recorded": false
+  }
+}

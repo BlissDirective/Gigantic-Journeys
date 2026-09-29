@@ -16,7 +16,8 @@
         "GJ.AnimationSelection",
         "GJ.MotionWarping",
         "GJ.Procedural",
-        "GJ.Movement.Controller"
+        "GJ.Movement.Controller",
+        "GJ.Capture"
     ],
     "includePlatforms": [
         "Editor"

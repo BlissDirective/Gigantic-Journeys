@@ -5,7 +5,7 @@
   "area": "CAPT",
   "owner": "gj-capture",
   "qa": "gj-qa-release",
-  "status": "open",
+  "status": "blocked",
   "priority": "P0",
   "size": "L",
   "summary": "Guided capture in the app (room walkthrough + tabletop orbital, one illustrated toggle): record video with ARKit camera poses and depth, live coverage and speed coaching, blur rejection, and a pre-upload quality gate, producing an upload bundle for reconstruction (the capture→reconstruction contract). Coaching UI follows the locked DESIGN_SYSTEM §6; the pre-upload gate uses an on-device reconstruction-readiness score (coverage, overlap/parallax, blur, light, tracking continuity). Includes both mode coaching scripts, failure/recovery (tracking-loss relocalize, resume, downstream free retry), and first-run guided capture per SPEC §3.1 (AUTH #025). The on-device predictor + multi-pass 'add a pass' loop is M1-CAPT-04.",
@@ -76,10 +76,10 @@
     "AUTH #025",
     "design/proposals/capture-ux-coaching-v1.md"
   ],
-  "branch": null,
+  "branch": "ticket/M1-CAPT-01-capture-core",
   "pr": null,
   "created": "2026-09-16",
-  "updated": "2026-09-20",
+  "updated": "2026-09-29",
   "history": [
     {
       "date": "2026-09-16",
@@ -90,6 +90,15 @@
       "date": "2026-09-20",
       "event": "sharpened under AUTH #025 (capture UX + coaching): reconstruction-readiness gate signals (AT-3); named upload-contract contents (AT-1); both mode coaching scripts; failure/recovery + first-run coach-through (AT-6). On-device predictor + multi-pass loop split to M1-CAPT-04.",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-29",
+      "event": "Core built by gj-operator: upload contract v1.0 (services/reconstruction/bundle/capture_bundle.schema.json + README) and validator (tools/capture_bundle.py, 23 pytest incl. mutations); Unity GJ.Capture assembly — CaptureSession flow state machine, speed/blur/light/coverage/parallax/tracking signals, ReadinessScore + CoachingCopy, deterministic CaptureBundleWriter, SyntheticCapture; 39 new EditMode tests (134/134 EditMode pass locally); golden bundles written by the C# writer validated by Python. ARKit adapter + UI + device evidence remain → blocked on the AR stack decision and the device path. QA: qa/reports/M1-CAPT-01.md",
+      "by": "gj-operator"
     }
+  ],
+  "blocked_by": [
+    "AR stack decision (AR Foundation + ARKit XR plugin vs native plugin; a package addition like ADR-0001 addendum #035) before the device adapter + UI can be built",
+    "Device evidence (real-room bundle AT-1, AT-4 video strip, AT-5, AT-6) needs a TestFlight build on the Owner's iPhone (Admin-role App Store Connect key)"
   ]
 }
