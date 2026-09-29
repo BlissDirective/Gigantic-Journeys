@@ -1,9 +1,12 @@
 # AUTH request: freeze scene_graph / traversal_graph / environment_spec v1.0.0 (M1-DATA-01)
 
-> **STATUS: PROPOSED, awaiting the Owner.** Filed by gj-operator on 2026-09-29 (overnight worker). No AUTH
-> number is assigned, because Bots never write the Decisions table. If the Owner approves, the Coordinator
-> logs it as the next free number (#036 today, or #037 if the M0-UNITY-03 movement.json request is logged
-> first).
+> **STATUS: APPROVED as AUTH #037 (Owner, 2026-09-29).** Filed by gj-operator on 2026-09-29 (overnight
+> worker); logged in `governance/AUTHORIZATION_LOG.md` as Decision #037. The three schemas, their fixtures,
+> `check_consistency.py` and the 51 tests moved unchanged into `data/schemas/environment/` (kept as a self-
+> contained subdir so its fixture globbing does not collide with the flat telemetry/correction fixtures). One
+> BLOCKER from the AT-4 secondary review was fixed before the freeze: the teach-before-use check now fires on
+> every route, not just rank 1. Two field items were frozen as-drafted and surfaced to the Owner as non-blocking
+> fast-follows (crouch=T0; vault names to reconcile in M1-MOVE-02). Ticket M1-DATA-01 → done.
 
 ```
 AUTH REQUEST (next free #)

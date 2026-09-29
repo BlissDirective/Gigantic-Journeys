@@ -1,10 +1,22 @@
-# M1-DATA-01 proposal: scene_graph, traversal_graph and environment_spec schemas v1.0.0
+# Environment schemas (M1-DATA-01): scene_graph, traversal_graph and environment_spec v1.0.0
 
-**Status: PROPOSAL, not frozen.** Drafted by gj-operator on 2026-09-29 (overnight worker) for gj-scenegraph,
-with gj-gameplay and gj-platform as reviewers. The freeze needs a design-change AUTH
-(`governance/auth-requests/M1-DATA-01-schema-freeze.md`). Once it is approved, these files move unchanged
-to `data/schemas/`, the tests move to `data/schemas/tests/`, and `data/schemas/README.md` gets the
-version rows. Until then nothing reads them in production.
+**Status: FROZEN by AUTH #037 (2026-09-29).** Drafted by gj-operator on 2026-09-29 (overnight worker) for
+gj-scenegraph, with gj-gameplay and gj-platform as reviewers; secondary review by the Coordinator (AUTH #027)
+on 2026-09-29. These files are the frozen v1.0.0 contract the M1-SCEN chain writes and the Unity loader
+(M1-GAME-01) reads. Any change now needs its own design-change AUTH, cited as `APPROVED #n`, exactly like the
+telemetry and correction schemas one level up. This set stays in its own `environment/` subdirectory (self-
+contained schemas + `fixtures/` + `check_consistency.py` + `tests/`) so its fixture globbing does not collide
+with the flat telemetry/correction fixtures in `data/schemas/`.
+
+Two field-level items were frozen as-drafted and surfaced to the Owner as fast-follow adjustments (they do not
+block the freeze; changing either is an additive schema revision under a later AUTH):
+
+- **`crouch` is tier T0** (a beat-1-legal verb). This is the Operator's intentional design and is asserted by
+  `tests/test_m1_schemas.py`; it extends the SPEC §3.4 T0 set with crouch. If the Owner wants crouch at T1,
+  that is a one-line enum move plus the test.
+- **Vault variant names** are `speed-vault`, `kong-vault`, `lazy-vault` (AUTH #021). The Owner decision packet
+  used `step / speed / kong`; final names are to be reconciled in M1-MOVE-02. No fixture depends on a vault
+  verb, so the reconciliation is non-breaking.
 
 ## Files
 
@@ -45,5 +57,8 @@ version rows. Until then nothing reads them in production.
 - AT-2: fixtures validate and invalid ones are rejected. **Met.** "The validator and a Unity loader both parse
   the same fixture": the Python side is `check_consistency.py`. The Unity loader lands with M1-GAME-01 and
   should parse `fixtures/valid/*.desk-tabletop.json` in an EditMode test.
-- AT-3: needs the AUTH (APPROVED #n) and the README version row. **Open (Owner).**
-- AT-4: gj-gameplay and gj-platform review. **Open.**
+- AT-3: needs the AUTH (APPROVED #n) and the README version row. **Met** — frozen under AUTH #037 (2026-09-29);
+  version rows added to `data/schemas/README.md`.
+- AT-4: gj-gameplay and gj-platform review. **Met** — cross-review completed; the one BLOCKER it found (the
+  teach-before-use check only fired on the rank-1 route) is fixed in `check_consistency.py`
+  (`tool is None and tools`), so any route that uses a tool without declaring `required_tool` now fails.

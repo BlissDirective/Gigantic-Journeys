@@ -10,6 +10,9 @@ Frozen schemas: telemetry and correction events (M0-DATA-01), scene graph, trave
 |---|---|---|---|
 | `telemetry_events.schema.json` | **1.0.0** | AUTH #029 (2026-09-23) | frozen; field design awaiting Owner review (privacy label) |
 | `correction_events.schema.json` | **1.0.0** | AUTH #029 (2026-09-23) | frozen; field design awaiting Owner review (privacy label) |
+| `environment/scene_graph.json` | **1.0.0** | AUTH #037 (2026-09-29) | frozen; M1-SCEN-01/02 output |
+| `environment/traversal_graph.json` | **1.0.0** | AUTH #037 (2026-09-29) | frozen; M1-SCEN-03/05 output |
+| `environment/environment_spec.json` | **1.0.0** | AUTH #037 (2026-09-29) | frozen; playable contract for the Unity loader (M1-GAME-01) |
 
 ## Change rule
 
@@ -69,6 +72,10 @@ Purposes: app functionality and analytics (product improvement). The capture vid
 
 ## Layout
 
+Telemetry and correction (M0-DATA-01) sit flat at the top of `data/schemas/` with a shared `fixtures/` and `tests/`:
+
 - `fixtures/valid/<schema>.<event>.<n>.json`: must validate (two or more per event).
 - `fixtures/invalid/<schema>.<case>.json`: must be rejected (GPS, email, device id, free text, media URL, out-of-range values, wrong version and so on).
 - `tests/test_telemetry_schemas.py`: pytest, run by the lint workflow.
+
+The environment schemas (M1-DATA-01) live in the self-contained `environment/` subdirectory — `scene_graph.json`, `traversal_graph.json`, `environment_spec.json`, the cross-document `check_consistency.py`, and their own `fixtures/` and `tests/`. They are kept separate because both suites glob `fixtures/*.json` and infer the schema kind from the filename prefix, so mixing them in one flat directory would make each suite try to validate the other's fixtures. See `environment/README.md`.

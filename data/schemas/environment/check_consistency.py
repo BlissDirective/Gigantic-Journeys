@@ -136,10 +136,9 @@ def _check_route(route: dict, edges: dict, spec: dict) -> list[str]:
         problems.append(f"{rid}: commit_points does not match its edges")
     tools = {TOOL_OF_VERB[e["verb"]] for e in path if e["verb"] in TOOL_OF_VERB}
     tool = route["required_tool"]
-    if tool is None and tools and route["rank"] == 1:
+    if tool is None and tools:
         problems.append(
-            f"{rid}: the easiest route uses a tool ({sorted(tools)}) "
-            "without declaring required_tool"
+            f"{rid}: route uses a tool ({sorted(tools)}) without declaring required_tool"
         )
     if tool is not None:
         if tool not in tools:
