@@ -98,7 +98,7 @@ Rules:
 > **Withdraw consent & delete avatar.** This deletes your avatar and stops all future biometric processing. Your original photos were already deleted right after your avatar was made. Completes within 30 days.
 > `Withdraw & delete`
 
-Withdrawal: writes the `granted:false` record, deletes avatar assets, and — because source photos are already gone — logs completion. Full account delete-all is the broader flow in `RETENTION_SCHEDULE.md`.
+Withdrawal: writes the `granted:false` record, deletes avatar assets, and — because source photos are already gone — logs completion. Full account delete-all is the broader flow in `DELETION_FLOW.md`.
 
 ---
 

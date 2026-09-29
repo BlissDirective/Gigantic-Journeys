@@ -119,7 +119,7 @@ Repo-internal reading comes first: `ADRs/0002-backend-platform-and-secrets.md`; 
 
 ## G. Privacy-by-design, deletion and metadata stripping
 
-94. **GDPR Article 17 — Right to erasure** — <https://gdpr-info.eu/art-17-gdpr/> · *doc* — Legal basis for the delete-all flow (legal/RETENTION_SCHEDULE.md §2).
+94. **GDPR Article 17 — Right to erasure** — <https://gdpr-info.eu/art-17-gdpr/> · *doc* — Legal basis for the delete-all flow (legal/DELETION_FLOW.md).
 95. **GDPR Article 25 — Data protection by design and by default** — <https://gdpr-info.eu/art-25-gdpr/> · *doc* — Minimization and defaults, e.g. training opt-in default off.
 96. **Apple — Offering account deletion in your app** — <https://developer.apple.com/support/offering-account-deletion-in-your-app/> · *doc* — App Store requirement for in-app account deletion; shapes Settings → Delete my data.
 97. **Apple — Privacy manifest files** — <https://developer.apple.com/documentation/bundleresources/privacy-manifest-files> · *doc* — Required declarations of data use and SDK API reasons.

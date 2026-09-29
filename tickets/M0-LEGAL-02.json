@@ -5,7 +5,7 @@
   "area": "LEGAL",
   "owner": "gj-platform",
   "qa": null,
-  "status": "open",
+  "status": "in-review",
   "priority": "P1",
   "size": "S",
   "summary": "Write the retention schedule for every data class in SPEC §7 and specify the per-user delete-all flow, including vendor-side deletion. Draft for counsel review before M5.",
@@ -51,10 +51,10 @@
     "SPEC §7",
     "plan §9"
   ],
-  "branch": null,
+  "branch": "ticket/M0-LEGAL-02-retention-deletion",
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-15",
+  "updated": "2026-09-29",
   "history": [
     {
       "date": "2026-09-15",
@@ -65,6 +65,11 @@
       "date": "2026-09-15",
       "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-29",
+      "event": "legal/RETENTION_SCHEDULE.md → DRAFT v0.2 (one row per SPEC §7 class with retention, trigger, storage location, access and processor; v1 has no face/body photos per AUTH #020; raw media ≤ 24 h on success, ≤ 7 days on failure) + new legal/DELETION_FLOW.md DRAFT v0.1 (Settings entry point, confirmation + re-auth, steps per class, processor deletion + receipts incl. Sign in with Apple revocation, 30-day limit, user-facing copy, synthetic staging test). Both pending attorney review; SPEC §7 already points to legal/ (no SPEC edit). QA qa/reports/M0-LEGAL-02.md. → in-review",
+      "by": "gj-operator"
     }
   ]
 }

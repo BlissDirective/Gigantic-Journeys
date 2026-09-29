@@ -89,7 +89,7 @@ Research list: `projects/skills/platform/RESOURCES.md` (104 link-checked entries
 
 ## 6. Deletion flows
 
-- **Data classes and retention:** SPEC §7 is the source. The draft schedule and flow live in `legal/RETENTION_SCHEDULE.md` (M0-LEGAL-02, open; DRAFT pending counsel before M5). M0-LEGAL-02 AT-3 also asks for `legal/DELETION_FLOW.md`, which **doesn't exist yet**; today the flow is `RETENTION_SCHEDULE.md` §2. **TBD: M0-LEGAL-02.**
+- **Data classes and retention:** SPEC §7 is the source. The draft schedule is `legal/RETENTION_SCHEDULE.md` (v0.2, one row per SPEC §7 class with location, access and processor) and the delete-all contract is `legal/DELETION_FLOW.md` (v0.1: steps per class, processor deletion + receipts, 30 days, the staging test). Both are DRAFT pending counsel before M5 (M0-LEGAL-02).
 - **Automatic purges:**
   - Raw scan media is deleted once derived assets exist (the migration's `source_media_deleted_at` records it).
   - Failed jobs are deleted within 7 days (§6.1).

@@ -9,7 +9,8 @@ Privacy policy, BIPA consent copy, retention schedule, vendor data-retention ter
 |---|---|---|
 | `PRIVACY_POLICY.md` | Public privacy policy (data classes, biometric handling, rights) | — |
 | `BIPA_CONSENT.md` | Biometric consent screen, learn-more sheet, consent record, statute mapping | M0-LEGAL-01 |
-| `RETENTION_SCHEDULE.md` | Publishable retention & destruction schedule + deletion-flow spec | M0-LEGAL-02 |
+| `RETENTION_SCHEDULE.md` | Publishable retention & destruction schedule (DRAFT v0.2, one row per SPEC §7 class) | M0-LEGAL-02 |
+| `DELETION_FLOW.md` | Per-user delete-all specification: entry point, steps per class, processor deletion + receipts, 30 days, staging test (DRAFT v0.1) | M0-LEGAL-02 |
 | `TERMS_OF_SERVICE.md` | Terms of Service / EULA (UGC rules, moderation, IAP; Apple 1.2 + AUTH #026) | — |
 | `APP_STORE_UGC_COMPLIANCE.md` | Apple Guideline 1.2 requirement + evidence map (the four pillars, published contact info, DMCA) | M4-DATA-03, M4-GAME-01 |
 | `vendors/` | Vendor data-retention request template, DPA checklist, per-vendor terms on file | M0-LEGAL-03, M0-LEGAL-04 |
