@@ -93,3 +93,37 @@ PlayMode log (real CharacterController physics, 60 fps target):
   implemented (no Bible timing value). **D3 (S4)** Android reads StreamingAssets from a jar, so `File.ReadAllText`
   fails there; Android is not a v1 target (AUTH #003), noted in code.
 - Verdict: **PASS WITH DEFECTS** (none blocking). Privacy: synthetic scene only.
+
+## Follow-up 2026-09-29: D1 (control customization) and the resize-safe touch layout
+gj-operator, as an overnight follow-up to QA finding D1 and the BACKLOG item from the M1-DUO-01 research.
+It was delivered as a direct commit to `main`.
+
+**What changed**
+- `GJ.Intent/ControlCustomization.cs`: the runtime half of DESIGN_SYSTEM decision 5's "Customization" (Settings › Controls).
+  - Fields: button size 56–96 pt, idle opacity 0.2–1 (default 0.6), a left-handed mirror, and a drag offset for the jump pad.
+  - JSON with a version field, clamped. Empty, malformed, newer-version or non-finite data falls back to the default.
+  - Persisted by `ControlCustomizationStore` in PlayerPrefs (`gj.controls.v1`) with `Reset()`.
+  - The range constants live in `ProvisionalTuning.Touch`, which is what the no-literals architecture test requires.
+- `TouchLayout` applies the customization.
+  - Left-handed puts the stick zone on the right third and the jump pad low-left, mirrored exactly.
+  - The drag offset points toward the screen centre in either hand.
+  - The pad is clamped inside the safe area and clear of the stick zone.
+  - The old two-argument constructor still gives exactly the default layout.
+- `TraversalController` loads the saved customization; `TouchControlsView` uses its idle opacity.
+- **Resize-safe:** `TouchIntentSource` cancels an active floating stick when the safe area changes (Duo fold or unfold, Split View, rotation). It ignores that touch until it lifts, so the stick never keeps an origin in stale coordinates. A fresh touch takes the stick in the new layout. This covers BACKLOG item (a).
+
+**Tests** (local, Unity 6000.0.84f1, `-batchmode -nographics`)
+- EditMode: **151/151 passed**, 17 new in `ControlCustomizationTests`.
+  - Default equals the uncustomized layout.
+  - Size clamps to 56 and 96.
+  - Exact left-handed mirror.
+  - Drag offset works in both hands.
+  - Extreme offsets stay inside the safe area and clear of the stick zone.
+  - JSON round trip and clamping; bad or newer data falls back to the default; non-finite values fall back.
+  - Store save, load and reset.
+  - `GeometryDiffers`.
+- PlayMode: **18/18 passed** plus 1 explicit evidence capture, with 1 new test: `Touch_GeometryChangeMidDrag_CancelsTheStickUntilTheTouchLifts`.
+
+**Still to build:** the Settings › Controls screen itself (drag-to-reposition editor, sliders, live preview). It needs the UI
+Toolkit tokens from M0-DSGN-02; the mockup is `design/proposals/mockups/settings.html?state=controls`. The contextual
+action button, once it exists, takes the same size and offset model.

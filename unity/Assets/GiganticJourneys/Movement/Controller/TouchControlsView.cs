@@ -7,7 +7,8 @@ namespace GiganticJourneys.Movement.Controller
     /// <summary>
     /// Draws the touch controls of a <see cref="TraversalController"/> with UI Toolkit: the jump
     /// pad low-right and, while a thumb is down in the left third, the floating stick base and
-    /// knob (DESIGN_SYSTEM decision 5). Purely visual: input is read by
+    /// knob (DESIGN_SYSTEM decision 5), placed and sized by the player's control customization
+    /// (mirrored for left-handed play). Purely visual: input is read by
     /// <see cref="GiganticJourneys.Movement.Intent.TouchIntentSource"/>. Placeholder styling until
     /// the design tokens land (M0-DSGN-02).
     /// </summary>
@@ -132,7 +133,8 @@ namespace GiganticJourneys.Movement.Controller
             if (visible)
             {
                 Place(_jump, layout.JumpCenter, layout.JumpRadius);
-                _jump.style.opacity = touch.JumpHeld ? 1f : 0.6f;
+                // Idle opacity is the player's Settings › Controls choice; pressed is always opaque.
+                _jump.style.opacity = touch.JumpHeld ? 1f : touch.Customization.Clamped().opacity;
                 _jump.style.backgroundColor = touch.JumpHeld
                     ? new Color(1f, 1f, 1f, 0.8f)
                     : new Color(1f, 1f, 1f, 0.3f);

@@ -42,30 +42,59 @@ namespace GiganticJourneys.Movement.Intent
         }
     }
 
-    /// <summary>Where the touch controls sit for a given screen (pixels, y up).</summary>
+    /// <summary>
+    /// Where the touch controls sit for a given screen (pixels, y up), after the player's
+    /// <see cref="ControlCustomization"/>: button size, left-handed mirror, dragged jump-pad position.
+    /// </summary>
     public readonly struct TouchLayout
     {
+        public readonly Rect SafeArea;
         public readonly Rect StickZone;
         public readonly Vector2 JumpCenter;
         public readonly float JumpRadius;
         public readonly float StickRadius;
+        public readonly bool LeftHanded;
 
         public TouchLayout(Rect safeArea, float pixelsPerPoint)
+            : this(safeArea, pixelsPerPoint, null) { }
+
+        public TouchLayout(Rect safeArea, float pixelsPerPoint, ControlCustomization customization)
         {
+            var c = (customization ?? ControlCustomization.Default).Clamped();
+            SafeArea = safeArea;
+            LeftHanded = c.leftHanded;
+            var zoneWidth = safeArea.width * ProvisionalTuning.Touch.StickZoneWidthFraction;
             StickZone = new Rect(
-                safeArea.xMin,
+                c.leftHanded ? safeArea.xMax - zoneWidth : safeArea.xMin,
                 safeArea.yMin,
-                safeArea.width * ProvisionalTuning.Touch.StickZoneWidthFraction,
+                zoneWidth,
                 safeArea.height
             );
-            JumpRadius = ProvisionalTuning.Touch.JumpPadPt * pixelsPerPoint * 0.5f;
+            JumpRadius = c.buttonSizePt * pixelsPerPoint * 0.5f;
             var inset = ProvisionalTuning.Touch.JumpPadInsetPt * pixelsPerPoint;
+            // Default anchor: low-right (low-left when mirrored), inset from the safe-area corner.
+            var towardCentre = c.leftHanded ? 1f : -1f;
+            var anchorX = c.leftHanded
+                ? safeArea.xMin + inset + JumpRadius
+                : safeArea.xMax - inset - JumpRadius;
+            var x = anchorX + towardCentre * c.jumpOffsetPt.x * pixelsPerPoint;
+            var y = safeArea.yMin + inset + JumpRadius + c.jumpOffsetPt.y * pixelsPerPoint;
+            // Keep the whole pad inside the safe area and out of the stick zone.
+            var minX = c.leftHanded ? safeArea.xMin + JumpRadius : StickZone.xMax + JumpRadius;
+            var maxX = c.leftHanded ? StickZone.xMin - JumpRadius : safeArea.xMax - JumpRadius;
             JumpCenter = new Vector2(
-                safeArea.xMax - inset - JumpRadius,
-                safeArea.yMin + inset + JumpRadius
+                minX <= maxX ? Mathf.Clamp(x, minX, maxX) : (minX + maxX) * 0.5f,
+                Mathf.Clamp(
+                    y,
+                    safeArea.yMin + JumpRadius,
+                    Mathf.Max(safeArea.yMin + JumpRadius, safeArea.yMax - JumpRadius)
+                )
             );
             StickRadius = ProvisionalTuning.Touch.StickRadiusPt * pixelsPerPoint;
         }
+
+        /// <summary>True when the screen geometry differs (fold, unfold, Split View, rotation).</summary>
+        public bool GeometryDiffers(TouchLayout other) => SafeArea != other.SafeArea;
 
         public bool InStickZone(Vector2 p) => StickZone.Contains(p);
 

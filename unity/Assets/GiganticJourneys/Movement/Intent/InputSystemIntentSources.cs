@@ -51,21 +51,38 @@ namespace GiganticJourneys.Movement.Intent
 
     /// <summary>
     /// Touch: a floating stick anywhere in the left third of the safe area and a jump pad
-    /// low-right (DESIGN_SYSTEM decision 5). Reads <see cref="Touchscreen.current"/> directly so
-    /// it works without UI raycasts; the right half outside the pad is reserved for camera orbit (M1).
+    /// low-right (DESIGN_SYSTEM decision 5), both following the player's
+    /// <see cref="ControlCustomization"/> (size, left-handed mirror, dragged position). Reads
+    /// <see cref="Touchscreen.current"/> directly so it works without UI raycasts; the right half
+    /// outside the pad is reserved for camera orbit (M1).
+    /// When the screen geometry changes mid-touch (iPhone Duo fold/unfold, Split View, rotation) the
+    /// active stick is cancelled and its touch ignored until lifted, so the stick never keeps an
+    /// origin in stale coordinates.
     /// </summary>
     public sealed class TouchIntentSource : IIntentSource
     {
         readonly FloatingStick _stick = new FloatingStick();
+        TouchLayout? _lastLayout;
+        int _cancelledTouchId = -1;
 
         /// <summary>Test hook: fixes the layout instead of reading Screen.safeArea / dpi.</summary>
         public TouchLayout? LayoutOverride;
+
+        /// <summary>The player's control customization (Settings › Controls); defaults until loaded.</summary>
+        public ControlCustomization Customization { get; set; } = ControlCustomization.Default;
 
         public FloatingStick Stick => _stick;
 
         public TouchLayout Layout =>
             LayoutOverride
-            ?? new TouchLayout(Screen.safeArea, TouchLayout.PixelsPerPoint(Screen.dpi));
+            ?? new TouchLayout(
+                Screen.safeArea,
+                TouchLayout.PixelsPerPoint(Screen.dpi),
+                Customization
+            );
+
+        /// <summary>Touch id cancelled by a geometry change and ignored until it lifts, or -1.</summary>
+        public int CancelledTouchId => _cancelledTouchId;
 
         public bool JumpHeld { get; private set; }
 
@@ -79,6 +96,13 @@ namespace GiganticJourneys.Movement.Intent
                 return IntentFrame.None;
             }
             var layout = Layout;
+            if (_lastLayout.HasValue && _lastLayout.Value.GeometryDiffers(layout) && _stick.Active)
+            {
+                _cancelledTouchId = _stick.TouchId;
+                _stick.End();
+            }
+            _lastLayout = layout;
+            var cancelledSeen = false;
             var jumpPressed = false;
             var jumpHeld = false;
             var stickSeen = false;
@@ -87,6 +111,11 @@ namespace GiganticJourneys.Movement.Intent
                 var id = touch.touchId.ReadValue();
                 var inProgress = touch.isInProgress;
                 var start = touch.startPosition.ReadValue();
+                if (id == _cancelledTouchId)
+                {
+                    cancelledSeen |= inProgress;
+                    continue;
+                }
                 if (_stick.Active && id == _stick.TouchId)
                 {
                     if (inProgress)
@@ -114,6 +143,8 @@ namespace GiganticJourneys.Movement.Intent
             }
             if (_stick.Active && !stickSeen)
                 _stick.End();
+            if (!cancelledSeen)
+                _cancelledTouchId = -1;
             JumpHeld = jumpHeld;
             return new IntentFrame(_stick.Value, jumpPressed, jumpHeld);
         }

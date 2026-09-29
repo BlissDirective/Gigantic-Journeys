@@ -92,6 +92,17 @@ namespace GiganticJourneys.Movement
 
             /// <summary>Largest iPhone screen scale (@3x).</summary>
             public const float MaxPixelsPerPoint = 3f;
+
+            /// <summary>Settings › Controls size slider range, points (DESIGN_SYSTEM decision 5: 56–96 pt).</summary>
+            public const float ButtonSizeMinPt = 56f;
+            public const float ButtonSizeMaxPt = 96f;
+
+            /// <summary>Opacity slider: lowest idle opacity, and the default (~60 % scrim discs, decision 5).</summary>
+            public const float OpacityMin = 0.2f;
+            public const float OpacityDefault = 0.6f;
+
+            /// <summary>Furthest a dragged control may move from its default anchor, points (the layout also clamps to the safe area).</summary>
+            public const float DragOffsetMaxPt = 400f;
         }
     }
 }

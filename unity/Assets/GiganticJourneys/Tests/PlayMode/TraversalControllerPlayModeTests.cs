@@ -311,6 +311,86 @@ namespace GiganticJourneys.Tests
         }
 
         [UnityTest]
+        public IEnumerator Touch_GeometryChangeMidDrag_CancelsTheStickUntilTheTouchLifts()
+        {
+            var c = Spawn(new Vector3(0f, 0.01f, -15f));
+            c.Touch.LayoutOverride = new TouchLayout(new Rect(0f, 0f, 1920f, 1080f), 1f);
+            yield return Settle(c);
+            var screen = InputSystem.AddDevice<Touchscreen>();
+            _devices.Add(screen);
+            var origin = new Vector2(300f, 300f);
+            TouchState T(int id, UnityEngine.InputSystem.TouchPhase phase, Vector2 at) =>
+                new TouchState
+                {
+                    touchId = id,
+                    phase = phase,
+                    position = at,
+                    startPosition = origin,
+                };
+            InputSystem.QueueStateEvent(
+                screen,
+                T(1, UnityEngine.InputSystem.TouchPhase.Began, origin)
+            );
+            yield return null;
+            InputSystem.QueueStateEvent(
+                screen,
+                T(1, UnityEngine.InputSystem.TouchPhase.Moved, origin + new Vector2(0f, 40f))
+            );
+            yield return null;
+            Assert.That(c.Touch.Stick.Active, Is.True);
+
+            // Fold / Split View: the safe area changes while the thumb is still down.
+            c.Touch.LayoutOverride = new TouchLayout(new Rect(0f, 0f, 960f, 1080f), 1f);
+            InputSystem.QueueStateEvent(
+                screen,
+                T(1, UnityEngine.InputSystem.TouchPhase.Moved, origin + new Vector2(0f, 60f))
+            );
+            yield return null;
+            yield return null;
+            Assert.That(c.Touch.Stick.Active, Is.False, "stick cancelled on the geometry change");
+            Assert.That(c.Touch.CancelledTouchId, Is.EqualTo(1));
+            Assert.That(c.LastIntent.Move, Is.EqualTo(Vector2.zero));
+
+            InputSystem.QueueStateEvent(
+                screen,
+                T(1, UnityEngine.InputSystem.TouchPhase.Moved, origin + new Vector2(0f, 80f))
+            );
+            yield return null;
+            Assert.That(
+                c.Touch.Stick.Active,
+                Is.False,
+                "the stale touch does not re-grab the stick"
+            );
+
+            InputSystem.QueueStateEvent(
+                screen,
+                T(1, UnityEngine.InputSystem.TouchPhase.Ended, origin)
+            );
+            yield return null;
+            yield return null;
+            Assert.That(c.Touch.CancelledTouchId, Is.EqualTo(-1), "cleared once lifted");
+
+            var fresh = new Vector2(200f, 400f);
+            InputSystem.QueueStateEvent(
+                screen,
+                new TouchState
+                {
+                    touchId = 2,
+                    phase = UnityEngine.InputSystem.TouchPhase.Began,
+                    position = fresh,
+                    startPosition = fresh,
+                }
+            );
+            yield return null;
+            Assert.That(
+                c.Touch.Stick.Active,
+                Is.True,
+                "a new touch takes the stick in the new layout"
+            );
+            Assert.That(c.Touch.Stick.Origin, Is.EqualTo(fresh));
+        }
+
+        [UnityTest]
         public IEnumerator MovementTestScene_LoadsWithControllerCameraAndTouchControls()
         {
             yield return SceneManager.LoadSceneAsync("MovementTest", LoadSceneMode.Additive);

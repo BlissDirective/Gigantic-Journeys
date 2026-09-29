@@ -82,7 +82,7 @@
   "branch": "ticket/M0-UNITY-03-traversal-controller",
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-28",
+  "updated": "2026-09-29",
   "history": [
     {
       "date": "2026-09-15",
@@ -97,6 +97,11 @@
     {
       "date": "2026-09-28",
       "event": "Built by gj-operator (overnight worker, Owner: 'proceed with all remaining autonomous tasks') and committed directly to main (fast-forward model, AUTH #006/#007): 732de3f (code, tests, scene) + the evidence/docs commit. Seven assemblies (GJ.Movement.Shared, GJ.Intent, GJ.TraversalQuery, GJ.AnimationSelection, GJ.MotionWarping, GJ.Procedural + GJ.Movement.Controller composition root), references only downward; strict MovementConfig loader for StreamingAssets/movement.json (missing/unknown/duplicate/wrong-type keys are hard errors naming the path); touch floating stick + 72 pt jump pad and Input System gamepad merged into one intent layer; gait bands, coyote time, jump buffer; IVerbProvider registry + locomotion verbs; capsule motor with committed ballistic jumps; fixed follow camera; MovementTest scene (1:12 flat floor). Local EditMode 95/95, PlayMode 17/17 (+1 explicit evidence capture). AT-1, AT-2 met; AT-3 met (walk/jog/run/sprint 1.200/2.400/3.600/4.500 A/s over 5 s); AT-4 met (standing 1.100 A / 1.228 A, running 1.200 A / 2.406 A; coyote 100 ms and buffer 120 ms boundary tests); AT-5 met in the Editor with simulated touch + gamepad (qa/evidence/M0-UNITY-03/01, 02) — device clip pending; AT-6 not measured (needs TestFlight on an Owner iPhone); AT-7 met for every movement.json constant, but the Bible §3.1/§8 stick-band and camera numbers have no movement.json section, so they sit in one file (ProvisionalTuning.cs, enforced by an EditMode literal scan) pending AUTH: governance/auth-requests/M0-UNITY-03-movement-json-intent-camera.md. QA: PASS WITH DEFECTS (non-blocking), qa/reports/M0-UNITY-03.md. For Coordinator review.",
+      "by": "gj-operator"
+    },
+    {
+      "date": "2026-09-29",
+      "event": "gj-operator follow-up (QA D1 + M1-DUO-01 BACKLOG item a): ControlCustomization (56–96 pt buttons, opacity, left-handed mirror, drag offset, PlayerPrefs store + Reset) applied by TouchLayout with safe-area/stick-zone clamping; active stick cancelled on safe-area change (Duo fold/Split View). EditMode 151/151 (17 new), PlayMode 18/18 (+1 new). Settings › Controls screen still needs M0-DSGN-02 tokens. Status unchanged (in-review).",
       "by": "gj-operator"
     }
   ]

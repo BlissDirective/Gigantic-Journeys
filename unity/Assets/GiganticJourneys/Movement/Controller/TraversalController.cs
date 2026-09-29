@@ -76,6 +76,7 @@ namespace GiganticJourneys.Movement.Controller
             Configure(config, avatarRealHeightMeters, environmentScale);
             _gamepad = new GamepadIntentSource();
             _intent.Add(_gamepad);
+            Touch.Customization = ControlCustomizationStore.Load();
             _intent.Add(Touch);
         }
 
