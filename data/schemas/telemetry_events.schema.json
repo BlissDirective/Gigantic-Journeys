@@ -1,0 +1,1127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/BlissDirective/Gigantic-Journeys/data/schemas/telemetry_events.schema.json",
+  "title": "Gigantic Journeys telemetry event v1.0.0",
+  "description": "One telemetry event: a common envelope plus a per-event `props` object. Pseudonymous ids only; no GPS, email, phone, device identifiers, raw media references or user free text (SECURITY_CHECKLIST §10.1, SPEC §7). Frozen at 1.0.0 by AUTH #029; changes need a new AUTH (design-change).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "client_version",
+    "env_id",
+    "event",
+    "event_id",
+    "platform",
+    "props",
+    "scale_multiplier",
+    "schema_version",
+    "session_id",
+    "ts",
+    "user_id"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0",
+      "description": "Semver of this schema; frozen at 1.0.0 (AUTH #029)."
+    },
+    "event_id": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "Random UUID v4 per event (deduplication)."
+    },
+    "user_id": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "Pseudonymous id: a random UUID bound to the account server-side, never the Supabase auth id, email or any device identifier. Rotated by delete-all."
+    },
+    "session_id": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "Random UUID per app session (funnels and heatmaps)."
+    },
+    "env_id": {
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "The environment (environments.id) or null outside an environment."
+    },
+    "client_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(\\+[0-9]{1,6})?$",
+      "description": "App version, optional build number."
+    },
+    "platform": {
+      "type": "string",
+      "enum": [
+        "ios",
+        "android",
+        "editor"
+      ],
+      "description": "Platform enum; no device model, OS build or identifier (SECURITY_CHECKLIST §10.1)."
+    },
+    "ts": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,6})?Z$",
+      "description": "Client UTC timestamp."
+    },
+    "scale_multiplier": {
+      "oneOf": [
+        {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1000
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "The environment's scale multiplier (12 = 1:12), null outside an environment."
+    },
+    "event": {
+      "type": "string",
+      "enum": [
+        "avatar_failed",
+        "avatar_generated",
+        "character_selected",
+        "fall",
+        "play_started",
+        "quit",
+        "rating_submitted",
+        "report_submitted",
+        "route_completed",
+        "route_started",
+        "scan_completed",
+        "scan_failed",
+        "scan_started",
+        "session_end",
+        "session_start",
+        "stuck",
+        "summit_reached",
+        "vista_found"
+      ]
+    },
+    "props": {
+      "type": "object"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "avatar_failed"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "properties": {
+          "props": {
+            "$ref": "#/$defs/avatar_failed"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "avatar_generated"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "properties": {
+          "props": {
+            "$ref": "#/$defs/avatar_generated"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "character_selected"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "properties": {
+          "props": {
+            "$ref": "#/$defs/character_selected"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "fall"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "properties": {
+          "props": {
+            "$ref": "#/$defs/fall"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "play_started"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "properties": {
+          "props": {
+            "$ref": "#/$defs/play_started"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "quit"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "properties": {
+          "props": {
+            "$ref": "#/$defs/quit"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "rating_submitted"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "properties": {
+          "props": {
+            "$ref": "#/$defs/rating_submitted"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "report_submitted"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "properties": {
+          "props": {
+            "$ref": "#/$defs/report_submitted"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "route_completed"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "properties": {
+          "props": {
+            "$ref": "#/$defs/route_completed"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "route_started"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "properties": {
+          "props": {
+            "$ref": "#/$defs/route_started"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "scan_completed"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "properties": {
+          "props": {
+            "$ref": "#/$defs/scan_completed"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "scan_failed"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "properties": {
+          "props": {
+            "$ref": "#/$defs/scan_failed"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "scan_started"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "properties": {
+          "props": {
+            "$ref": "#/$defs/scan_started"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "session_end"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "properties": {
+          "props": {
+            "$ref": "#/$defs/session_end"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "session_start"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "properties": {
+          "props": {
+            "$ref": "#/$defs/session_start"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "stuck"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "properties": {
+          "props": {
+            "$ref": "#/$defs/stuck"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "summit_reached"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "properties": {
+          "props": {
+            "$ref": "#/$defs/summit_reached"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "vista_found"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "properties": {
+          "props": {
+            "$ref": "#/$defs/vista_found"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "avatar_failed": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "duration_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3600000
+        }
+      },
+      "required": [
+        "duration_ms"
+      ],
+      "description": "V2 custom-avatar track only; reserved, durations only."
+    },
+    "avatar_generated": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "duration_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3600000
+        }
+      },
+      "required": [
+        "duration_ms"
+      ],
+      "description": "V2 custom-avatar track only (AUTH #020: v1 has no avatar generation); reserved, durations only."
+    },
+    "character_selected": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "character_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{0,47}$",
+          "description": "Roster character id (AUTH #024), e.g. 'climber-01'."
+        }
+      },
+      "required": [
+        "character_id"
+      ]
+    },
+    "fall": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tier": {
+          "type": "string",
+          "enum": [
+            "soft",
+            "roll",
+            "hard",
+            "recover",
+            "void_respawn"
+          ],
+          "description": "Bible §5 landing tier; void_respawn for off-table/into-void falls."
+        },
+        "height_A": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "position": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "type": "number",
+              "minimum": -10000,
+              "maximum": 10000
+            },
+            "y": {
+              "type": "number",
+              "minimum": -10000,
+              "maximum": 10000
+            },
+            "z": {
+              "type": "number",
+              "minimum": -10000,
+              "maximum": 10000
+            }
+          },
+          "required": [
+            "x",
+            "y",
+            "z"
+          ],
+          "description": "Environment-local position in A units (one avatar height), never world or geographic coordinates."
+        },
+        "surface_class": {
+          "oneOf": [
+            {
+              "type": "string",
+              "enum": [
+                "walkable-hard",
+                "walkable-soft",
+                "walkable-narrow",
+                "ledge",
+                "rung",
+                "stud",
+                "textured-vertical",
+                "pole",
+                "overhang",
+                "slope",
+                "wall-smooth",
+                "soft-hanging",
+                "void",
+                "hazard-none"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "height_A",
+        "position",
+        "surface_class",
+        "tier"
+      ]
+    },
+    "play_started": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "journey",
+            "time_trial",
+            "free_roam"
+          ]
+        },
+        "route_id": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9-]{0,47}$",
+              "description": "Route id within the environment."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "mode",
+        "route_id"
+      ]
+    },
+    "quit": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "elapsed_s": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 86400
+        },
+        "beat_reached": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 50
+        },
+        "position": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "type": "number",
+              "minimum": -10000,
+              "maximum": 10000
+            },
+            "y": {
+              "type": "number",
+              "minimum": -10000,
+              "maximum": 10000
+            },
+            "z": {
+              "type": "number",
+              "minimum": -10000,
+              "maximum": 10000
+            }
+          },
+          "required": [
+            "x",
+            "y",
+            "z"
+          ],
+          "description": "Environment-local position in A units (one avatar height), never world or geographic coordinates."
+        }
+      },
+      "required": [
+        "beat_reached",
+        "elapsed_s",
+        "position"
+      ]
+    },
+    "rating_submitted": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "fun": {
+          "oneOf": [
+            {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "interesting": {
+          "oneOf": [
+            {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "interactive": {
+          "oneOf": [
+            {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "exciting": {
+          "oneOf": [
+            {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "exciting",
+        "fun",
+        "interactive",
+        "interesting"
+      ],
+      "description": "Four five-segment rows (DESIGN_SYSTEM decision 8); null = axis left untouched.",
+      "anyOf": [
+        {
+          "properties": {
+            "fun": {
+              "type": "integer"
+            }
+          }
+        },
+        {
+          "properties": {
+            "interesting": {
+              "type": "integer"
+            }
+          }
+        },
+        {
+          "properties": {
+            "interactive": {
+              "type": "integer"
+            }
+          }
+        },
+        {
+          "properties": {
+            "exciting": {
+              "type": "integer"
+            }
+          }
+        }
+      ]
+    },
+    "report_submitted": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "reason": {
+          "type": "string",
+          "enum": [
+            "private_information_visible",
+            "inappropriate_content",
+            "not_a_real_place",
+            "broken_environment",
+            "other"
+          ],
+          "description": "Decision 8d reason sheet; no free text."
+        }
+      },
+      "required": [
+        "reason"
+      ]
+    },
+    "route_completed": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "route_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{0,47}$",
+          "description": "Route id."
+        },
+        "time_s": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 86400
+        },
+        "beat_reached": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 50
+        },
+        "falls": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100000
+        }
+      },
+      "required": [
+        "beat_reached",
+        "falls",
+        "route_id",
+        "time_s"
+      ]
+    },
+    "route_started": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "route_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{0,47}$",
+          "description": "Route id."
+        },
+        "route_index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20
+        }
+      },
+      "required": [
+        "route_id",
+        "route_index"
+      ]
+    },
+    "scan_completed": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "capture_mode": {
+          "type": "string",
+          "enum": [
+            "room",
+            "tabletop"
+          ]
+        },
+        "duration_s": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 86400
+        },
+        "passes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20
+        },
+        "frame_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100000
+        },
+        "coverage_pct": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Share of the target surfaces covered (capture coaching)."
+        },
+        "blur_frame_ratio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "low_light_frame_ratio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "tracking_loss_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "readiness_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "On-device reconstruction-readiness prediction (M1-CAPT-04)."
+        },
+        "quality_gate": {
+          "type": "string",
+          "enum": [
+            "pass",
+            "warn"
+          ],
+          "description": "Quality-gate result the player accepted."
+        }
+      },
+      "required": [
+        "blur_frame_ratio",
+        "capture_mode",
+        "coverage_pct",
+        "duration_s",
+        "frame_count",
+        "low_light_frame_ratio",
+        "passes",
+        "quality_gate",
+        "readiness_score",
+        "tracking_loss_count"
+      ]
+    },
+    "scan_failed": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "capture_mode": {
+          "type": "string",
+          "enum": [
+            "room",
+            "tabletop"
+          ]
+        },
+        "stage": {
+          "type": "string",
+          "enum": [
+            "capture",
+            "quality_gate",
+            "upload",
+            "reconstruction",
+            "scenegraph",
+            "journey",
+            "package"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "enum": [
+            "low_coverage",
+            "blur",
+            "low_light",
+            "tracking_lost",
+            "too_short",
+            "cancelled",
+            "upload_failed",
+            "reconstruction_failed",
+            "timeout",
+            "other"
+          ]
+        },
+        "duration_s": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 86400
+        }
+      },
+      "required": [
+        "capture_mode",
+        "duration_s",
+        "reason",
+        "stage"
+      ]
+    },
+    "scan_started": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "capture_mode": {
+          "type": "string",
+          "enum": [
+            "room",
+            "tabletop"
+          ]
+        },
+        "pass_index": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20,
+          "description": "1 for the first pass; later passes are 'add a pass' (AUTH #025)."
+        }
+      },
+      "required": [
+        "capture_mode",
+        "pass_index"
+      ]
+    },
+    "session_end": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "duration_s": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 86400
+        }
+      },
+      "required": [
+        "duration_s"
+      ]
+    },
+    "session_start": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "quality_tier": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "description": "Automatic quality tier (SPEC §6)."
+        }
+      },
+      "required": [
+        "quality_tier"
+      ]
+    },
+    "stuck": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dwell_s": {
+          "type": "number",
+          "minimum": 20,
+          "maximum": 86400,
+          "description": "No progress for more than 20 s."
+        },
+        "position": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "type": "number",
+              "minimum": -10000,
+              "maximum": 10000
+            },
+            "y": {
+              "type": "number",
+              "minimum": -10000,
+              "maximum": 10000
+            },
+            "z": {
+              "type": "number",
+              "minimum": -10000,
+              "maximum": 10000
+            }
+          },
+          "required": [
+            "x",
+            "y",
+            "z"
+          ],
+          "description": "Environment-local position in A units (one avatar height), never world or geographic coordinates."
+        }
+      },
+      "required": [
+        "dwell_s",
+        "position"
+      ]
+    },
+    "summit_reached": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "route_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{0,47}$",
+          "description": "Route id."
+        },
+        "elapsed_s": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 86400
+        },
+        "falls": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100000
+        }
+      },
+      "required": [
+        "elapsed_s",
+        "falls",
+        "route_id"
+      ]
+    },
+    "vista_found": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "vista_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{0,47}$",
+          "description": "Vista id within the environment."
+        },
+        "elapsed_s": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 86400
+        },
+        "position": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "type": "number",
+              "minimum": -10000,
+              "maximum": 10000
+            },
+            "y": {
+              "type": "number",
+              "minimum": -10000,
+              "maximum": 10000
+            },
+            "z": {
+              "type": "number",
+              "minimum": -10000,
+              "maximum": 10000
+            }
+          },
+          "required": [
+            "x",
+            "y",
+            "z"
+          ],
+          "description": "Environment-local position in A units (one avatar height), never world or geographic coordinates."
+        }
+      },
+      "required": [
+        "elapsed_s",
+        "position",
+        "vista_id"
+      ]
+    }
+  }
+}

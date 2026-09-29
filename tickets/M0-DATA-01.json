@@ -5,7 +5,7 @@
   "area": "DATA",
   "owner": "gj-platform",
   "qa": "gj-data",
-  "status": "open",
+  "status": "in-review",
   "priority": "P0",
   "size": "M",
   "summary": "Define and freeze the event schemas that M1 telemetry, the weekly gj-data reports, and the M6 learning loop depend on. Frozen means: version 1.0.0, validated fixtures, forbidden-field tests, and an AUTH (design-change) approving the freeze; later changes need another AUTH.",
@@ -72,8 +72,8 @@
     {
       "type": "design-change",
       "what": "Freeze telemetry and correction event schemas v1.0.0",
-      "auth_id": null,
-      "status": "pending"
+      "auth_id": "AUTH #029",
+      "status": "approved"
     }
   ],
   "references": [
@@ -81,10 +81,10 @@
     "kit START M0 (schemas frozen)",
     "plan M0"
   ],
-  "branch": null,
+  "branch": "ticket/M0-DATA-01-schema-freeze",
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-15",
+  "updated": "2026-09-29",
   "history": [
     {
       "date": "2026-09-15",
@@ -95,6 +95,11 @@
       "date": "2026-09-15",
       "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-29",
+      "event": "telemetry + correction schemas v1.0.0 frozen (APPROVED #029): 18 telemetry events + correction_submitted, 38 valid / 19 invalid fixtures, forbidden-field + closed-object + no-free-text tests (70 pytest cases), README with change rule and proposed App Store privacy label; QA qa/reports/M0-DATA-01.md PASS. Open: the Owner's field-design review required by AUTH #029; avatar_generated/failed kept as V2-reserved (AUTH #020). → in-review",
+      "by": "gj-operator"
     }
   ]
 }

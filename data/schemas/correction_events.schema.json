@@ -1,0 +1,219 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/BlissDirective/Gigantic-Journeys/data/schemas/correction_events.schema.json",
+  "title": "Gigantic Journeys correction event v1.0.0",
+  "description": "A one-tap 'fix this label' correction (SPEC §7). Same envelope as telemetry; derived data only; used for training only when training_opt_in is true. Frozen at 1.0.0 by AUTH #029.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "client_version",
+    "env_id",
+    "event",
+    "event_id",
+    "platform",
+    "props",
+    "scale_multiplier",
+    "schema_version",
+    "session_id",
+    "ts",
+    "user_id"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0",
+      "description": "Semver of this schema; frozen at 1.0.0 (AUTH #029)."
+    },
+    "event_id": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "Random UUID v4 per event (deduplication)."
+    },
+    "user_id": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "Pseudonymous id: a random UUID bound to the account server-side, never the Supabase auth id, email or any device identifier. Rotated by delete-all."
+    },
+    "session_id": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "Random UUID per app session (funnels and heatmaps)."
+    },
+    "env_id": {
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "The environment (environments.id) or null outside an environment."
+    },
+    "client_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(\\+[0-9]{1,6})?$",
+      "description": "App version, optional build number."
+    },
+    "platform": {
+      "type": "string",
+      "enum": [
+        "ios",
+        "android",
+        "editor"
+      ],
+      "description": "Platform enum; no device model, OS build or identifier (SECURITY_CHECKLIST §10.1)."
+    },
+    "ts": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,6})?Z$",
+      "description": "Client UTC timestamp."
+    },
+    "scale_multiplier": {
+      "oneOf": [
+        {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1000
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "The environment's scale multiplier (12 = 1:12), null outside an environment."
+    },
+    "event": {
+      "type": "string",
+      "enum": [
+        "correction_submitted"
+      ]
+    },
+    "props": {
+      "type": "object"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "const": "correction_submitted"
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "properties": {
+          "props": {
+            "$ref": "#/$defs/correction_submitted"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "correction_submitted": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surface_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{0,47}$",
+          "description": "Scene-graph surface id (M1-DATA-01) within the environment."
+        },
+        "old_label": {
+          "type": "string",
+          "enum": [
+            "walkable-hard",
+            "walkable-soft",
+            "walkable-narrow",
+            "ledge",
+            "rung",
+            "stud",
+            "textured-vertical",
+            "pole",
+            "overhang",
+            "slope",
+            "wall-smooth",
+            "soft-hanging",
+            "void",
+            "hazard-none"
+          ],
+          "description": "Bible §4 surface class the pipeline assigned."
+        },
+        "new_label": {
+          "type": "string",
+          "enum": [
+            "walkable-hard",
+            "walkable-soft",
+            "walkable-narrow",
+            "ledge",
+            "rung",
+            "stud",
+            "textured-vertical",
+            "pole",
+            "overhang",
+            "slope",
+            "wall-smooth",
+            "soft-hanging",
+            "void",
+            "hazard-none"
+          ],
+          "description": "Bible §4 surface class the player chose."
+        },
+        "position": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "type": "number",
+              "minimum": -10000,
+              "maximum": 10000
+            },
+            "y": {
+              "type": "number",
+              "minimum": -10000,
+              "maximum": 10000
+            },
+            "z": {
+              "type": "number",
+              "minimum": -10000,
+              "maximum": 10000
+            }
+          },
+          "required": [
+            "x",
+            "y",
+            "z"
+          ],
+          "description": "Environment-local position in A units (one avatar height), never world or geographic coordinates."
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "The classifier's confidence in old_label."
+        },
+        "training_opt_in": {
+          "type": "boolean",
+          "description": "The player's training opt-in at submit time (default off, SPEC §3.9); false = never used for training."
+        }
+      },
+      "required": [
+        "confidence",
+        "new_label",
+        "old_label",
+        "position",
+        "surface_id",
+        "training_opt_in"
+      ]
+    }
+  }
+}

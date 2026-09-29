@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0.0",
+  "event_id": "0b6f2a4e-1c3d-4e5f-8a9b-000000000099",
+  "user_id": "5d1e8c2a-7b3f-4a6e-9c0d-2f4b6a8c0e1a",
+  "session_id": "9a8b7c6d-5e4f-4a3b-8c2d-1e0f9a8b7c6d",
+  "env_id": "3c2b1a09-8f7e-4d6c-b5a4-938271605f4e",
+  "client_version": "0.1.0+42",
+  "platform": "iPhone15,2",
+  "ts": "2026-09-29T03:14:15.926Z",
+  "scale_multiplier": 12,
+  "event": "fall",
+  "props": {
+    "tier": "roll",
+    "height_A": 3.2,
+    "position": {
+      "x": 1.5,
+      "y": 0.0,
+      "z": -3.25
+    },
+    "surface_class": "walkable-soft"
+  }
+}
