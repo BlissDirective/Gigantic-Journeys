@@ -1,0 +1,23 @@
+# M0-UNITY-03 AT-7: numeric literals in the movement assemblies (comments and strings stripped)
+# command: grep -nE '[0-9]+\.[0-9]+f?|\b[3-9][0-9]*f?\b' over unity/Assets/GiganticJourneys/Movement/**/*.cs (comment lines excluded)
+# expected: only ProvisionalTuning.cs (pending-AUTH constants), MovementScale.cs (9.81 standard gravity), TouchControlsView.cs (placeholder UI styling until M0-DSGN-02 tokens), StrictJson.cs (parser hex width)
+
+## per-file counts
+      1 Controller/FollowCamera.cs
+      1 Controller/LocomotionMotor.cs
+      8 Controller/TouchControlsView.cs
+      1 Controller/TraversalController.cs
+      1 Intent/FloatingStick.cs
+      1 Intent/TrajectoryPredictor.cs
+      1 Shared/MovementScale.cs
+     22 Shared/ProvisionalTuning.cs
+      3 Shared/StrictJson.cs
+
+## every hit outside the exempt files (all are the 0.5 math factor):
+Intent/TrajectoryPredictor.cs:28: p.y -= 0.5f * gravity * t * t;
+Intent/FloatingStick.cs:61: JumpRadius = ProvisionalTuning.Touch.JumpPadPt * pixelsPerPoint * 0.5f;
+Controller/LocomotionMotor.cs:133: _velocity * deltaTime + Vector3.down * (0.5f * g * deltaTime * deltaTime);
+Controller/TraversalController.cs:98: _body.center = Vector3.up * (height * 0.5f);
+Controller/FollowCamera.cs:97: var lookAt = focus + Vector3.up * scale.ToWorld(motor.Config.AvatarHeightA * 0.5f);
+
+# enforced by EditMode test MovementArchitectureTests.NoMovementOrCameraLiteral_OutsideTheConfig (allowed math literals: 0, 1, 2, 0.5, 1000)

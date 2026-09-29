@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="18" result="Passed" total="18" passed="17" failed="0" inconclusive="0" skipped="1" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-29 02:46:34Z" end-time="2026-09-29 02:46:48Z" duration="13.6583757">
+  <test-suite type="TestSuite" id="1030" name="Gigantic Journeys" fullname="Gigantic Journeys" runstate="Runnable" testcasecount="18" result="Passed" start-time="2026-09-29 02:46:34Z" end-time="2026-09-29 02:46:48Z" duration="13.658376" total="18" passed="17" failed="0" inconclusive="0" skipped="1" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1024" name="GiganticJourneys.PlayMode.Tests.dll" fullname="unity/Library/ScriptAssemblies/GiganticJourneys.PlayMode.Tests.dll" runstate="Runnable" testcasecount="18" result="Passed" start-time="2026-09-29 02:46:34Z" end-time="2026-09-29 02:46:48Z" duration="13.651895" total="18" passed="17" failed="0" inconclusive="0" skipped="1" asserts="0">
+      <properties>
+        <property name="_PID" value="3022159" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1025" name="GiganticJourneys" fullname="GiganticJourneys" runstate="Runnable" testcasecount="18" result="Passed" start-time="2026-09-29 02:46:34Z" end-time="2026-09-29 02:46:48Z" duration="13.651452" total="18" passed="17" failed="0" inconclusive="0" skipped="1" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1026" name="Tests" fullname="GiganticJourneys.Tests" runstate="Runnable" testcasecount="18" result="Passed" start-time="2026-09-29 02:46:34Z" end-time="2026-09-29 02:46:48Z" duration="13.651188" total="18" passed="17" failed="0" inconclusive="0" skipped="1" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1001" name="DebugOverlayPlayModeTests" fullname="GiganticJourneys.Tests.DebugOverlayPlayModeTests" classname="GiganticJourneys.Tests.DebugOverlayPlayModeTests" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-09-29 02:46:34Z" end-time="2026-09-29 02:46:37Z" duration="2.184240" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1010" name="F3_TogglesOverlay" fullname="GiganticJourneys.Tests.DebugOverlayPlayModeTests.F3_TogglesOverlay" methodname="F3_TogglesOverlay" classname="GiganticJourneys.Tests.DebugOverlayPlayModeTests" runstate="Runnable" seed="1768789703" result="Passed" start-time="2026-09-29 02:46:34Z" end-time="2026-09-29 02:46:35Z" duration="0.328388" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1009" name="F4_SavesReport_WhileVisible" fullname="GiganticJourneys.Tests.DebugOverlayPlayModeTests.F4_SavesReport_WhileVisible" methodname="F4_SavesReport_WhileVisible" classname="GiganticJourneys.Tests.DebugOverlayPlayModeTests" runstate="Runnable" seed="1857536148" result="Passed" start-time="2026-09-29 02:46:35Z" end-time="2026-09-29 02:46:35Z" duration="0.020321" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[GJ-DEBUG] performance report saved: gj-perf-report-20260929-024635.txt
+]]></output>
+            </test-case>
+            <test-case id="1004" name="Layout_TopRightInsideSafeArea_NoTallerThan8Percent" fullname="GiganticJourneys.Tests.DebugOverlayPlayModeTests.Layout_TopRightInsideSafeArea_NoTallerThan8Percent" methodname="Layout_TopRightInsideSafeArea_NoTallerThan8Percent" classname="GiganticJourneys.Tests.DebugOverlayPlayModeTests" runstate="Runnable" seed="1510838743" result="Passed" start-time="2026-09-29 02:46:35Z" end-time="2026-09-29 02:46:35Z" duration="0.004897" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1002" name="Overlay_IsCreatedAutomatically_HiddenByDefault_WithUiToolkit" fullname="GiganticJourneys.Tests.DebugOverlayPlayModeTests.Overlay_IsCreatedAutomatically_HiddenByDefault_WithUiToolkit" methodname="Overlay_IsCreatedAutomatically_HiddenByDefault_WithUiToolkit" classname="GiganticJourneys.Tests.DebugOverlayPlayModeTests" runstate="Runnable" seed="432105900" result="Passed" start-time="2026-09-29 02:46:35Z" end-time="2026-09-29 02:46:35Z" duration="0.005815" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1008" name="SaveButton_BelowPanel_AtLeast44Points_InsideSafeArea" fullname="GiganticJourneys.Tests.DebugOverlayPlayModeTests.SaveButton_BelowPanel_AtLeast44Points_InsideSafeArea" classname="GiganticJourneys.Tests.DebugOverlayPlayModeTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-09-29 02:46:35Z" end-time="2026-09-29 02:46:35Z" duration="0.007978" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+              </properties>
+              <test-case id="1005" name="SaveButton_BelowPanel_AtLeast44Points_InsideSafeArea(1.0f)" fullname="GiganticJourneys.Tests.DebugOverlayPlayModeTests.SaveButton_BelowPanel_AtLeast44Points_InsideSafeArea(1.0f)" methodname="SaveButton_BelowPanel_AtLeast44Points_InsideSafeArea" classname="GiganticJourneys.Tests.DebugOverlayPlayModeTests" runstate="Runnable" seed="534781450" result="Passed" start-time="2026-09-29 02:46:35Z" end-time="2026-09-29 02:46:35Z" duration="0.002829" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1006" name="SaveButton_BelowPanel_AtLeast44Points_InsideSafeArea(2.0f)" fullname="GiganticJourneys.Tests.DebugOverlayPlayModeTests.SaveButton_BelowPanel_AtLeast44Points_InsideSafeArea(2.0f)" methodname="SaveButton_BelowPanel_AtLeast44Points_InsideSafeArea" classname="GiganticJourneys.Tests.DebugOverlayPlayModeTests" runstate="Runnable" seed="1564201748" result="Passed" start-time="2026-09-29 02:46:35Z" end-time="2026-09-29 02:46:35Z" duration="0.001752" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1007" name="SaveButton_BelowPanel_AtLeast44Points_InsideSafeArea(3.0f)" fullname="GiganticJourneys.Tests.DebugOverlayPlayModeTests.SaveButton_BelowPanel_AtLeast44Points_InsideSafeArea(3.0f)" methodname="SaveButton_BelowPanel_AtLeast44Points_InsideSafeArea" classname="GiganticJourneys.Tests.DebugOverlayPlayModeTests" runstate="Runnable" seed="846509707" result="Passed" start-time="2026-09-29 02:46:35Z" end-time="2026-09-29 02:46:35Z" duration="0.001639" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1012" name="SaveButton_WritesSixtySecondReport" fullname="GiganticJourneys.Tests.DebugOverlayPlayModeTests.SaveButton_WritesSixtySecondReport" methodname="SaveButton_WritesSixtySecondReport" classname="GiganticJourneys.Tests.DebugOverlayPlayModeTests" runstate="Runnable" seed="1684764051" result="Passed" start-time="2026-09-29 02:46:35Z" end-time="2026-09-29 02:46:35Z" duration="0.516679" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[GJ-DEBUG] performance report saved: gj-perf-report-20260929-024635.txt
+]]></output>
+            </test-case>
+            <test-case id="1011" name="ThreeFingerTap_TogglesOverlay" fullname="GiganticJourneys.Tests.DebugOverlayPlayModeTests.ThreeFingerTap_TogglesOverlay" methodname="ThreeFingerTap_TogglesOverlay" classname="GiganticJourneys.Tests.DebugOverlayPlayModeTests" runstate="Runnable" seed="588181717" result="Passed" start-time="2026-09-29 02:46:35Z" end-time="2026-09-29 02:46:35Z" duration="0.083801" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1003" name="Visible_ShowsFpsP99FrameTimeBuildShaSceneDevice" fullname="GiganticJourneys.Tests.DebugOverlayPlayModeTests.Visible_ShowsFpsP99FrameTimeBuildShaSceneDevice" methodname="Visible_ShowsFpsP99FrameTimeBuildShaSceneDevice" classname="GiganticJourneys.Tests.DebugOverlayPlayModeTests" runstate="Runnable" seed="341730132" result="Passed" start-time="2026-09-29 02:46:35Z" end-time="2026-09-29 02:46:37Z" duration="1.207242" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1013" name="MovementEvidenceCapture" fullname="GiganticJourneys.Tests.MovementEvidenceCapture" classname="GiganticJourneys.Tests.MovementEvidenceCapture" runstate="Explicit" testcasecount="1" result="Skipped" label="Explicit" site="SetUp" start-time="2026-09-29 02:46:37Z" end-time="2026-09-29 02:46:37Z" duration="0.001896" total="1" passed="0" failed="0" inconclusive="0" skipped="1" asserts="0">
+            <properties>
+              <property name="_SKIPREASON" value="evidence capture; needs a graphics device" />
+              <property name="Category" value="Evidence" />
+            </properties>
+            <reason>
+              <message><![CDATA[evidence capture; needs a graphics device]]></message>
+            </reason>
+            <test-case id="1014" name="Capture_TouchControlsInTheMovementTestScene" fullname="GiganticJourneys.Tests.MovementEvidenceCapture.Capture_TouchControlsInTheMovementTestScene" methodname="Capture_TouchControlsInTheMovementTestScene" classname="GiganticJourneys.Tests.MovementEvidenceCapture" runstate="Runnable" seed="727485982" result="Skipped" label="Explicit" site="Parent" start-time="0001-01-01 00:00:00Z" end-time="0001-01-01 00:00:00Z" duration="0.000000" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+              </properties>
+              <reason>
+                <message><![CDATA[evidence capture; needs a graphics device]]></message>
+              </reason>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1015" name="RuntimeSmokeTests" fullname="GiganticJourneys.Tests.RuntimeSmokeTests" classname="GiganticJourneys.Tests.RuntimeSmokeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-29 02:46:37Z" end-time="2026-09-29 02:46:37Z" duration="0.002779" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1016" name="PlayerLoopAdvancesAFrame" fullname="GiganticJourneys.Tests.RuntimeSmokeTests.PlayerLoopAdvancesAFrame" methodname="PlayerLoopAdvancesAFrame" classname="GiganticJourneys.Tests.RuntimeSmokeTests" runstate="Runnable" seed="1524209845" result="Passed" start-time="2026-09-29 02:46:37Z" end-time="2026-09-29 02:46:37Z" duration="0.001825" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1017" name="TraversalControllerPlayModeTests" fullname="GiganticJourneys.Tests.TraversalControllerPlayModeTests" classname="GiganticJourneys.Tests.TraversalControllerPlayModeTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-09-29 02:46:37Z" end-time="2026-09-29 02:46:48Z" duration="11.461300" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1018" name="Capsule_IsSizedInA_FromMovementJson" fullname="GiganticJourneys.Tests.TraversalControllerPlayModeTests.Capsule_IsSizedInA_FromMovementJson" methodname="Capsule_IsSizedInA_FromMovementJson" classname="GiganticJourneys.Tests.TraversalControllerPlayModeTests" runstate="Runnable" seed="1655799489" result="Passed" start-time="2026-09-29 02:46:37Z" end-time="2026-09-29 02:46:37Z" duration="0.054268" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1021" name="Gamepad_DrivesTheIntentLayer" fullname="GiganticJourneys.Tests.TraversalControllerPlayModeTests.Gamepad_DrivesTheIntentLayer" methodname="Gamepad_DrivesTheIntentLayer" classname="GiganticJourneys.Tests.TraversalControllerPlayModeTests" runstate="Runnable" seed="1131669174" result="Passed" start-time="2026-09-29 02:46:37Z" end-time="2026-09-29 02:46:37Z" duration="0.438373" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1023" name="MovementTestScene_LoadsWithControllerCameraAndTouchControls" fullname="GiganticJourneys.Tests.TraversalControllerPlayModeTests.MovementTestScene_LoadsWithControllerCameraAndTouchControls" methodname="MovementTestScene_LoadsWithControllerCameraAndTouchControls" classname="GiganticJourneys.Tests.TraversalControllerPlayModeTests" runstate="Runnable" seed="197685802" result="Passed" start-time="2026-09-29 02:46:37Z" end-time="2026-09-29 02:46:37Z" duration="0.262328" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1020" name="StandingAndRunningJump_HeightAndDistance_WithinFivePercent" fullname="GiganticJourneys.Tests.TraversalControllerPlayModeTests.StandingAndRunningJump_HeightAndDistance_WithinFivePercent" methodname="StandingAndRunningJump_HeightAndDistance_WithinFivePercent" classname="GiganticJourneys.Tests.TraversalControllerPlayModeTests" runstate="Runnable" seed="2027616360" result="Passed" start-time="2026-09-29 02:46:37Z" end-time="2026-09-29 02:46:41Z" duration="3.270505" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[M0-UNITY-03 AT-4] standing jump: height 1.100 A, distance 1.228 A
+[M0-UNITY-03 AT-4] running jump: height 1.200 A, distance 2.406 A
+]]></output>
+            </test-case>
+            <test-case id="1022" name="Touch_FloatingStickAndJumpPad_DriveTheSameIntentLayer" fullname="GiganticJourneys.Tests.TraversalControllerPlayModeTests.Touch_FloatingStickAndJumpPad_DriveTheSameIntentLayer" methodname="Touch_FloatingStickAndJumpPad_DriveTheSameIntentLayer" classname="GiganticJourneys.Tests.TraversalControllerPlayModeTests" runstate="Runnable" seed="1133381633" result="Passed" start-time="2026-09-29 02:46:41Z" end-time="2026-09-29 02:46:41Z" duration="0.482947" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1019" name="WalkJogRunSprint_Over5Seconds_WithinTwoPercent" fullname="GiganticJourneys.Tests.TraversalControllerPlayModeTests.WalkJogRunSprint_Over5Seconds_WithinTwoPercent" methodname="WalkJogRunSprint_Over5Seconds_WithinTwoPercent" classname="GiganticJourneys.Tests.TraversalControllerPlayModeTests" runstate="Runnable" seed="128428339" result="Passed" start-time="2026-09-29 02:46:41Z" end-time="2026-09-29 02:46:48Z" duration="6.951106" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[M0-UNITY-03 AT-3] Walk: 1.200 A/s over 5.02 s (target 1.2)
+[M0-UNITY-03 AT-3] Jog: 2.400 A/s over 5.02 s (target 2.4)
+[M0-UNITY-03 AT-3] Run: 3.600 A/s over 5.02 s (target 3.6)
+[M0-UNITY-03 AT-3] Sprint: 4.500 A/s over 5.02 s (target 4.5)
+Saving results to: ~/.config/unity3d/SparkForge Labs/Gigantic Journeys/TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

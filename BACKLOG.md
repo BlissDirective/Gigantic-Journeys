@@ -25,3 +25,7 @@ Deferred scope and ideas, each with a one-line rationale. Nothing here is schedu
 ## Deferred by AUTH #003 (platform)
 - Android release (v1.1): the Unity project keeps the target compiling on demand; open the Play Console early because a personal account needs a 12-tester, 14-day closed test before production access; Material 3 shell work; Android device QA.
 - iPhone Duo candidates the Owner does not select (`design/proposals/iphone-duo-track.md`).
+
+## Surfaced by the overnight worker (2026-09-28)
+- **Touch controls repositionable and resizable** (DESIGN_SYSTEM decision 5 binding constraint): not in M0-UNITY-03's ATs; the M0 floating stick + fixed jump pad ship first. Source: M0-UNITY-03 QA D1 (gj-operator, 2026-09-28).
+- **Double-tap to sprint** (Bible §3.1 "run held 1.5 s or double-tap"): needs a double-tap window value in the proposed movement.json `intent` section. Source: M0-UNITY-03 QA D2.
