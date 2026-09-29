@@ -8,15 +8,14 @@ telemetry and correction schemas one level up. This set stays in its own `enviro
 contained schemas + `fixtures/` + `check_consistency.py` + `tests/`) so its fixture globbing does not collide
 with the flat telemetry/correction fixtures in `data/schemas/`.
 
-Two field-level items were frozen as-drafted and surfaced to the Owner as fast-follow adjustments (they do not
-block the freeze; changing either is an additive schema revision under a later AUTH):
+Two field-level items were frozen as-drafted, surfaced to the Owner, and **resolved (Owner re-confirmed
+AUTH #037 on 2026-09-29)** — both stay as frozen:
 
-- **`crouch` is tier T0** (a beat-1-legal verb). This is the Operator's intentional design and is asserted by
-  `tests/test_m1_schemas.py`; it extends the SPEC §3.4 T0 set with crouch. If the Owner wants crouch at T1,
-  that is a one-line enum move plus the test.
-- **Vault variant names** are `speed-vault`, `kong-vault`, `lazy-vault` (AUTH #021). The Owner decision packet
-  used `step / speed / kong`; final names are to be reconciled in M1-MOVE-02. No fixture depends on a vault
-  verb, so the reconciliation is non-breaking.
+- **`crouch` is tier T0** (a beat-1-legal verb), asserted by `tests/test_m1_schemas.py`; it extends the
+  SPEC §3.4 T0 set with crouch. **Kept at T0.**
+- **Vault variant names** are `speed-vault`, `kong-vault`, `lazy-vault` (AUTH #021), now the **canonical**
+  names (superseding the decision-packet's step/speed/kong wording); M1-MOVE-02's C# verb set implements
+  these three names. No fixture depends on a vault verb, so nothing else changes.
 
 ## Files
 

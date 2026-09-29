@@ -1,8 +1,15 @@
 # AUTH request: create the M4 social tables (M4-DATA-01)
 
-> **STATUS: PROPOSED, awaiting the Owner.** Filed by gj-operator on 2026-09-29 (overnight worker). No AUTH
-> number is assigned, because Bots never write the Decisions table. If approved, the Coordinator logs it
-> as the next free number.
+> **STATUS: APPROVED as AUTH #038 (Owner, 2026-09-29; re-confirmed 2026-09-29).** Logged in
+> `governance/AUTHORIZATION_LOG.md` as Decision #038 (schema/table creation; security-sensitive →
+> secondary review under AUTH #007). **Coordinator secondary security review complete (AUTH #027,
+> 2026-09-29):** `check_rls.py` passes on the draft (every created table has RLS + a policy); the #038
+> conditions are all present — device IDs hashed (`device_hash`, cross-account, in the privacy label),
+> `user_blocks` (Apple 1.2), leaderboards show a handle not a raw user id, narrowed client grants, and the
+> §10.2 rate-limit trigger; the 31 RLS/rate-limit tests pass in CI (they only ERROR in this sandbox because
+> `initdb` cannot start a local PostgreSQL). **The migration is staging-ready.** Remaining step is the
+> Operator's: add the `APPROVED #038` header + a current timestamp, move it to `supabase/migrations/`, and
+> apply it to Supabase **staging** (requires Supabase access this Coordinator does not hold).
 
 ```
 AUTH REQUEST (next free #)

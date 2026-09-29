@@ -56,6 +56,12 @@
       "date": "2026-09-18",
       "event": "created by the Coordinator as an AUTH #021 movement follow-up (expanded verb set).",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-29",
+      "event": "Freeze fast-follow resolved (Owner re-confirmed AUTH #037 2026-09-29): the canonical vault-variant verb names are speed-vault / kong-vault / lazy-vault (as frozen in data/schemas/environment/traversal_graph.json under #037), superseding the decision-packet's step/speed/kong wording. This ticket's C# verb set must use those three names so the controller matches the frozen traversal_graph + affordance library. crouch stays tier T0 (beat-1-legal, extends the SPEC §3.4 T0 set) as frozen and tested. No schema change (would need its own AUTH); this is the implementation-side reconciliation only.",
+      "by": "coordinator"
     }
-  ]
+  ],
+  "notes": "Canonical AUTH #021 vault names (frozen #037): speed-vault, kong-vault, lazy-vault. crouch = T0. Implement the C# verbs to these names/tiers to match config/movement.json + the traversal_graph schema."
 }

@@ -73,10 +73,22 @@
       "date": "2026-09-29",
       "event": "Draft migration in design/proposals/m4-data-01-social/ (publishes, ratings, reports, leaderboard_times, moderation_actions, user_blocks, rate_limit_rules): RLS on every table (owner-only / published-read / service-role-only), narrowed column grants, per-user + per-device rate-limit trigger (P0429; server clock; advisory lock; service role exempt). 31 pytest cases on a throwaway PostgreSQL with a Supabase stand-in cover AT-1/AT-2/AT-3 (all pass locally on PG 17; a mutation check fails 10). Not applied anywhere. Table-creation AUTH request filed → blocked on the AUTH + secondary review.",
       "by": "gj-operator"
+    },
+    {
+      "date": "2026-09-29",
+      "event": "APPROVED as AUTH #038 (Owner, re-confirmed 2026-09-29). Coordinator secondary security review complete (AUTH #027): check_rls.py green on the draft (RLS + a policy on every created table); #038 conditions all present — hashed cross-account device_hash (+ privacy label), user_blocks (Apple 1.2), leaderboards expose a handle not a raw user id, narrowed client grants, §10.2 per-user/per-device rate-limit trigger; the 31 RLS/rate-limit tests pass in CI (local ERRORs are only this sandbox's initdb failing to start PostgreSQL). Migration is staging-ready. Two of the three blockers cleared (AUTH + secondary review); the remaining step is the Operator's apply to Supabase staging.",
+      "by": "coordinator"
+    }
+  ],
+  "auth_required": [
+    {
+      "type": "design-change",
+      "what": "Create the 7 M4 social tables + RLS + rate limits (schema/table creation; security-sensitive, secondary review AUTH #007)",
+      "auth_id": "AUTH #038",
+      "status": "approved"
     }
   ],
   "blocked_by": [
-    "Table-creation AUTH proposed in governance/auth-requests/M4-DATA-01-social-migration.md; awaiting the Owner",
-    "Secondary security review (AUTH #007) of design/proposals/m4-data-01-social/ by gj-data + the Coordinator"
+    "Operator applies the validated migration to Supabase staging: add the APPROVED #038 header + timestamp, move design/proposals/m4-data-01-social/20261101000000_m4_social.sql to supabase/migrations/, and run it against staging (requires Supabase access)"
   ]
 }

@@ -108,6 +108,10 @@ Binding constraints: two-thumb landscape; floating stick anywhere in the left th
 - Styling: neutral scrim discs (charcoal or cream per scan, ~60 % opacity, 1 pt outline); the pressed state and the action button's availability pulse are the only amber; icons in ink or paper at ≥ 3:1; glass and flat variants both defined.
 - Safe zones and iPhone Duo: controls inset 16 pt from the rounded corners and the Dynamic Island in either landscape orientation; the HUD never overlaps the island. Duo stand mode (M3-DUO-01): upper half photograph only, lower half stick at left, jump and action at right, the diorama overview centered, the timer above it. Duo open flat: the standard layout on the 7.6-inch display with the stick zone widened to the left 40 %.
 
+**Refinement (AUTH #042, 2026-09-29):**
+- Per-screen orientation: **play, create-flow, and results are landscape** (two-thumb, diorama-first); **capture, browse, and settings are portrait** (one-handed scanning and scrolling). The signature transition bridges portrait capture → landscape play (and the reverse for results). iPhone Duo variants (§5, §3) are the only exception, per AUTH #003.
+- HUD tap-target rule: the top-8 % HUD band carries only **passive readouts** (route timer, vista count) — it is never a tap target and has no minimum touch size. Every **interactive control** (stick, jump, action, pause, drop) is a real target sized ≥ 44 pt (play controls ≥ 56 pt per above); pause, though anchored at the top-right, is a control at ≥ 44 pt, not part of the passive band. This keeps the overlay budget honest: readouts stay tiny, controls stay reachable.
+
 
 ## 6. Capture coaching UI — LOCKED 2026-09-16 (AUTH #005)
 
@@ -154,6 +158,9 @@ Binding constraints: browse by place, thumbnails are the room; sort tabs Top thi
 - Deep links: an environment link opens its card with one primary action, Journey; if the app is not installed, the App Store page with the diorama thumbnail; the link carries no location data.
 - Moderation visibility: environments awaiting the vision pass show an "Under review" badge and are playable only by their creator until cleared; a rejection tells the creator why in one line with an appeal action.
 
+**Refinement (AUTH #042, 2026-09-29):**
+- Lighter, image-forward cards: the diorama fills the full 4:5 with no title chrome and no card border; the bottom scrim is thinner and single-line (creator name · summit count · the four-axis score as four compact bars), sitting only over the lowest ~18 % so the place reads first and the metadata second. The "Under review" badge and the report flag stay, kept minimal. Portrait per the §5 orientation rule.
+
 
 ## 9. Results and store screens — LOCKED 2026-09-16 (AUTH #005)
 
@@ -166,6 +173,8 @@ Binding constraints: one primary action ("Share"); the store after a win, never 
 - Store placement: on the results screen after a summit only, below the fold, a "Dress your avatar" card and a "Realism+" card with inline prices, each previewed on the player's own avatar in the diorama; Restore purchases is one tap here and in Settings; never after a fall or quit, never before the first summit of the account, never covering Share.
 - Store copy and rules: verbs first ("Dress your avatar", "Sharpen the look"); local prices from StoreKit; no timers, badges, countdowns, or "limited" language; purchases apply immediately in the preview; Family Sharing and restore work on day one.
 - Failure and loss screens: the diorama with the avatar at the last stable surface and one primary action, Keep going; store, ratings, and share are absent; a time penalty shows as a small "+0:04" next to the timer, never a red banner.
+
+**Refinement (AUTH #042, 2026-09-29):** player-facing copy across results and store says **"your character"**, not "your avatar" (align AUTH #020 / §4 — v1 is a selected, curated character, not a generated avatar). So the store cards read "Dress your character" and "Sharpen your character's look", previewed on the player's chosen character in the diorama; "avatar" survives only as an internal/engineering term.
 
 
 ## 10. Accessibility baseline — LOCKED 2026-09-16 (AUTH #005)
@@ -193,6 +202,7 @@ Binding constraints: assist options (Bible §10 assist block), colorblind palett
 | 0.4 | 2026-09-16 | Decisions 1–4 transcribed from the Owner's 2026-09-14 lock; consistency notes and palette contrast measurements added; §5 vocabulary fix (diorama overview) | Transcription, M0-OWNER-02 (no AUTH consumed) |
 | 0.5 | 2026-09-16 | §3 amended with the five adopted Coordinator recommendations (scale anchor, summit last, sound and haptics, short form on return, reverse transition as results backdrop) | AUTH #004 |
 | 0.6 | 2026-09-16 | Decisions 5–10 locked (play layout, capture coaching, create-flow waits, browse cards, results and store, accessibility), each the recommended package | AUTH #005 |
+| 0.7 | 2026-09-29 | Decision-6 refinements: per-screen orientation (landscape play/create/results, portrait capture/browse/settings) + HUD passive-readout/interactive tap-target rule in §5; lighter image-forward browse cards in §8; "your character" copy alignment (AUTH #020) in §9 | AUTH #042 |
 
 ## 12. Field notes
 
