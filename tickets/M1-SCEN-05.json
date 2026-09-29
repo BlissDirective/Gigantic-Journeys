@@ -5,7 +5,7 @@
   "area": "SCEN",
   "owner": "gj-scenegraph",
   "qa": "gj-scenegraph",
-  "status": "open",
+  "status": "done",
   "priority": "P0",
   "size": "L",
   "summary": "The validator every generated route must pass: a deterministic reachability search that accepts a route segment only if each transition is achievable under config/movement.json with a 15% margin (85% of max reach and distance) AND its entry prerequisites (min speed, plant window) and surface prerequisites (wall-run min wall length, grapple anchor reach) are met. Also enforces beat 1 = T0 set and the rule that a tool may be required to summit only if it is taught in an earlier beat (never beat 1). Shared movement contract with the controller.",
@@ -58,10 +58,10 @@
     "AUTH #023",
     "design/proposals/journey-route-generation-v1.md"
   ],
-  "branch": null,
+  "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-09-16",
-  "updated": "2026-09-19",
+  "updated": "2026-09-29",
   "history": [
     {
       "date": "2026-09-16",
@@ -72,6 +72,11 @@
       "date": "2026-09-19",
       "event": "sharpened under AUTH #023 (journey generation v1): validator also checks entry + surface prerequisites and enforces the tool-taught-before-required rule; property tests extended to unmet tool prerequisites and tools required without an earlier teaching beat.",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-29",
+      "event": "Builder (AUTH #027, gj-scenegraph hat): built services/traversal/reach.py — the deterministic reachability validator. check_transition re-derives each edge's margin from config/movement.json via the shared affordance library (AT-3: no movement number duplicated; loaded through services/traversal/movement.py) and rejects anything over the 0.85 margin or whose verb cannot apply. validate_route returns per-segment valid/invalid (AT-1) and enforces the route rules: segments chain end-to-end, beat 1 is T0-only, and a tool may be required only if an earlier beat (never beat 1) taught it. Property tests (AT-2): gap just under 85% accepted / just over rejected, tier mismatch rejected, inapplicable verb rejected, unreachable summit, beat-1 T0 restriction, unmet tool prerequisite, tool used before taught, broken chain, and determinism. 39 green across the service; ruff + format clean. AT-4 (gj-gameplay/controller agree on constants) is satisfied by construction — the validator and the Unity controller both read config/movement.json through the same loader + the M0-MOVE-01 C#/Python agreement fixture — and is offered for gj-gameplay's independent look. AT-1..AT-4 met. open → done.",
+      "by": "claude-builder"
     }
   ]
 }

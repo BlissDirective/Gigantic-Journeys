@@ -5,7 +5,7 @@
   "area": "SCEN",
   "owner": "gj-scenegraph",
   "qa": "gj-scenegraph",
-  "status": "open",
+  "status": "done",
   "priority": "P0",
   "size": "M",
   "summary": "Map surface classes to traversal verbs (the affordance library) and export the traversal graph: which surfaces reach which, by which verb, at what difficulty. Each edge carries verb, capability cost (distance/height/angle in A-units), entry + surface prerequisites, and a T0–T3 difficulty tier (SPEC §3.4). Tool verbs (grapple swing/ascend/rappel, pole-vault, wall-run) are added the same way as any IVerbProvider verb. traversal_graph schema fields are frozen by M1-DATA-01.",
@@ -56,10 +56,10 @@
     "AUTH #023",
     "design/proposals/journey-route-generation-v1.md"
   ],
-  "branch": null,
+  "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-09-16",
-  "updated": "2026-09-19",
+  "updated": "2026-09-29",
   "history": [
     {
       "date": "2026-09-16",
@@ -70,6 +70,11 @@
       "date": "2026-09-19",
       "event": "sharpened under AUTH #023 (journey generation v1): edges carry T0–T3 difficulty tier, capability cost, and prerequisites; tool verbs (grapple/pole-vault/wall-run) added via the same affordance mapping (AT-4).",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-29",
+      "event": "Builder (AUTH #027, gj-scenegraph hat): built the affordance library + traversal-graph export in services/traversal/ — affordances.py is the single place (AT-3) holding the verb→tier table (asserted equal to the frozen traversal_graph schema), the Bible §4 class→verb matrix, the per-verb reach model against config/movement.json, and each verb's required prerequisites; imported by both graph.py (export) and reach.py (validator). graph.py places stance/hang/climb/anchor nodes on the classified surfaces and proposes a directed edge per reachable pair using only verbs the source class enables (AT-2), each accepted at the 0.85 margin; edge distance is the edge-to-edge surface gap. Tool verbs ride the same mapping with their movement.json prerequisites (AT-4: grapple anchor_ledge_A, pole-vault plant window + min run speed, wall-run min entry speed + wall length) — verified by tests that build grapple and wall-run edges on crafted scenes and pole-vault/grapple on the frozen desk fixture. Tests: test_affordances/test_graph (schema-validation of the emitted traversal_graph, AT-2 verb-enabled-for-class, determinism); 39 green across the service; ruff + format clean. AT-1..AT-4 met. open → done.",
+      "by": "claude-builder"
     }
   ]
 }
