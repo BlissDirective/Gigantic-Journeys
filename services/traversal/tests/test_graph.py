@@ -141,6 +141,45 @@ def test_no_tools_option_drops_tool_edges():
     assert not any(e["prerequisites"].get("tool") for e in doc["edges"])
 
 
+def test_large_surface_gets_edge_nodes_and_intra_surface_walk():
+    # a big floor (10x8) gets a centroid + 4 edge-midpoint stance nodes; a small
+    # platform beside it keeps a single node
+    s = scene(
+        [
+            surface("surface-1", "walkable-hard", (0, 0, 0), ((-5, -0.1, -4), (5, 0.1, 4)), 0.0),
+            surface("surface-2", "walkable-hard", (6, 1, 0), ((5.2, 0.9, -1), (7, 1.1, 1)), 1.0),
+        ]
+    )
+    doc = graph.build_traversal_graph(s)
+    assert not _validate(doc)
+    big = [n for n in doc["nodes"] if n["surface_id"] == "surface-1"]
+    small = [n for n in doc["nodes"] if n["surface_id"] == "surface-2"]
+    assert len(big) == 5 and len(small) == 1
+    # intra-surface walk edges exist and cross more than a step gap (free on one surface)
+    intra_ids = {n["id"] for n in big}
+    intra = [
+        e
+        for e in doc["edges"]
+        if e["from"] in intra_ids and e["to"] in intra_ids and e["verb"] == "walk"
+    ]
+    assert intra and max(e["distance_A"] for e in intra) > 1.0
+
+
+def test_validator_accepts_intra_surface_walk_but_not_across_a_gap():
+    import movement
+    import reach
+
+    cfg = movement.load()
+    s = scene(
+        [surface("surface-1", "walkable-hard", (0, 0, 0), ((-5, -0.1, -4), (5, 0.1, 4)), 0.0)]
+    )
+    doc = graph.build_traversal_graph(s)
+    walk = next(e for e in doc["edges"] if e["verb"] == "walk" and e["distance_A"] > 1.0)
+    # same-surface walk is free; the identical distance as a between-surface gap is too far to step
+    assert reach.check_transition(cfg, walk, same_surface=True)[1]
+    assert not reach.check_transition(cfg, walk, same_surface=False)[1]
+
+
 def test_empty_scene_rejected():
     import pytest
 

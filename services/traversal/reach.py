@@ -48,24 +48,28 @@ class RouteResult:
     problems: list[str] = field(default_factory=list)
 
 
-def _ctx_from_edge(edge: dict) -> Context:
+def _ctx_from_edge(edge: dict, same_surface: bool = False) -> Context:
     pre = edge.get("prerequisites", {})
     return Context(
         run_up_A=pre.get("run_up_A", 0.0),
         wall_length_A=pre.get("wall_length_A", 0.0),
         anchor_ledge_A=pre.get("anchor_ledge_A", 0.0),
         tool_available=frozenset({pre["tool"]}) if "tool" in pre else frozenset(),
+        same_surface=same_surface,
     )
 
 
-def check_transition(cfg: MovementConfig, edge: dict) -> tuple[float | None, bool, str]:
+def check_transition(
+    cfg: MovementConfig, edge: dict, same_surface: bool = False
+) -> tuple[float | None, bool, str]:
     """Recompute the edge's reachability from movement.json. Returns
-    (margin, ok, reason). ok is False if the verb cannot apply or exceeds 85 %."""
+    (margin, ok, reason). ok is False if the verb cannot apply or exceeds 85 %.
+    ``same_surface`` marks an intra-surface transition, where walking is free."""
     verb = edge["verb"]
     if affordances.VERB_TIER.get(verb) != edge["tier"]:
         return None, False, f"tier {edge['tier']} does not match verb {verb}"
     margin = affordances.verb_margin(
-        cfg, verb, edge["distance_A"], edge["rise_A"], _ctx_from_edge(edge)
+        cfg, verb, edge["distance_A"], edge["rise_A"], _ctx_from_edge(edge, same_surface)
     )
     if margin is None:
         return None, False, f"{verb} cannot apply to this transition"
@@ -74,8 +78,8 @@ def check_transition(cfg: MovementConfig, edge: dict) -> tuple[float | None, boo
     return margin, True, ""
 
 
-def validate_edge(cfg: MovementConfig, edge: dict) -> SegmentResult:
-    margin, ok, reason = check_transition(cfg, edge)
+def validate_edge(cfg: MovementConfig, edge: dict, same_surface: bool = False) -> SegmentResult:
+    margin, ok, reason = check_transition(cfg, edge, same_surface)
     return SegmentResult(
         edge_id=edge["id"],
         verb=edge["verb"],
@@ -97,6 +101,7 @@ def validate_route(
     """Validate a proposed route (ordered beats of edge ids) against ``graph``."""
     cfg = cfg or movement.load()
     edges = {e["id"]: e for e in graph["edges"]}
+    node_surface = {n["id"]: n["surface_id"] for n in graph.get("nodes", [])}
     result = RouteResult(ok=True)
 
     # Which beat first teaches each tool (via a taught verb that needs one).
@@ -119,7 +124,9 @@ def validate_route(
                 result.problems.append(f"beat {beat.index}: unknown edge {eid}")
                 result.ok = False
                 continue
-            seg = validate_edge(cfg, edge)
+            sfrom = node_surface.get(edge["from"])
+            same_surface = sfrom is not None and sfrom == node_surface.get(edge["to"])
+            seg = validate_edge(cfg, edge, same_surface)
             result.segments.append(seg)
             if not seg.ok:
                 result.ok = False

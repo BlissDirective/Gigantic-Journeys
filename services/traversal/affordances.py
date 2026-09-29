@@ -183,6 +183,7 @@ class Context:
     wall_length_A: float = 0.0  # length of a usable wall for wall-run/tic-tac
     anchor_ledge_A: float = 0.0  # depth of the grapple anchor ledge at the target
     tool_available: frozenset = field(default_factory=frozenset)  # {"grapple","pole-vault"}
+    same_surface: bool = False  # from and to are on one solid surface (walking is free)
 
 
 def tier_of(verb: str) -> str:
@@ -206,9 +207,10 @@ def verb_margin(
     v = cfg.verticals
     near = distance_A <= cfg.reach.holdReach
 
-    # --- locomotion: level, adjacent surfaces (small gap, no step) ---
+    # --- locomotion: level. Free anywhere on one solid surface; between surfaces only
+    # across a tiny gap (a real gap is a jump, not a step). ---
     if verb in ("walk", "jog", "run", "balance-walk"):
-        if distance_A <= WALK_GAP and abs(rise_A) <= v.stepUp:
+        if abs(rise_A) <= v.stepUp and (ctx.same_surface or distance_A <= WALK_GAP):
             return 0.0
         return None
 

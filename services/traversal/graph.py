@@ -1,12 +1,17 @@
 """Traversal-graph export (M1-SCEN-03): scene_graph.json -> traversal_graph.json.
 
-Places nodes on the classified surfaces (a stance on a walkable top, a hang on a
-ledge/overhang, a climb on a climbable face, a grapple anchor on a deep ledge), then
-proposes a directed edge between every reachable pair using the shared affordance
-library — so every edge's verb is one the source surface's Bible §4 class enables
-(AT-2) and tool verbs ride the same mapping with their movement.json prerequisites
-(AT-4). Each proposed edge is accepted only if it is reachable under config/movement.json
-at the 85 % margin (the same check the M1-SCEN-05 validator runs).
+Places nodes on the classified surfaces — a stance on a walkable top (large surfaces
+also get edge-midpoint stances, so a neighbour near any part of them has a close
+jump-off point and a route can walk across them), a hang on a ledge/overhang, a climb
+on a climbable face, a grapple anchor on a deep ledge. Then it adds edges:
+- intra-surface locomotion (walking is free between stance nodes on one solid surface);
+- one inter-surface crossing per (surface pair, target-node kind), at the true
+  edge-to-edge gap, from the A node nearest B to the nearest B node of each kind — so a
+  grapple still targets an anchor and a jump a stance.
+Every edge's verb is one the source surface's Bible §4 class enables (AT-2); tool verbs
+ride the same affordance mapping with their movement.json prerequisites (AT-4); and
+every edge is accepted only if reachable under config/movement.json at the 85 % margin
+(the same check the M1-SCEN-05 validator runs).
 
 Standard library only; deterministic.
 """
@@ -42,6 +47,12 @@ _KIND_BY_CLASS = {
 _ANCHOR_CLASSES = {"ledge", "overhang"}
 _WALL_CLASSES = {"wall-smooth", "textured-vertical"}
 
+# A walkable surface wider/longer than this (A) gets stance nodes near its edges as well
+# as its centroid, so a neighbour near any part of it has a close jump-off point and a
+# route can walk across it. Small surfaces keep a single centroid node.
+_EDGE_NODE_MIN_SPAN = 3.0
+_EDGE_INSET = 0.5
+
 
 @dataclass
 class _Node:
@@ -53,9 +64,13 @@ class _Node:
     plantable: bool
 
 
+def _horiz(a: list[float], b: list[float]) -> float:
+    return ((a[0] - b[0]) ** 2 + (a[2] - b[2]) ** 2) ** 0.5
+
+
 def _aabb_gap(a: dict, b: dict) -> float:
-    """Horizontal edge-to-edge distance between two surface AABBs (0 if they overlap
-    in x/z) — the gap the avatar actually has to cross."""
+    """Horizontal edge-to-edge distance between two surface AABBs (0 if they overlap in
+    x/z) — the true gap the avatar crosses, independent of where the nodes sit."""
     amin, amax = a["bounds"]["min"], a["bounds"]["max"]
     bmin, bmax = b["bounds"]["min"], b["bounds"]["max"]
     dx = max(0.0, amin[0] - bmax[0], bmin[0] - amax[0])
@@ -72,6 +87,23 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _stance_positions(s: dict) -> list[list[float]]:
+    """Centroid plus edge-midpoint stance points on a large walkable surface."""
+    b = s["bounds"]
+    top = s["measurements"]["top_height_A"]
+    cx, _, cz = s["centroid"]
+    minx, maxx = b["min"][0], b["max"][0]
+    minz, maxz = b["min"][2], b["max"][2]
+    positions = [[cx, top, cz]]
+    if maxx - minx > _EDGE_NODE_MIN_SPAN:
+        positions.append([round(minx + _EDGE_INSET, 4), top, cz])
+        positions.append([round(maxx - _EDGE_INSET, 4), top, cz])
+    if maxz - minz > _EDGE_NODE_MIN_SPAN:
+        positions.append([cx, top, round(minz + _EDGE_INSET, 4)])
+        positions.append([cx, top, round(maxz - _EDGE_INSET, 4)])
+    return positions
+
+
 def _make_nodes(scene: dict) -> list[_Node]:
     nodes: list[_Node] = []
     n = 0
@@ -80,14 +112,34 @@ def _make_nodes(scene: dict) -> list[_Node]:
         kind = _KIND_BY_CLASS.get(cls)
         top = s["measurements"]["top_height_A"]
         cx, cy, cz = s["centroid"]
-        if kind is not None:
+        if kind == "stance":
+            for pos in _stance_positions(s):
+                n += 1
+                nodes.append(_Node(f"node-{n}", s["id"], cls, pos, "stance", True))
+        elif kind is not None:  # hang / climb — one node at the feature
             n += 1
-            pos = [cx, top, cz] if kind in ("stance", "hang") else [cx, cy, cz]
-            nodes.append(_Node(f"node-{n}", s["id"], cls, pos, kind, kind == "stance"))
+            pos = [cx, top, cz] if kind == "hang" else [cx, cy, cz]
+            nodes.append(_Node(f"node-{n}", s["id"], cls, pos, kind, False))
         if cls in _ANCHOR_CLASSES:
             n += 1
             nodes.append(_Node(f"node-{n}", s["id"], cls, [cx, top, cz], "anchor", False))
     return nodes
+
+
+def _edge_dict(
+    a: _Node, b: _Node, distance: float, rise: float, aff: affordances.Affordance
+) -> dict:
+    return {
+        "from": a.id,
+        "to": b.id,
+        "verb": aff.verb,
+        "tier": aff.tier,
+        "distance_A": round(distance, 4),
+        "rise_A": round(rise, 4),
+        "margin_used": aff.margin_used,
+        "cost": aff.cost,
+        "prerequisites": aff.prerequisites,
+    }
 
 
 def build_traversal_graph(
@@ -116,42 +168,67 @@ def build_traversal_graph(
     max_reach = max(cfg.grapple.reachA, cfg.poleVault.maxGapA, cfg.jump.sprintDistance)
     max_rise = cfg.grapple.reachA + 1.0
 
+    nodes_by_surface: dict[str, list[_Node]] = {}
+    for nd in nodes:
+        nodes_by_surface.setdefault(nd.surface_id, []).append(nd)
+
+    centroid = {sid: surface_by_id[sid]["centroid"] for sid in nodes_by_surface}
     proposed: dict[tuple[str, str], dict] = {}
-    for a in nodes:
-        surf = surface_by_id[a.surface_id]
-        run_up = min(max(*_extent(surf)), 10.0)
-        for b in nodes:
-            if a is b or a.surface_id == b.surface_id:
+
+    # intra-surface locomotion: walking is free between stance nodes on one solid surface
+    for group in nodes_by_surface.values():
+        stances = [nd for nd in group if nd.kind == "stance"]
+        for a in stances:
+            for b in stances:
+                if b is a:
+                    continue
+                distance = _horiz(a.position, b.position)
+                rise = b.position[1] - a.position[1]
+                ctx = Context(
+                    from_kind="stance",
+                    to_kind="stance",
+                    to_class=b.surface_class,
+                    same_surface=True,
+                )
+                aff = affordances.best_affordance(cfg, a.surface_class, distance, rise, ctx)
+                if aff is not None:
+                    proposed[(a.id, b.id)] = _edge_dict(a, b, distance, rise, aff)
+
+    # inter-surface: one crossing per (surface pair, target-node kind). Distance is the
+    # true edge-to-edge gap; endpoints are the node on A nearest B and, per kind, the
+    # nearest B node (so a grapple still targets B's anchor, a jump its stance).
+    for sa, ga in nodes_by_surface.items():
+        run_up = min(max(*_extent(surface_by_id[sa])), 10.0)
+        for sb, gb in nodes_by_surface.items():
+            if sb == sa:
                 continue
-            distance = _aabb_gap(surf, surface_by_id[b.surface_id])
-            rise = b.position[1] - a.position[1]
-            if distance > max_reach or abs(rise) > max_rise:
+            gap = _aabb_gap(surface_by_id[sa], surface_by_id[sb])
+            if gap > max_reach:
                 continue
-            ctx = Context(
-                from_kind=a.kind,
-                to_kind=b.kind,
-                to_class=b.surface_class,
-                run_up_A=run_up,
-                wall_length_A=_wall_between(a.position, b.position, walls),
-                anchor_ledge_A=min(*_extent(surface_by_id[b.surface_id]))
-                if b.kind == "anchor"
-                else 0.0,
-                tool_available=tools,
-            )
-            aff = affordances.best_affordance(cfg, a.surface_class, distance, rise, ctx)
-            if aff is None:
-                continue
-            proposed[(a.id, b.id)] = {
-                "from": a.id,
-                "to": b.id,
-                "verb": aff.verb,
-                "tier": aff.tier,
-                "distance_A": round(distance, 4),
-                "rise_A": round(rise, 4),
-                "margin_used": aff.margin_used,
-                "cost": aff.cost,
-                "prerequisites": aff.prerequisites,
-            }
+            a = min(ga, key=lambda na: _horiz(na.position, centroid[sb]))
+            targets: dict[str, _Node] = {}
+            for nb in gb:
+                cur = targets.get(nb.kind)
+                if cur is None or _horiz(a.position, nb.position) < _horiz(
+                    a.position, cur.position
+                ):
+                    targets[nb.kind] = nb
+            for b in targets.values():
+                rise = b.position[1] - a.position[1]
+                if abs(rise) > max_rise:
+                    continue
+                ctx = Context(
+                    from_kind=a.kind,
+                    to_kind=b.kind,
+                    to_class=b.surface_class,
+                    run_up_A=run_up,
+                    wall_length_A=_wall_between(a.position, b.position, walls),
+                    anchor_ledge_A=min(*_extent(surface_by_id[sb])) if b.kind == "anchor" else 0.0,
+                    tool_available=tools,
+                )
+                aff = affordances.best_affordance(cfg, a.surface_class, gap, rise, ctx)
+                if aff is not None:
+                    proposed[(a.id, b.id)] = _edge_dict(a, b, gap, rise, aff)
 
     edges = []
     for i, ((fr, to), e) in enumerate(sorted(proposed.items()), start=1):
