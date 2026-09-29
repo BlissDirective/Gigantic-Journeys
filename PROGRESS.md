@@ -19,11 +19,11 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 |---|---|
 | open | 35 |
 | in-progress | 2 |
-| in-review | 11 |
+| in-review | 9 |
 | changes-requested | 0 |
 | blocked | 6 |
 | merged | 11 |
-| done | 12 |
+| done | 14 |
 | cancelled | 3 |
 | **total** | **80** |
 
@@ -97,7 +97,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | M0-FORE-01 | VM repo bootstrap and secret-hygiene proof | gj-foreman | P0 | blocked | — | ticket/M0-FORE-01-vm-bootstrap |
 | M0-FORE-02 | File the M0 AUTH batch (accounts, spend, name protection) | gj-foreman | P0 | open | — | — |
 | M0-FORE-04 | M0 checkpoint report | gj-foreman | P0 | open | M0-UNITY-04, M0-QA-01, M0-DATA-01, M0-PIPE-01, M0-DSGN-01, M0-FORE-02, M0-FORE-03 | — |
-| M0-MOVE-01 | movement.json as the shared tuning contract (loaders, schema, CI sync) | gj-gameplay | P0 | in-review | — | — |
+| M0-MOVE-01 | movement.json as the shared tuning contract (loaders, schema, CI sync) | gj-gameplay | P0 | done | — | claude/gigantic-journeys-governance-f0wgak |
 | M0-OWNER-01 | Capture the day-one corpus: 10 rooms and 5 tabletop builds | owner | P0 | open | M0-CAPT-01 | — |
 | M0-OWNER-03 | Lock design system decisions 5–10 at the M0 checkpoint | owner | P0 | done | M0-DSGN-01 | — |
 | M0-PIPE-01 | Inngest loop skeleton: scan.submitted → reconstruct → scenegraph → journey → package (stubs) | gj-platform | P0 | merged | — | c-main |
@@ -143,7 +143,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | M0-LEGAL-03 | Luma data-retention and training terms on file | gj-capture | P1 | open | — | — |
 | M0-LEGAL-04 | [V2] Avatar vendor data terms (no avatar vendor in v1) | gj-avatar | P1 | cancelled | — | — |
 | M0-OWNER-02 | Transcribe the four locked design decisions into DESIGN_SYSTEM.md | owner | P1 | done | — | — |
-| M0-PLAT-01 | Supabase local scaffold and RLS-by-default lint | gj-platform | P1 | in-review | — | ticket/M0-PLAT-01-supabase-local-rls |
+| M0-PLAT-01 | Supabase local scaffold and RLS-by-default lint | gj-platform | P1 | done | — | ticket/M0-PLAT-01-supabase-local-rls |
 | M0-REPO-06 | TestFlight lane in ios-build.yml (cloud-managed signing, fastlane pilot) | coordinator | P1 | done | M0-REPO-05 | — |
 | M0-SCEN-01 | Tier 2 research track charter (no compute spend in M0) | gj-scenegraph | P1 | in-review | — | ticket/M0-SCEN-01-tier2-charter |
 | M0-SKILL-02 | gj-capture: research handbook (RESOURCES.md + SKILLS.md) | gj-capture | P1 | merged | — | https://github.com/BlissDirective/Gigantic-Journeys/pull/7 |
