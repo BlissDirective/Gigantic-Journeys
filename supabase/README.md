@@ -2,7 +2,7 @@
 
 Owner: gj-platform
 
-Migrations, RLS policies, edge functions. Rule: every table has RLS enabled and at least one policy in the same migration, enforced by `supabase/scripts/check_rls.py` (M0-PLAT-01). Table creation needs an AUTH (data schema).
+Migrations, RLS policies, edge functions. Rule: **RLS by default.** Every table has RLS enabled and at least one policy in the same migration, enforced by `supabase/scripts/check_rls.py` (M0-PLAT-01; `python supabase/scripts/check_rls.py [dir]`, pass/fail fixtures in `scripts/tests/fixtures/`). Table creation needs an AUTH (data schema).
 
 First migration: `migrations/20260926120000_m1_environments_staging.sql` (M1 `environments` table + private storage bucket + RLS) — **APPROVED #034**, **applied to STAGING 2026-09-26** by gj-operator (M1-PLAT-01; evidence `qa/reports/M1-PLAT-01.md`). Align `environment_spec` with M1-DATA-01 when it freezes. `scripts/check_rls.py` enforces the rule in CI (the `governance` workflow's `rls` job): every table created in a migration must enable RLS + have at least one policy in the same migration.
 
@@ -18,7 +18,7 @@ Storage follows the same rule: private buckets, owner-prefixed object paths (`{u
 
 ## Local
 
-`config.toml` is the local-dev config (`supabase start`). Auth mirrors staging: email sign-in with confirmation required, anonymous sign-in off, minimum password length 8; Apple and Google (§9.3) are present but disabled until the Owner creates the OAuth clients, with secrets only via `env()`. `functions.environment-urls.verify_jwt = true`. No keys or project refs live in this directory.
+`config.toml` is the local-dev config (`supabase start`). CI boots it on every change to `config.toml` or `migrations/` (`.github/workflows/supabase-local.yml`, M0-PLAT-01 AT-1): the pinned Supabase CLI starts the local stack, applies every migration from scratch, and fails if any public table lacks RLS or a policy in the live database (the runtime twin of `scripts/check_rls.py`). The start log is kept as the `supabase-start-log` artifact with key lines stripped. Locally: `npx supabase@2.118.0 start` (needs Docker). Auth mirrors staging: email sign-in with confirmation required, anonymous sign-in off, minimum password length 8; Apple and Google (§9.3) are present but disabled until the Owner creates the OAuth clients, with secrets only via `env()`. `functions.environment-urls.verify_jwt = true`. No keys or project refs live in this directory.
 
 ## Staging (gj-operator; staging credentials only, never production)
 

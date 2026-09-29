@@ -1,0 +1,81 @@
+# supabase-local (M0-PLAT-01 AT-1): boots the local Supabase stack from supabase/config.toml
+# with the Supabase CLI, applies every migration from scratch, and checks that every public
+# table has RLS on and at least one policy in the live database (the runtime twin of the
+# static check_rls.py gate). Uses only the CLI's local-dev defaults: no project URL, key or
+# ref is involved, and nothing talks to staging or production.
+name: supabase-local
+
+on:
+  push:
+    branches: ["**"]
+    paths:
+      - "supabase/config.toml"
+      - "supabase/migrations/**"
+      - "supabase/seed.sql"
+      - ".github/workflows/supabase-local.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: supabase-local-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  SUPABASE_CLI_VERSION: "2.118.0"
+  # Local-dev default connection (documented CLI default, not a credential). The start log
+  # drops any line mentioning a key/secret/JWT so even the local demo keys are not archived.
+  LOCAL_DB_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+
+jobs:
+  start:
+    name: supabase start + migrations + live RLS check
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: supabase start (local stack, heavy optional services excluded)
+        run: |
+          set -o pipefail
+          npx --yes "supabase@${SUPABASE_CLI_VERSION}" start \
+            -x studio,imgproxy,edge-runtime,logflare,vector,supavisor 2>&1 \
+            | grep -viE 'key|secret|jwt|token' | tee supabase-start.log
+      - name: Migrations applied
+        run: |
+          set -o pipefail
+          applied=$(psql "$LOCAL_DB_URL" -Atc "select count(*) from supabase_migrations.schema_migrations")
+          files=$(ls supabase/migrations/*.sql | wc -l)
+          echo "migrations applied: $applied / files: $files" | tee -a supabase-start.log
+          test "$applied" -eq "$files"
+      - name: Live RLS check (every public table has RLS on + a policy)
+        run: |
+          set -o pipefail
+          psql "$LOCAL_DB_URL" -v ON_ERROR_STOP=1 -P pager=off -c "
+            select c.relname as table, c.relrowsecurity as rls,
+                   (select count(*) from pg_policies p
+                      where p.schemaname = 'public' and p.tablename = c.relname) as policies
+            from pg_class c join pg_namespace n on n.oid = c.relnamespace
+            where n.nspname = 'public' and c.relkind in ('r', 'p') order by 1" | tee -a supabase-start.log
+          bad=$(psql "$LOCAL_DB_URL" -Atc "
+            select count(*) from pg_class c join pg_namespace n on n.oid = c.relnamespace
+            where n.nspname = 'public' and c.relkind in ('r', 'p')
+              and (not c.relrowsecurity or not exists (
+                select 1 from pg_policies p
+                where p.schemaname = 'public' and p.tablename = c.relname))")
+          echo "public tables without RLS or a policy: $bad" | tee -a supabase-start.log
+          test "$bad" -eq 0
+      - name: supabase status (local URLs only)
+        run: npx --yes "supabase@${SUPABASE_CLI_VERSION}" status -o env 2>&1 | grep -E '^(API_URL|DB_URL)=' | tee -a supabase-start.log
+      - name: supabase stop
+        if: always()
+        run: npx --yes "supabase@${SUPABASE_CLI_VERSION}" stop --no-backup || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: supabase-start-log
+          path: supabase-start.log
+          retention-days: 30

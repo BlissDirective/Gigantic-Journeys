@@ -57,16 +57,28 @@ def violations(sql: str) -> list[str]:
     return bad
 
 
-def main() -> int:
-    if not MIGRATIONS.is_dir():
-        print(f"check_rls: no migrations dir at {MIGRATIONS}")
+def _display(path: Path) -> str:
+    """Repo-relative path for GitHub annotations when possible."""
+    root = Path(__file__).resolve().parents[2]
+    try:
+        return path.resolve().relative_to(root).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Scan supabase/migrations (or the directory given as the only argument)."""
+    args = sys.argv[1:] if argv is None else argv
+    migrations = Path(args[0]).resolve() if args else MIGRATIONS
+    if not migrations.is_dir():
+        print(f"check_rls: no migrations dir at {migrations}")
         return 0
-    files = sorted(MIGRATIONS.glob("*.sql"))
+    files = sorted(migrations.glob("*.sql"))
     failed = False
     for path in files:
         for bad in violations(path.read_text(encoding="utf-8")):
             failed = True
-            print(f"::error file=supabase/migrations/{path.name}::RLS — {bad}")
+            print(f"::error file={_display(path)}::RLS — {bad}")
     if failed:
         print(
             "Every table created in a migration needs `enable row level security` "
