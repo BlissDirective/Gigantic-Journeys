@@ -8,7 +8,7 @@
   "reviewers": [
     "gj-data"
   ],
-  "status": "open",
+  "status": "blocked",
   "priority": "P0",
   "size": "L",
   "summary": "Supabase migrations for the social tables (environments, publishes, ratings, reports, leaderboard_times, moderation_actions) with RLS on every table and the locked policy patterns: owner-only for drafts and creator stats, published-read (published AND moderation-cleared) for public browse/play, service-role-only for the moderation queue and ranking jobs. Ratings, reports, and time submissions are rate-limited per user and device (SPEC §3.7; security-sensitive → secondary review, AUTH #007).",
@@ -59,15 +59,24 @@
     "SPEC §3.7",
     "design/proposals/publish-browse-rank-moderation-v1.md"
   ],
-  "branch": null,
+  "branch": "ticket/M4-DATA-01-social-migration",
   "pr": null,
   "created": "2026-09-20",
-  "updated": "2026-09-20",
+  "updated": "2026-09-29",
   "history": [
     {
       "date": "2026-09-20",
       "event": "created by the Coordinator (M4 decomposition, AUTH #026).",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-29",
+      "event": "Draft migration in design/proposals/m4-data-01-social/ (publishes, ratings, reports, leaderboard_times, moderation_actions, user_blocks, rate_limit_rules): RLS on every table (owner-only / published-read / service-role-only), narrowed column grants, per-user + per-device rate-limit trigger (P0429; server clock; advisory lock; service role exempt). 31 pytest cases on a throwaway PostgreSQL with a Supabase stand-in cover AT-1/AT-2/AT-3 (all pass locally on PG 17; a mutation check fails 10). Not applied anywhere. Table-creation AUTH request filed → blocked on the AUTH + secondary review.",
+      "by": "gj-operator"
     }
+  ],
+  "blocked_by": [
+    "Table-creation AUTH proposed in governance/auth-requests/M4-DATA-01-social-migration.md; awaiting the Owner",
+    "Secondary security review (AUTH #007) of design/proposals/m4-data-01-social/ by gj-data + the Coordinator"
   ]
 }
