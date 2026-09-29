@@ -5,7 +5,7 @@
   "area": "REPO",
   "owner": "coordinator",
   "qa": null,
-  "status": "open",
+  "status": "in-review",
   "priority": "P2",
   "size": "S",
   "summary": "Five open Dependabot PRs (#1-5) bump GitHub Actions by major versions (actions/checkout 4->7, actions/setup-python 5->7, actions/setup-dotnet 4->6, actions/cache 4->6, game-ci/unity-builder 4->6). Supply-chain hygiene, but major bumps can change behavior. Rebase each onto main and merge only on green CI; hold any that breaks a workflow with a one-line note. Surfaced by the M0 audit (governance/checkpoints/M0.md, finding A1).",
@@ -35,15 +35,20 @@
   "references": [
     "governance/checkpoints/M0.md (audit A1)"
   ],
-  "branch": null,
+  "branch": "ticket/M0-REPO-07-action-bumps",
   "pr": null,
   "created": "2026-09-20",
-  "updated": "2026-09-20",
+  "updated": "2026-09-29",
   "history": [
     {
       "date": "2026-09-20",
       "event": "created by the Coordinator from the M0 audit (finding A1: open Dependabot CI-action bumps).",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-29",
+      "event": "gj-operator: Dependabot #1/#2/#4/#5 applied in 87c38b1 (checkout v7, setup-python v7, setup-dotnet v6, cache v6); CI green on 76b943b (lint, governance, secret-scan, supabase-local, unity-tests; ios-build green up to the known TestFlight export step). #3 game-ci/unity-builder v6 HELD: runtime-downloaded CLI inside the job holding Unity licence + signing secrets, verifiable only via a full ios-build (Owner ASC key). QA: qa/reports/M0-REPO-07.md",
+      "by": "gj-operator"
     }
   ]
 }
