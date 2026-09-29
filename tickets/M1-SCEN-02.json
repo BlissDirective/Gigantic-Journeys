@@ -5,7 +5,7 @@
   "area": "SCEN",
   "owner": "gj-scenegraph",
   "qa": "gj-scenegraph",
-  "status": "open",
+  "status": "in-progress",
   "priority": "P0",
   "size": "L",
   "summary": "Classify every surface into the Bible §4 classes, measure heights/gaps/edges in metres and in A units, infer the per-environment scale multiplier (default 1:12), and attach material and semantic labels via a vision pass.",
@@ -53,15 +53,20 @@
     "SPEC §3.3",
     "kit §3.2"
   ],
-  "branch": null,
+  "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-09-16",
-  "updated": "2026-09-16",
+  "updated": "2026-09-29",
   "history": [
     {
       "date": "2026-09-16",
       "event": "created by the Coordinator (M1 decomposition)",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-29",
+      "event": "Builder (AUTH #027, gj-scenegraph hat): built the deterministic geometric core in services/scenegraph/ — geometry.py (vec math), segment.py (planar-patch region-grow on the cleaned collision mesh), classify.py (Bible §4 classification + A-unit measurement from orientation/size + the VisionLabeler port with a no-op GeometricStub), scene.py (scale metres→A from the capture bundle's metric scale per SPEC §3.3, environment-local frame with floor at y=0, headroom, spawn, and a reordered collision mesh with one contiguous triangle run per surface), scene_cli.py. Tests: 18 new (geometry/segment/scene), incl. schema-validation of the emitted scene_graph against data/schemas/environment/scene_graph.json, class/scale/spawn/headroom/triangle-run/determinism and the vision-port override; full service suite 29 green; ruff + format clean. AT-4 (schema-validates; measurement + A-unit unit tests) met. AT-1 (labelled render on 5 corpus rooms), AT-2 (material/semantic vision pass) and AT-3 (corpus classification inspection) ride the vision pass, which per SPEC §3.3 must be self-hosted (never off-site) and so is deferred behind the VisionLabeler port — Operator/GPU + corpus. The coarse geometric graph is a valid input to M1-SCEN-03 (traversal edges come from surface height relationships, not the fine class). open → in-progress.",
+      "by": "claude-builder"
     }
   ]
 }
