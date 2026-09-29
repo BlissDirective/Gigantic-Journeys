@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>State colours — DESIGN_SYSTEM §2, §10 (AT-3)</title>
+<link rel="stylesheet" href="mockups.css">
+<style>
+  .sheet2 { width: 760px; padding: 20px; }
+  .grid2 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 12px; }
+  .sw2 { border-radius: 14px; padding: 12px; min-height: 108px; display: flex; flex-direction: column; justify-content: space-between; }
+  .tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 12px; font-size: 13px; font-weight: 700; }
+  .wash { height: 44px; border-radius: 10px; }
+</style></head>
+<body data-default-state="default">
+<!-- Every state colour with its non-hue cue (shape, word, position or pattern). Render with cvd=deuteranopia etc. -->
+<div class="device sheet2 shell-cream" style="border-radius:0" data-safe="[0,0,0,0]">
+  <div class="h3" id="ttl">State colours</div>
+  <div class="grid2">
+    <div class="sw2 shell-charcoal"><div class="cap">Coverage wash</div><div class="wash" style="background:rgba(0,88,94,.75)"></div><div class="cap">teal, solid</div></div>
+    <div class="sw2 shell-charcoal"><div class="cap">Coverage (pattern)</div><div class="wash" style="background:repeating-linear-gradient(45deg, rgba(0,88,94,.9) 0 3px, rgba(245,239,230,.25) 3px 9px)"></div><div class="cap">hatch option</div></div>
+    <div class="sw2 shell-charcoal"><div class="cap">Speed: good</div><svg viewBox="0 0 120 20" width="120"><path d="M8 4 Q60 22 112 4" fill="none" stroke="#1c1f26" stroke-width="7" stroke-linecap="round"/><path d="M8 4 Q60 22 80 11" fill="none" stroke="#00585e" stroke-width="4" stroke-linecap="round"/><path d="M80 11 Q96 8 112 4" fill="none" stroke="rgba(245,239,230,.35)" stroke-width="4" stroke-linecap="round"/></svg><div class="cap">teal, partial fill</div></div>
+    <div class="sw2 shell-charcoal"><div class="cap" data-m="text" data-mid="Swatch caption (paper on ink)">Speed: too fast</div><svg viewBox="0 0 120 20" width="120"><path d="M8 4 Q60 22 112 4" fill="none" stroke="#f2a93b" stroke-width="4" stroke-linecap="round"/></svg><div class="cap">amber, full arc + haptic + words</div></div>
+    <div class="sw2 shell-charcoal"><div class="cap">Control pressed</div><div class="round" style="width:48px;height:48px;background:#f2a93b;color:#1c1f26"><svg class="icon"><use href="#i-jump"/></svg></div><div class="cap">amber fill, glyph flips to ink</div></div>
+    <div class="sw2 shell-charcoal"><div class="cap">Action available</div><div class="round" style="width:48px;height:48px;background:rgba(28,31,38,.6);box-shadow:0 0 0 3px #f2a93b;color:#f5efe6"><svg class="icon"><use href="#i-vault"/></svg></div><div class="cap">appears only when usable</div></div>
+    <div class="sw2 shell-cream" style="border:1px solid #d8cfc0"><div class="cap">Success</div><span class="tag" style="background:#7a8f7b;color:#1c1f26"><svg class="icon" data-m="icon" data-mid="Success check (ink on sage)" style="width:16px;height:16px"><use href="#i-check"/></svg><span data-m="text" data-mid="Success word (ink on sage)">Cleared</span></span><div class="cap">sage + check + word</div></div>
+    <div class="sw2 shell-cream" style="border:1px solid #d8cfc0"><div class="cap">Error</div><span class="tag" style="background:var(--paper-cream);color:#1c1f26;box-shadow:inset 0 0 0 1.5px #c9573d"><svg class="icon" data-m="icon" data-mid="Error triangle (terracotta on cream)" style="width:16px;height:16px;color:#c9573d"><use href="#i-alert"/></svg><span data-m="text" data-mid="Error word (ink on cream)">Didn't rebuild</span></span><div class="cap">terracotta edge + triangle; ink word (terracotta fails as a text background)</div></div>
+    <div class="sw2 shell-charcoal"><div class="cap">Vistas</div><div style="display:flex;gap:6px;color:#f5efe6"><svg class="icon"><use href="#i-sparkle"/></svg><svg class="icon"><use href="#i-sparkle"/></svg><svg class="icon"><use href="#i-sparkle-o"/></svg></div><div class="cap">filled vs outline, "2 of 3"</div></div>
+    <div class="sw2 shell-charcoal"><div class="cap">Rating bars</div><div style="display:flex;gap:3px">
+      <b style="width:14px;height:6px;background:#f5efe6"></b><b style="width:14px;height:6px;background:#f5efe6"></b><b style="width:14px;height:6px;background:#f5efe6"></b><b style="width:14px;height:6px;background:#f5efe6;opacity:.3"></b><b style="width:14px;height:6px;background:#f5efe6;opacity:.3"></b></div><div class="cap">position + label, no hue</div></div>
+    <div class="sw2 shell-charcoal"><div class="cap">Progress (on charcoal)</div><div style="height:6px;border-radius:3px;background:rgba(128,128,128,.35)"><i style="display:block;width:60%;height:100%;background:#f5efe6;border-radius:3px"></i></div><div class="cap">paper fill; teal on cream</div></div>
+    <div class="sw2 shell-cream" style="border:1px solid #d8cfc0"><div class="cap">Progress (on cream)</div><div style="height:6px;border-radius:3px;background:rgba(128,128,128,.35)"><i style="display:block;width:60%;height:100%;background:#00585e;border-radius:3px"></i></div><div class="cap">teal fill, ✓ on done stages</div></div>
+  </div>
+</div>
+<script>
+  window.screenSetup = (gj) => { const c = gj.q.get("cvd"); document.getElementById("ttl").textContent = "State colours — " + (c || "typical vision"); };
+</script>
+<script src="mockups.js"></script>
+</body></html>

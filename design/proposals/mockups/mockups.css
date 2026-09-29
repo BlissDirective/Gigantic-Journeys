@@ -1,0 +1,129 @@
+/* Gigantic Journeys mockups (M0-DSGN-01). Mockup-local stylesheet, NOT the token source of truth:
+   canonical tokens land in design/tokens/ (M0-DSGN-02, protected path). Every value below is quoted
+   from design/DESIGN_SYSTEM.md v0.6 (section in the comment) or marked "mockup choice".
+   1 CSS px = 1 pt. Renders use a device scale factor of 2. */
+:root {
+  /* §2 palette (locked) */
+  --accent-amber: #f2a93b;
+  --accent-amber-light: #ffd27a;
+  --ink-charcoal: #1c1f26;
+  --surface-charcoal: #2a2e37;
+  --paper-cream: #f5efe6;
+  --surface-cream: #ede5d8;
+  --text-muted: #8a8f99;
+  --semantic-teal: #00585e;
+  --semantic-sage: #7a8f7b;
+  --semantic-terracotta: #c9573d;
+  /* §2/§12 derived tokens (Coordinator guidance) */
+  --muted-on-cream: #63676e;
+  --muted-on-charcoal: #90959f;
+  /* scrim opacity: §5 control discs ~60 %; §10 Increase Contrast 90 %;
+     text-bearing scrims 72 % (mockup choice: paper-on-charcoal needs >= 65 % over any background for 4.5:1;
+     72 % leaves margin; see M0-design-system-proposal.md finding 1) */
+  --scrim-disc: 0.6;
+  --scrim-text: 0.72;
+  /* §2 type: at most 5 steps on the 17 pt body */
+  --type-caption: 13px;
+  --type-body: 17px;
+  --type-title3: 20px;
+  --type-title1: 28px;
+  --type-display: 34px;
+  /* spacing: 8 pt grid, 4 pt half step (M0-DSGN-02 AT-1) */
+  --s1: 4px; --s2: 8px; --s3: 16px; --s4: 24px; --s5: 32px;
+  --radius-s: 8px; --radius-m: 14px; --radius-l: 22px;
+  --font: -apple-system, "SF Pro Text", "Inter", "Helvetica Neue", Arial, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #555; font-family: var(--font); }
+body { display: flex; align-items: flex-start; justify-content: flex-start; }
+.tab { font-variant-numeric: tabular-nums; }
+
+/* ---------- devices ---------- */
+.device { position: relative; overflow: hidden; background: #000; }
+.device.landscape { width: 852px; height: 393px; border-radius: 55px; } /* iPhone 15 Pro, landscape */
+.device.portrait { width: 393px; height: 852px; border-radius: 55px; }
+.device.duo { width: 1016px; height: 720px; border-radius: 40px; } /* Duo inner display, ASSUMED points */
+.scene, .ui, .annot { position: absolute; inset: 0; }
+.ui { z-index: 2; }
+.annot { z-index: 5; pointer-events: none; display: none; }
+body.annot-on .annot { display: block; }
+body.ui-off .ui, body.ui-off .island { visibility: hidden; }
+body.hidescrim .scrim, body.hidescrim .scrim * { visibility: hidden !important; }
+body.hidescrim .island { visibility: hidden; }
+.island { position: absolute; z-index: 9; background: #000; border-radius: 20px; }
+.landscape .island { left: 11px; top: 133px; width: 37px; height: 126px; }
+.portrait .island { top: 11px; left: 133px; width: 126px; height: 37px; }
+
+/* ---------- stand-in scans (CSS-only; replace with the three real test scans, M0-OWNER-01) ---------- */
+.scene > div { position: absolute; }
+.bg-bright .scene { background: linear-gradient(#f6f3ec, #e8e2d6 62%, #d9c4a2 62%, #cdb48c); }
+.bg-bright .win { left: 4%; top: 0; width: 30%; height: 48%; background: #fff; border: 6px solid #f0ebe0; }
+.bg-bright .sofa { left: 46%; top: 44%; width: 40%; height: 26%; background: linear-gradient(#c9b8a6, #b8a590); border-radius: 18px 18px 6px 6px; }
+.bg-bright .plant { left: 88%; top: 26%; width: 8%; height: 42%; background: radial-gradient(ellipse at 50% 35%, #7e9d63 0 40%, transparent 42%), linear-gradient(transparent 78%, #b5673f 78%); }
+.bg-bright .lamp { display: none; }
+.bg-dark .scene { background: radial-gradient(ellipse at 70% 38%, #6b5033 0%, #2a211a 18%, #121215 45%, #0b0b0d); }
+.bg-dark .win { left: 4%; top: 6%; width: 26%; height: 40%; background: #1b2230; border: 6px solid #0e0f12; }
+.bg-dark .sofa { left: 42%; top: 48%; width: 42%; height: 24%; background: linear-gradient(#2d2621, #1a1613); border-radius: 18px 18px 6px 6px; }
+.bg-dark .plant { left: 88%; top: 32%; width: 7%; height: 34%; background: radial-gradient(circle at 50% 30%, #25321f, #151d12 60%, transparent 62%); }
+.bg-dark .lamp { left: 66%; top: 18%; width: 9%; height: 20%; background: radial-gradient(circle, #ffe2a8, #d29a55 30%, transparent 70%); }
+.bg-table .scene { background: linear-gradient(#b7c3c9, #9aa7ad 34%, #8a5a36 34%, #6e4528); }
+.bg-table .win { left: 6%; top: 40%; width: 22%; height: 30%; background: #fbfbf8; transform: rotate(-8deg); } /* paper sheets */
+.bg-table .sofa { left: 34%; top: 46%; width: 20%; height: 18%; background: linear-gradient(90deg, #1e4f9c 0 30%, #d9362b 30% 55%, #f3c623 55% 80%, #1a1a1a 80%); } /* book stack */
+.bg-table .plant { left: 64%; top: 30%; width: 12%; height: 34%; background: radial-gradient(circle at 50% 60%, #e8e8e8 0 30%, #c0392b 31% 48%, transparent 50%); } /* mug */
+.bg-table .lamp { left: 80%; top: 52%; width: 16%; height: 16%; background: repeating-linear-gradient(90deg, #111 0 6px, #444 6px 9px); } /* keyboard */
+.clutter { display: none; }
+.bg-table .clutter { display: block; left: 0; top: 34%; width: 100%; height: 66%;
+  background: radial-gradient(circle at 12% 88%, #2ecc71 0 3%, transparent 3.2%), radial-gradient(circle at 30% 80%, #fff 0 2.5%, transparent 2.7%),
+    radial-gradient(circle at 52% 90%, #8e44ad 0 3%, transparent 3.2%), radial-gradient(circle at 74% 84%, #f39c12 0 2.5%, transparent 2.7%),
+    radial-gradient(circle at 92% 76%, #ecf0f1 0 3%, transparent 3.2%), radial-gradient(circle at 44% 70%, #16a085 0 2%, transparent 2.2%); }
+/* play-only scene elements (DESIGN_SYSTEM §1) */
+.beam { left: 72%; top: 0; width: 3px; height: 46%; background: linear-gradient(transparent, rgba(255, 210, 122, 0.85) 40%, rgba(242, 169, 59, 0.9)); box-shadow: 0 0 8px rgba(255, 210, 122, 0.6); }
+.avatar { width: 14px; height: 40px; left: 48%; top: 40%; border-radius: 7px 7px 3px 3px; background: linear-gradient(90deg, #3b4a5c, #56687d 60%, #ffd27a 94%); }
+.avatar::after { content: ""; position: absolute; left: -4px; bottom: -4px; width: 22px; height: 6px; border-radius: 50%; background: rgba(0, 0, 0, 0.35); }
+.steps { left: 40%; top: 52%; width: 70px; height: 20px; background: radial-gradient(ellipse, rgba(255, 210, 122, 0.45) 0 2px, transparent 3px) 0 0 / 14px 10px; }
+
+/* ---------- surfaces: glass and flat twins (§2, §10 Reduce Transparency) ---------- */
+.scrim { color: var(--fg); }
+.scrim.charcoal { --fg: var(--paper-cream); --scrim-rgb: 28, 31, 38; }
+.scrim.cream { --fg: var(--ink-charcoal); --scrim-rgb: 245, 239, 230; }
+.scrim.disc { background: rgba(var(--scrim-rgb), var(--scrim-disc)); border: 1px solid rgba(var(--scrim-rgb), 0.9); }
+.scrim.text { background: rgba(var(--scrim-rgb), var(--scrim-text)); }
+body.glass .scrim { -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); }
+body.flat .scrim.text, body.flat .scrim.panel { background: rgb(var(--scrim-rgb)); }
+body.flat .scrim.disc { background: rgba(var(--scrim-rgb), 0.9); border-width: 2px; }
+body.hc .scrim.text, body.hc .scrim.disc { background: rgba(var(--scrim-rgb), 0.9); border-width: 2px; }
+.scrim.panel { background: rgba(var(--scrim-rgb), 0.86); }
+/* opaque shell surfaces */
+.shell-cream { background: var(--paper-cream); color: var(--ink-charcoal); }
+.shell-charcoal { background: var(--ink-charcoal); color: var(--paper-cream); }
+.card-cream { background: var(--surface-cream); color: var(--ink-charcoal); }
+.card-charcoal { background: var(--surface-charcoal); color: var(--paper-cream); }
+.muted-c { color: var(--muted-on-cream); }
+.muted-k { color: var(--muted-on-charcoal); }
+
+/* ---------- common widgets ---------- */
+.abs { position: absolute; }
+.pill { display: flex; align-items: center; gap: 6px; height: 28px; padding: 0 12px; border-radius: 14px; font-size: 17px; font-weight: 600; }
+.icon { width: 24px; height: 24px; display: block; fill: currentColor; }
+.btn { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 20px; border-radius: 22px; font-size: 17px; font-weight: 600; border: 0; }
+.btn.primary { background: var(--accent-amber); color: var(--ink-charcoal); }
+.btn.teal { background: var(--semantic-teal); color: var(--paper-cream); }
+.btn.ghost-k { background: transparent; color: var(--paper-cream); border: 1.5px solid var(--paper-cream); }
+.btn.ghost-c { background: transparent; color: var(--ink-charcoal); border: 1.5px solid var(--ink-charcoal); }
+.round { border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.h1 { font-size: var(--type-title1); font-weight: 700; line-height: 1.15; }
+.h3 { font-size: var(--type-title3); font-weight: 600; line-height: 1.25; }
+.body { font-size: var(--type-body); line-height: 1.35; }
+.cap { font-size: var(--type-caption); line-height: 1.3; }
+.sheet { position: absolute; left: 0; right: 0; bottom: 0; border-radius: 22px 22px 0 0; padding: 20px 24px 46px; }
+.grabber { width: 36px; height: 5px; border-radius: 3px; background: currentColor; opacity: 0.35; margin: -10px auto 14px; }
+
+/* ---------- annotation layer (AT-4) ---------- */
+.a-target { position: absolute; border: 1.5px dashed #ff2bd6; }
+.a-target span { position: absolute; left: 50%; transform: translateX(-50%); top: 100%; margin-top: 2px; white-space: nowrap;
+  font: 700 10px/1.2 var(--font); color: #fff; background: #ff2bd6; padding: 1px 4px; border-radius: 3px; }
+.a-target.up span { top: auto; bottom: 100%; margin: 0 0 2px; }
+.a-safe { position: absolute; border: 1.5px dashed #ffe600; }
+.a-band { position: absolute; left: 0; right: 0; border-bottom: 1.5px solid #00e5ff; }
+.a-label { position: absolute; font: 700 10px/1.2 var(--font); color: #111; background: #ffe600; padding: 1px 4px; border-radius: 3px; white-space: nowrap; }
+.a-label.cyan { background: #00e5ff; }

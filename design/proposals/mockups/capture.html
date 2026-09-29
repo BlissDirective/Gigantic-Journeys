@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Capture coaching — DESIGN_SYSTEM §6</title>
+<link rel="stylesheet" href="mockups.css">
+<style>
+  .wash { position: absolute; background: rgba(0, 88, 94, 0.38); border-radius: 18px; }
+  body.hatch .wash { background: repeating-linear-gradient(45deg, rgba(0,88,94,.55) 0 3px, rgba(0,88,94,.15) 3px 9px); }
+  .rec { width: 72px; height: 72px; border-radius: 50%; }
+  .rec-inner { width: 58px; height: 58px; border-radius: 50%; background: var(--paper-cream); border: 2px solid var(--ink-charcoal); }
+  .recording .rec-inner { background: var(--semantic-teal); border-color: var(--paper-cream); width: 30px; height: 30px; border-radius: 8px; }
+  .ring svg { position: absolute; inset: 0; }
+  .seg { display: flex; height: 50px; border-radius: 25px; padding: 3px; gap: 3px; }
+  .seg > div { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; border-radius: 22px; font-size: 17px; font-weight: 600; }
+  .seg .on { background: var(--paper-cream); color: var(--ink-charcoal); }
+  .illo { width: 150px; height: 96px; border-radius: 14px; display: flex; align-items: center; justify-content: center; }
+  .arrow3d { width: 64px; height: 64px; transform: perspective(200px) rotateX(35deg) rotate(35deg); color: var(--accent-amber); filter: drop-shadow(0 6px 4px rgba(0,0,0,.45)); }
+  .card { border-radius: 18px; padding: 16px; }
+  /* amber only on surfaces it passes on (DESIGN_SYSTEM §2): amber glyph on charcoal, ink on cream */
+  .scrim.charcoal .alert-glyph { color: var(--accent-amber); }
+</style></head>
+<body data-default-state="recording">
+<!-- mode=room|tabletop; state=pre (mode toggle, before recording) | recording | fast (speed arc amber + copy)
+     | lowlight (one card, Continue anyway) | long (past 3 min) | missed (pre-upload missed-corner arrow, Done). -->
+<div class="device portrait" data-safe="[59,0,34,0]">
+  <div class="scene"><div class="win"></div><div class="sofa"></div><div class="plant"></div><div class="lamp"></div><div class="clutter"></div></div>
+  <div class="island"></div>
+  <div class="ui">
+    <!-- coverage wash: AR-anchored over captured surfaces (hatch option for colorblind players, §10) -->
+    <div data-state="recording fast long missed lowlight">
+      <div class="wash" style="left:20px; top:300px; width:200px; height:170px"></div>
+      <div class="wash" style="left:170px; top:420px; width:190px; height:150px"></div>
+      <div class="wash" style="left:40px; top:520px; width:150px; height:90px"></div>
+    </div>
+    <!-- top bar: close (44 pt) left; coverage ring (percentage) right -->
+    <div class="abs scrim disc auto round" style="left:16px; top:67px; width:44px; height:44px" data-target="44" data-name="Close" aria-label="Close capture">
+      <svg class="icon" data-m="icon" data-mid="Capture close"><use href="#i-close"/></svg></div>
+    <div data-state-not="pre" class="abs scrim text auto round ring" style="right:16px; top:63px; width:56px; height:56px" aria-label="Coverage 42 percent">
+      <svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="24" fill="none" stroke="rgba(128,128,128,.45)" stroke-width="4"/>
+        <circle cx="28" cy="28" r="24" fill="none" stroke="var(--paper-cream)" stroke-width="7" stroke-dasharray="63 151" transform="rotate(-90 28 28)" class="keyline"/><circle cx="28" cy="28" r="24" fill="none" stroke="var(--semantic-teal)" stroke-width="4" stroke-dasharray="63 151" transform="rotate(-90 28 28)"/></svg>
+      <span data-m="text" data-mid="Coverage percent" class="tab" style="font-size:15px;font-weight:700;position:relative">42%</span></div>
+    <!-- illustration-first mode choice (before recording, remembered, never in settings) -->
+    <div data-state="pre" class="abs scrim panel auto card" style="left:40px; right:40px; top:270px; display:flex; flex-direction:column; align-items:center; gap:10px">
+      <div class="illo" style="background:rgba(128,128,128,.18)">
+        <svg class="mode-room" viewBox="0 0 150 96" width="150" height="96"><path d="M20 70 Q75 20 130 70" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="6 5"/><rect x="66" y="30" width="18" height="30" rx="4" fill="none" stroke="var(--accent-amber)" stroke-width="3"/><path d="M122 62l8 8-11 2" fill="none" stroke="currentColor" stroke-width="3"/></svg>
+        <svg class="mode-table" viewBox="0 0 150 96" width="150" height="96"><ellipse cx="75" cy="40" rx="55" ry="14" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="6 5"/><ellipse cx="75" cy="66" rx="55" ry="14" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="6 5"/><rect x="62" y="48" width="26" height="14" rx="3" fill="none" stroke="var(--accent-amber)" stroke-width="3"/></svg>
+      </div>
+      <span data-m="text" data-mid="Mode hint" class="body mode-room-t" style="text-align:center">Walk a slow arc at chest height.</span>
+      <span data-m="text" data-mid="Mode hint" class="body mode-table-t" style="text-align:center">Circle slowly, once low and once high.</span>
+    </div>
+    <div data-state="pre" class="abs scrim text auto seg" style="left:76px; right:76px; bottom:176px" aria-label="Capture mode">
+      <div class="seg-room" data-target="44" data-name="Room"><span data-m="text" data-mid="Toggle Room">Room</span></div>
+      <div class="seg-table" data-target="44" data-name="Tabletop"><span data-m="text" data-mid="Toggle Tabletop">Tabletop</span></div>
+    </div>
+    <!-- coaching copy: speed (after 1 s amber), long capture, low light card, missed corner -->
+    <div data-state="fast" class="abs scrim text auto pill" style="left:50%; transform:translateX(-50%); bottom:170px; height:36px; border-radius:18px"><span data-m="text" data-mid="Slow down copy">Slow down a little</span></div>
+    <div data-state="long" class="abs scrim text auto pill" style="left:50%; transform:translateX(-50%); bottom:170px; height:36px; border-radius:18px">
+      <svg class="icon alert-glyph" data-m="icon" data-mid="Long-capture alert" style="width:18px;height:18px"><use href="#i-alert"/></svg>
+      <span data-m="text" data-mid="Long capture copy">Long captures rebuild worse</span></div>
+    <div data-state="lowlight" class="abs scrim panel auto card" style="left:24px; right:24px; top:330px">
+      <div style="display:flex; gap:12px; align-items:center"><svg class="icon" data-m="icon" data-mid="Low-light lamp" style="width:32px;height:32px"><use href="#i-lamp"/></svg>
+        <span data-m="text" data-mid="Low light copy" class="h3">Too dark here. Turn on a lamp?</span></div>
+      <div class="btn ghost-auto" data-target="44" data-name="Continue anyway" style="margin-top:14px"><span data-m="text" data-mid="Continue anyway">Continue anyway</span></div>
+    </div>
+    <div data-state="missed">
+      <svg class="abs arrow3d" style="left:250px; top:210px" viewBox="0 0 24 24"><path d="M12 2 20 12h-5v10H9V12H4Z" fill="currentColor" stroke="#1c1f26" stroke-width="1"/></svg>
+      <div class="abs scrim panel auto card" style="left:24px; right:24px; top:330px">
+        <span data-m="text" data-mid="Missed corner copy" class="h3">You missed this corner</span>
+        <div style="display:flex; flex-direction:column; gap:10px; margin-top:14px">
+          <div class="btn teal" data-target="44" data-name="Got it"><span data-m="text" data-mid="Got it (teal button)">Got it</span></div>
+          <div class="btn ghost-auto" data-target="44" data-name="Upload anyway"><span data-m="text" data-mid="Upload anyway">Upload anyway</span></div>
+        </div></div>
+    </div>
+    <!-- record button 72 pt with the 90 s progress ring and the speed arc beneath -->
+    <div class="abs ring" data-state-not="missed" style="left:50%; margin-left:-48px; bottom:66px; width:96px; height:96px">
+      <svg viewBox="0 0 96 96" data-state-not="pre"><circle cx="48" cy="48" r="44" fill="none" stroke="rgba(245,239,230,.35)" stroke-width="5"/>
+        <circle class="keyline rec-keyline" cx="48" cy="48" r="44" fill="none" stroke="var(--paper-cream)" stroke-width="8" stroke-linecap="round" stroke-dasharray="105 276" transform="rotate(-90 48 48)"/><circle class="prog" cx="48" cy="48" r="44" fill="none" stroke="var(--semantic-teal)" stroke-width="5" stroke-linecap="round" stroke-dasharray="105 276" transform="rotate(-90 48 48)"/></svg>
+      <div class="abs rec round scrim disc auto" style="left:12px; top:12px" data-target="56" data-name="Record" aria-label="Record"><div class="rec-inner"></div></div>
+    </div>
+    <div data-state="missed" class="abs btn primary" style="left:50%; transform:translateX(-50%); bottom:74px; width:120px; height:64px; border-radius:32px" data-target="56" data-name="Done"><span data-m="text" data-mid="Done (amber button)">Done</span></div>
+    <svg data-state="recording fast long lowlight" class="abs speed" viewBox="0 0 120 20" style="left:50%; margin-left:-60px; bottom:40px; width:120px; height:20px">
+      <path d="M8 4 Q60 22 112 4" fill="none" stroke="rgba(245,239,230,.35)" stroke-width="4" stroke-linecap="round"/>
+      <path class="speed-key" d="M8 4 Q60 22 80 11" fill="none" stroke="var(--ink-charcoal)" stroke-width="7" stroke-linecap="round"/><path class="speed-fill" d="M8 4 Q60 22 80 11" fill="none" stroke="var(--semantic-teal)" stroke-width="4" stroke-linecap="round"/></svg>
+  </div>
+</div>
+<script>
+  window.screenSetup = (gj) => {
+    const mode = gj.q.get("mode") === "tabletop" ? "table" : "room";
+    document.querySelectorAll(".mode-room, .mode-room-t").forEach((e) => (e.style.display = mode === "room" ? "" : "none"));
+    document.querySelectorAll(".mode-table, .mode-table-t").forEach((e) => (e.style.display = mode === "table" ? "" : "none"));
+    const on = document.querySelector(mode === "room" ? ".seg-room" : ".seg-table");
+    if (on) on.classList.add("on");
+    if (on && gj.scrim === "cream") Object.assign(on.style, { background: "var(--ink-charcoal)", color: "var(--paper-cream)" });
+    if (["recording", "fast", "long", "lowlight"].includes(gj.state)) document.querySelector(".device").classList.add("recording");
+    if (gj.state === "fast") document.querySelector(".speed-fill").setAttribute("stroke", "var(--accent-amber)");
+    if (gj.state === "fast") document.querySelectorAll(".speed-fill, .speed-key").forEach((e) => e.setAttribute("d", "M8 4 Q60 22 112 4"));
+    if (gj.state === "long") document.querySelector(".prog").setAttribute("stroke", "var(--accent-amber)");
+    if (gj.state === "long") document.querySelectorAll(".prog, .rec-keyline").forEach((e) => e.setAttribute("stroke-dasharray", "276 0"));
+    if (gj.q.get("hatch") === "1") document.body.classList.add("hatch");
+    const ghost = gj.scrim === "charcoal" ? "ghost-k" : "ghost-c";
+    document.querySelectorAll(".ghost-auto").forEach((e) => e.classList.add(ghost));
+  };
+</script>
+<script src="mockups.js"></script>
+</body></html>

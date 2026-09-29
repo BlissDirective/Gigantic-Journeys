@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Results, store and loss screens — DESIGN_SYSTEM §9</title>
+<link rel="stylesheet" href="mockups.css">
+<style>
+  .backdrop { filter: blur(10px); transform: scale(1.06); }
+  .dio { position: absolute; left: 50%; top: 22px; width: 250px; height: 130px; margin-left: -125px; transform: skewY(-10deg); border-radius: 10px;
+    box-shadow: 0 30px 40px rgba(0,0,0,.45); overflow: hidden; }
+  .dio .scene { position: absolute; inset: 0; }
+  .flag { position: absolute; left: 60%; top: 16%; color: var(--accent-amber-light); }
+  .card { border-radius: 22px; padding: 16px 20px; }
+  .row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+  .moves { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .btn { white-space: nowrap; }
+  .chip { font-size: 13px; padding: 3px 8px; border-radius: 10px; border: 1px solid currentColor; }
+  .store { display: flex; gap: 12px; }
+  .sku { flex: 1; border-radius: 18px; padding: 12px 14px; display: flex; gap: 12px; align-items: center; }
+  .prev { width: 56px; height: 72px; border-radius: 10px; background: linear-gradient(#3b4a5c, #56687d 60%, #ffd27a 96%); flex: none; }
+</style></head>
+<body data-default-state="results">
+<!-- state=results (first view: Share primary) | store (scrolled below the fold; after a summit only) | loss (fall/quit: Keep going, nothing else) -->
+<div class="device landscape" data-safe="[0,59,21,59]">
+  <div class="scene backdrop"><div class="win"></div><div class="sofa"></div><div class="plant"></div><div class="lamp"></div><div class="clutter"></div></div>
+  <div class="dio"><div class="scene"><div class="win"></div><div class="sofa"></div><div class="plant"></div><div class="lamp"></div><div class="clutter"></div><div class="avatar"></div></div>
+    <svg class="icon flag" style="width:34px;height:34px" data-state="results store"><use href="#i-flag"/></svg></div>
+  <div class="island"></div>
+  <div class="ui">
+    <div data-state="results" class="abs scrim panel auto card" style="left:196px; right:196px; top:172px">
+      <div class="row"><span class="h3" data-m="text" data-mid="Summit label">Summit</span><span class="h3 tab" style="font-weight:700" data-m="text" data-mid="Summit time">3:42.1</span></div>
+      <div class="row body"><span data-m="text" data-mid="Route row">Ridge route</span><span class="tab" data-m="text" data-mid="Route time">1:12.4 · best 1:09.8</span></div>
+      <div class="row body"><span data-m="text" data-mid="Vista label">Vistas</span>
+        <span aria-label="2 of 3 vistas found" style="display:flex; gap:4px">
+          <svg class="icon" data-m="icon" data-mid="Vista found" style="width:20px;height:20px"><use href="#i-sparkle"/></svg>
+          <svg class="icon" style="width:20px;height:20px"><use href="#i-sparkle"/></svg>
+          <svg class="icon" data-m="icon" data-mid="Vista not found (outline)" style="width:20px;height:20px"><use href="#i-sparkle-o"/></svg><span class="tab" data-m="text" data-mid="Vista count">2 of 3</span></span></div>
+      <div class="moves"><span class="chip" data-m="text" data-mid="Move chip">Jump ×24</span><span class="chip">Vault ×6</span><span class="chip">Wall-run ×2</span><span class="chip">Grapple ×1</span></div>
+      <div style="display:flex; gap:10px; margin-top:12px">
+        <div class="btn primary" style="flex:1.3" data-target="44" data-name="Share"><svg class="icon" data-m="icon" data-mid="Share glyph (on amber)" style="width:20px;height:20px"><use href="#i-share"/></svg><span data-m="text" data-mid="Share (amber button)">Share</span></div>
+        <div class="btn ghost-auto" style="flex:1" data-target="44" data-name="Journey again"><span data-m="text" data-mid="Journey again">Journey again</span></div>
+        <div class="btn ghost-auto" style="flex:1" data-target="44" data-name="Next route"><span data-m="text" data-mid="Next route">Next route</span></div>
+      </div>
+    </div>
+    <div data-state="store" class="abs" style="left:170px; right:170px; top:24px">
+      <div class="scrim panel auto card" style="padding:12px 16px; display:flex; justify-content:space-between; align-items:center">
+        <span class="body" data-m="text" data-mid="Store header (results scrolled)"><b class="tab">3:42.1</b> · Ridge route</span>
+        <div class="btn primary" style="min-height:44px" data-target="44" data-name="Share (sticky)"><span data-m="text" data-mid="Share sticky">Share</span></div></div>
+      <div class="store" style="margin-top:12px">
+        <div class="sku card-charcoal" data-target="44" data-name="Outfit SKU"><div class="prev"></div><div>
+          <div class="body" style="font-weight:700" data-m="text" data-mid="SKU 1 title" data-token="paper.cream">Dress your character</div>
+          <div class="cap muted-k" data-m="text" data-mid="SKU 1 note (muted-on-charcoal)" data-token="muted-on-charcoal">Four outfits, shown on your character</div>
+          <div class="body tab" style="font-weight:700; color:var(--accent-amber)" data-m="text" data-mid="SKU price (amber on surface.charcoal)" data-token="accent.amber">$2.99</div></div></div>
+        <div class="sku card-charcoal" data-target="44" data-name="Realism+ SKU"><div class="prev" style="filter:contrast(1.3) saturate(1.2)"></div><div>
+          <div class="body" style="font-weight:700" data-m="text" data-mid="SKU 2 title">Realism+</div>
+          <div class="cap muted-k" data-m="text" data-mid="SKU 2 note">Sharpen the look</div>
+          <div class="body tab" style="font-weight:700; color:var(--accent-amber)" data-m="text" data-mid="SKU 2 price">$4.99</div></div></div>
+      </div>
+      <div class="scrim text auto btn" style="margin:10px auto 0; width:max-content" data-target="44" data-name="Restore purchases"><span data-m="text" data-mid="Restore purchases">Restore purchases</span></div>
+    </div>
+    <div data-state="loss" class="abs scrim text auto pill tab" style="left:67px; top:2px"><span data-m="text" data-mid="Loss timer">1:48.9</span><span class="cap tab" style="font-weight:600" data-m="text" data-mid="Loss penalty">+0:04</span></div>
+    <div data-state="loss" class="abs btn primary" style="left:50%; transform:translateX(-50%); bottom:37px; min-height:56px; padding:0 32px; font-size:20px" data-target="44" data-name="Keep going"><span data-m="text" data-mid="Keep going (amber)">Keep going</span></div>
+  </div>
+</div>
+<script>
+  window.screenSetup = (gj) => {
+    const ghost = gj.scrim === "charcoal" ? "ghost-k" : "ghost-c";
+    document.querySelectorAll(".ghost-auto").forEach((e) => e.classList.add(ghost));
+  };
+</script>
+<script src="mockups.js"></script>
+</body></html>

@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Browse, rating and report — DESIGN_SYSTEM §8</title>
+<link rel="stylesheet" href="mockups.css">
+<style>
+  .grid { position: absolute; left: 16px; right: 16px; top: 160px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .card4x5 { position: relative; aspect-ratio: 4 / 5; border-radius: 14px; overflow: hidden; }
+  .thumb { position: absolute; inset: 0; }
+  .thumb .iso { position: absolute; left: 22%; top: 18%; width: 56%; height: 40%; transform: skewY(-12deg); border-radius: 5px; box-shadow: 0 10px 16px rgba(0,0,0,.45); }
+  .thumb .b { position: absolute; left: 62%; top: 6%; width: 2px; height: 30%; background: linear-gradient(transparent, #ffd27a); }
+  .cap-scrim { position: absolute; left: 0; right: 0; bottom: 0; padding: 8px 10px 10px; }
+  .axes { display: grid; grid-template-columns: 1fr 1fr; column-gap: 8px; row-gap: 4px; margin-top: 6px; }
+  .axis { display: flex; flex-direction: column; gap: 2px; font-size: 13px; line-height: 1.2; }
+  .segs { display: flex; gap: 2px; }
+  .segs b { width: 12px; height: 5px; border-radius: 1px; background: currentColor; }
+  .segs b.off { opacity: 0.3; }
+  .tabs { position: absolute; left: 16px; right: 16px; top: 110px; display: flex; gap: 18px; }
+  .tabs div { height: 44px; display: flex; align-items: center; font-size: 17px; }
+  .tabs .on { font-weight: 700; box-shadow: inset 0 -3px 0 var(--ink-charcoal); }
+  .badge { position: absolute; left: 8px; top: 8px; display: flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 10px; font-size: 13px; font-weight: 600; }
+  .rows .row { display: flex; align-items: center; justify-content: space-between; min-height: 48px; }
+  .five { display: flex; gap: 4px; }
+  .five div { width: 44px; height: 44px; border-radius: 8px; border: 1.5px solid var(--ink-charcoal); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+  .five div.on { background: var(--ink-charcoal); color: var(--paper-cream); }
+  .reason { min-height: 48px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(28,31,38,.15); font-size: 17px; }
+  .dim { position: absolute; inset: 0; background: rgba(28,31,38,.5); }
+</style></head>
+<body data-default-state="grid">
+<!-- state=grid | back (card flipped: creator stats + report) | report (reason sheet) | rate (four-axis rating sheet) | scale (Near your scale tab) -->
+<div class="device portrait shell-cream" data-safe="[59,0,34,0]">
+  <div class="island"></div>
+  <div class="ui shell-cream">
+    <div class="abs h1" style="left:16px; top:64px" data-m="text" data-mid="Browse title" data-token="ink.charcoal">Find a journey</div>
+    <div class="tabs" role="tablist">
+      <div class="t-top" data-target="44" data-name="Tab"><span data-m="text" data-mid="Tab Top this week">Top this week</span></div>
+      <div class="t-new"><span data-m="text" data-mid="Tab New">New</span></div>
+      <div class="t-scale"><span data-m="text" data-mid="Tab Near your scale">Near your scale</span></div>
+    </div>
+    <div data-state="scale" class="abs" style="left:16px; right:16px; top:160px; height:50px; display:flex; border-radius:25px; background:var(--surface-cream); padding:3px">
+      <div class="round" style="flex:1;border-radius:22px;background:var(--ink-charcoal);color:var(--paper-cream);font-weight:600" data-target="44" data-name="Room"><span data-m="text" data-mid="Scale Room (on)">Room</span></div>
+      <div class="round" style="flex:1;font-weight:600" data-m="text" data-mid="Scale Tabletop (off)">Tabletop</div></div>
+    <div class="grid" id="grid"></div>
+    <div data-state="report rate" class="dim"></div>
+    <div data-state="report" class="sheet shell-cream">
+      <div class="grabber"></div>
+      <div class="h3" data-m="text" data-mid="Report title">What's wrong with this environment?</div>
+      <div style="margin-top:8px">
+        <div class="reason" data-target="44" data-name="Reason row"><span data-m="text" data-mid="Reason private">Private information visible</span><svg class="icon" data-m="icon" data-mid="Reason chevron"><use href="#i-chev"/></svg></div>
+        <div class="reason"><span data-m="text" data-mid="Reason inappropriate">Inappropriate content</span><svg class="icon"><use href="#i-chev"/></svg></div>
+        <div class="reason"><span data-m="text" data-mid="Reason not real">Not a real place</span><svg class="icon"><use href="#i-chev"/></svg></div>
+        <div class="reason"><span data-m="text" data-mid="Reason broken">Broken environment</span><svg class="icon"><use href="#i-chev"/></svg></div>
+        <div class="reason"><span data-m="text" data-mid="Reason other">Other</span><svg class="icon"><use href="#i-chev"/></svg></div>
+      </div>
+      <div class="cap muted-c" style="margin-top:10px" data-m="text" data-mid="Report footnote (muted-on-cream)" data-token="muted-on-cream">It shows "Under review" right away while we take a look.</div>
+    </div>
+    <div data-state="rate" class="sheet shell-cream">
+      <div class="grabber"></div>
+      <div style="display:flex; justify-content:space-between; align-items:center">
+        <span class="h3" data-m="text" data-mid="Rate title">How was this journey?</span>
+        <div class="btn ghost-c" style="min-height:44px" data-target="44" data-name="Skip"><span data-m="text" data-mid="Skip">Skip</span></div></div>
+      <div class="rows" id="rows" style="margin-top:6px"></div>
+    </div>
+  </div>
+</div>
+<script>
+  const CARDS = [
+    ["Maya's kitchen", "128 summits", [5, 4, 3, 4], "#e8e2d6,#cdb48c", "#3b3530,#1c1f26"],
+    ["Desk at dusk", "86 summits", [4, 5, 4, 3], "#2d2621,#6b5033", "#141418,#2a2e37"],
+    ["Bookshelf climb", "54 summits", [3, 4, 5, 5], "#1e4f9c,#f3c623", "#6e4528,#8a5a36"],
+    ["Garage loft", "Under review", [0, 0, 0, 0], "#9aa7ad,#6e4528", "#b7c3c9,#9aa7ad"],
+  ];
+  const AX = ["Fun", "Interesting", "Interactive", "Exciting"];
+  const segs = (n) => [1, 2, 3, 4, 5].map((i) => `<b class="${i <= n ? "" : "off"}"></b>`).join("");
+  window.screenSetup = (gj) => {
+    const g = document.getElementById("grid");
+    if (gj.state === "scale") g.style.top = "222px";
+    CARDS.forEach(([name, stat, ax, top, bg], i) => {
+      const review = stat === "Under review";
+      const back = gj.state === "back" && i === 0;
+      g.insertAdjacentHTML("beforeend", back
+        ? `<div class="card4x5 card-charcoal" style="padding:12px" data-target="44" data-name="Card (tap to flip)">
+             <div class="body" style="font-weight:700" data-m="text" data-mid="Card back title">${name}</div>
+             <div class="cap muted-k" data-m="text" data-mid="Card back note (muted-on-charcoal)" data-token="muted-on-charcoal">Only you can see these</div>
+             <div class="cap" style="margin-top:8px; line-height:1.6" data-m="text" data-mid="Card back stats">1,240 plays<br>128 summits<br>Best: Ridge route <span class="tab">1:09.8</span><br>Rated by 212 players</div>
+             <div class="round" style="position:absolute;right:8px;bottom:8px;width:44px;height:44px" data-target="44" data-name="Report" aria-label="Report this environment">
+               <svg class="icon" data-m="icon" data-mid="Report flag (card back)"><use href="#i-flag"/></svg></div></div>`
+        : `<div class="card4x5" data-target="44" data-name="Card" aria-label="${name}, ${stat}">
+             <div class="thumb" style="background:radial-gradient(circle at 50% 40%, ${bg.split(",")[1]}, ${bg.split(",")[0]})">
+               <div class="iso" style="background:linear-gradient(135deg, ${top.split(",")[0]} 0 50%, ${top.split(",")[1]} 50%)"></div><div class="b"></div></div>
+             ${review ? `<div class="badge card-cream"><svg class="icon" data-m="icon" data-mid="Under review glyph" style="width:14px;height:14px"><use href="#i-alert"/></svg><span data-m="text" data-mid="Under review badge">Under review</span></div>` : ""}
+             <div class="cap-scrim scrim charcoal panel">
+               <div class="cap" style="font-weight:700" data-m="text" data-mid="Card creator">${name}</div>
+               <div class="cap" data-m="text" data-mid="Card summits">${review ? "Only you can play it for now" : stat}</div>
+               ${review ? "" : `<div class="axes">${AX.map((a, k) => `<div class="axis"><span class="t" data-m="text" data-mid="Axis label">${a}</span><span class="segs" data-m="icon" data-mid="Axis bar">${segs(ax[k])}</span></div>`).join("")}</div>`}
+             </div></div>`);
+    });
+    const tab = gj.state === "scale" ? ".t-scale" : ".t-top";
+    document.querySelector(tab).classList.add("on");
+    const rows = document.getElementById("rows");
+    AX.forEach((a, k) => rows.insertAdjacentHTML("beforeend",
+      `<div class="row"><span class="body" data-m="text" data-mid="Rate axis">${a}</span><div class="five">${[1, 2, 3, 4, 5]
+        .map((i) => `<div class="${i <= [4, 3, 0, 5][k] ? "on" : ""}" ${k === 0 && i === 1 ? 'data-target="44" data-name="Rating segment"' : ""}>${i}</div>`).join("")}</div></div>`));
+  };
+</script>
+<script src="mockups.js"></script>
+</body></html>

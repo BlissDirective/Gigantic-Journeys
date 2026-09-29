@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Play HUD and controls — DESIGN_SYSTEM §5</title>
+<link rel="stylesheet" href="mockups.css">
+<style>
+  .stick-base { width: 96px; height: 96px; }
+  .stick-knob { width: 44px; height: 44px; border-radius: 50%; position: absolute; left: 36px; top: 16px; }
+  .jump { width: 72px; height: 72px; }
+  .action { width: 56px; height: 56px; }
+  .action.avail { box-shadow: 0 0 0 3px var(--accent-amber); }
+  .pressed { background: var(--accent-amber) !important; color: var(--ink-charcoal) !important; border-color: var(--accent-amber) !important; }
+  .icon.big { width: 32px; height: 32px; }
+  .penalty { font-size: 13px; font-weight: 600; margin-left: 2px; }
+</style></head>
+<body data-default-state="action">
+<!-- States: run (stick only), action (contextual action available), pressed (jump pressed), controller (touch controls hidden). -->
+<div class="device landscape" data-hud="1" data-safe="[0,59,21,59]">
+  <div class="scene"><div class="win"></div><div class="sofa"></div><div class="plant"></div><div class="lamp"></div><div class="clutter"></div>
+    <div class="beam"></div><div class="steps"></div><div class="avatar"></div></div>
+  <div class="island"></div>
+  <div class="ui">
+    <!-- HUD (top 8 % = 31.4 pt): route timer left (only while a route is active), vistas glyph + count, pause right -->
+    <div class="abs scrim text auto pill tab" style="left:67px; top:2px" aria-label="Route time 1 minute 42 seconds">
+      <span data-m="text" data-mid="HUD route timer" class="tab">1:42.3</span>
+      <span data-state="penalty" data-m="text" data-mid="HUD time penalty" class="penalty tab">+0:04</span>
+    </div>
+    <div class="abs scrim text auto pill" style="left:152px; top:2px" aria-label="Vistas found: 2 of 3">
+      <svg class="icon" data-m="icon" data-mid="HUD vista sparkle" style="width:18px;height:18px"><use href="#i-sparkle"/></svg>
+      <span data-m="text" data-mid="HUD vista count" class="tab">2/3</span>
+    </div>
+    <div class="abs scrim disc auto round" style="right:67px; top:2px; width:28px; height:28px" data-target="44" data-hit="44" data-name="Pause" aria-label="Pause">
+      <svg class="icon" data-m="icon" data-mid="HUD pause" style="width:16px;height:16px"><use href="#i-pause"/></svg>
+    </div>
+    <!-- Floating stick: under the first touch in the left third; 96 pt base; hides after 1 s idle -->
+    <div data-state-not="controller" class="abs scrim disc auto round stick-base" style="left:110px; top:236px" data-target="56" data-name="Stick base">
+      <div class="scrim disc auto stick-knob" style="--scrim-disc:0.85"></div>
+    </div>
+    <!-- Right-thumb cluster: 72 pt jump low-right; contextual action 24 pt up-left of it -->
+    <div data-state-not="controller" class="abs scrim disc auto round jump" style="left:705px; top:284px" data-target="56" data-name="Jump" aria-label="Jump">
+      <svg class="icon big" data-m="icon" data-mid="Jump glyph"><use href="#i-jump"/></svg>
+    </div>
+    <div data-state="action pressed" class="abs scrim disc auto round action avail" style="left:625px; top:204px" data-target="56" data-name="Action (vault)" aria-label="Vault">
+      <svg class="icon" data-m="icon" data-mid="Action glyph (vault)" style="width:28px;height:28px"><use href="#i-vault"/></svg>
+    </div>
+  </div>
+</div>
+<script>
+  window.screenSetup = (gj) => {
+    if (gj.state === "pressed") document.querySelector(".jump").classList.add("pressed");
+  };
+</script>
+<script src="mockups.js"></script>
+</body></html>

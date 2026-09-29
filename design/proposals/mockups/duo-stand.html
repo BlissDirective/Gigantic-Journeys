@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>iPhone Duo stand mode — DESIGN_SYSTEM §5 (M3-DUO-01)</title>
+<link rel="stylesheet" href="mockups.css">
+<style>
+  .upper { position: absolute; left: 0; top: 0; width: 100%; height: 340px; overflow: hidden; }
+  .upper .scene { position: absolute; inset: 0; }
+  .fold { position: absolute; left: 0; right: 0; top: 340px; height: 40px; background: linear-gradient(#0d0f13, #1c1f26 50%, #0d0f13); }
+  .deck { position: absolute; left: 0; right: 0; top: 380px; bottom: 0; }
+  .diorama { position: absolute; left: 358px; top: 470px; width: 300px; height: 190px; border-radius: 14px; }
+  .iso { position: absolute; left: 70px; top: 40px; width: 160px; height: 110px; transform: skewY(-12deg); border-radius: 6px;
+    background: linear-gradient(135deg, #e8e2d6 0 50%, #cdb48c 50%); box-shadow: 0 12px 20px rgba(0,0,0,.45); }
+  .mini-beam { position: absolute; left: 190px; top: 8px; width: 2px; height: 70px; background: linear-gradient(transparent, #ffd27a); }
+  .mini-route { position: absolute; left: 96px; top: 96px; width: 90px; height: 30px; border-bottom: 2px dotted rgba(255,210,122,.8); border-right: 2px dotted rgba(255,210,122,.8); }
+  .mini-vista { position: absolute; left: 120px; top: 56px; color: #ffd27a; }
+</style></head>
+<body data-default-state="default">
+<!-- Duo stand mode (partly folded ~90°): upper half photograph only; lower half stick left, jump + action right,
+     diorama overview centered, timer above it. Inner-display point size ASSUMED (1016×720, ~1.42:1). -->
+<div class="device duo" data-safe="[24,24,24,24]">
+  <div class="upper"><div class="scene"><div class="win"></div><div class="sofa"></div><div class="plant"></div><div class="lamp"></div><div class="clutter"></div>
+    <div class="beam"></div><div class="steps"></div><div class="avatar"></div></div></div>
+  <div class="fold"></div>
+  <div class="deck shell-charcoal"></div>
+  <div class="ui">
+    <div class="abs card-charcoal pill tab" style="left:458px; top:412px; height:36px; border-radius:18px; padding:0 16px" aria-label="Route time 1 minute 42 seconds">
+      <span data-m="text" data-mid="Duo route timer" class="tab">1:42.3</span>
+      <svg class="icon" data-m="icon" data-mid="Duo vista sparkle" style="width:18px;height:18px;margin-left:8px"><use href="#i-sparkle"/></svg>
+      <span data-m="text" data-mid="Duo vista count" class="tab">2/3</span>
+    </div>
+    <div class="abs card-charcoal round" style="right:40px; top:404px; width:44px; height:44px" data-target="44" data-name="Pause" aria-label="Pause">
+      <svg class="icon" data-m="icon" data-mid="Duo pause" style="width:18px;height:18px"><use href="#i-pause"/></svg></div>
+    <div class="diorama card-charcoal" aria-label="Diorama overview: summit, route and vistas">
+      <div class="iso"></div><div class="mini-route"></div><div class="mini-beam"></div>
+      <svg class="icon mini-vista" style="width:16px;height:16px"><use href="#i-sparkle"/></svg>
+      <span class="abs cap muted-k" data-m="text" data-mid="Diorama caption (muted-on-charcoal)" style="left:12px; bottom:8px">Diorama overview</span>
+    </div>
+    <div class="abs card-charcoal round" style="left:96px; top:500px; width:120px; height:120px" data-target="56" data-name="Stick base (widened zone)">
+      <div class="round" style="width:52px;height:52px;background:#3a3f4a;border:1px solid #555b67"></div></div>
+    <div class="abs card-charcoal round" style="left:840px; top:560px; width:88px; height:88px" data-target="56" data-name="Jump" aria-label="Jump">
+      <svg class="icon" data-m="icon" data-mid="Duo jump glyph" style="width:36px;height:36px"><use href="#i-jump"/></svg></div>
+    <div class="abs card-charcoal round" style="left:744px; top:476px; width:64px; height:64px; box-shadow:0 0 0 3px var(--accent-amber)" data-target="56" data-name="Action (grab)" aria-label="Grab">
+      <svg class="icon" data-m="icon" data-mid="Duo action glyph" style="width:30px;height:30px"><use href="#i-hand"/></svg></div>
+  </div>
+</div>
+<script src="mockups.js"></script>
+</body></html>

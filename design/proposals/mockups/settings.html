@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Settings: accessibility and controls — DESIGN_SYSTEM §5, §10</title>
+<link rel="stylesheet" href="mockups.css">
+<style>
+  .list { position: absolute; left: 16px; right: 16px; top: 110px; }
+  .group { border-radius: 14px; overflow: hidden; margin-bottom: 18px; }
+  .gh { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; margin: 0 0 6px 4px; }
+  .it { min-height: 52px; padding: 8px 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid rgba(28,31,38,.12); }
+  .it:last-child { border-bottom: 0; }
+  .sw { width: 51px; height: 31px; border-radius: 16px; position: relative; flex: none; border: 1.5px solid var(--ink-charcoal); }
+  .sw::after { content: ""; position: absolute; top: 2px; left: 2px; width: 24px; height: 24px; border-radius: 50%; background: var(--ink-charcoal); }
+  .sw.on { background: var(--ink-charcoal); }
+  .sw.on::after { left: 22px; background: var(--paper-cream); }
+  .sw .lbl { position: absolute; font-size: 11px; }
+  .seg { display: flex; border-radius: 10px; background: var(--paper-cream); padding: 2px; gap: 2px; }
+  .seg div { padding: 0 8px; min-height: 44px; display: flex; align-items: center; font-size: 13px; font-weight: 600; border-radius: 8px; }
+  .seg .on { background: var(--ink-charcoal); color: var(--paper-cream); }
+  .preview { position: absolute; left: 16px; right: 16px; top: 110px; height: 181px; border-radius: 14px; overflow: hidden; }
+  .preview .scene { position: absolute; inset: 0; }
+  .slider { height: 44px; display: flex; align-items: center; gap: 10px; }
+  .track { flex: 1; height: 4px; border-radius: 2px; background: var(--ink-charcoal); position: relative; }
+  .knob { position: absolute; top: -12px; width: 28px; height: 28px; border-radius: 50%; background: var(--paper-cream); border: 1.5px solid var(--ink-charcoal); }
+</style></head>
+<body data-default-state="access">
+<!-- state=access (Settings › Accessibility, §10) | controls (Settings › Controls customization with live preview, §5) -->
+<div class="device portrait shell-cream" data-safe="[59,0,34,0]">
+  <div class="island"></div>
+  <div class="ui shell-cream">
+    <div class="abs h1" style="left:16px; top:64px" data-m="text" data-mid="Settings title"><span data-state="access">Accessibility</span><span data-state="controls">Controls</span></div>
+    <div data-state="access" class="list">
+      <div class="gh muted-c" data-m="text" data-mid="Group header (muted-on-cream)" data-token="muted-on-cream">Play</div>
+      <div class="group card-cream">
+        <div class="it" data-target="44" data-name="Assist row"><div><div class="body" data-m="text" data-mid="Assist">Assist</div>
+          <div class="cap muted-c" data-m="text" data-mid="Assist copy (muted-on-cream on surface.cream)" data-token="muted-on-cream">Assist makes climbs more forgiving</div></div><div class="sw on" aria-label="On"></div></div>
+        <div class="it"><div class="body" data-m="text" data-mid="Slower time">Slower time (0.8×)</div><div class="sw"></div></div>
+        <div class="it"><div class="body" data-m="text" data-mid="Camera shake">Camera shake</div><div class="sw on"></div></div>
+        <div class="it"><div class="body" data-m="text" data-mid="Haptics">Haptics</div><div class="sw on"></div></div>
+      </div>
+      <div class="gh muted-c">Seeing</div>
+      <div class="group card-cream">
+        <div class="it" style="flex-direction:column; align-items:flex-start"><div class="body" data-m="text" data-mid="Colors">Color filters</div>
+          <div class="seg" style="align-self:stretch"><div class="on" data-m="text" data-mid="Seg on">Off</div><div data-target="44" data-name="Palette" data-m="text" data-mid="Seg off">Deuteranopia</div><div>Protanopia</div><div>Tritanopia</div></div></div>
+        <div class="it"><div class="body" data-m="text" data-mid="Larger HUD">Larger HUD (+25%)</div><div class="sw"></div></div>
+        <div class="it"><div class="body" data-m="text" data-mid="Coverage pattern">Coverage pattern while capturing</div><div class="sw"></div></div>
+        <div class="it"><div class="body" data-m="text" data-mid="Summit beam">Summit beam</div><div class="sw on"></div></div>
+      </div>
+      <div class="cap muted-c" data-m="text" data-mid="System note">Reduce Motion, Reduce Transparency and Increase Contrast follow your iPhone settings.</div>
+    </div>
+    <div data-state="controls">
+      <div class="preview"><div class="scene"><div class="win"></div><div class="sofa"></div><div class="plant"></div><div class="lamp"></div><div class="clutter"></div></div>
+        <div class="abs scrim disc charcoal round" style="left:30px; top:92px; width:64px; height:64px; outline:2px dashed var(--accent-amber); outline-offset:3px"></div>
+        <div class="abs scrim disc charcoal round" style="right:24px; top:104px; width:52px; height:52px"><svg class="icon" style="color:var(--paper-cream)"><use href="#i-jump"/></svg></div>
+        <div class="abs scrim text charcoal pill" style="left:50%; transform:translateX(-50%); top:10px"><span class="cap" data-m="text" data-mid="Preview hint">Drag a control to move it</span></div></div>
+      <div class="list" style="top:307px">
+        <div class="group card-cream">
+          <div class="it" style="flex-direction:column; align-items:stretch"><div class="body" data-m="text" data-mid="Size">Size</div>
+            <div class="slider" data-target="44" data-name="Size slider"><span class="cap tab" data-m="text" data-mid="Slider min">56</span><div class="track"><div class="knob" style="left:30%"></div></div><span class="cap tab">96 pt</span></div></div>
+          <div class="it" style="flex-direction:column; align-items:stretch"><div class="body" data-m="text" data-mid="Opacity">Opacity</div>
+            <div class="slider"><span class="cap tab">20%</span><div class="track"><div class="knob" style="left:55%"></div></div><span class="cap tab">100%</span></div></div>
+          <div class="it" data-target="44" data-name="Left-handed row"><div class="body" data-m="text" data-mid="Left-handed">Left-handed</div><div class="sw"></div></div>
+        </div>
+        <div class="btn ghost-c" style="width:100%" data-target="44" data-name="Reset"><span data-m="text" data-mid="Reset">Reset controls</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="mockups.js"></script>
+</body></html>

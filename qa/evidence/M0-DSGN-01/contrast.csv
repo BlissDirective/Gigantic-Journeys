@@ -1,0 +1,1223 @@
+screen,state,scan,surface,scrim,item,kind,fg,on,min,p5,need,pass
+play,run,bright,glass,charcoal,HUD route timer,text,#F5EFE6,#1C1F26 @ 0.72 glass,5.78,5.78,4.5,yes
+play,run,bright,glass,charcoal,HUD vista sparkle,icon,#F5EFE6,#1C1F26 @ 0.72 glass,5.78,5.78,3.0,yes
+play,run,bright,glass,charcoal,HUD vista count,text,#F5EFE6,#1C1F26 @ 0.72 glass,5.78,5.78,4.5,yes
+play,run,bright,glass,charcoal,HUD pause,icon,#F5EFE6,#1C1F26 @ 0.60 glass,4.12,4.13,3.0,yes
+play,run,bright,glass,charcoal,Jump glyph,icon,#F5EFE6,#1C1F26 @ 0.60 glass,5.61,5.61,3.0,yes
+play,run,bright,flat,charcoal,HUD route timer,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+play,run,bright,flat,charcoal,HUD vista sparkle,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+play,run,bright,flat,charcoal,HUD vista count,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+play,run,bright,flat,charcoal,HUD pause,icon,#F5EFE6,#1C1F26 @ 0.90 flat,10.87,10.87,3.0,yes
+play,run,bright,flat,charcoal,Jump glyph,icon,#F5EFE6,#1C1F26 @ 0.90 flat,11.71,11.73,3.0,yes
+play,run,dark,glass,cream,HUD route timer,text,#1C1F26,#F5EFE6 @ 0.72 glass,7.72,7.74,4.5,yes
+play,run,dark,glass,cream,HUD vista sparkle,icon,#1C1F26,#F5EFE6 @ 0.72 glass,7.74,7.74,3.0,yes
+play,run,dark,glass,cream,HUD vista count,text,#1C1F26,#F5EFE6 @ 0.72 glass,7.74,7.76,4.5,yes
+play,run,dark,glass,cream,HUD pause,icon,#1C1F26,#F5EFE6 @ 0.60 glass,5.71,5.72,3.0,yes
+play,run,dark,glass,cream,Jump glyph,icon,#1C1F26,#F5EFE6 @ 0.60 glass,5.60,5.62,3.0,yes
+play,run,dark,flat,cream,HUD route timer,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+play,run,dark,flat,cream,HUD vista sparkle,icon,#1C1F26,#F5EFE6,14.43,14.43,3.0,yes
+play,run,dark,flat,cream,HUD vista count,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+play,run,dark,flat,cream,HUD pause,icon,#1C1F26,#F5EFE6 @ 0.90 flat,11.75,11.76,3.0,yes
+play,run,dark,flat,cream,Jump glyph,icon,#1C1F26,#F5EFE6 @ 0.90 flat,11.72,11.72,3.0,yes
+play,run,table,glass,charcoal,HUD route timer,text,#F5EFE6,#1C1F26 @ 0.72 glass,7.58,7.58,4.5,yes
+play,run,table,glass,charcoal,HUD vista sparkle,icon,#F5EFE6,#1C1F26 @ 0.72 glass,7.58,7.58,3.0,yes
+play,run,table,glass,charcoal,HUD vista count,text,#F5EFE6,#1C1F26 @ 0.72 glass,7.58,7.58,4.5,yes
+play,run,table,glass,charcoal,HUD pause,icon,#F5EFE6,#1C1F26 @ 0.60 glass,5.63,5.63,3.0,yes
+play,run,table,glass,charcoal,Jump glyph,icon,#F5EFE6,#1C1F26 @ 0.60 glass,8.34,8.64,3.0,yes
+play,run,table,flat,charcoal,HUD route timer,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+play,run,table,flat,charcoal,HUD vista sparkle,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+play,run,table,flat,charcoal,HUD vista count,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+play,run,table,flat,charcoal,HUD pause,icon,#F5EFE6,#1C1F26 @ 0.90 flat,11.71,11.72,3.0,yes
+play,run,table,flat,charcoal,Jump glyph,icon,#F5EFE6,#1C1F26 @ 0.90 flat,13.55,13.56,3.0,yes
+play,action,bright,glass,charcoal,HUD route timer,text,#F5EFE6,#1C1F26 @ 0.72 glass,5.78,5.78,4.5,yes
+play,action,bright,glass,charcoal,HUD vista sparkle,icon,#F5EFE6,#1C1F26 @ 0.72 glass,5.78,5.78,3.0,yes
+play,action,bright,glass,charcoal,HUD vista count,text,#F5EFE6,#1C1F26 @ 0.72 glass,5.78,5.78,4.5,yes
+play,action,bright,glass,charcoal,HUD pause,icon,#F5EFE6,#1C1F26 @ 0.60 glass,4.12,4.13,3.0,yes
+play,action,bright,glass,charcoal,Jump glyph,icon,#F5EFE6,#1C1F26 @ 0.60 glass,5.61,5.61,3.0,yes
+play,action,bright,glass,charcoal,Action glyph (vault),icon,#F5EFE6,#1C1F26 @ 0.60 glass,6.04,6.04,3.0,yes
+play,action,bright,flat,charcoal,HUD route timer,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+play,action,bright,flat,charcoal,HUD vista sparkle,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+play,action,bright,flat,charcoal,HUD vista count,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+play,action,bright,flat,charcoal,HUD pause,icon,#F5EFE6,#1C1F26 @ 0.90 flat,10.87,10.87,3.0,yes
+play,action,bright,flat,charcoal,Jump glyph,icon,#F5EFE6,#1C1F26 @ 0.90 flat,11.71,11.73,3.0,yes
+play,action,bright,flat,charcoal,Action glyph (vault),icon,#F5EFE6,#1C1F26 @ 0.90 flat,11.94,11.96,3.0,yes
+play,action,dark,glass,cream,HUD route timer,text,#1C1F26,#F5EFE6 @ 0.72 glass,7.72,7.74,4.5,yes
+play,action,dark,glass,cream,HUD vista sparkle,icon,#1C1F26,#F5EFE6 @ 0.72 glass,7.74,7.74,3.0,yes
+play,action,dark,glass,cream,HUD vista count,text,#1C1F26,#F5EFE6 @ 0.72 glass,7.74,7.76,4.5,yes
+play,action,dark,glass,cream,HUD pause,icon,#1C1F26,#F5EFE6 @ 0.60 glass,5.71,5.72,3.0,yes
+play,action,dark,glass,cream,Jump glyph,icon,#1C1F26,#F5EFE6 @ 0.60 glass,5.60,5.62,3.0,yes
+play,action,dark,glass,cream,Action glyph (vault),icon,#1C1F26,#F5EFE6 @ 0.60 glass,5.96,5.97,3.0,yes
+play,action,dark,flat,cream,HUD route timer,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+play,action,dark,flat,cream,HUD vista sparkle,icon,#1C1F26,#F5EFE6,14.43,14.43,3.0,yes
+play,action,dark,flat,cream,HUD vista count,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+play,action,dark,flat,cream,HUD pause,icon,#1C1F26,#F5EFE6 @ 0.90 flat,11.75,11.76,3.0,yes
+play,action,dark,flat,cream,Jump glyph,icon,#1C1F26,#F5EFE6 @ 0.90 flat,11.72,11.72,3.0,yes
+play,action,dark,flat,cream,Action glyph (vault),icon,#1C1F26,#F5EFE6 @ 0.90 flat,11.86,11.87,3.0,yes
+play,action,table,glass,charcoal,HUD route timer,text,#F5EFE6,#1C1F26 @ 0.72 glass,7.58,7.58,4.5,yes
+play,action,table,glass,charcoal,HUD vista sparkle,icon,#F5EFE6,#1C1F26 @ 0.72 glass,7.58,7.58,3.0,yes
+play,action,table,glass,charcoal,HUD vista count,text,#F5EFE6,#1C1F26 @ 0.72 glass,7.58,7.58,4.5,yes
+play,action,table,glass,charcoal,HUD pause,icon,#F5EFE6,#1C1F26 @ 0.60 glass,5.63,5.63,3.0,yes
+play,action,table,glass,charcoal,Jump glyph,icon,#F5EFE6,#1C1F26 @ 0.60 glass,8.34,8.64,3.0,yes
+play,action,table,glass,charcoal,Action glyph (vault),icon,#F5EFE6,#1C1F26 @ 0.60 glass,9.42,9.79,3.0,yes
+play,action,table,flat,charcoal,HUD route timer,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+play,action,table,flat,charcoal,HUD vista sparkle,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+play,action,table,flat,charcoal,HUD vista count,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+play,action,table,flat,charcoal,HUD pause,icon,#F5EFE6,#1C1F26 @ 0.90 flat,11.71,11.72,3.0,yes
+play,action,table,flat,charcoal,Jump glyph,icon,#F5EFE6,#1C1F26 @ 0.90 flat,13.55,13.56,3.0,yes
+play,action,table,flat,charcoal,Action glyph (vault),icon,#F5EFE6,#1C1F26 @ 0.90 flat,13.43,13.44,3.0,yes
+play,pressed,bright,glass,charcoal,HUD route timer,text,#F5EFE6,#1C1F26 @ 0.72 glass,5.78,5.78,4.5,yes
+play,pressed,bright,glass,charcoal,HUD vista sparkle,icon,#F5EFE6,#1C1F26 @ 0.72 glass,5.78,5.78,3.0,yes
+play,pressed,bright,glass,charcoal,HUD vista count,text,#F5EFE6,#1C1F26 @ 0.72 glass,5.78,5.78,4.5,yes
+play,pressed,bright,glass,charcoal,HUD pause,icon,#F5EFE6,#1C1F26 @ 0.60 glass,4.12,4.13,3.0,yes
+play,pressed,bright,glass,charcoal,Jump glyph,icon,#1C1F26,#F2A93B,8.26,8.26,3.0,yes
+play,pressed,bright,glass,charcoal,Action glyph (vault),icon,#F5EFE6,#1C1F26 @ 0.60 glass,6.04,6.04,3.0,yes
+play,pressed,bright,flat,charcoal,HUD route timer,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+play,pressed,bright,flat,charcoal,HUD vista sparkle,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+play,pressed,bright,flat,charcoal,HUD vista count,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+play,pressed,bright,flat,charcoal,HUD pause,icon,#F5EFE6,#1C1F26 @ 0.90 flat,10.87,10.87,3.0,yes
+play,pressed,bright,flat,charcoal,Jump glyph,icon,#1C1F26,#F2A93B,8.26,8.26,3.0,yes
+play,pressed,bright,flat,charcoal,Action glyph (vault),icon,#F5EFE6,#1C1F26 @ 0.90 flat,11.94,11.96,3.0,yes
+play,pressed,dark,glass,cream,HUD route timer,text,#1C1F26,#F5EFE6 @ 0.72 glass,7.72,7.74,4.5,yes
+play,pressed,dark,glass,cream,HUD vista sparkle,icon,#1C1F26,#F5EFE6 @ 0.72 glass,7.74,7.74,3.0,yes
+play,pressed,dark,glass,cream,HUD vista count,text,#1C1F26,#F5EFE6 @ 0.72 glass,7.74,7.76,4.5,yes
+play,pressed,dark,glass,cream,HUD pause,icon,#1C1F26,#F5EFE6 @ 0.60 glass,5.71,5.72,3.0,yes
+play,pressed,dark,glass,cream,Jump glyph,icon,#1C1F26,#F2A93B,8.26,8.26,3.0,yes
+play,pressed,dark,glass,cream,Action glyph (vault),icon,#1C1F26,#F5EFE6 @ 0.60 glass,5.96,5.97,3.0,yes
+play,pressed,dark,flat,cream,HUD route timer,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+play,pressed,dark,flat,cream,HUD vista sparkle,icon,#1C1F26,#F5EFE6,14.43,14.43,3.0,yes
+play,pressed,dark,flat,cream,HUD vista count,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+play,pressed,dark,flat,cream,HUD pause,icon,#1C1F26,#F5EFE6 @ 0.90 flat,11.75,11.76,3.0,yes
+play,pressed,dark,flat,cream,Jump glyph,icon,#1C1F26,#F2A93B,8.26,8.26,3.0,yes
+play,pressed,dark,flat,cream,Action glyph (vault),icon,#1C1F26,#F5EFE6 @ 0.90 flat,11.86,11.87,3.0,yes
+play,pressed,table,glass,charcoal,HUD route timer,text,#F5EFE6,#1C1F26 @ 0.72 glass,7.58,7.58,4.5,yes
+play,pressed,table,glass,charcoal,HUD vista sparkle,icon,#F5EFE6,#1C1F26 @ 0.72 glass,7.58,7.58,3.0,yes
+play,pressed,table,glass,charcoal,HUD vista count,text,#F5EFE6,#1C1F26 @ 0.72 glass,7.58,7.58,4.5,yes
+play,pressed,table,glass,charcoal,HUD pause,icon,#F5EFE6,#1C1F26 @ 0.60 glass,5.63,5.63,3.0,yes
+play,pressed,table,glass,charcoal,Jump glyph,icon,#1C1F26,#F2A93B,8.26,8.26,3.0,yes
+play,pressed,table,glass,charcoal,Action glyph (vault),icon,#F5EFE6,#1C1F26 @ 0.60 glass,9.42,9.79,3.0,yes
+play,pressed,table,flat,charcoal,HUD route timer,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+play,pressed,table,flat,charcoal,HUD vista sparkle,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+play,pressed,table,flat,charcoal,HUD vista count,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+play,pressed,table,flat,charcoal,HUD pause,icon,#F5EFE6,#1C1F26 @ 0.90 flat,11.71,11.72,3.0,yes
+play,pressed,table,flat,charcoal,Jump glyph,icon,#1C1F26,#F2A93B,8.26,8.26,3.0,yes
+play,pressed,table,flat,charcoal,Action glyph (vault),icon,#F5EFE6,#1C1F26 @ 0.90 flat,13.43,13.44,3.0,yes
+play,penalty,bright,glass,charcoal,HUD route timer,text,#F5EFE6,#1C1F26 @ 0.72 glass,5.78,5.78,4.5,yes
+play,penalty,bright,glass,charcoal,HUD time penalty,text,#F5EFE6,#1C1F26 @ 0.72 glass,5.80,5.80,4.5,yes
+play,penalty,bright,glass,charcoal,HUD vista sparkle,icon,#F5EFE6,#1C1F26 @ 0.72 glass,5.78,5.78,3.0,yes
+play,penalty,bright,glass,charcoal,HUD vista count,text,#F5EFE6,#1C1F26 @ 0.72 glass,5.78,5.78,4.5,yes
+play,penalty,bright,glass,charcoal,HUD pause,icon,#F5EFE6,#1C1F26 @ 0.60 glass,4.12,4.13,3.0,yes
+play,penalty,bright,glass,charcoal,Jump glyph,icon,#F5EFE6,#1C1F26 @ 0.60 glass,5.61,5.61,3.0,yes
+play,penalty,bright,flat,charcoal,HUD route timer,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+play,penalty,bright,flat,charcoal,HUD time penalty,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+play,penalty,bright,flat,charcoal,HUD vista sparkle,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+play,penalty,bright,flat,charcoal,HUD vista count,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+play,penalty,bright,flat,charcoal,HUD pause,icon,#F5EFE6,#1C1F26 @ 0.90 flat,10.87,10.87,3.0,yes
+play,penalty,bright,flat,charcoal,Jump glyph,icon,#F5EFE6,#1C1F26 @ 0.90 flat,11.71,11.73,3.0,yes
+play,penalty,dark,glass,cream,HUD route timer,text,#1C1F26,#F5EFE6 @ 0.72 glass,7.72,7.74,4.5,yes
+play,penalty,dark,glass,cream,HUD time penalty,text,#1C1F26,#F5EFE6 @ 0.72 glass,7.74,7.75,4.5,yes
+play,penalty,dark,glass,cream,HUD vista sparkle,icon,#1C1F26,#F5EFE6 @ 0.72 glass,7.74,7.74,3.0,yes
+play,penalty,dark,glass,cream,HUD vista count,text,#1C1F26,#F5EFE6 @ 0.72 glass,7.74,7.76,4.5,yes
+play,penalty,dark,glass,cream,HUD pause,icon,#1C1F26,#F5EFE6 @ 0.60 glass,5.71,5.72,3.0,yes
+play,penalty,dark,glass,cream,Jump glyph,icon,#1C1F26,#F5EFE6 @ 0.60 glass,5.60,5.62,3.0,yes
+play,penalty,dark,flat,cream,HUD route timer,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+play,penalty,dark,flat,cream,HUD time penalty,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+play,penalty,dark,flat,cream,HUD vista sparkle,icon,#1C1F26,#F5EFE6,14.43,14.43,3.0,yes
+play,penalty,dark,flat,cream,HUD vista count,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+play,penalty,dark,flat,cream,HUD pause,icon,#1C1F26,#F5EFE6 @ 0.90 flat,11.75,11.76,3.0,yes
+play,penalty,dark,flat,cream,Jump glyph,icon,#1C1F26,#F5EFE6 @ 0.90 flat,11.72,11.72,3.0,yes
+play,penalty,table,glass,charcoal,HUD route timer,text,#F5EFE6,#1C1F26 @ 0.72 glass,7.58,7.58,4.5,yes
+play,penalty,table,glass,charcoal,HUD time penalty,text,#F5EFE6,#1C1F26 @ 0.72 glass,7.58,7.58,4.5,yes
+play,penalty,table,glass,charcoal,HUD vista sparkle,icon,#F5EFE6,#1C1F26 @ 0.72 glass,7.58,7.58,3.0,yes
+play,penalty,table,glass,charcoal,HUD vista count,text,#F5EFE6,#1C1F26 @ 0.72 glass,7.58,7.58,4.5,yes
+play,penalty,table,glass,charcoal,HUD pause,icon,#F5EFE6,#1C1F26 @ 0.60 glass,5.63,5.63,3.0,yes
+play,penalty,table,glass,charcoal,Jump glyph,icon,#F5EFE6,#1C1F26 @ 0.60 glass,8.34,8.64,3.0,yes
+play,penalty,table,flat,charcoal,HUD route timer,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+play,penalty,table,flat,charcoal,HUD time penalty,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+play,penalty,table,flat,charcoal,HUD vista sparkle,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+play,penalty,table,flat,charcoal,HUD vista count,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+play,penalty,table,flat,charcoal,HUD pause,icon,#F5EFE6,#1C1F26 @ 0.90 flat,11.71,11.72,3.0,yes
+play,penalty,table,flat,charcoal,Jump glyph,icon,#F5EFE6,#1C1F26 @ 0.90 flat,13.55,13.56,3.0,yes
+play (hc=1),action,bright,glass,charcoal,HUD route timer,text,#F5EFE6,#1C1F26 @ 0.90 glass,10.73,10.73,4.5,yes
+play (hc=1),action,bright,glass,charcoal,HUD vista sparkle,icon,#F5EFE6,#1C1F26 @ 0.90 glass,10.73,10.73,3.0,yes
+play (hc=1),action,bright,glass,charcoal,HUD vista count,text,#F5EFE6,#1C1F26 @ 0.90 glass,10.73,10.73,4.5,yes
+play (hc=1),action,bright,glass,charcoal,HUD pause,icon,#F5EFE6,#1C1F26 @ 0.90 glass,10.88,10.89,3.0,yes
+play (hc=1),action,bright,glass,charcoal,Jump glyph,icon,#F5EFE6,#1C1F26 @ 0.90 glass,11.74,11.74,3.0,yes
+play (hc=1),action,bright,glass,charcoal,Action glyph (vault),icon,#F5EFE6,#1C1F26 @ 0.90 glass,11.94,11.94,3.0,yes
+play (hc=1),action,bright,flat,charcoal,HUD route timer,text,#F5EFE6,#1C1F26 @ 0.90 flat,10.68,10.68,4.5,yes
+play (hc=1),action,bright,flat,charcoal,HUD vista sparkle,icon,#F5EFE6,#1C1F26 @ 0.90 flat,10.68,10.68,3.0,yes
+play (hc=1),action,bright,flat,charcoal,HUD vista count,text,#F5EFE6,#1C1F26 @ 0.90 flat,10.68,10.68,4.5,yes
+play (hc=1),action,bright,flat,charcoal,HUD pause,icon,#F5EFE6,#1C1F26 @ 0.90 flat,10.87,10.87,3.0,yes
+play (hc=1),action,bright,flat,charcoal,Jump glyph,icon,#F5EFE6,#1C1F26 @ 0.90 flat,11.71,11.73,3.0,yes
+play (hc=1),action,bright,flat,charcoal,Action glyph (vault),icon,#F5EFE6,#1C1F26 @ 0.90 flat,11.94,11.96,3.0,yes
+play (hc=1),action,dark,glass,cream,HUD route timer,text,#1C1F26,#F5EFE6 @ 0.90 glass,11.73,11.74,4.5,yes
+play (hc=1),action,dark,glass,cream,HUD vista sparkle,icon,#1C1F26,#F5EFE6 @ 0.90 glass,11.74,11.74,3.0,yes
+play (hc=1),action,dark,glass,cream,HUD vista count,text,#1C1F26,#F5EFE6 @ 0.90 glass,11.74,11.75,4.5,yes
+play (hc=1),action,dark,glass,cream,HUD pause,icon,#1C1F26,#F5EFE6 @ 0.90 glass,11.77,11.77,3.0,yes
+play (hc=1),action,dark,glass,cream,Jump glyph,icon,#1C1F26,#F5EFE6 @ 0.90 glass,11.72,11.73,3.0,yes
+play (hc=1),action,dark,glass,cream,Action glyph (vault),icon,#1C1F26,#F5EFE6 @ 0.90 glass,11.86,11.87,3.0,yes
+play (hc=1),action,dark,flat,cream,HUD route timer,text,#1C1F26,#F5EFE6 @ 0.90 flat,11.70,11.70,4.5,yes
+play (hc=1),action,dark,flat,cream,HUD vista sparkle,icon,#1C1F26,#F5EFE6 @ 0.90 flat,11.71,11.71,3.0,yes
+play (hc=1),action,dark,flat,cream,HUD vista count,text,#1C1F26,#F5EFE6 @ 0.90 flat,11.71,11.71,4.5,yes
+play (hc=1),action,dark,flat,cream,HUD pause,icon,#1C1F26,#F5EFE6 @ 0.90 flat,11.75,11.76,3.0,yes
+play (hc=1),action,dark,flat,cream,Jump glyph,icon,#1C1F26,#F5EFE6 @ 0.90 flat,11.72,11.72,3.0,yes
+play (hc=1),action,dark,flat,cream,Action glyph (vault),icon,#1C1F26,#F5EFE6 @ 0.90 flat,11.86,11.87,3.0,yes
+play (hc=1),action,table,glass,charcoal,HUD route timer,text,#F5EFE6,#1C1F26 @ 0.90 glass,11.74,11.74,4.5,yes
+play (hc=1),action,table,glass,charcoal,HUD vista sparkle,icon,#F5EFE6,#1C1F26 @ 0.90 glass,11.74,11.74,3.0,yes
+play (hc=1),action,table,glass,charcoal,HUD vista count,text,#F5EFE6,#1C1F26 @ 0.90 glass,11.74,11.74,4.5,yes
+play (hc=1),action,table,glass,charcoal,HUD pause,icon,#F5EFE6,#1C1F26 @ 0.90 glass,11.74,11.74,3.0,yes
+play (hc=1),action,table,glass,charcoal,Jump glyph,icon,#F5EFE6,#1C1F26 @ 0.90 glass,12.82,12.92,3.0,yes
+play (hc=1),action,table,glass,charcoal,Action glyph (vault),icon,#F5EFE6,#1C1F26 @ 0.90 glass,13.18,13.29,3.0,yes
+play (hc=1),action,table,flat,charcoal,HUD route timer,text,#F5EFE6,#1C1F26 @ 0.90 flat,11.71,11.71,4.5,yes
+play (hc=1),action,table,flat,charcoal,HUD vista sparkle,icon,#F5EFE6,#1C1F26 @ 0.90 flat,11.71,11.72,3.0,yes
+play (hc=1),action,table,flat,charcoal,HUD vista count,text,#F5EFE6,#1C1F26 @ 0.90 flat,11.71,11.71,4.5,yes
+play (hc=1),action,table,flat,charcoal,HUD pause,icon,#F5EFE6,#1C1F26 @ 0.90 flat,11.71,11.72,3.0,yes
+play (hc=1),action,table,flat,charcoal,Jump glyph,icon,#F5EFE6,#1C1F26 @ 0.90 flat,13.55,13.56,3.0,yes
+play (hc=1),action,table,flat,charcoal,Action glyph (vault),icon,#F5EFE6,#1C1F26 @ 0.90 flat,13.43,13.44,3.0,yes
+duo-stand,default,bright,glass,charcoal,Duo route timer,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+duo-stand,default,bright,glass,charcoal,Duo vista sparkle,icon,#F5EFE6,#2A2E37,11.90,11.90,3.0,yes
+duo-stand,default,bright,glass,charcoal,Duo vista count,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+duo-stand,default,bright,glass,charcoal,Duo pause,icon,#F5EFE6,#2A2E37,11.90,11.90,3.0,yes
+duo-stand,default,bright,glass,charcoal,Diorama caption (muted-on-charcoal),text,#90959F,#2A2E37,4.52,4.52,4.5,yes
+duo-stand,default,bright,glass,charcoal,Duo jump glyph,icon,#F5EFE6,#2A2E37,11.90,11.90,3.0,yes
+duo-stand,default,bright,glass,charcoal,Duo action glyph,icon,#F5EFE6,#2A2E37,11.90,11.90,3.0,yes
+duo-stand,default,bright,flat,charcoal,Duo route timer,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+duo-stand,default,bright,flat,charcoal,Duo vista sparkle,icon,#F5EFE6,#2A2E37,11.90,11.90,3.0,yes
+duo-stand,default,bright,flat,charcoal,Duo vista count,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+duo-stand,default,bright,flat,charcoal,Duo pause,icon,#F5EFE6,#2A2E37,11.90,11.90,3.0,yes
+duo-stand,default,bright,flat,charcoal,Diorama caption (muted-on-charcoal),text,#90959F,#2A2E37,4.52,4.52,4.5,yes
+duo-stand,default,bright,flat,charcoal,Duo jump glyph,icon,#F5EFE6,#2A2E37,11.90,11.90,3.0,yes
+duo-stand,default,bright,flat,charcoal,Duo action glyph,icon,#F5EFE6,#2A2E37,11.90,11.90,3.0,yes
+duo-stand,default,dark,glass,cream,Duo route timer,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+duo-stand,default,dark,glass,cream,Duo vista sparkle,icon,#F5EFE6,#2A2E37,11.90,11.90,3.0,yes
+duo-stand,default,dark,glass,cream,Duo vista count,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+duo-stand,default,dark,glass,cream,Duo pause,icon,#F5EFE6,#2A2E37,11.90,11.90,3.0,yes
+duo-stand,default,dark,glass,cream,Diorama caption (muted-on-charcoal),text,#90959F,#2A2E37,4.52,4.52,4.5,yes
+duo-stand,default,dark,glass,cream,Duo jump glyph,icon,#F5EFE6,#2A2E37,11.90,11.90,3.0,yes
+duo-stand,default,dark,glass,cream,Duo action glyph,icon,#F5EFE6,#2A2E37,11.90,11.90,3.0,yes
+duo-stand,default,dark,flat,cream,Duo route timer,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+duo-stand,default,dark,flat,cream,Duo vista sparkle,icon,#F5EFE6,#2A2E37,11.90,11.90,3.0,yes
+duo-stand,default,dark,flat,cream,Duo vista count,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+duo-stand,default,dark,flat,cream,Duo pause,icon,#F5EFE6,#2A2E37,11.90,11.90,3.0,yes
+duo-stand,default,dark,flat,cream,Diorama caption (muted-on-charcoal),text,#90959F,#2A2E37,4.52,4.52,4.5,yes
+duo-stand,default,dark,flat,cream,Duo jump glyph,icon,#F5EFE6,#2A2E37,11.90,11.90,3.0,yes
+duo-stand,default,dark,flat,cream,Duo action glyph,icon,#F5EFE6,#2A2E37,11.90,11.90,3.0,yes
+duo-stand,default,table,glass,charcoal,Duo route timer,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+duo-stand,default,table,glass,charcoal,Duo vista sparkle,icon,#F5EFE6,#2A2E37,11.90,11.90,3.0,yes
+duo-stand,default,table,glass,charcoal,Duo vista count,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+duo-stand,default,table,glass,charcoal,Duo pause,icon,#F5EFE6,#2A2E37,11.90,11.90,3.0,yes
+duo-stand,default,table,glass,charcoal,Diorama caption (muted-on-charcoal),text,#90959F,#2A2E37,4.52,4.52,4.5,yes
+duo-stand,default,table,glass,charcoal,Duo jump glyph,icon,#F5EFE6,#2A2E37,11.90,11.90,3.0,yes
+duo-stand,default,table,glass,charcoal,Duo action glyph,icon,#F5EFE6,#2A2E37,11.90,11.90,3.0,yes
+duo-stand,default,table,flat,charcoal,Duo route timer,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+duo-stand,default,table,flat,charcoal,Duo vista sparkle,icon,#F5EFE6,#2A2E37,11.90,11.90,3.0,yes
+duo-stand,default,table,flat,charcoal,Duo vista count,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+duo-stand,default,table,flat,charcoal,Duo pause,icon,#F5EFE6,#2A2E37,11.90,11.90,3.0,yes
+duo-stand,default,table,flat,charcoal,Diorama caption (muted-on-charcoal),text,#90959F,#2A2E37,4.52,4.52,4.5,yes
+duo-stand,default,table,flat,charcoal,Duo jump glyph,icon,#F5EFE6,#2A2E37,11.90,11.90,3.0,yes
+duo-stand,default,table,flat,charcoal,Duo action glyph,icon,#F5EFE6,#2A2E37,11.90,11.90,3.0,yes
+capture (mode=room),pre,bright,glass,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.60 glass,3.86,3.87,3.0,yes
+capture (mode=room),pre,bright,glass,charcoal,Mode hint,text,#F5EFE6,#1C1F26 @ 0.86 glass,9.46,9.54,4.5,yes
+capture (mode=room),pre,bright,glass,charcoal,Toggle Room,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+capture (mode=room),pre,bright,glass,charcoal,Toggle Tabletop,text,#F5EFE6,#1C1F26 @ 0.72 glass,7.50,7.50,4.5,yes
+capture (mode=room),pre,bright,flat,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.90 flat,10.68,10.68,3.0,yes
+capture (mode=room),pre,bright,flat,charcoal,Mode hint,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),pre,bright,flat,charcoal,Toggle Room,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+capture (mode=room),pre,bright,flat,charcoal,Toggle Tabletop,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),pre,dark,glass,cream,Capture close,icon,#1C1F26,#F5EFE6 @ 0.60 glass,5.84,5.85,3.0,yes
+capture (mode=room),pre,dark,glass,cream,Mode hint,text,#1C1F26,#F5EFE6 @ 0.86 glass,10.76,10.79,4.5,yes
+capture (mode=room),pre,dark,glass,cream,Toggle Room,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),pre,dark,glass,cream,Toggle Tabletop,text,#1C1F26,#F5EFE6 @ 0.72 glass,7.75,7.75,4.5,yes
+capture (mode=room),pre,dark,flat,cream,Capture close,icon,#1C1F26,#F5EFE6 @ 0.90 flat,11.92,11.92,3.0,yes
+capture (mode=room),pre,dark,flat,cream,Mode hint,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+capture (mode=room),pre,dark,flat,cream,Toggle Room,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),pre,dark,flat,cream,Toggle Tabletop,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+capture (mode=room),pre,table,glass,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.60 glass,5.80,5.80,3.0,yes
+capture (mode=room),pre,table,glass,charcoal,Mode hint,text,#F5EFE6,#1C1F26 @ 0.86 glass,9.58,9.98,4.5,yes
+capture (mode=room),pre,table,glass,charcoal,Toggle Room,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+capture (mode=room),pre,table,glass,charcoal,Toggle Tabletop,text,#F5EFE6,#1C1F26 @ 0.72 glass,11.88,11.88,4.5,yes
+capture (mode=room),pre,table,flat,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.90 flat,11.81,11.81,3.0,yes
+capture (mode=room),pre,table,flat,charcoal,Mode hint,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),pre,table,flat,charcoal,Toggle Room,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+capture (mode=room),pre,table,flat,charcoal,Toggle Tabletop,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),recording,bright,glass,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.60 glass,3.86,3.87,3.0,yes
+capture (mode=room),recording,bright,glass,charcoal,Coverage percent,text,#F5EFE6,#1C1F26 @ 0.72 glass,6.08,6.08,4.5,yes
+capture (mode=room),recording,bright,flat,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.90 flat,10.68,10.68,3.0,yes
+capture (mode=room),recording,bright,flat,charcoal,Coverage percent,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),recording,dark,glass,cream,Capture close,icon,#1C1F26,#F5EFE6 @ 0.60 glass,5.84,5.85,3.0,yes
+capture (mode=room),recording,dark,glass,cream,Coverage percent,text,#1C1F26,#F5EFE6 @ 0.72 glass,7.83,7.83,4.5,yes
+capture (mode=room),recording,dark,flat,cream,Capture close,icon,#1C1F26,#F5EFE6 @ 0.90 flat,11.92,11.92,3.0,yes
+capture (mode=room),recording,dark,flat,cream,Coverage percent,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+capture (mode=room),recording,table,glass,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.60 glass,5.80,5.80,3.0,yes
+capture (mode=room),recording,table,glass,charcoal,Coverage percent,text,#F5EFE6,#1C1F26 @ 0.72 glass,7.75,7.75,4.5,yes
+capture (mode=room),recording,table,flat,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.90 flat,11.81,11.81,3.0,yes
+capture (mode=room),recording,table,flat,charcoal,Coverage percent,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),fast,bright,glass,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.60 glass,3.86,3.87,3.0,yes
+capture (mode=room),fast,bright,glass,charcoal,Coverage percent,text,#F5EFE6,#1C1F26 @ 0.72 glass,6.08,6.08,4.5,yes
+capture (mode=room),fast,bright,glass,charcoal,Slow down copy,text,#F5EFE6,#1C1F26 @ 0.72 glass,7.51,7.51,4.5,yes
+capture (mode=room),fast,bright,flat,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.90 flat,10.68,10.68,3.0,yes
+capture (mode=room),fast,bright,flat,charcoal,Coverage percent,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),fast,bright,flat,charcoal,Slow down copy,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),fast,dark,glass,cream,Capture close,icon,#1C1F26,#F5EFE6 @ 0.60 glass,5.84,5.85,3.0,yes
+capture (mode=room),fast,dark,glass,cream,Coverage percent,text,#1C1F26,#F5EFE6 @ 0.72 glass,7.83,7.83,4.5,yes
+capture (mode=room),fast,dark,glass,cream,Slow down copy,text,#1C1F26,#F5EFE6 @ 0.72 glass,7.70,7.70,4.5,yes
+capture (mode=room),fast,dark,flat,cream,Capture close,icon,#1C1F26,#F5EFE6 @ 0.90 flat,11.92,11.92,3.0,yes
+capture (mode=room),fast,dark,flat,cream,Coverage percent,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+capture (mode=room),fast,dark,flat,cream,Slow down copy,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+capture (mode=room),fast,table,glass,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.60 glass,5.80,5.80,3.0,yes
+capture (mode=room),fast,table,glass,charcoal,Coverage percent,text,#F5EFE6,#1C1F26 @ 0.72 glass,7.75,7.75,4.5,yes
+capture (mode=room),fast,table,glass,charcoal,Slow down copy,text,#F5EFE6,#1C1F26 @ 0.72 glass,11.65,11.70,4.5,yes
+capture (mode=room),fast,table,flat,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.90 flat,11.81,11.81,3.0,yes
+capture (mode=room),fast,table,flat,charcoal,Coverage percent,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),fast,table,flat,charcoal,Slow down copy,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),lowlight,bright,glass,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.60 glass,3.86,3.87,3.0,yes
+capture (mode=room),lowlight,bright,glass,charcoal,Coverage percent,text,#F5EFE6,#1C1F26 @ 0.72 glass,6.08,6.08,4.5,yes
+capture (mode=room),lowlight,bright,glass,charcoal,Low-light lamp,icon,#F5EFE6,#1C1F26 @ 0.86 glass,10.66,10.68,3.0,yes
+capture (mode=room),lowlight,bright,glass,charcoal,Low light copy,text,#F5EFE6,#1C1F26 @ 0.86 glass,9.87,9.97,4.5,yes
+capture (mode=room),lowlight,bright,glass,charcoal,Continue anyway,text,#F5EFE6,#1C1F26 @ 0.86 glass,11.07,11.15,4.5,yes
+capture (mode=room),lowlight,bright,flat,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.90 flat,10.68,10.68,3.0,yes
+capture (mode=room),lowlight,bright,flat,charcoal,Coverage percent,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),lowlight,bright,flat,charcoal,Low-light lamp,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+capture (mode=room),lowlight,bright,flat,charcoal,Low light copy,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),lowlight,bright,flat,charcoal,Continue anyway,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),lowlight,dark,glass,cream,Capture close,icon,#1C1F26,#F5EFE6 @ 0.60 glass,5.84,5.85,3.0,yes
+capture (mode=room),lowlight,dark,glass,cream,Coverage percent,text,#1C1F26,#F5EFE6 @ 0.72 glass,7.83,7.83,4.5,yes
+capture (mode=room),lowlight,dark,glass,cream,Low-light lamp,icon,#1C1F26,#F5EFE6 @ 0.86 glass,11.04,11.07,3.0,yes
+capture (mode=room),lowlight,dark,glass,cream,Low light copy,text,#1C1F26,#F5EFE6 @ 0.86 glass,11.06,11.10,4.5,yes
+capture (mode=room),lowlight,dark,glass,cream,Continue anyway,text,#1C1F26,#F5EFE6 @ 0.86 glass,11.04,11.08,4.5,yes
+capture (mode=room),lowlight,dark,flat,cream,Capture close,icon,#1C1F26,#F5EFE6 @ 0.90 flat,11.92,11.92,3.0,yes
+capture (mode=room),lowlight,dark,flat,cream,Coverage percent,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+capture (mode=room),lowlight,dark,flat,cream,Low-light lamp,icon,#1C1F26,#F5EFE6,14.43,14.43,3.0,yes
+capture (mode=room),lowlight,dark,flat,cream,Low light copy,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+capture (mode=room),lowlight,dark,flat,cream,Continue anyway,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+capture (mode=room),lowlight,table,glass,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.60 glass,5.80,5.80,3.0,yes
+capture (mode=room),lowlight,table,glass,charcoal,Coverage percent,text,#F5EFE6,#1C1F26 @ 0.72 glass,7.75,7.75,4.5,yes
+capture (mode=room),lowlight,table,glass,charcoal,Low-light lamp,icon,#F5EFE6,#1C1F26 @ 0.86 glass,10.91,10.93,3.0,yes
+capture (mode=room),lowlight,table,glass,charcoal,Low light copy,text,#F5EFE6,#1C1F26 @ 0.86 glass,11.16,11.65,4.5,yes
+capture (mode=room),lowlight,table,glass,charcoal,Continue anyway,text,#F5EFE6,#1C1F26 @ 0.86 glass,11.26,11.63,4.5,yes
+capture (mode=room),lowlight,table,flat,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.90 flat,11.81,11.81,3.0,yes
+capture (mode=room),lowlight,table,flat,charcoal,Coverage percent,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),lowlight,table,flat,charcoal,Low-light lamp,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+capture (mode=room),lowlight,table,flat,charcoal,Low light copy,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),lowlight,table,flat,charcoal,Continue anyway,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),long,bright,glass,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.60 glass,3.86,3.87,3.0,yes
+capture (mode=room),long,bright,glass,charcoal,Coverage percent,text,#F5EFE6,#1C1F26 @ 0.72 glass,6.08,6.08,4.5,yes
+capture (mode=room),long,bright,glass,charcoal,Long-capture alert,icon,#F2A93B,#1C1F26 @ 0.72 glass,4.30,4.30,3.0,yes
+capture (mode=room),long,bright,glass,charcoal,Long capture copy,text,#F5EFE6,#1C1F26 @ 0.72 glass,7.50,7.50,4.5,yes
+capture (mode=room),long,bright,flat,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.90 flat,10.68,10.68,3.0,yes
+capture (mode=room),long,bright,flat,charcoal,Coverage percent,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),long,bright,flat,charcoal,Long-capture alert,icon,#F2A93B,#1C1F26,8.26,8.26,3.0,yes
+capture (mode=room),long,bright,flat,charcoal,Long capture copy,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),long,dark,glass,cream,Capture close,icon,#1C1F26,#F5EFE6 @ 0.60 glass,5.84,5.85,3.0,yes
+capture (mode=room),long,dark,glass,cream,Coverage percent,text,#1C1F26,#F5EFE6 @ 0.72 glass,7.83,7.83,4.5,yes
+capture (mode=room),long,dark,glass,cream,Long-capture alert,icon,#1C1F26,#F5EFE6 @ 0.72 glass,7.70,7.70,3.0,yes
+capture (mode=room),long,dark,glass,cream,Long capture copy,text,#1C1F26,#F5EFE6 @ 0.72 glass,7.70,7.72,4.5,yes
+capture (mode=room),long,dark,flat,cream,Capture close,icon,#1C1F26,#F5EFE6 @ 0.90 flat,11.92,11.92,3.0,yes
+capture (mode=room),long,dark,flat,cream,Coverage percent,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+capture (mode=room),long,dark,flat,cream,Long-capture alert,icon,#1C1F26,#F5EFE6,14.43,14.43,3.0,yes
+capture (mode=room),long,dark,flat,cream,Long capture copy,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+capture (mode=room),long,table,glass,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.60 glass,5.80,5.80,3.0,yes
+capture (mode=room),long,table,glass,charcoal,Coverage percent,text,#F5EFE6,#1C1F26 @ 0.72 glass,7.75,7.75,4.5,yes
+capture (mode=room),long,table,glass,charcoal,Long-capture alert,icon,#F2A93B,#1C1F26 @ 0.72 glass,6.83,6.83,3.0,yes
+capture (mode=room),long,table,glass,charcoal,Long capture copy,text,#F5EFE6,#1C1F26 @ 0.72 glass,11.13,11.33,4.5,yes
+capture (mode=room),long,table,flat,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.90 flat,11.81,11.81,3.0,yes
+capture (mode=room),long,table,flat,charcoal,Coverage percent,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),long,table,flat,charcoal,Long-capture alert,icon,#F2A93B,#1C1F26,8.26,8.26,3.0,yes
+capture (mode=room),long,table,flat,charcoal,Long capture copy,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),missed,bright,glass,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.60 glass,3.86,3.87,3.0,yes
+capture (mode=room),missed,bright,glass,charcoal,Coverage percent,text,#F5EFE6,#1C1F26 @ 0.72 glass,6.08,6.08,4.5,yes
+capture (mode=room),missed,bright,glass,charcoal,Missed corner copy,text,#F5EFE6,#1C1F26 @ 0.86 glass,9.89,10.10,4.5,yes
+capture (mode=room),missed,bright,glass,charcoal,Got it (teal button),text,#F5EFE6,#00585E,7.18,7.18,4.5,yes
+capture (mode=room),missed,bright,glass,charcoal,Upload anyway,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.55,10.78,4.5,yes
+capture (mode=room),missed,bright,glass,charcoal,Done (amber button),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+capture (mode=room),missed,bright,flat,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.90 flat,10.68,10.68,3.0,yes
+capture (mode=room),missed,bright,flat,charcoal,Coverage percent,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),missed,bright,flat,charcoal,Missed corner copy,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),missed,bright,flat,charcoal,Got it (teal button),text,#F5EFE6,#00585E,7.18,7.18,4.5,yes
+capture (mode=room),missed,bright,flat,charcoal,Upload anyway,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),missed,bright,flat,charcoal,Done (amber button),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+capture (mode=room),missed,dark,glass,cream,Capture close,icon,#1C1F26,#F5EFE6 @ 0.60 glass,5.84,5.85,3.0,yes
+capture (mode=room),missed,dark,glass,cream,Coverage percent,text,#1C1F26,#F5EFE6 @ 0.72 glass,7.83,7.83,4.5,yes
+capture (mode=room),missed,dark,glass,cream,Missed corner copy,text,#1C1F26,#F5EFE6 @ 0.86 glass,11.08,11.11,4.5,yes
+capture (mode=room),missed,dark,glass,cream,Got it (teal button),text,#F5EFE6,#00585E,7.18,7.18,4.5,yes
+capture (mode=room),missed,dark,glass,cream,Upload anyway,text,#1C1F26,#F5EFE6 @ 0.86 glass,10.94,11.01,4.5,yes
+capture (mode=room),missed,dark,glass,cream,Done (amber button),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+capture (mode=room),missed,dark,flat,cream,Capture close,icon,#1C1F26,#F5EFE6 @ 0.90 flat,11.92,11.92,3.0,yes
+capture (mode=room),missed,dark,flat,cream,Coverage percent,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+capture (mode=room),missed,dark,flat,cream,Missed corner copy,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+capture (mode=room),missed,dark,flat,cream,Got it (teal button),text,#F5EFE6,#00585E,7.18,7.18,4.5,yes
+capture (mode=room),missed,dark,flat,cream,Upload anyway,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+capture (mode=room),missed,dark,flat,cream,Done (amber button),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+capture (mode=room),missed,table,glass,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.60 glass,5.80,5.80,3.0,yes
+capture (mode=room),missed,table,glass,charcoal,Coverage percent,text,#F5EFE6,#1C1F26 @ 0.72 glass,7.75,7.75,4.5,yes
+capture (mode=room),missed,table,glass,charcoal,Missed corner copy,text,#F5EFE6,#1C1F26 @ 0.86 glass,11.07,11.30,4.5,yes
+capture (mode=room),missed,table,glass,charcoal,Got it (teal button),text,#F5EFE6,#00585E,7.18,7.18,4.5,yes
+capture (mode=room),missed,table,glass,charcoal,Upload anyway,text,#F5EFE6,#1C1F26 @ 0.86 glass,11.96,12.33,4.5,yes
+capture (mode=room),missed,table,glass,charcoal,Done (amber button),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+capture (mode=room),missed,table,flat,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.90 flat,11.81,11.81,3.0,yes
+capture (mode=room),missed,table,flat,charcoal,Coverage percent,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),missed,table,flat,charcoal,Missed corner copy,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),missed,table,flat,charcoal,Got it (teal button),text,#F5EFE6,#00585E,7.18,7.18,4.5,yes
+capture (mode=room),missed,table,flat,charcoal,Upload anyway,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=room),missed,table,flat,charcoal,Done (amber button),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+capture (mode=tabletop),pre,bright,glass,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.60 glass,3.86,3.87,3.0,yes
+capture (mode=tabletop),pre,bright,glass,charcoal,Mode hint,text,#F5EFE6,#1C1F26 @ 0.86 glass,9.46,9.58,4.5,yes
+capture (mode=tabletop),pre,bright,glass,charcoal,Toggle Room,text,#F5EFE6,#1C1F26 @ 0.72 glass,7.48,7.50,4.5,yes
+capture (mode=tabletop),pre,bright,glass,charcoal,Toggle Tabletop,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+capture (mode=tabletop),pre,bright,flat,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.90 flat,10.68,10.68,3.0,yes
+capture (mode=tabletop),pre,bright,flat,charcoal,Mode hint,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=tabletop),pre,bright,flat,charcoal,Toggle Room,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=tabletop),pre,bright,flat,charcoal,Toggle Tabletop,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+capture (mode=tabletop),pre,dark,glass,cream,Capture close,icon,#1C1F26,#F5EFE6 @ 0.60 glass,5.84,5.85,3.0,yes
+capture (mode=tabletop),pre,dark,glass,cream,Mode hint,text,#1C1F26,#F5EFE6 @ 0.86 glass,10.73,10.76,4.5,yes
+capture (mode=tabletop),pre,dark,glass,cream,Toggle Room,text,#1C1F26,#F5EFE6 @ 0.72 glass,7.70,7.70,4.5,yes
+capture (mode=tabletop),pre,dark,glass,cream,Toggle Tabletop,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=tabletop),pre,dark,flat,cream,Capture close,icon,#1C1F26,#F5EFE6 @ 0.90 flat,11.92,11.92,3.0,yes
+capture (mode=tabletop),pre,dark,flat,cream,Mode hint,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+capture (mode=tabletop),pre,dark,flat,cream,Toggle Room,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+capture (mode=tabletop),pre,dark,flat,cream,Toggle Tabletop,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=tabletop),pre,table,glass,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.60 glass,5.80,5.80,3.0,yes
+capture (mode=tabletop),pre,table,glass,charcoal,Mode hint,text,#F5EFE6,#1C1F26 @ 0.86 glass,9.48,9.58,4.5,yes
+capture (mode=tabletop),pre,table,glass,charcoal,Toggle Room,text,#F5EFE6,#1C1F26 @ 0.72 glass,11.83,11.86,4.5,yes
+capture (mode=tabletop),pre,table,glass,charcoal,Toggle Tabletop,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+capture (mode=tabletop),pre,table,flat,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.90 flat,11.81,11.81,3.0,yes
+capture (mode=tabletop),pre,table,flat,charcoal,Mode hint,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=tabletop),pre,table,flat,charcoal,Toggle Room,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=tabletop),pre,table,flat,charcoal,Toggle Tabletop,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+capture (mode=tabletop),missed,bright,glass,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.60 glass,3.86,3.87,3.0,yes
+capture (mode=tabletop),missed,bright,glass,charcoal,Coverage percent,text,#F5EFE6,#1C1F26 @ 0.72 glass,6.08,6.08,4.5,yes
+capture (mode=tabletop),missed,bright,glass,charcoal,Missed corner copy,text,#F5EFE6,#1C1F26 @ 0.86 glass,9.89,10.10,4.5,yes
+capture (mode=tabletop),missed,bright,glass,charcoal,Got it (teal button),text,#F5EFE6,#00585E,7.18,7.18,4.5,yes
+capture (mode=tabletop),missed,bright,glass,charcoal,Upload anyway,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.55,10.78,4.5,yes
+capture (mode=tabletop),missed,bright,glass,charcoal,Done (amber button),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+capture (mode=tabletop),missed,bright,flat,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.90 flat,10.68,10.68,3.0,yes
+capture (mode=tabletop),missed,bright,flat,charcoal,Coverage percent,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=tabletop),missed,bright,flat,charcoal,Missed corner copy,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=tabletop),missed,bright,flat,charcoal,Got it (teal button),text,#F5EFE6,#00585E,7.18,7.18,4.5,yes
+capture (mode=tabletop),missed,bright,flat,charcoal,Upload anyway,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=tabletop),missed,bright,flat,charcoal,Done (amber button),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+capture (mode=tabletop),missed,dark,glass,cream,Capture close,icon,#1C1F26,#F5EFE6 @ 0.60 glass,5.84,5.85,3.0,yes
+capture (mode=tabletop),missed,dark,glass,cream,Coverage percent,text,#1C1F26,#F5EFE6 @ 0.72 glass,7.83,7.83,4.5,yes
+capture (mode=tabletop),missed,dark,glass,cream,Missed corner copy,text,#1C1F26,#F5EFE6 @ 0.86 glass,11.08,11.11,4.5,yes
+capture (mode=tabletop),missed,dark,glass,cream,Got it (teal button),text,#F5EFE6,#00585E,7.18,7.18,4.5,yes
+capture (mode=tabletop),missed,dark,glass,cream,Upload anyway,text,#1C1F26,#F5EFE6 @ 0.86 glass,10.94,11.01,4.5,yes
+capture (mode=tabletop),missed,dark,glass,cream,Done (amber button),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+capture (mode=tabletop),missed,dark,flat,cream,Capture close,icon,#1C1F26,#F5EFE6 @ 0.90 flat,11.92,11.92,3.0,yes
+capture (mode=tabletop),missed,dark,flat,cream,Coverage percent,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+capture (mode=tabletop),missed,dark,flat,cream,Missed corner copy,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+capture (mode=tabletop),missed,dark,flat,cream,Got it (teal button),text,#F5EFE6,#00585E,7.18,7.18,4.5,yes
+capture (mode=tabletop),missed,dark,flat,cream,Upload anyway,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+capture (mode=tabletop),missed,dark,flat,cream,Done (amber button),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+capture (mode=tabletop),missed,table,glass,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.60 glass,5.80,5.80,3.0,yes
+capture (mode=tabletop),missed,table,glass,charcoal,Coverage percent,text,#F5EFE6,#1C1F26 @ 0.72 glass,7.75,7.75,4.5,yes
+capture (mode=tabletop),missed,table,glass,charcoal,Missed corner copy,text,#F5EFE6,#1C1F26 @ 0.86 glass,11.07,11.30,4.5,yes
+capture (mode=tabletop),missed,table,glass,charcoal,Got it (teal button),text,#F5EFE6,#00585E,7.18,7.18,4.5,yes
+capture (mode=tabletop),missed,table,glass,charcoal,Upload anyway,text,#F5EFE6,#1C1F26 @ 0.86 glass,11.96,12.33,4.5,yes
+capture (mode=tabletop),missed,table,glass,charcoal,Done (amber button),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+capture (mode=tabletop),missed,table,flat,charcoal,Capture close,icon,#F5EFE6,#1C1F26 @ 0.90 flat,11.81,11.81,3.0,yes
+capture (mode=tabletop),missed,table,flat,charcoal,Coverage percent,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=tabletop),missed,table,flat,charcoal,Missed corner copy,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=tabletop),missed,table,flat,charcoal,Got it (teal button),text,#F5EFE6,#00585E,7.18,7.18,4.5,yes
+capture (mode=tabletop),missed,table,flat,charcoal,Upload anyway,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+capture (mode=tabletop),missed,table,flat,charcoal,Done (amber button),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+create,progress,bright,glass,charcoal,Stage title,text,#F5EFE6,#1C1F26 @ 0.86 glass,9.52,9.62,4.5,yes
+create,progress,bright,glass,charcoal,Estimate,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.42,10.47,4.5,yes
+create,progress,bright,glass,charcoal,Progress fill (done),icon,#F5EFE6,#1C1F26 @ 0.86 glass,10.13,10.13,3.0,yes
+create,progress,bright,glass,charcoal,Stage done check,icon,#F5EFE6,#1C1F26 @ 0.86 glass,10.28,10.28,3.0,yes
+create,progress,bright,glass,charcoal,Stage 1 label,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.26,10.28,4.5,yes
+create,progress,bright,glass,charcoal,Progress fill (current),icon,#F5EFE6,#1C1F26 @ 0.86 glass,10.14,10.14,3.0,yes
+create,progress,bright,glass,charcoal,Stage 2 label,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.28,10.30,4.5,yes
+create,progress,bright,glass,charcoal,Stage 3 label,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.69,10.77,4.5,yes
+create,progress,bright,glass,charcoal,Stage 4 label,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.86,10.88,4.5,yes
+create,progress,bright,glass,charcoal,What's happening line,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.62,10.64,4.5,yes
+create,progress,bright,glass,charcoal,Journey the demo,text,#F5EFE6,#1C1F26 @ 0.72 glass,6.13,6.13,4.5,yes
+create,progress,bright,flat,charcoal,Stage title,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,progress,bright,flat,charcoal,Estimate,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,progress,bright,flat,charcoal,Progress fill (done),icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+create,progress,bright,flat,charcoal,Stage done check,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+create,progress,bright,flat,charcoal,Stage 1 label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,progress,bright,flat,charcoal,Progress fill (current),icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+create,progress,bright,flat,charcoal,Stage 2 label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,progress,bright,flat,charcoal,Stage 3 label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,progress,bright,flat,charcoal,Stage 4 label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,progress,bright,flat,charcoal,What's happening line,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,progress,bright,flat,charcoal,Journey the demo,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,progress,dark,glass,cream,Stage title,text,#1C1F26,#F5EFE6 @ 0.86 glass,10.75,10.77,4.5,yes
+create,progress,dark,glass,cream,Estimate,text,#1C1F26,#F5EFE6 @ 0.86 glass,10.99,10.99,4.5,yes
+create,progress,dark,glass,cream,Progress fill (done),icon,#00585E,#F5EFE6 @ 0.86 glass,5.35,5.35,3.0,yes
+create,progress,dark,glass,cream,Stage done check,icon,#1C1F26,#F5EFE6 @ 0.86 glass,10.75,10.75,3.0,yes
+create,progress,dark,glass,cream,Stage 1 label,text,#1C1F26,#F5EFE6 @ 0.86 glass,10.75,10.75,4.5,yes
+create,progress,dark,glass,cream,Progress fill (current),icon,#00585E,#F5EFE6 @ 0.86 glass,5.37,5.37,3.0,yes
+create,progress,dark,glass,cream,Stage 2 label,text,#1C1F26,#F5EFE6 @ 0.86 glass,10.76,10.76,4.5,yes
+create,progress,dark,glass,cream,Stage 3 label,text,#1C1F26,#F5EFE6 @ 0.86 glass,10.81,10.83,4.5,yes
+create,progress,dark,glass,cream,Stage 4 label,text,#1C1F26,#F5EFE6 @ 0.86 glass,10.83,10.83,4.5,yes
+create,progress,dark,glass,cream,What's happening line,text,#1C1F26,#F5EFE6 @ 0.86 glass,10.72,10.73,4.5,yes
+create,progress,dark,glass,cream,Journey the demo,text,#1C1F26,#F5EFE6 @ 0.72 glass,7.83,7.86,4.5,yes
+create,progress,dark,flat,cream,Stage title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+create,progress,dark,flat,cream,Estimate,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+create,progress,dark,flat,cream,Progress fill (done),icon,#00585E,#F5EFE6,7.18,7.18,3.0,yes
+create,progress,dark,flat,cream,Stage done check,icon,#1C1F26,#F5EFE6,14.43,14.43,3.0,yes
+create,progress,dark,flat,cream,Stage 1 label,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+create,progress,dark,flat,cream,Progress fill (current),icon,#00585E,#F5EFE6,7.18,7.18,3.0,yes
+create,progress,dark,flat,cream,Stage 2 label,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+create,progress,dark,flat,cream,Stage 3 label,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+create,progress,dark,flat,cream,Stage 4 label,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+create,progress,dark,flat,cream,What's happening line,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+create,progress,dark,flat,cream,Journey the demo,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+create,progress,table,glass,charcoal,Stage title,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.11,10.79,4.5,yes
+create,progress,table,glass,charcoal,Estimate,text,#F5EFE6,#1C1F26 @ 0.86 glass,11.97,12.25,4.5,yes
+create,progress,table,glass,charcoal,Progress fill (done),icon,#F5EFE6,#1C1F26 @ 0.86 glass,10.25,10.47,3.0,yes
+create,progress,table,glass,charcoal,Stage done check,icon,#F5EFE6,#1C1F26 @ 0.86 glass,10.60,10.72,3.0,yes
+create,progress,table,glass,charcoal,Stage 1 label,text,#F5EFE6,#1C1F26 @ 0.86 glass,11.29,11.62,4.5,yes
+create,progress,table,glass,charcoal,Progress fill (current),icon,#F5EFE6,#1C1F26 @ 0.86 glass,13.20,13.22,3.0,yes
+create,progress,table,glass,charcoal,Stage 2 label,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.85,12.98,4.5,yes
+create,progress,table,glass,charcoal,Stage 3 label,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.23,12.48,4.5,yes
+create,progress,table,glass,charcoal,Stage 4 label,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.88,13.03,4.5,yes
+create,progress,table,glass,charcoal,What's happening line,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.47,12.75,4.5,yes
+create,progress,table,glass,charcoal,Journey the demo,text,#F5EFE6,#1C1F26 @ 0.72 glass,7.88,7.88,4.5,yes
+create,progress,table,flat,charcoal,Stage title,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,progress,table,flat,charcoal,Estimate,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,progress,table,flat,charcoal,Progress fill (done),icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+create,progress,table,flat,charcoal,Stage done check,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+create,progress,table,flat,charcoal,Stage 1 label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,progress,table,flat,charcoal,Progress fill (current),icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+create,progress,table,flat,charcoal,Stage 2 label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,progress,table,flat,charcoal,Stage 3 label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,progress,table,flat,charcoal,Stage 4 label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,progress,table,flat,charcoal,What's happening line,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,progress,table,flat,charcoal,Journey the demo,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,failed,bright,glass,charcoal,Failure lamp,icon,#F5EFE6,#1C1F26 @ 0.86 glass,9.74,9.74,3.0,yes
+create,failed,bright,glass,charcoal,Failure copy,text,#F5EFE6,#1C1F26 @ 0.86 glass,9.40,9.62,4.5,yes
+create,failed,bright,glass,charcoal,Retry (amber button),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+create,failed,bright,glass,charcoal,Keep the capture,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.49,10.60,4.5,yes
+create,failed,bright,flat,charcoal,Failure lamp,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+create,failed,bright,flat,charcoal,Failure copy,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,failed,bright,flat,charcoal,Retry (amber button),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+create,failed,bright,flat,charcoal,Keep the capture,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,failed,dark,glass,cream,Failure lamp,icon,#1C1F26,#F5EFE6 @ 0.86 glass,10.91,10.92,3.0,yes
+create,failed,dark,glass,cream,Failure copy,text,#1C1F26,#F5EFE6 @ 0.86 glass,10.76,10.78,4.5,yes
+create,failed,dark,glass,cream,Retry (amber button),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+create,failed,dark,glass,cream,Keep the capture,text,#1C1F26,#F5EFE6 @ 0.86 glass,10.81,10.84,4.5,yes
+create,failed,dark,flat,cream,Failure lamp,icon,#1C1F26,#F5EFE6,14.43,14.43,3.0,yes
+create,failed,dark,flat,cream,Failure copy,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+create,failed,dark,flat,cream,Retry (amber button),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+create,failed,dark,flat,cream,Keep the capture,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+create,failed,table,glass,charcoal,Failure lamp,icon,#F5EFE6,#1C1F26 @ 0.86 glass,11.65,11.67,3.0,yes
+create,failed,table,glass,charcoal,Failure copy,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.87,11.84,4.5,yes
+create,failed,table,glass,charcoal,Retry (amber button),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+create,failed,table,glass,charcoal,Keep the capture,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.50,12.63,4.5,yes
+create,failed,table,flat,charcoal,Failure lamp,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+create,failed,table,flat,charcoal,Failure copy,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,failed,table,flat,charcoal,Retry (amber button),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+create,failed,table,flat,charcoal,Keep the capture,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,queued,bright,glass,charcoal,Queued copy,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.10,10.18,4.5,yes
+create,queued,bright,glass,charcoal,Progress fill (done),icon,#F5EFE6,#1C1F26 @ 0.86 glass,10.62,10.62,3.0,yes
+create,queued,bright,glass,charcoal,Stage done check,icon,#F5EFE6,#1C1F26 @ 0.86 glass,10.66,10.66,3.0,yes
+create,queued,bright,glass,charcoal,Stage 1 label,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.66,10.66,4.5,yes
+create,queued,bright,glass,charcoal,Stage 2 label (queued),text,#F5EFE6,#1C1F26 @ 0.86 glass,10.66,10.66,4.5,yes
+create,queued,bright,glass,charcoal,Stage 3 label,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.68,10.70,4.5,yes
+create,queued,bright,glass,charcoal,Stage 4 label,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.71,10.73,4.5,yes
+create,queued,bright,flat,charcoal,Queued copy,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,queued,bright,flat,charcoal,Progress fill (done),icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+create,queued,bright,flat,charcoal,Stage done check,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+create,queued,bright,flat,charcoal,Stage 1 label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,queued,bright,flat,charcoal,Stage 2 label (queued),text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,queued,bright,flat,charcoal,Stage 3 label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,queued,bright,flat,charcoal,Stage 4 label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,queued,dark,glass,cream,Queued copy,text,#1C1F26,#F5EFE6 @ 0.86 glass,10.73,10.75,4.5,yes
+create,queued,dark,glass,cream,Progress fill (done),icon,#00585E,#F5EFE6 @ 0.86 glass,5.34,5.34,3.0,yes
+create,queued,dark,glass,cream,Stage done check,icon,#1C1F26,#F5EFE6 @ 0.86 glass,10.72,10.73,3.0,yes
+create,queued,dark,glass,cream,Stage 1 label,text,#1C1F26,#F5EFE6 @ 0.86 glass,10.73,10.73,4.5,yes
+create,queued,dark,glass,cream,Stage 2 label (queued),text,#1C1F26,#F5EFE6 @ 0.86 glass,10.73,10.73,4.5,yes
+create,queued,dark,glass,cream,Stage 3 label,text,#1C1F26,#F5EFE6 @ 0.86 glass,10.73,10.73,4.5,yes
+create,queued,dark,glass,cream,Stage 4 label,text,#1C1F26,#F5EFE6 @ 0.86 glass,10.75,10.75,4.5,yes
+create,queued,dark,flat,cream,Queued copy,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+create,queued,dark,flat,cream,Progress fill (done),icon,#00585E,#F5EFE6,7.18,7.18,3.0,yes
+create,queued,dark,flat,cream,Stage done check,icon,#1C1F26,#F5EFE6,14.43,14.43,3.0,yes
+create,queued,dark,flat,cream,Stage 1 label,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+create,queued,dark,flat,cream,Stage 2 label (queued),text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+create,queued,dark,flat,cream,Stage 3 label,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+create,queued,dark,flat,cream,Stage 4 label,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+create,queued,table,glass,charcoal,Queued copy,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.23,11.69,4.5,yes
+create,queued,table,glass,charcoal,Progress fill (done),icon,#F5EFE6,#1C1F26 @ 0.86 glass,12.53,12.63,3.0,yes
+create,queued,table,glass,charcoal,Stage done check,icon,#F5EFE6,#1C1F26 @ 0.86 glass,12.86,12.88,3.0,yes
+create,queued,table,glass,charcoal,Stage 1 label,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.72,12.77,4.5,yes
+create,queued,table,glass,charcoal,Stage 2 label (queued),text,#F5EFE6,#1C1F26 @ 0.86 glass,13.13,13.15,4.5,yes
+create,queued,table,glass,charcoal,Stage 3 label,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.13,13.16,4.5,yes
+create,queued,table,glass,charcoal,Stage 4 label,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.20,13.20,4.5,yes
+create,queued,table,flat,charcoal,Queued copy,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,queued,table,flat,charcoal,Progress fill (done),icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+create,queued,table,flat,charcoal,Stage done check,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+create,queued,table,flat,charcoal,Stage 1 label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,queued,table,flat,charcoal,Stage 2 label (queued),text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,queued,table,flat,charcoal,Stage 3 label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+create,queued,table,flat,charcoal,Stage 4 label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,results,bright,glass,charcoal,Summit label,text,#F5EFE6,#1C1F26 @ 0.86 glass,9.62,9.66,4.5,yes
+results,results,bright,glass,charcoal,Summit time,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.75,10.84,4.5,yes
+results,results,bright,glass,charcoal,Route row,text,#F5EFE6,#1C1F26 @ 0.86 glass,9.86,9.89,4.5,yes
+results,results,bright,glass,charcoal,Route time,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.86,10.96,4.5,yes
+results,results,bright,glass,charcoal,Vista label,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.13,10.13,4.5,yes
+results,results,bright,glass,charcoal,Vista found,icon,#F5EFE6,#1C1F26 @ 0.86 glass,11.03,11.03,3.0,yes
+results,results,bright,glass,charcoal,Vista not found (outline),icon,#F5EFE6,#1C1F26 @ 0.86 glass,11.03,11.03,3.0,yes
+results,results,bright,glass,charcoal,Vista count,text,#F5EFE6,#1C1F26 @ 0.86 glass,11.01,11.01,4.5,yes
+results,results,bright,glass,charcoal,Move chip,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.47,10.47,4.5,yes
+results,results,bright,glass,charcoal,Share glyph (on amber),icon,#1C1F26,#F2A93B,8.26,8.26,3.0,yes
+results,results,bright,glass,charcoal,Share (amber button),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+results,results,bright,glass,charcoal,Journey again,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.68,10.69,4.5,yes
+results,results,bright,glass,charcoal,Next route,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.70,10.70,4.5,yes
+results,results,bright,flat,charcoal,Summit label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,results,bright,flat,charcoal,Summit time,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,results,bright,flat,charcoal,Route row,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,results,bright,flat,charcoal,Route time,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,results,bright,flat,charcoal,Vista label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,results,bright,flat,charcoal,Vista found,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+results,results,bright,flat,charcoal,Vista not found (outline),icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+results,results,bright,flat,charcoal,Vista count,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,results,bright,flat,charcoal,Move chip,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,results,bright,flat,charcoal,Share glyph (on amber),icon,#1C1F26,#F2A93B,8.26,8.26,3.0,yes
+results,results,bright,flat,charcoal,Share (amber button),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+results,results,bright,flat,charcoal,Journey again,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,results,bright,flat,charcoal,Next route,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,results,dark,glass,cream,Summit label,text,#1C1F26,#F5EFE6 @ 0.86 glass,10.76,10.77,4.5,yes
+results,results,dark,glass,cream,Summit time,text,#1C1F26,#F5EFE6 @ 0.86 glass,11.01,11.02,4.5,yes
+results,results,dark,glass,cream,Route row,text,#1C1F26,#F5EFE6 @ 0.86 glass,10.75,10.76,4.5,yes
+results,results,dark,glass,cream,Route time,text,#1C1F26,#F5EFE6 @ 0.86 glass,10.95,10.96,4.5,yes
+results,results,dark,glass,cream,Vista label,text,#1C1F26,#F5EFE6 @ 0.86 glass,10.75,10.75,4.5,yes
+results,results,dark,glass,cream,Vista found,icon,#1C1F26,#F5EFE6 @ 0.86 glass,10.91,10.91,3.0,yes
+results,results,dark,glass,cream,Vista not found (outline),icon,#1C1F26,#F5EFE6 @ 0.86 glass,10.91,10.91,3.0,yes
+results,results,dark,glass,cream,Vista count,text,#1C1F26,#F5EFE6 @ 0.86 glass,10.91,10.91,4.5,yes
+results,results,dark,glass,cream,Move chip,text,#1C1F26,#F5EFE6 @ 0.86 glass,10.73,10.73,4.5,yes
+results,results,dark,glass,cream,Share glyph (on amber),icon,#1C1F26,#F2A93B,8.26,8.26,3.0,yes
+results,results,dark,glass,cream,Share (amber button),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+results,results,dark,glass,cream,Journey again,text,#1C1F26,#F5EFE6 @ 0.86 glass,10.73,10.75,4.5,yes
+results,results,dark,glass,cream,Next route,text,#1C1F26,#F5EFE6 @ 0.86 glass,10.75,10.75,4.5,yes
+results,results,dark,flat,cream,Summit label,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+results,results,dark,flat,cream,Summit time,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+results,results,dark,flat,cream,Route row,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+results,results,dark,flat,cream,Route time,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+results,results,dark,flat,cream,Vista label,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+results,results,dark,flat,cream,Vista found,icon,#1C1F26,#F5EFE6,14.43,14.43,3.0,yes
+results,results,dark,flat,cream,Vista not found (outline),icon,#1C1F26,#F5EFE6,14.43,14.43,3.0,yes
+results,results,dark,flat,cream,Vista count,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+results,results,dark,flat,cream,Move chip,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+results,results,dark,flat,cream,Share glyph (on amber),icon,#1C1F26,#F2A93B,8.26,8.26,3.0,yes
+results,results,dark,flat,cream,Share (amber button),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+results,results,dark,flat,cream,Journey again,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+results,results,dark,flat,cream,Next route,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+results,results,table,glass,charcoal,Summit label,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.52,10.80,4.5,yes
+results,results,table,glass,charcoal,Summit time,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.43,12.55,4.5,yes
+results,results,table,glass,charcoal,Route row,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.48,10.73,4.5,yes
+results,results,table,glass,charcoal,Route time,text,#F5EFE6,#1C1F26 @ 0.86 glass,11.91,12.11,4.5,yes
+results,results,table,glass,charcoal,Vista label,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.61,10.93,4.5,yes
+results,results,table,glass,charcoal,Vista found,icon,#F5EFE6,#1C1F26 @ 0.86 glass,13.25,13.30,3.0,yes
+results,results,table,glass,charcoal,Vista not found (outline),icon,#F5EFE6,#1C1F26 @ 0.86 glass,13.08,13.08,3.0,yes
+results,results,table,glass,charcoal,Vista count,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.81,12.94,4.5,yes
+results,results,table,glass,charcoal,Move chip,text,#F5EFE6,#1C1F26 @ 0.86 glass,11.59,12.11,4.5,yes
+results,results,table,glass,charcoal,Share glyph (on amber),icon,#1C1F26,#F2A93B,8.26,8.26,3.0,yes
+results,results,table,glass,charcoal,Share (amber button),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+results,results,table,glass,charcoal,Journey again,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.09,13.10,4.5,yes
+results,results,table,glass,charcoal,Next route,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.04,13.11,4.5,yes
+results,results,table,flat,charcoal,Summit label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,results,table,flat,charcoal,Summit time,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,results,table,flat,charcoal,Route row,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,results,table,flat,charcoal,Route time,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,results,table,flat,charcoal,Vista label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,results,table,flat,charcoal,Vista found,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+results,results,table,flat,charcoal,Vista not found (outline),icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+results,results,table,flat,charcoal,Vista count,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,results,table,flat,charcoal,Move chip,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,results,table,flat,charcoal,Share glyph (on amber),icon,#1C1F26,#F2A93B,8.26,8.26,3.0,yes
+results,results,table,flat,charcoal,Share (amber button),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+results,results,table,flat,charcoal,Journey again,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,results,table,flat,charcoal,Next route,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,store,bright,glass,charcoal,Store header (results scrolled),text,#F5EFE6,#1C1F26 @ 0.86 glass,9.32,9.32,4.5,yes
+results,store,bright,glass,charcoal,Share sticky,text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+results,store,bright,glass,charcoal,SKU 1 title,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+results,store,bright,glass,charcoal,SKU 1 note (muted-on-charcoal),text,#90959F,#2A2E37,4.52,4.52,4.5,yes
+results,store,bright,glass,charcoal,SKU price (amber on surface.charcoal),text,#F2A93B,#2A2E37,6.81,6.81,4.5,yes
+results,store,bright,glass,charcoal,SKU 2 title,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+results,store,bright,glass,charcoal,SKU 2 note,text,#90959F,#2A2E37,4.52,4.52,4.5,yes
+results,store,bright,glass,charcoal,SKU 2 price,text,#F2A93B,#2A2E37,6.81,6.81,4.5,yes
+results,store,bright,glass,charcoal,Restore purchases,text,#F5EFE6,#1C1F26 @ 0.72 glass,7.38,7.42,4.5,yes
+results,store,bright,flat,charcoal,Store header (results scrolled),text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,store,bright,flat,charcoal,Share sticky,text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+results,store,bright,flat,charcoal,SKU 1 title,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+results,store,bright,flat,charcoal,SKU 1 note (muted-on-charcoal),text,#90959F,#2A2E37,4.52,4.52,4.5,yes
+results,store,bright,flat,charcoal,SKU price (amber on surface.charcoal),text,#F2A93B,#2A2E37,6.81,6.81,4.5,yes
+results,store,bright,flat,charcoal,SKU 2 title,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+results,store,bright,flat,charcoal,SKU 2 note,text,#90959F,#2A2E37,4.52,4.52,4.5,yes
+results,store,bright,flat,charcoal,SKU 2 price,text,#F2A93B,#2A2E37,6.81,6.81,4.5,yes
+results,store,bright,flat,charcoal,Restore purchases,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,store,dark,glass,cream,Store header (results scrolled),text,#1C1F26,#F5EFE6 @ 0.86 glass,10.76,10.76,4.5,yes
+results,store,dark,glass,cream,Share sticky,text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+results,store,dark,glass,cream,SKU 1 title,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+results,store,dark,glass,cream,SKU 1 note (muted-on-charcoal),text,#90959F,#2A2E37,4.52,4.52,4.5,yes
+results,store,dark,glass,cream,SKU price (amber on surface.charcoal),text,#F2A93B,#2A2E37,6.81,6.81,4.5,yes
+results,store,dark,glass,cream,SKU 2 title,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+results,store,dark,glass,cream,SKU 2 note,text,#90959F,#2A2E37,4.52,4.52,4.5,yes
+results,store,dark,glass,cream,SKU 2 price,text,#F2A93B,#2A2E37,6.81,6.81,4.5,yes
+results,store,dark,glass,cream,Restore purchases,text,#1C1F26,#F5EFE6 @ 0.72 glass,7.75,7.80,4.5,yes
+results,store,dark,flat,cream,Store header (results scrolled),text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+results,store,dark,flat,cream,Share sticky,text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+results,store,dark,flat,cream,SKU 1 title,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+results,store,dark,flat,cream,SKU 1 note (muted-on-charcoal),text,#90959F,#2A2E37,4.52,4.52,4.5,yes
+results,store,dark,flat,cream,SKU price (amber on surface.charcoal),text,#F2A93B,#2A2E37,6.81,6.81,4.5,yes
+results,store,dark,flat,cream,SKU 2 title,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+results,store,dark,flat,cream,SKU 2 note,text,#90959F,#2A2E37,4.52,4.52,4.5,yes
+results,store,dark,flat,cream,SKU 2 price,text,#F2A93B,#2A2E37,6.81,6.81,4.5,yes
+results,store,dark,flat,cream,Restore purchases,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+results,store,table,glass,charcoal,Store header (results scrolled),text,#F5EFE6,#1C1F26 @ 0.86 glass,10.90,10.90,4.5,yes
+results,store,table,glass,charcoal,Share sticky,text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+results,store,table,glass,charcoal,SKU 1 title,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+results,store,table,glass,charcoal,SKU 1 note (muted-on-charcoal),text,#90959F,#2A2E37,4.52,4.52,4.5,yes
+results,store,table,glass,charcoal,SKU price (amber on surface.charcoal),text,#F2A93B,#2A2E37,6.81,6.81,4.5,yes
+results,store,table,glass,charcoal,SKU 2 title,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+results,store,table,glass,charcoal,SKU 2 note,text,#90959F,#2A2E37,4.52,4.52,4.5,yes
+results,store,table,glass,charcoal,SKU 2 price,text,#F2A93B,#2A2E37,6.81,6.81,4.5,yes
+results,store,table,glass,charcoal,Restore purchases,text,#F5EFE6,#1C1F26 @ 0.72 glass,10.70,10.84,4.5,yes
+results,store,table,flat,charcoal,Store header (results scrolled),text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,store,table,flat,charcoal,Share sticky,text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+results,store,table,flat,charcoal,SKU 1 title,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+results,store,table,flat,charcoal,SKU 1 note (muted-on-charcoal),text,#90959F,#2A2E37,4.52,4.52,4.5,yes
+results,store,table,flat,charcoal,SKU price (amber on surface.charcoal),text,#F2A93B,#2A2E37,6.81,6.81,4.5,yes
+results,store,table,flat,charcoal,SKU 2 title,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+results,store,table,flat,charcoal,SKU 2 note,text,#90959F,#2A2E37,4.52,4.52,4.5,yes
+results,store,table,flat,charcoal,SKU 2 price,text,#F2A93B,#2A2E37,6.81,6.81,4.5,yes
+results,store,table,flat,charcoal,Restore purchases,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,loss,bright,glass,charcoal,Loss timer,text,#F5EFE6,#1C1F26 @ 0.72 glass,5.83,5.85,4.5,yes
+results,loss,bright,glass,charcoal,Loss penalty,text,#F5EFE6,#1C1F26 @ 0.72 glass,5.85,5.85,4.5,yes
+results,loss,bright,glass,charcoal,Keep going (amber),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+results,loss,bright,flat,charcoal,Loss timer,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,loss,bright,flat,charcoal,Loss penalty,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,loss,bright,flat,charcoal,Keep going (amber),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+results,loss,dark,glass,cream,Loss timer,text,#1C1F26,#F5EFE6 @ 0.72 glass,7.81,7.81,4.5,yes
+results,loss,dark,glass,cream,Loss penalty,text,#1C1F26,#F5EFE6 @ 0.72 glass,7.82,7.82,4.5,yes
+results,loss,dark,glass,cream,Keep going (amber),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+results,loss,dark,flat,cream,Loss timer,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+results,loss,dark,flat,cream,Loss penalty,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+results,loss,dark,flat,cream,Keep going (amber),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+results,loss,table,glass,charcoal,Loss timer,text,#F5EFE6,#1C1F26 @ 0.72 glass,7.85,7.85,4.5,yes
+results,loss,table,glass,charcoal,Loss penalty,text,#F5EFE6,#1C1F26 @ 0.72 glass,7.85,7.85,4.5,yes
+results,loss,table,glass,charcoal,Keep going (amber),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+results,loss,table,flat,charcoal,Loss timer,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,loss,table,flat,charcoal,Loss penalty,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+results,loss,table,flat,charcoal,Keep going (amber),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+settings,controls,bright,glass,charcoal,Settings title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+settings,controls,bright,glass,charcoal,Preview hint,text,#F5EFE6,#1C1F26 @ 0.72 glass,5.86,5.95,4.5,yes
+settings,controls,bright,glass,charcoal,Size,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,controls,bright,glass,charcoal,Slider min,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,controls,bright,glass,charcoal,Opacity,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,controls,bright,glass,charcoal,Left-handed,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,controls,bright,glass,charcoal,Reset,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+settings,controls,bright,flat,charcoal,Settings title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+settings,controls,bright,flat,charcoal,Preview hint,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+settings,controls,bright,flat,charcoal,Size,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,controls,bright,flat,charcoal,Slider min,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,controls,bright,flat,charcoal,Opacity,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,controls,bright,flat,charcoal,Left-handed,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,controls,bright,flat,charcoal,Reset,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+settings,controls,dark,glass,cream,Settings title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+settings,controls,dark,glass,cream,Preview hint,text,#F5EFE6,#1C1F26 @ 0.72 glass,11.97,12.35,4.5,yes
+settings,controls,dark,glass,cream,Size,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,controls,dark,glass,cream,Slider min,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,controls,dark,glass,cream,Opacity,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,controls,dark,glass,cream,Left-handed,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,controls,dark,glass,cream,Reset,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+settings,controls,dark,flat,cream,Settings title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+settings,controls,dark,flat,cream,Preview hint,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+settings,controls,dark,flat,cream,Size,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,controls,dark,flat,cream,Slider min,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,controls,dark,flat,cream,Opacity,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,controls,dark,flat,cream,Left-handed,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,controls,dark,flat,cream,Reset,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+settings,controls,table,glass,charcoal,Settings title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+settings,controls,table,glass,charcoal,Preview hint,text,#F5EFE6,#1C1F26 @ 0.72 glass,7.40,7.46,4.5,yes
+settings,controls,table,glass,charcoal,Size,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,controls,table,glass,charcoal,Slider min,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,controls,table,glass,charcoal,Opacity,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,controls,table,glass,charcoal,Left-handed,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,controls,table,glass,charcoal,Reset,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+settings,controls,table,flat,charcoal,Settings title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+settings,controls,table,flat,charcoal,Preview hint,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+settings,controls,table,flat,charcoal,Size,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,controls,table,flat,charcoal,Slider min,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,controls,table,flat,charcoal,Opacity,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,controls,table,flat,charcoal,Left-handed,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,controls,table,flat,charcoal,Reset,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,grid,bright,glass,charcoal,Browse title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,grid,bright,glass,charcoal,Tab Top this week,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,grid,bright,glass,charcoal,Tab New,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,grid,bright,glass,charcoal,Tab Near your scale,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,grid,bright,glass,charcoal,Card creator,text,#F5EFE6,#1C1F26 @ 0.86 glass,11.90,12.18,4.5,yes
+browse,grid,bright,glass,charcoal,Card summits,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.57,13.02,4.5,yes
+browse,grid,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.62,12.88,4.5,yes
+browse,grid,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,12.54,12.81,3.0,yes
+browse,grid,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.28,13.41,4.5,yes
+browse,grid,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,13.19,13.31,3.0,yes
+browse,grid,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.09,12.50,4.5,yes
+browse,grid,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,11.89,12.15,3.0,yes
+browse,grid,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.61,12.92,4.5,yes
+browse,grid,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,12.34,12.51,3.0,yes
+browse,grid,bright,glass,charcoal,Card creator,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.86,13.39,4.5,yes
+browse,grid,bright,glass,charcoal,Card summits,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.91,13.44,4.5,yes
+browse,grid,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.48,13.63,4.5,yes
+browse,grid,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,13.39,13.55,3.0,yes
+browse,grid,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.84,13.12,4.5,yes
+browse,grid,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,12.77,13.06,3.0,yes
+browse,grid,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.69,13.10,4.5,yes
+browse,grid,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,12.31,12.53,3.0,yes
+browse,grid,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.20,12.71,4.5,yes
+browse,grid,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,11.87,12.19,3.0,yes
+browse,grid,bright,glass,charcoal,Card creator,text,#F5EFE6,#1C1F26 @ 0.86 glass,11.93,12.10,4.5,yes
+browse,grid,bright,glass,charcoal,Card summits,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.05,12.31,4.5,yes
+browse,grid,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.05,12.25,4.5,yes
+browse,grid,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,12.00,12.20,3.0,yes
+browse,grid,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.20,12.37,4.5,yes
+browse,grid,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,12.15,12.33,3.0,yes
+browse,grid,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,11.53,11.91,4.5,yes
+browse,grid,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,11.24,11.47,3.0,yes
+browse,grid,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,11.63,12.01,4.5,yes
+browse,grid,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,11.32,11.54,3.0,yes
+browse,grid,bright,glass,charcoal,Under review glyph,icon,#1C1F26,#EDE5D8,13.19,13.19,3.0,yes
+browse,grid,bright,glass,charcoal,Under review badge,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+browse,grid,bright,glass,charcoal,Card creator,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.44,10.62,4.5,yes
+browse,grid,bright,glass,charcoal,Card summits,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.13,10.38,4.5,yes
+browse,grid,bright,flat,charcoal,Browse title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,grid,bright,flat,charcoal,Tab Top this week,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,grid,bright,flat,charcoal,Tab New,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,grid,bright,flat,charcoal,Tab Near your scale,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,grid,bright,flat,charcoal,Card creator,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,grid,bright,flat,charcoal,Card summits,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,grid,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,grid,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,grid,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,grid,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,grid,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,grid,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,grid,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,grid,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,grid,bright,flat,charcoal,Card creator,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,grid,bright,flat,charcoal,Card summits,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,grid,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,grid,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,grid,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,grid,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,grid,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,grid,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,grid,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,grid,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,grid,bright,flat,charcoal,Card creator,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,grid,bright,flat,charcoal,Card summits,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,grid,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,grid,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,grid,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,grid,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,grid,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,grid,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,grid,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,grid,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,grid,bright,flat,charcoal,Under review glyph,icon,#1C1F26,#EDE5D8,13.19,13.19,3.0,yes
+browse,grid,bright,flat,charcoal,Under review badge,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+browse,grid,bright,flat,charcoal,Card creator,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,grid,bright,flat,charcoal,Card summits,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,back,bright,glass,charcoal,Browse title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,back,bright,glass,charcoal,Tab Top this week,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,back,bright,glass,charcoal,Tab New,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,back,bright,glass,charcoal,Tab Near your scale,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,back,bright,glass,charcoal,Card back title,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+browse,back,bright,glass,charcoal,Card back note (muted-on-charcoal),text,#90959F,#2A2E37,4.52,4.52,4.5,yes
+browse,back,bright,glass,charcoal,Card back stats,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+browse,back,bright,glass,charcoal,Report flag (card back),icon,#F5EFE6,#2A2E37,11.90,11.90,3.0,yes
+browse,back,bright,glass,charcoal,Card creator,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.86,13.39,4.5,yes
+browse,back,bright,glass,charcoal,Card summits,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.91,13.44,4.5,yes
+browse,back,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.48,13.63,4.5,yes
+browse,back,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,13.39,13.55,3.0,yes
+browse,back,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.84,13.12,4.5,yes
+browse,back,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,12.77,13.06,3.0,yes
+browse,back,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.71,13.10,4.5,yes
+browse,back,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,12.31,12.53,3.0,yes
+browse,back,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.20,12.71,4.5,yes
+browse,back,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,11.87,12.19,3.0,yes
+browse,back,bright,glass,charcoal,Card creator,text,#F5EFE6,#1C1F26 @ 0.86 glass,11.93,12.10,4.5,yes
+browse,back,bright,glass,charcoal,Card summits,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.05,12.31,4.5,yes
+browse,back,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.05,12.25,4.5,yes
+browse,back,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,12.00,12.20,3.0,yes
+browse,back,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.20,12.37,4.5,yes
+browse,back,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,12.15,12.33,3.0,yes
+browse,back,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,11.53,11.91,4.5,yes
+browse,back,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,11.24,11.47,3.0,yes
+browse,back,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,11.63,12.01,4.5,yes
+browse,back,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,11.32,11.54,3.0,yes
+browse,back,bright,glass,charcoal,Under review glyph,icon,#1C1F26,#EDE5D8,13.19,13.19,3.0,yes
+browse,back,bright,glass,charcoal,Under review badge,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+browse,back,bright,glass,charcoal,Card creator,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.44,10.62,4.5,yes
+browse,back,bright,glass,charcoal,Card summits,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.13,10.38,4.5,yes
+browse,back,bright,flat,charcoal,Browse title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,back,bright,flat,charcoal,Tab Top this week,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,back,bright,flat,charcoal,Tab New,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,back,bright,flat,charcoal,Tab Near your scale,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,back,bright,flat,charcoal,Card back title,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+browse,back,bright,flat,charcoal,Card back note (muted-on-charcoal),text,#90959F,#2A2E37,4.52,4.52,4.5,yes
+browse,back,bright,flat,charcoal,Card back stats,text,#F5EFE6,#2A2E37,11.90,11.90,4.5,yes
+browse,back,bright,flat,charcoal,Report flag (card back),icon,#F5EFE6,#2A2E37,11.90,11.90,3.0,yes
+browse,back,bright,flat,charcoal,Card creator,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,back,bright,flat,charcoal,Card summits,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,back,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,back,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,back,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,back,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,back,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,back,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,back,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,back,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,back,bright,flat,charcoal,Card creator,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,back,bright,flat,charcoal,Card summits,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,back,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,back,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,back,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,back,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,back,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,back,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,back,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,back,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,back,bright,flat,charcoal,Under review glyph,icon,#1C1F26,#EDE5D8,13.19,13.19,3.0,yes
+browse,back,bright,flat,charcoal,Under review badge,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+browse,back,bright,flat,charcoal,Card creator,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,back,bright,flat,charcoal,Card summits,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,report,bright,glass,charcoal,Browse title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,report,bright,glass,charcoal,Tab Top this week,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,report,bright,glass,charcoal,Tab New,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,report,bright,glass,charcoal,Tab Near your scale,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,report,bright,glass,charcoal,Card creator,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.15,13.31,4.5,yes
+browse,report,bright,glass,charcoal,Card summits,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.51,13.72,4.5,yes
+browse,report,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.53,13.65,4.5,yes
+browse,report,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,13.49,13.63,3.0,yes
+browse,report,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.86,13.92,4.5,yes
+browse,report,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,13.82,13.86,3.0,yes
+browse,report,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.27,13.48,4.5,yes
+browse,report,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,13.17,13.29,3.0,yes
+browse,report,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.53,13.67,4.5,yes
+browse,report,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,13.38,13.48,3.0,yes
+browse,report,bright,glass,charcoal,Card creator,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.65,13.91,4.5,yes
+browse,report,bright,glass,charcoal,Card summits,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.67,13.94,4.5,yes
+browse,report,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.96,14.03,4.5,yes
+browse,report,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,13.91,13.99,3.0,yes
+browse,report,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.65,13.77,4.5,yes
+browse,report,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,13.61,13.75,3.0,yes
+browse,report,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.56,13.77,4.5,yes
+browse,report,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,13.37,13.49,3.0,yes
+browse,report,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.32,13.58,4.5,yes
+browse,report,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,13.15,13.32,3.0,yes
+browse,report,bright,glass,charcoal,Card creator,text,#F5EFE6,#1C1F26 @ 0.86 glass,9.85,9.88,4.5,yes
+browse,report,bright,glass,charcoal,Card summits,text,#F5EFE6,#1C1F26 @ 0.86 glass,9.84,9.89,4.5,yes
+browse,report,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,9.82,9.85,4.5,yes
+browse,report,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,9.82,9.84,3.0,yes
+browse,report,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,9.93,9.95,4.5,yes
+browse,report,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,9.93,9.93,3.0,yes
+browse,report,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,9.82,9.86,4.5,yes
+browse,report,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,9.84,9.87,3.0,yes
+browse,report,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,9.91,9.93,4.5,yes
+browse,report,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,9.89,9.91,3.0,yes
+browse,report,bright,glass,charcoal,Under review glyph,icon,#1C1F26,#EDE5D8,13.19,13.19,3.0,yes
+browse,report,bright,glass,charcoal,Under review badge,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+browse,report,bright,glass,charcoal,Card creator,text,#F5EFE6,#1C1F26 @ 0.86 glass,9.63,9.65,4.5,yes
+browse,report,bright,glass,charcoal,Card summits,text,#F5EFE6,#1C1F26 @ 0.86 glass,9.65,9.65,4.5,yes
+browse,report,bright,glass,charcoal,Report title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,report,bright,glass,charcoal,Reason private,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,report,bright,glass,charcoal,Reason chevron,icon,#1C1F26,#F5EFE6,14.43,14.43,3.0,yes
+browse,report,bright,glass,charcoal,Reason inappropriate,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,report,bright,glass,charcoal,Reason not real,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,report,bright,glass,charcoal,Reason broken,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,report,bright,glass,charcoal,Reason other,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,report,bright,glass,charcoal,Report footnote (muted-on-cream),text,#63676E,#F5EFE6,4.97,4.97,4.5,yes
+browse,report,bright,flat,charcoal,Browse title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Tab Top this week,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Tab New,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Tab Near your scale,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Card creator,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Card summits,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,report,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,report,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,report,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,report,bright,flat,charcoal,Card creator,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Card summits,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,report,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,report,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,report,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,report,bright,flat,charcoal,Card creator,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Card summits,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,report,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,report,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,report,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,report,bright,flat,charcoal,Under review glyph,icon,#1C1F26,#EDE5D8,13.19,13.19,3.0,yes
+browse,report,bright,flat,charcoal,Under review badge,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+browse,report,bright,flat,charcoal,Card creator,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Card summits,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Report title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Reason private,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Reason chevron,icon,#1C1F26,#F5EFE6,14.43,14.43,3.0,yes
+browse,report,bright,flat,charcoal,Reason inappropriate,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Reason not real,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Reason broken,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Reason other,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,report,bright,flat,charcoal,Report footnote (muted-on-cream),text,#63676E,#F5EFE6,4.97,4.97,4.5,yes
+browse,rate,bright,glass,charcoal,Browse title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,rate,bright,glass,charcoal,Tab Top this week,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,rate,bright,glass,charcoal,Tab New,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,rate,bright,glass,charcoal,Tab Near your scale,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,rate,bright,glass,charcoal,Card creator,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.15,13.31,4.5,yes
+browse,rate,bright,glass,charcoal,Card summits,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.51,13.72,4.5,yes
+browse,rate,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.53,13.65,4.5,yes
+browse,rate,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,13.49,13.63,3.0,yes
+browse,rate,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.86,13.92,4.5,yes
+browse,rate,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,13.82,13.86,3.0,yes
+browse,rate,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.27,13.48,4.5,yes
+browse,rate,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,13.17,13.29,3.0,yes
+browse,rate,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.53,13.67,4.5,yes
+browse,rate,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,13.38,13.48,3.0,yes
+browse,rate,bright,glass,charcoal,Card creator,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.65,13.91,4.5,yes
+browse,rate,bright,glass,charcoal,Card summits,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.67,13.94,4.5,yes
+browse,rate,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.96,14.03,4.5,yes
+browse,rate,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,13.91,13.99,3.0,yes
+browse,rate,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.65,13.77,4.5,yes
+browse,rate,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,13.61,13.75,3.0,yes
+browse,rate,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.56,13.77,4.5,yes
+browse,rate,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,13.37,13.49,3.0,yes
+browse,rate,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.32,13.58,4.5,yes
+browse,rate,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,13.15,13.32,3.0,yes
+browse,rate,bright,glass,charcoal,Card creator,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.03,12.15,4.5,yes
+browse,rate,bright,glass,charcoal,Card summits,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.95,11.02,4.5,yes
+browse,rate,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.10,10.14,4.5,yes
+browse,rate,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,9.99,10.03,3.0,yes
+browse,rate,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.16,10.18,4.5,yes
+browse,rate,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,10.10,10.10,3.0,yes
+browse,rate,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,9.89,9.93,4.5,yes
+browse,rate,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,9.87,9.90,3.0,yes
+browse,rate,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.07,10.08,4.5,yes
+browse,rate,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,10.08,10.10,3.0,yes
+browse,rate,bright,glass,charcoal,Under review glyph,icon,#1C1F26,#EDE5D8,13.19,13.19,3.0,yes
+browse,rate,bright,glass,charcoal,Under review badge,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+browse,rate,bright,glass,charcoal,Card creator,text,#F5EFE6,#1C1F26 @ 0.86 glass,9.93,9.99,4.5,yes
+browse,rate,bright,glass,charcoal,Card summits,text,#F5EFE6,#1C1F26 @ 0.86 glass,9.82,9.86,4.5,yes
+browse,rate,bright,glass,charcoal,Rate title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,rate,bright,glass,charcoal,Skip,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,rate,bright,glass,charcoal,Rate axis,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,rate,bright,glass,charcoal,Rate axis,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,rate,bright,glass,charcoal,Rate axis,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,rate,bright,glass,charcoal,Rate axis,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Browse title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Tab Top this week,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Tab New,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Tab Near your scale,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Card creator,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Card summits,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,rate,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,rate,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,rate,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,rate,bright,flat,charcoal,Card creator,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Card summits,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,rate,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,rate,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,rate,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,rate,bright,flat,charcoal,Card creator,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Card summits,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,rate,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,rate,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,rate,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,rate,bright,flat,charcoal,Under review glyph,icon,#1C1F26,#EDE5D8,13.19,13.19,3.0,yes
+browse,rate,bright,flat,charcoal,Under review badge,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+browse,rate,bright,flat,charcoal,Card creator,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Card summits,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Rate title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Skip,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Rate axis,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Rate axis,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Rate axis,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,rate,bright,flat,charcoal,Rate axis,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,scale,bright,glass,charcoal,Browse title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,scale,bright,glass,charcoal,Tab Top this week,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,scale,bright,glass,charcoal,Tab New,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,scale,bright,glass,charcoal,Tab Near your scale,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,scale,bright,glass,charcoal,Scale Room (on),text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,scale,bright,glass,charcoal,Scale Tabletop (off),text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+browse,scale,bright,glass,charcoal,Card creator,text,#F5EFE6,#1C1F26 @ 0.86 glass,11.90,12.18,4.5,yes
+browse,scale,bright,glass,charcoal,Card summits,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.57,13.02,4.5,yes
+browse,scale,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.62,12.88,4.5,yes
+browse,scale,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,12.54,12.81,3.0,yes
+browse,scale,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.28,13.41,4.5,yes
+browse,scale,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,13.19,13.31,3.0,yes
+browse,scale,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.09,12.50,4.5,yes
+browse,scale,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,11.89,12.15,3.0,yes
+browse,scale,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.61,12.92,4.5,yes
+browse,scale,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,12.34,12.51,3.0,yes
+browse,scale,bright,glass,charcoal,Card creator,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.86,13.39,4.5,yes
+browse,scale,bright,glass,charcoal,Card summits,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.91,13.44,4.5,yes
+browse,scale,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,13.48,13.63,4.5,yes
+browse,scale,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,13.39,13.55,3.0,yes
+browse,scale,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.84,13.12,4.5,yes
+browse,scale,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,12.77,13.06,3.0,yes
+browse,scale,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.69,13.10,4.5,yes
+browse,scale,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,12.31,12.53,3.0,yes
+browse,scale,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.20,12.71,4.5,yes
+browse,scale,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,11.87,12.19,3.0,yes
+browse,scale,bright,glass,charcoal,Card creator,text,#F5EFE6,#1C1F26 @ 0.86 glass,11.93,12.10,4.5,yes
+browse,scale,bright,glass,charcoal,Card summits,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.05,12.31,4.5,yes
+browse,scale,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.05,12.25,4.5,yes
+browse,scale,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,12.00,12.20,3.0,yes
+browse,scale,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,12.20,12.37,4.5,yes
+browse,scale,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,12.15,12.33,3.0,yes
+browse,scale,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,11.53,11.91,4.5,yes
+browse,scale,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,11.24,11.47,3.0,yes
+browse,scale,bright,glass,charcoal,Axis label,text,#F5EFE6,#1C1F26 @ 0.86 glass,11.63,12.01,4.5,yes
+browse,scale,bright,glass,charcoal,Axis bar,icon,#F5EFE6,#1C1F26 @ 0.86 glass,11.32,11.54,3.0,yes
+browse,scale,bright,glass,charcoal,Under review glyph,icon,#1C1F26,#EDE5D8,13.19,13.19,3.0,yes
+browse,scale,bright,glass,charcoal,Under review badge,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+browse,scale,bright,glass,charcoal,Card creator,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.44,10.62,4.5,yes
+browse,scale,bright,glass,charcoal,Card summits,text,#F5EFE6,#1C1F26 @ 0.86 glass,10.13,10.38,4.5,yes
+browse,scale,bright,flat,charcoal,Browse title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,scale,bright,flat,charcoal,Tab Top this week,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,scale,bright,flat,charcoal,Tab New,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,scale,bright,flat,charcoal,Tab Near your scale,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+browse,scale,bright,flat,charcoal,Scale Room (on),text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,scale,bright,flat,charcoal,Scale Tabletop (off),text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+browse,scale,bright,flat,charcoal,Card creator,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,scale,bright,flat,charcoal,Card summits,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,scale,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,scale,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,scale,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,scale,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,scale,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,scale,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,scale,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,scale,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,scale,bright,flat,charcoal,Card creator,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,scale,bright,flat,charcoal,Card summits,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,scale,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,scale,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,scale,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,scale,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,scale,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,scale,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,scale,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,scale,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,scale,bright,flat,charcoal,Card creator,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,scale,bright,flat,charcoal,Card summits,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,scale,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,scale,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,scale,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,scale,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,scale,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,scale,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,scale,bright,flat,charcoal,Axis label,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,scale,bright,flat,charcoal,Axis bar,icon,#F5EFE6,#1C1F26,14.43,14.43,3.0,yes
+browse,scale,bright,flat,charcoal,Under review glyph,icon,#1C1F26,#EDE5D8,13.19,13.19,3.0,yes
+browse,scale,bright,flat,charcoal,Under review badge,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+browse,scale,bright,flat,charcoal,Card creator,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+browse,scale,bright,flat,charcoal,Card summits,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+consent,age,bright,glass,charcoal,Age title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+consent,age,bright,glass,charcoal,Age body,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+consent,age,bright,glass,charcoal,Wheel off (muted-on-cream),text,#63676E,#EDE5D8,4.55,4.55,4.5,yes
+consent,age,bright,glass,charcoal,Wheel selected,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+consent,age,bright,glass,charcoal,Continue (amber),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+consent,age,bright,flat,charcoal,Age title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+consent,age,bright,flat,charcoal,Age body,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+consent,age,bright,flat,charcoal,Wheel off (muted-on-cream),text,#63676E,#EDE5D8,4.55,4.55,4.5,yes
+consent,age,bright,flat,charcoal,Wheel selected,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+consent,age,bright,flat,charcoal,Continue (amber),text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+consent,under13,bright,glass,charcoal,Under-13 title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+consent,under13,bright,glass,charcoal,Under-13 body,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+consent,under13,bright,glass,charcoal,Under-13 close,text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+consent,under13,bright,flat,charcoal,Under-13 title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+consent,under13,bright,flat,charcoal,Under-13 body,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+consent,under13,bright,flat,charcoal,Under-13 close,text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+consent,privacy,bright,glass,charcoal,Privacy title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+consent,privacy,bright,glass,charcoal,Bullet check,icon,#1C1F26,#F5EFE6,14.43,14.43,3.0,yes
+consent,privacy,bright,glass,charcoal,Privacy bullet 1,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+consent,privacy,bright,glass,charcoal,Privacy bullet 2,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+consent,privacy,bright,glass,charcoal,Privacy bullet 3,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+consent,privacy,bright,glass,charcoal,Privacy bullet 4,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+consent,privacy,bright,glass,charcoal,Learn more link,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+consent,privacy,bright,glass,charcoal,Privacy continue,text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+consent,privacy,bright,flat,charcoal,Privacy title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+consent,privacy,bright,flat,charcoal,Bullet check,icon,#1C1F26,#F5EFE6,14.43,14.43,3.0,yes
+consent,privacy,bright,flat,charcoal,Privacy bullet 1,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+consent,privacy,bright,flat,charcoal,Privacy bullet 2,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+consent,privacy,bright,flat,charcoal,Privacy bullet 3,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+consent,privacy,bright,flat,charcoal,Privacy bullet 4,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+consent,privacy,bright,flat,charcoal,Learn more link,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+consent,privacy,bright,flat,charcoal,Privacy continue,text,#1C1F26,#F2A93B,8.26,8.26,4.5,yes
+consent,learn,bright,glass,charcoal,Sheet close,icon,#1C1F26,#F5EFE6,14.43,14.43,3.0,yes
+consent,learn,bright,glass,charcoal,Learn title,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+consent,learn,bright,glass,charcoal,Learn body,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+consent,learn,bright,glass,charcoal,Learn footnote (muted-on-cream on surface.cream),text,#63676E,#EDE5D8,4.55,4.55,4.5,yes
+consent,learn,bright,flat,charcoal,Sheet close,icon,#1C1F26,#F5EFE6,14.43,14.43,3.0,yes
+consent,learn,bright,flat,charcoal,Learn title,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+consent,learn,bright,flat,charcoal,Learn body,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+consent,learn,bright,flat,charcoal,Learn footnote (muted-on-cream on surface.cream),text,#63676E,#EDE5D8,4.55,4.55,4.5,yes
+settings,access,bright,glass,charcoal,Settings title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+settings,access,bright,glass,charcoal,Group header (muted-on-cream),text,#63676E,#F5EFE6,4.97,4.97,4.5,yes
+settings,access,bright,glass,charcoal,Assist,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,access,bright,glass,charcoal,Assist copy (muted-on-cream on surface.cream),text,#63676E,#EDE5D8,4.55,4.55,4.5,yes
+settings,access,bright,glass,charcoal,Slower time,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,access,bright,glass,charcoal,Camera shake,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,access,bright,glass,charcoal,Haptics,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,access,bright,glass,charcoal,Colors,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,access,bright,glass,charcoal,Seg on,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+settings,access,bright,glass,charcoal,Seg off,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+settings,access,bright,glass,charcoal,Larger HUD,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,access,bright,glass,charcoal,Coverage pattern,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,access,bright,glass,charcoal,Summit beam,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,access,bright,glass,charcoal,System note,text,#63676E,#F5EFE6,4.97,4.97,4.5,yes
+settings,access,bright,flat,charcoal,Settings title,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+settings,access,bright,flat,charcoal,Group header (muted-on-cream),text,#63676E,#F5EFE6,4.97,4.97,4.5,yes
+settings,access,bright,flat,charcoal,Assist,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,access,bright,flat,charcoal,Assist copy (muted-on-cream on surface.cream),text,#63676E,#EDE5D8,4.55,4.55,4.5,yes
+settings,access,bright,flat,charcoal,Slower time,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,access,bright,flat,charcoal,Camera shake,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,access,bright,flat,charcoal,Haptics,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,access,bright,flat,charcoal,Colors,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,access,bright,flat,charcoal,Seg on,text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+settings,access,bright,flat,charcoal,Seg off,text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+settings,access,bright,flat,charcoal,Larger HUD,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,access,bright,flat,charcoal,Coverage pattern,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,access,bright,flat,charcoal,Summit beam,text,#1C1F26,#EDE5D8,13.19,13.19,4.5,yes
+settings,access,bright,flat,charcoal,System note,text,#63676E,#F5EFE6,4.97,4.97,4.5,yes
+state-colors,default,bright,glass,charcoal,Swatch caption (paper on ink),text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+state-colors,default,bright,glass,charcoal,Success check (ink on sage),icon,#1C1F26,#7A8F7B,4.75,4.75,3.0,yes
+state-colors,default,bright,glass,charcoal,Success word (ink on sage),text,#1C1F26,#7A8F7B,4.75,4.75,4.5,yes
+state-colors,default,bright,glass,charcoal,Error triangle (terracotta on cream),icon,#C9573D,#F5EFE6,3.74,3.74,3.0,yes
+state-colors,default,bright,glass,charcoal,Error word (ink on cream),text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes
+state-colors,default,bright,flat,charcoal,Swatch caption (paper on ink),text,#F5EFE6,#1C1F26,14.43,14.43,4.5,yes
+state-colors,default,bright,flat,charcoal,Success check (ink on sage),icon,#1C1F26,#7A8F7B,4.75,4.75,3.0,yes
+state-colors,default,bright,flat,charcoal,Success word (ink on sage),text,#1C1F26,#7A8F7B,4.75,4.75,4.5,yes
+state-colors,default,bright,flat,charcoal,Error triangle (terracotta on cream),icon,#C9573D,#F5EFE6,3.74,3.74,3.0,yes
+state-colors,default,bright,flat,charcoal,Error word (ink on cream),text,#1C1F26,#F5EFE6,14.43,14.43,4.5,yes

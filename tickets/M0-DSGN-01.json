@@ -5,7 +5,7 @@
   "area": "DSGN",
   "owner": "gj-design",
   "qa": "gj-qa-release",
-  "status": "open",
+  "status": "blocked",
   "priority": "P0",
   "size": "L",
   "summary": "Decisions 5–10 were locked by the Owner on 2026-09-16 (AUTH #005) from the Coordinator's option sets, so this ticket no longer proposes them. It now produces the implementation-ready mockups for the locked play, capture, create-flow, browse, results/store, and accessibility screens and runs the contrast and colorblind verification on the three test scans, so gj-gameplay and gj-platform can build against pixels, not prose.",
@@ -60,10 +60,10 @@
     "kit §8",
     "Design Skills §5"
   ],
-  "branch": null,
+  "branch": "ticket/M0-DSGN-01-mockups",
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-16",
+  "updated": "2026-09-29",
   "history": [
     {
       "date": "2026-09-15",
@@ -79,6 +79,15 @@
       "date": "2026-09-16",
       "event": "decisions 5–10 locked via AUTH #005 from the Coordinator's option sets; ticket narrowed from 'propose 5–10' to 'mockups + contrast/colorblind verification of the locked screens'",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-29",
+      "event": "Mockups built by gj-operator (gj-design hat): 10 HTML pages under design/proposals/mockups/ (play HUD + controls, Duo stand mode, capture room + tabletop, create waits, browse/rating/report, results/store/loss, age gate + consent, settings accessibility + controls, state colours) with glass/flat/Increase Contrast/CVD/annotation switches; per-pixel contrast renderer (148 renders, 1222 measurements, 0 failures on CSS stand-in scans) + 24 CI tests; proposal doc with 13 findings. AT-1/3/4/5 ready for Coordinator review; AT-2 needs the real three test scans → blocked on M0-OWNER-01 for AT-2 only. QA: qa/reports/M0-DSGN-01.md",
+      "by": "gj-operator"
     }
+  ],
+  "blocked_by": [
+    "AT-2 re-run on the Owner's three test scans (bright room, dark room, cluttered tabletop; M0-OWNER-01). Run `python design/proposals/mockups/tools/render.py --scan bright=… --scan dark=… --scan table=…`; everything else is ready for Coordinator review.",
+    "Owner decisions from the proposal §4: 'Dress your avatar' (§9) vs 'your character' (AUTH #020); screen orientation; Larger HUD vs the 8 % band; browse-card density"
   ]
 }

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Age gate and consent — DESIGN_SYSTEM §10</title>
+<link rel="stylesheet" href="mockups.css">
+<style>
+  /* §10: largest body size by default (the accessibility default here is title3 20 pt for body copy),
+     plain sentences, one primary action per screen. */
+  .page { position: absolute; left: 24px; right: 24px; top: 96px; bottom: 34px; display: flex; flex-direction: column; }
+  .big { font-size: var(--type-title3); line-height: 1.4; }
+  .wheel { margin: 28px auto 0; width: 200px; border-radius: 14px; background: var(--surface-cream); overflow: hidden; }
+  .wheel div { height: 44px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+  .wheel .sel { font-weight: 700; box-shadow: inset 0 1.5px 0 var(--ink-charcoal), inset 0 -1.5px 0 var(--ink-charcoal); }
+  .cta { margin-top: auto; }
+  .cta .btn { width: 100%; min-height: 56px; font-size: 20px; }
+  .link { min-height: 44px; display: flex; align-items: center; justify-content: center; font-size: 20px; text-decoration: underline; }
+  .bul { display: flex; gap: 12px; margin-top: 18px; }
+  .bul svg { flex: none; margin-top: 3px; }
+  .learn { top: 120px; overflow: hidden; }
+  .close { position: absolute; right: 16px; top: 12px; width: 44px; height: 44px; }
+</style></head>
+<body data-default-state="age">
+<!-- state=age (neutral birth-year gate) | under13 | privacy (scan privacy before the first capture; v1 has no biometric step, AUTH #020)
+     | learn (scrollable learn-more sheet with a persistent close). Copy is an engineering draft for legal review (legal/README.md). -->
+<div class="device portrait shell-cream" data-safe="[59,0,34,0]">
+  <div class="island"></div>
+  <div class="ui shell-cream">
+    <div data-state="age" class="page">
+      <div class="h1" data-m="text" data-mid="Age title">When were you born?</div>
+      <div class="big" style="margin-top:12px" data-m="text" data-mid="Age body">We ask everyone. It helps us keep Gigantic Journeys right for your age.</div>
+      <div class="wheel" aria-label="Birth year">
+        <div class="muted-c" data-m="text" data-mid="Wheel off (muted-on-cream)" data-token="muted-on-cream">2004</div><div class="muted-c">2005</div>
+        <div class="sel" data-m="text" data-mid="Wheel selected">2006</div><div class="muted-c">2007</div><div class="muted-c">2008</div></div>
+      <div class="cta"><div class="btn primary" data-target="44" data-name="Continue"><span data-m="text" data-mid="Continue (amber)">Continue</span></div></div>
+    </div>
+    <div data-state="under13" class="page">
+      <div class="h1" data-m="text" data-mid="Under-13 title">Thanks for checking in</div>
+      <div class="big" style="margin-top:12px" data-m="text" data-mid="Under-13 body">Gigantic Journeys is for players 13 and older. We haven't saved anything about you.</div>
+      <div class="cta"><div class="btn primary" data-target="44" data-name="Close"><span data-m="text" data-mid="Under-13 close">Close</span></div></div>
+    </div>
+    <div data-state="privacy" class="page">
+      <div class="h1" data-m="text" data-mid="Privacy title">Your places stay yours</div>
+      <div class="bul"><svg class="icon" data-m="icon" data-mid="Bullet check"><use href="#i-check"/></svg>
+        <div class="big" data-m="text" data-mid="Privacy bullet 1">We rebuild your capture on our own servers. No one else sees it.</div></div>
+      <div class="bul"><svg class="icon"><use href="#i-check"/></svg>
+        <div class="big" data-m="text" data-mid="Privacy bullet 2">Location details are removed before anything leaves your phone.</div></div>
+      <div class="bul"><svg class="icon"><use href="#i-check"/></svg>
+        <div class="big" data-m="text" data-mid="Privacy bullet 3">Your video is deleted once your environment is built.</div></div>
+      <div class="bul"><svg class="icon"><use href="#i-check"/></svg>
+        <div class="big" data-m="text" data-mid="Privacy bullet 4">Nothing is public until you choose to publish it.</div></div>
+      <div class="cta"><div class="link" data-target="44" data-name="Learn more"><span data-m="text" data-mid="Learn more link">Learn more</span></div>
+        <div class="btn primary" style="margin-top:8px" data-target="44" data-name="Continue"><span data-m="text" data-mid="Privacy continue">Continue</span></div></div>
+    </div>
+    <div data-state="learn" class="page" style="opacity:.35"><div class="h1">Your places stay yours</div></div>
+    <div data-state="learn" class="sheet card-cream learn">
+      <div class="grabber"></div>
+      <div class="close round" data-target="44" data-name="Close (persistent)" aria-label="Close" style="background:var(--paper-cream)"><svg class="icon" data-m="icon" data-mid="Sheet close"><use href="#i-close"/></svg></div>
+      <div class="h3" data-m="text" data-mid="Learn title" style="margin-right:52px">How we handle your captures</div>
+      <div class="big" style="margin-top:12px" data-m="text" data-mid="Learn body">When you capture a room or a tabletop, the video goes to our servers so we can rebuild it in 3D. We strip location data on your phone and again on our servers. We keep the video only until your environment is ready, then delete it. You can delete everything from Settings at any time, and we finish within 30 days.</div>
+      <div class="cap muted-c" style="margin-top:12px" data-m="text" data-mid="Learn footnote (muted-on-cream on surface.cream)" data-token="muted-on-cream">Full details: Privacy Policy, section 2.</div>
+    </div>
+  </div>
+</div>
+<script src="mockups.js"></script>
+</body></html>
