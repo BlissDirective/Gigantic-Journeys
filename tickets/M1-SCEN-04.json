@@ -5,7 +5,7 @@
   "area": "SCEN",
   "owner": "gj-scenegraph",
   "qa": "gj-scenegraph",
-  "status": "open",
+  "status": "in-progress",
   "priority": "P0",
   "size": "L",
   "summary": "Generate the goals: designate the highest validated-reachable plantable point as the summit, generate two or three routes of per-environment rising difficulty structured introduce→develop→twist→resolve (beat 1 = T0 ground set only; the twist is the signature/tool beat), and pick three vistas scored for view. Traversal tools (grapple/pole-vault/wall-run) may be required to reach the summit only when the required tool is taught in an earlier beat of that route, never beat 1. Each route records a difficulty score and a global difficulty score as metadata (SPEC §3.4).",
@@ -67,10 +67,10 @@
     "AUTH #023",
     "design/proposals/journey-route-generation-v1.md"
   ],
-  "branch": null,
+  "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-09-16",
-  "updated": "2026-09-19",
+  "updated": "2026-09-29",
   "history": [
     {
       "date": "2026-09-16",
@@ -81,6 +81,12 @@
       "date": "2026-09-19",
       "event": "sharpened under AUTH #023 (journey generation v1): per-environment rising difficulty + per-route difficulty score and global difficulty score; beat 1 = T0 set with the twist as the signature/tool beat; vista scoring criteria; template fallback = one guaranteed-simple validated route; tools may be required to summit only if taught in an earlier beat, never beat 1 (AT-5).",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-29",
+      "event": "Builder (AUTH #027, gj-scenegraph hat): built services/traversal/journey.py + journey_cli.py — summit designation (highest plantable node reachable tool-free from spawn; true_peak flag), route generation (DFS of spawn→summit paths shaped introduce→develop→twist→resolve, beat 1 T0-only; up to three routes ranked by a difficulty blend of highest tier / distinct T2+ verbs / tightest margin / commit points / climb; a template 'explore' fallback of one guaranteed-simple two-beat route when fewer than two full routes survive, so the environment is never a dead end), and vista selection (T0–T1-reachable stances scored viewshed/framing/access/spread, up to three, spatially spread). Every route is gated by reach.validate_route (AT-5: the M1-SCEN-05 validator enforces beat-1 T0 and the tool-taught-before-required rule). Tests: schema-validation of the emitted environment_spec, cross-document check_consistency.py on the (scene, graph, spec) triple, rising-difficulty ranking, beat-1 T0, template fallback, vistas, determinism, and no-reachable-summit; 45 green across the service; ruff + format clean. AT-4 (schema) and the required AT-1/AT-2/AT-5 logic met and tested; AT-1/AT-3 corpus evidence (labelled journeys on real reconstructions) rides the Operator's runs. open → in-progress.",
+      "by": "claude-builder"
     }
-  ]
+  ],
+  "notes": "v1 scope: summit is the highest plantable node reachable WITHOUT a tool, so routes are tool-free and always pass both the validator and the consistency checker; the validator still enforces the tool rule. Fast-follows for the Owner checkpoint: (1) tool-lifted summits (grapple/pole-vault to a higher peak) need a practice-then-use teaching beat pattern; (2) M1-SCEN-03 places one node per surface, so surfaces far apart in a real reconstruction may not connect — richer intermediate/multi-node placement would densify connectivity on corpus rooms."
 }

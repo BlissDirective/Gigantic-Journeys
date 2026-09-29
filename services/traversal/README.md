@@ -14,7 +14,8 @@ constants — no number is duplicated here. Pure standard library, deterministic
 | `affordances.py` | M1-SCEN-03 | **The affordance library — the one place** (M1-SCEN-03 AT-3, M1-SCEN-05 AT-3): the verb→tier table (mirrors the frozen `traversal_graph` schema), the Bible §4 class→verb matrix, the per-verb reach model against `MovementConfig`, and each verb's required prerequisites. Tool verbs (grapple, pole-vault, wall-run) are ordinary entries with their movement.json prerequisites (AT-4). |
 | `graph.py` | M1-SCEN-03 | Export a `traversal_graph.json` from a `scene_graph.json`: place nodes on the classified surfaces (stance / hang / climb / anchor), propose a directed edge for every reachable pair using only verbs the source surface's class enables (AT-2), each accepted at the 85 % margin. |
 | `reach.py` | M1-SCEN-05 | The deterministic reachability validator every route must pass: re-checks each transition against `movement.json` at the 85 % margin (never trusting the graph's recorded margin), and enforces the route rules — segments chain, beat 1 is T0-only, and a tool may be required only if an earlier beat (never beat 1) taught it. |
-| `graph_cli.py` | M1-SCEN-03 | `python services/traversal/graph_cli.py scene_graph.json traversal_graph.json` |
+| `journey.py` | M1-SCEN-04 | Summit designation, route generation (2–3 routes of rising difficulty shaped introduce→develop→twist→resolve, beat 1 T0-only; a template 'explore' fallback so an environment is never a dead end), and vista selection → `environment_spec.json`. Every route is gated by `reach.validate_route`. v1 designates a tool-free reachable summit; tool-lifted summits are a fast-follow. |
+| `graph_cli.py` / `journey_cli.py` | M1-SCEN-03/04 | `python services/traversal/graph_cli.py scene_graph.json traversal_graph.json` · `python services/traversal/journey_cli.py scene_graph.json traversal_graph.json environment_spec.json` |
 
 ## Contracts
 
