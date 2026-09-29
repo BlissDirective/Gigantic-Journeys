@@ -5,7 +5,7 @@
   "area": "DUO",
   "owner": "gj-gameplay",
   "qa": null,
-  "status": "open",
+  "status": "in-review",
   "priority": "P2",
   "size": "S",
   "summary": "Before any Duo feature is designed, establish what iOS 27 exposes to a Unity app on iPhone Duo and how. Deliverable is a short research report with a feasibility call per selected feature; a throwaway prototype is welcome if a Duo or Xcode simulator is available.",
@@ -49,15 +49,20 @@
     "SPEC §12",
     "design/proposals/iphone-duo-track.md §3, §4"
   ],
-  "branch": null,
+  "branch": "ticket/M1-DUO-01-duo-research",
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-15",
+  "updated": "2026-09-29",
   "history": [
     {
       "date": "2026-09-15",
       "event": "created by the Coordinator (Owner selection of iPhone Duo candidates 1–3 and App Store Connect key confirmation, AUTH #003)",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-29",
+      "event": "research/duo/README.md (desk research, 11 sources retrieved 2026-09-29): hinge APIs (onHingeChange / UIHingeInteraction; rate + precision are system policy, latency undocumented; hinge for effects, reserved regions + ArrangementView for layout); no Unity binding → small native plugin; Split View = mid-session resolution/aspect changes, orientation not honoured on the inner display; outer display while folded = the app's display; both-displays via SwiftUI-only CameraCaptureAccessory (needs an active capture session; ARKit compatibility unknown); Pencil via Input System Pen later. Feasibility (AT-2): M3-DUO-01 needs a small plugin (~3–5 d), M3-DUO-02 feasible (~2–3 d), M2-DUO-01 obsolete under AUTH #020 (cancel or reframe → Owner). AT-3 prototype not possible without the Duo simulator/device. → in-review",
+      "by": "gj-operator"
     }
   ],
   "notes": "Runs early in M1 so M2 and M3 design work has the API facts. Does not gate the M1 exit test."
