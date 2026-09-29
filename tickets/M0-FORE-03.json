@@ -5,7 +5,7 @@
   "area": "FORE",
   "owner": "gj-foreman",
   "qa": null,
-  "status": "open",
+  "status": "in-review",
   "priority": "P1",
   "size": "S",
   "summary": "Confirm each of the eight specialists completed the research handbook (M0-SKILL-02..09) and report gaps; M0 cannot close with a missing handbook.",
@@ -38,10 +38,10 @@
   "references": [
     "kit §2 setup task 4"
   ],
-  "branch": null,
+  "branch": "ticket/M0-FORE-03-handbook-verification",
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-15",
+  "updated": "2026-09-29",
   "history": [
     {
       "date": "2026-09-15",
@@ -52,6 +52,11 @@
       "date": "2026-09-15",
       "event": "AUTH #003 applied: acceptance-criterion levels added; iOS-only wording",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-29",
+      "event": "Verification table for M0-SKILL-01..09 in qa/reports/M0-FORE-03.md: all 9 merged (PRs #6–#14, 9322ea1), resources 102–134 well-formed entries with 0 duplicate URLs, AT-2 topics present, rule citations + Bible/Design Skills § present, Session log last, no secrets; no gaps (AT-2: no follow-ups needed). Schema-freeze drift fixed in the platform/data handbooks. Table lives in the report (no checkpoint PR exists in the direct-to-main model). → in-review",
+      "by": "gj-operator"
     }
   ]
 }

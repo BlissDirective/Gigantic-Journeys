@@ -71,9 +71,9 @@ Research list: `projects/skills/platform/RESOURCES.md` (104 link-checked entries
 ## 5. Schema freezing
 
 - **What gets frozen:**
-  - `telemetry_events` and `correction_events` (M0-DATA-01, open).
+  - `telemetry_events` and `correction_events`: **frozen at 1.0.0** (M0-DATA-01, APPROVED #029; in review for the Owner's field/privacy-label check).
   - `scene_graph`, `traversal_graph` and `environment_spec` (M1-DATA-01, open, owned by gj-scenegraph with gj-platform review).
-  - Today `data/schemas/` holds only a README, so **no schema is frozen yet**.
+  - The M1 graph/spec schemas are not frozen yet. The change rule and privacy invariants are in `data/schemas/README.md`; `data/schemas/tests/test_telemetry_schemas.py` enforces them.
 - **"Frozen" means:**
   - JSON Schema 2020-12, `schema_version` 1.0.0 (semver).
   - Valid fixtures plus one invalid fixture per schema.
@@ -153,3 +153,4 @@ Research list: `projects/skills/platform/RESOURCES.md` (104 link-checked entries
 |---|---|---|
 | 2026-09-24 | Builder authored the first handbook foundation. | Initial SKILLS.md + curated RESOURCES.md starter set. |
 | 2026-09-26 | The first migration (AUTH #034) is on STAGING. M1-PLAT-01 is blocked on Owner OAuth clients and the edge-function deploy token. `environment-urls` caps TTL at 900 s. No schema is frozen yet (`data/schemas/` is README-only). `legal/DELETION_FLOW.md` is still missing (M0-LEGAL-02). `strip_metadata.py` isn't on main yet. | gj-operator expanded RESOURCES.md to 104 link-checked entries and rewrote SKILLS.md around the AT-2 topics (M0-SKILL-06). |
+| 2026-09-29 | M0-DATA-01 froze the telemetry/correction schemas at 1.0.0 (ingest must keep a validator per live major). M0-LEGAL-02 split the delete-all contract into `legal/DELETION_FLOW.md`; the build (edge function, workflow, receipts tables, Apple token revoke, staging test) is a BACKLOG item with no ticket yet. M0-PLAT-01: the `supabase-local` workflow boots the stack in CI. | §5 and §6 updated (gj-operator). |

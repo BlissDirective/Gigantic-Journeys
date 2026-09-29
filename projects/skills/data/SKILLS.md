@@ -39,8 +39,8 @@ Research list: `projects/skills/data/RESOURCES.md` (108 link-checked entries).
 ## 2. Weekly report structure
 
 - **Where and for whom:** `data/reports/`, read by the Coordinator on AUDIT. **Aggregates only, never raw events with identifiers** (`data/reports/README.md`). The report loop is in DEVELOPMENT_PLAN §4 step 6: the analyst writes the report; the Coordinator proposes spec/validator tickets and a "learning loop" PR with before/after metrics on the held-out corpus.
-- **Preconditions** (none met yet, so no weekly report can run today):
-  - Frozen telemetry schemas. **M0-DATA-01 is open**: AUTH #029 approved the freeze, but `data/schemas/` holds only a README.
+- **Preconditions** (the schemas are met; the rest are not, so no weekly report can run today):
+  - Frozen telemetry schemas: **met**. `data/schemas/telemetry_events.schema.json` and `correction_events.schema.json` are frozen at 1.0.0 (M0-DATA-01, APPROVED #029).
   - Ingestion (gj-platform, M1).
   - Real play.
   - **Data access is TBD.** DEVELOPMENT_PLAN names a read-only replica, which is a paid Supabase feature (AUTH first). Until then, use service-role aggregate views run by the Builder/Operator, never ad-hoc raw exports.
@@ -163,3 +163,4 @@ Research list: `projects/skills/data/RESOURCES.md` (108 link-checked entries).
 |---|---|---|
 | 2026-09-24 | Builder authored the first handbook foundation. | Initial SKILLS.md + curated RESOURCES.md starter set. |
 | 2026-09-26 | The telemetry/correction schemas are **not frozen yet**: AUTH #029 approved the freeze, but M0-DATA-01 is open and `data/schemas/` is README-only. The previous handbook said "frozen v1.0", which was wrong. Still undecided: vision-pass vendor/model, low-confidence threshold, response SLA, ranking weights, the leaderboard floor computation, the held-out corpus, the report's minimum cell size, and data access for analysis. | gj-operator expanded RESOURCES.md to 108 link-checked entries and rewrote SKILLS.md around the AT-2 topics (M0-SKILL-09). |
+| 2026-09-29 | Telemetry 1.0.0 is frozen: 18 events; ratings are 1–5 per axis or null (at least one set); report reasons include `other` without free text; `avatar_generated/failed` are V2-reserved. The catalogue-to-report mapping is in `data/schemas/README.md` and was reviewed for heatmaps, completion, vistas and ratings (qa/reports/M0-DATA-01.md). | Preconditions updated (gj-operator). |
