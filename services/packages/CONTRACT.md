@@ -60,7 +60,11 @@ Spawn the avatar at `spawn.position` facing `spawn.facing_deg`, on `spawn.node_i
 ## Scope of this prep
 
 Contract + reference validator + golden fixture only (no unverified C#): the runtime
-loader and rendering are gj-gameplay's, validated in Unity. The golden fixture's binary
-assets (`splat.spz`, `collision.glb`, `thumbnail.webp`) are **presence-only stubs** — a
-parse/contract test checks they exist under the declared names; a real corpus package
-(the Operator's reconstruction runs) supplies loadable assets for the AT-2 render test.
+loader and rendering are gj-gameplay's, validated in Unity. The committed golden fixture
+holds only the three JSON documents — the binary assets (`splat.spz`, `collision.glb`,
+`thumbnail.webp`) are gitignored large-binary formats and are **not committed** (a bogus
+`.glb` would also trip Unity's importer). A contract/parse test materialises tiny
+presence-only stubs in setup under the manifest's declared names (the Python reference does
+this via `package.assemble`; the C# EditMode setup writes the same three files); a real
+corpus package (the Operator's reconstruction runs) supplies loadable assets for the AT-2
+render test.
