@@ -1,0 +1,40 @@
+{
+  "_comment": "M4-DATA-02 ranking weights (AUTH #026, SPEC §3.7). Telemetry-tunable post-launch with no code change. Weights within each group are normalised at load, so they need not sum to 1.",
+  "composition": {
+    "ratings": 0.5,
+    "signals": 0.5
+  },
+  "rating_axes": {
+    "fun": 0.3,
+    "interesting": 0.2,
+    "interactive": 0.25,
+    "exciting": 0.25
+  },
+  "signals": {
+    "verticality": 0.2,
+    "move_variety": 0.2,
+    "reachable_volume": 0.15,
+    "completion_rate": 0.25,
+    "replay_rate": 0.2
+  },
+  "rating_prior": {
+    "mean": 3.0,
+    "strength": 8.0
+  },
+  "anti_gaming": {
+    "per_device_cap": 3,
+    "full_trust_account_age_days": 30.0,
+    "new_account_trust_floor": 0.2,
+    "brigade_burst_window_h": 24.0,
+    "brigade_burst_min_count": 8,
+    "brigade_burst_trust_discount": 0.25
+  },
+  "top_week": {
+    "half_life_days": 3.5
+  },
+  "signal_caps": {
+    "verticality_ref_A": 20.0,
+    "move_variety_vocab": 34
+  },
+  "score_scale": 100.0
+}

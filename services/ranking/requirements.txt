@@ -1,0 +1,3 @@
+# services/ranking — M4-DATA-02 ranking + anti-gaming.
+# Pure standard library: no runtime dependencies to pin, pip-audit trivially clean.
+# The DB (ratings/leaderboard) and telemetry adapters that feed it are added on staging.

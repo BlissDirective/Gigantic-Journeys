@@ -5,7 +5,7 @@
   "area": "DATA",
   "owner": "gj-data",
   "qa": "gj-qa-release",
-  "status": "open",
+  "status": "in-progress",
   "priority": "P0",
   "size": "L",
   "summary": "The ranking pipeline (SPEC §3.7): a balanced blend of the four-axis community ratings (fun/interesting/interactive/exciting) and derived objective signals (verticality, move variety, reachable volume, completion rate, replay rate), with a time-decay for 'Top this week', recency for 'New', and a Room/Tabletop filter for 'Near your scale'. Weights are telemetry-tunable (config-driven, not hardcoded). Anti-gaming (rate-limits, one-rating-per-account-per-environment, self-rating and brigade detection) must survive a deliberate rate-spam test (M4 exit).",
@@ -48,15 +48,21 @@
     "SPEC §3.7",
     "design/proposals/publish-browse-rank-moderation-v1.md"
   ],
-  "branch": null,
+  "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-09-20",
-  "updated": "2026-09-20",
+  "updated": "2026-09-30",
   "history": [
     {
       "date": "2026-09-20",
       "event": "created by the Coordinator (M4 decomposition, AUTH #026): Owner chose the balanced-blend ranking.",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-30",
+      "event": "Builder (AUTH #027, gj-data hat): built services/ranking/ — the balanced-blend ranking (composition option A). base_score = ratings_weight·rating_component + signals_weight·signal_component (0-100). rating_component blends the four axes after anti-gaming and Bayesian shrinkage; signal_component blends verticality / move_variety / reachable_volume (proxy until the v1.1 signals block) / completion_rate / replay_rate. Every weight is in weights.json and normalised at load — telemetry-tunable, nothing hard-coded (AT-1). Sort tabs (AT-2): Top-this-week = base_score × exp(-ln2·age/half_life), New = recency, Near-your-scale = Room/Tabletop filter. Anti-gaming (AT-3): dedup one-per-account (latest), drop the creator's self-rating, per-device Sybil cap, brigade discount on low-trust bursts, account-age trust weighting, Bayesian shrinkage — measured resistance: 200 spam ratings move the 0-100 score ~1 point (a naive mean hits ~99). 14 tests incl. the rate-spam simulation + the three sort tabs + determinism; ruff + format clean. AT-1/AT-2 + the AT-3 logic met. open → in-progress.",
+      "by": "claude-builder"
     }
-  ]
+  ],
+  "notes": "The scoring + weighting layer is built and unit-tested (incl. rate-spam resistance). Follow-ups that ride the Operator/staging: the DB adapter (read ratings/leaderboard from the #038 tables, write scores), the telemetry adapter (completion/replay from M0-DATA-01 events), the real reachable_volume signal (v1.1 signals block), and the M4-QA-01 exit harness (50 environments, live scripted attack)."
 }
