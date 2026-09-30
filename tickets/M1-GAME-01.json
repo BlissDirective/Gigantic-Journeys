@@ -5,7 +5,7 @@
   "area": "GAME",
   "owner": "gj-gameplay",
   "qa": "gj-qa-release",
-  "status": "open",
+  "status": "in-progress",
   "priority": "P0",
   "size": "L",
   "summary": "The runtime loads a reconstructed environment: render the splat, load the collision mesh, parse environment_spec.json, and place the summit beacon, route markers, and vista sparkles per DESIGN_SYSTEM §1.",
@@ -47,15 +47,21 @@
   "references": [
     "SPEC §3.3, §3.4"
   ],
-  "branch": null,
+  "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-09-16",
-  "updated": "2026-09-16",
+  "updated": "2026-09-30",
   "history": [
     {
       "date": "2026-09-16",
       "event": "created by the Coordinator (M1 decomposition)",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-09-30",
+      "event": "Builder (AUTH #027): loader prep — contract + tests only (no unverified C#, per the Owner). services/packages/CONTRACT.md specifies the package layout, the C# load order (parse environment_spec.json manifest → resolve the asset filenames from its assets block → load the two graph docs in the fixed A/+y/left frame → verify the movement config_sha256 → render splat + collision mesh → place goals) and the DESIGN_SYSTEM §1 placement (summit beacon at summit.position visible-from-start depth-faded; route markers along the selected route's beat edge_ids via the traversal-graph nodes; up to 3 vista sparkles; all drawn on top). services/packages/package.py is the reference implementation the C# loader conforms to: assemble() writes a package from a scene_graph/traversal_graph/environment_spec triple + assets; validate() runs the loader's checks (manifest + both graph schemas, binary assets present under their declared names, and the three docs cross-consistent via the frozen check_consistency). Golden package fixture assembled from the frozen desk-tabletop triple committed to unity/Assets/GiganticJourneys/Tests/Environments/desk-tabletop/ (binary assets are presence-only stubs) for the C# EditMode loader test. 7 tests: reference-validate clean on the frozen triple, the committed golden validates, a drift guard (golden docs == frozen fixtures), and the failure modes (missing asset, missing manifest, inconsistent triple). ruff + format clean. open → in-progress.",
+      "by": "claude-builder"
     }
-  ]
+  ],
+  "notes": "Contract + reference validator + golden fixture done (Python, testable). The C# runtime loader + splat/mesh rendering + beacon/marker/vista placement (AT-1/AT-2) are gj-gameplay's, validated in Unity against unity/.../Tests/Environments/desk-tabletop/ and CONTRACT.md; AT-1/AT-2/AT-3 need real corpus packages (Operator reconstruction runs), not the presence-only stub assets. Depends_on M1-CAPT-02 (reconstruction output) still applies for the render side."
 }

@@ -1,0 +1,3 @@
+# services/packages — environment package format + reference validator.
+# Standard library + jsonschema (already the repo's schema-test dependency); no new
+# runtime pins. CDN delivery + signed URLs (M4-PLAT-01) add their adapters later.
