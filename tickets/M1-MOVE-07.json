@@ -53,5 +53,5 @@
       "by": "claude-builder"
     }
   ],
-  "notes": "The optics (DoF + motion blur) are the only GPU-cost items in the pack: half-res/capped and auto-tiered off on low-end devices (AUTH #003 quality tiers). Gravity stays 0.8 by default; the variant raises cadence and gravity slightly."
+  "notes": "The optics (DoF + motion blur) are the only GPU-cost items in the pack: half-res/capped and auto-tiered off on low-end devices (AUTH #003 quality tiers). Gravity 0.9 by default (more-miniature-real profile, Owner 2026-10-01); the keep-the-fantasy variant uses 0.8."
 }

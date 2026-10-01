@@ -20,16 +20,18 @@ Reversible: yes (every value is a movement.json constant; every layer is flag-ga
 Waiting on: nothing to authorize (approved). Execution is Operator-gated for the C# half (below).
 ```
 
-## New `movement.json` blocks (values = the "keep the fantasy" defaults; tunable)
+## New `movement.json` blocks (values = the "more miniature-real" defaults, Owner 2026-10-01; tunable)
 
 ```json
-"locomotion": { "refStrideA": 0.9, "refCadence": 2.6, "cadenceScale": 1.5, "accelTimeSec": 0.14, "decelTimeSec": 0.10, "strideWarpMin": 0.6, "strideWarpMax": 1.8, "footPlantLockRadiusA": 0.05 },
+"locomotion": { "refStrideA": 0.9, "refCadence": 2.6, "cadenceScale": 1.9, "accelTimeSec": 0.10, "decelTimeSec": 0.10, "strideWarpMin": 0.6, "strideWarpMax": 1.8, "footPlantLockRadiusA": 0.05 },
 "anticipation": { "leadTimeSec": { "jump": 0.35, "vault": 0.30, "climb": 0.40, "land": 0.25 }, "reachStartDistA": 1.2, "gazeLeadSec": 0.5, "maxConcurrentReaches": 2 },
 "landingResponse": { "absorbTimeSec": 0.12, "recoverTimeSec": 0.22, "maxCrouchFraction": 0.35, "camDipA": 0.15, "softSurfaceExtra": 0.5, "controlLockSec": { "soft": 0.0, "roll": 0.15, "hard": 0.3 } }
 ```
 
 Item #5 needs no `movement.json` change (normals derived at runtime from the collision mesh).
 Item #6's optics (tilt-shift DoF + motion blur) are a URP `VolumeProfile`, not `movement.json`.
+Item #6 also flips the existing `gravityScale` 0.8 → 0.9 (the more-miniature-real default, Owner
+2026-10-01); that key already exists in `movement.json`, so it rides the same lockstep.
 
 ## Execution — the `movement.json` lockstep (Operator-gated; bundle with the pending #036)
 

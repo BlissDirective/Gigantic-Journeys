@@ -25,13 +25,14 @@ import movement
 
 @dataclass(frozen=True)
 class LocomotionParams:
-    """Proposed ``movement.json.locomotion`` block (#1, #6). Values are the "keep the fantasy"
-    defaults; the "more real" variant raises ``cadenceScale`` and lowers the accel time."""
+    """Proposed ``movement.json.locomotion`` block (#1, #6). Values are the "more miniature-real"
+    defaults (Owner 2026-10-01); the "keep the fantasy" variant lowers ``cadenceScale`` to 1.5 and
+    raises the accel time to 0.14."""
 
     refStrideA: float = 0.9
     refCadence: float = 2.6
-    cadenceScale: float = 1.5
-    accelTimeSec: float = 0.14
+    cadenceScale: float = 1.9
+    accelTimeSec: float = 0.10
     decelTimeSec: float = 0.10
     strideWarpMin: float = 0.6
     strideWarpMax: float = 1.8

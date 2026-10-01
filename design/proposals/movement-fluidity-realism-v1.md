@@ -216,16 +216,17 @@ reversible tuning dial — I propose defaults and two variants for the Operator 
 
 **Proposed values (tunable; the identity dial).**
 
-| Lever | "Keep the fantasy" (default) | "More miniature-real" (variant) |
+| Lever | "More miniature-real" (default, Owner 2026-10-01) | "Keep the fantasy" (variant) |
 |---|---|---|
-| `gravityScale` | 0.8 (unchanged) | 0.9 |
-| `locomotion.cadenceScale` | 1.5 | 1.9 |
-| `locomotion.accelTimeSec` | 0.14 | 0.10 |
-| DoF / tilt-shift strength | subtle | pronounced |
-| motion-blur amount | low | medium |
+| `gravityScale` | 0.9 | 0.8 |
+| `locomotion.cadenceScale` | 1.9 | 1.5 |
+| `locomotion.accelTimeSec` | 0.10 | 0.14 |
+| DoF / tilt-shift strength | pronounced | subtle |
+| motion-blur amount | medium | low |
 
-I recommend shipping **"keep the fantasy"** as the default and letting the Operator compare on a real
-device; the variant is a one-line profile swap. Full √12 cadence is documented as the "max realism"
+**Owner decision (2026-10-01): ship "more miniature-real" as the v1 default.** Keep-the-fantasy
+ships as the one-line variant swap, and the Operator still A/Bs both on a real device to confirm the
+device-perf tier that enables the optics. Full √12 cadence remains documented as the "max realism"
 end, not proposed.
 
 **C# CONTRACT.** Cadence drives the stride-warp `refCadence` (ties into #1); accel/decel replace any
@@ -259,14 +260,14 @@ The lockstep (all must move together, byte-consistent where required):
 6. `unity/Assets/StreamingAssets/movement.json` — byte-identical copy (gate-enforced).
 7. **C# `MovementConfig`** (+ any consumers) — new fields; Operator/Unity, validated by `MovementConfigFixtureTests`.
 
-Proposed new blocks (values are the "keep the fantasy" defaults from §2; all tunable):
+Proposed new blocks (values are the "more miniature-real" defaults from §2, Owner 2026-10-01; all tunable):
 
 ```jsonc
 "locomotion": {                 // #1, #6
   "refStrideA": 0.9,            // stride length the base run clip was authored at (A)
   "refCadence": 2.6,            // base step rate (steps/s) before cadenceScale
-  "cadenceScale": 1.5,          // #6 miniature step-rate multiplier
-  "accelTimeSec": 0.14,         // #6 time to reach target speed (snappier)
+  "cadenceScale": 1.9,          // #6 miniature step-rate multiplier (more-real default)
+  "accelTimeSec": 0.10,         // #6 time to reach target speed (snappier)
   "decelTimeSec": 0.10,
   "strideWarpMin": 0.6,         // #1 clamp on stride-scale
   "strideWarpMax": 1.8,

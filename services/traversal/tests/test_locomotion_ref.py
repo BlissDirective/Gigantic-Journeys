@@ -37,10 +37,14 @@ def test_stride_scale_rejects_negative_speed():
         lr.stride_scale(-0.1)
 
 
-def test_run_speed_is_near_natural_stride():
-    # defaults put the base run clip near stride 1.0 at the movement.json run speed
+def test_more_real_default_compresses_stride_at_run():
+    # the more-miniature-real default (higher cadence) means quick, short steps: at the
+    # movement.json run speed the stride compresses below 1.0, within the clamp.
     run = movement.load().speeds.run
-    assert 0.9 <= lr.stride_scale(run) <= 1.2
+    s = lr.stride_scale(run)
+    assert lr.DEFAULT_LOCOMOTION.strideWarpMin <= s < 1.0
+    # the keep-the-fantasy variant (lower cadence) stretches the stride back up
+    assert lr.stride_scale(run, lr.LocomotionParams(cadenceScale=1.5)) > s
 
 
 # --- #6 snappier accel/decel ---------------------------------------------------------------
