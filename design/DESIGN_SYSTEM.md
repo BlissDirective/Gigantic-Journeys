@@ -176,6 +176,8 @@ Binding constraints: one primary action ("Share"); the store after a win, never 
 
 **Refinement (AUTH #042, 2026-09-29):** player-facing copy across results and store says **"your character"**, not "your avatar" (align AUTH #020 / §4 — v1 is a selected, curated character, not a generated avatar). So the store cards read "Dress your character" and "Sharpen your character's look", previewed on the player's chosen character in the diorama; "avatar" survives only as an internal/engineering term.
 
+**Refinement (AUTH #044, 2026-10-01):** custom avatars are now a **v1** feature — a player picks a preset **or** creates a custom "idealized-me" avatar fit **on-device** (same parameter set on one rig; ADR-0007, `design/proposals/custom-avatars-v1.md`). Decision 4 (avatar presentation) and decision 7 (create-flow waiting states) extend to the custom path: a separate, **opt-in**, on-device "create your avatar" flow (face fit on-device and discarded; no upload, no vendor) sits alongside "pick a character." **Open copy question for the Owner:** whether custom users see "your avatar" while preset users keep "your character," or the copy unifies — the #042 "your character" wording assumed there was no custom path. The full decision-4/7/9 reconcile + the consent UX are tracked in M1-AVAT-01/03 (consent copy is counsel-gated, M1-LEGAL-01).
+
 
 ## 10. Accessibility baseline — LOCKED 2026-09-16 (AUTH #005)
 
