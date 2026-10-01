@@ -310,8 +310,8 @@ high — RL training infra, hard real-time mobile story (you'd distill/bake), si
 risk. **Recommendation:** research north-star; not v1.
 
 **Proposed spike (fits the existing Tier-2 research line — AUTH #040, $500/mo already approved; GPU
-via #039 RunPod).** Ticket `M2-RES-01` (area `RES`, owner gj-operator), **deferred — created
-when the spike is scheduled**:
+via #039 RunPod).** Ticket `M2-RES-01` (area `RES`, owner gj-operator), **opened and explored
+2026-10-01** (`research/tier2/learned-physics-motion-2026-10.md`):
 - Reproduce a learned-motion-matching baseline on our ~110-clip whitelist; measure DB size vs classic
   and transition quality.
 - Prototype one physics-tracked verb (e.g., mantle) in sim; assess adaptivity to novel edges.
@@ -369,7 +369,7 @@ migration** (§3), keeping the doc internally consistent (no §3 key that isn't 
 - **M1-MOVE-06** (gj-gameplay) — Normal-aware contact IK (#5). Dep: M1-GAME-01 (collision mesh at runtime).
 - **M1-MOVE-07** (gj-gameplay) — Miniature levers: cadence/accel + URP miniature volume (#6). Dep: #1.
 - **M1-MOVE-08** (claude-builder) — Brain-B reference: `anticipation.py` + `locomotion_ref.py` + tests + CONTRACT (this pack builds it).
-- **M2-RES-01** (gj-operator) — Learned/physics motion spike (#8), Tier-2 (AUTH #040/#039). v2-targeted; **deferred, not created yet** (created when the spike is scheduled).
+- **M2-RES-01** (gj-operator) — Learned/physics motion spike (#8), Tier-2 (AUTH #040/#039). v2-targeted; **opened 2026-10-01, exploration delivered** (`research/tier2/learned-physics-motion-2026-10.md`); GPU experiments pending the Operator.
 
 (Exact IDs/fields validated against `tickets/SCHEMA.json` when created.)
 

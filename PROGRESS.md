@@ -18,14 +18,14 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | Status | Count |
 |---|---|
 | open | 33 |
-| in-progress | 8 |
+| in-progress | 9 |
 | in-review | 9 |
 | changes-requested | 0 |
 | blocked | 5 |
 | merged | 11 |
 | done | 17 |
 | cancelled | 3 |
-| **total** | **86** |
+| **total** | **87** |
 
 | ID | Title | Owner | Pri | Status | Depends on | Branch / PR |
 |---|---|---|---|---|---|---|
@@ -111,6 +111,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | M1-MOVE-07 | Miniature realism levers: cadence/accel + miniature camera look (AUTH #043) | gj-gameplay | P2 | open | M1-MOVE-03 | — |
 | M1-RES-01 | Tier 2 research prototype — month 1 (segment, embed, simulate on the corpus) | gj-scenegraph | P2 | blocked | — | — |
 | M2-DUO-01 | [V2] Rear-camera avatar capture with Duo Preview (iPhone Duo, optional) | gj-avatar | P2 | cancelled | M1-DUO-01 | — |
+| M2-RES-01 | Learned / physics-based motion spike (#8, Tier-2 R&D) | gj-operator | P2 | in-progress | M1-MOVE-01, M1-RES-01 | claude/gigantic-journeys-governance-f0wgak |
 | M3-DUO-01 | Stand-mode console layout (iPhone Duo, optional) | gj-gameplay | P2 | open | M1-DUO-01, M0-OWNER-03 | — |
 | M3-DUO-02 | Unfold triggers the signature transition (iPhone Duo, optional) | gj-gameplay | P2 | open | M1-DUO-01, M0-OWNER-02 | — |
 | M3-UNITY-01 | iOS Burst: commit the explicit disable (reproducibility) + macOS player build to re-enable (perf) | claude-builder | P2 | done | M0-UNITY-01 | — |
@@ -313,3 +314,4 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | 2026-09-29 | fast-forward to main (no PR; Coordinator) | M1-DATA-01 (done) | Froze scene_graph / traversal_graph / environment_spec v1.0.0 under AUTH #037. AT-4 secondary review fixed one BLOCKER (teach-before-use check now fires on every route, not just rank 1); schemas + fixtures + `check_consistency.py` + 51 tests moved unchanged from `design/proposals/` into the self-contained `data/schemas/environment/` subdir. 51 environment + 70 telemetry/correction tests green together; README version rows added. Non-blocking fast-follows surfaced to the Owner: crouch=T0 (extends SPEC §3.4), vault-name reconciliation (M1-MOVE-02). Unblocks M1-SCEN-02, M1-GAME-01, M4-PLAT-01, M4-DATA-02. |
 | 2026-09-30 | fast-forward to main (no PR; Coordinator/Builder) | M1-GAME-01, M4-DATA-02 (both in-progress; Python halves merged) | Completed the two merges to `main`: `origin/main` fast-forwarded to `f97287a`. M1-GAME-01's golden fixture needed a CI-caught fix (`f97287a` over `08f79a8`): `git add -A` had silently skipped the gitignored binary assets (`splat.spz`/`collision.glb`, `.gitignore` 111–115), so the fixture passed locally but failed on a fresh CI checkout. Fix — the committed golden ships only the three JSON docs; the binaries are materialised as presence-only stubs in test setup (Python `package.assemble`; the C# EditMode setup writes the same), which also avoids a bogus `.glb` that Unity's importer would reject. 8 tests. All CI green on `f97287a` (lint #273, governance #273, secret-scan #275); the "unity tests gate" is the documented non-Unity bypass. **Supersedes the golden-contents note in the M1-GAME-01 loader-prep row above** (the golden is now docs-only, not committed stubs). Both tickets stay in-progress: the C# runtime loader + rendering (AT-1/AT-2) and the DB/telemetry adapters + M4-QA-01 exit harness ride gj-gameplay/Operator. |
 | 2026-10-01 | fast-forward to main (no PR; Coordinator/Builder) | AUTH #043 movement fluidity & realism v1 (spec + Brain-B); M1-MOVE-03..08 | Owner directed "proceed to spec+build" for stride/speed warping (#1), traversal-graph anticipation (#2), procedural landing/weight + camera dip (#3), normal-aware contact IK (#5), and miniature realism levers (#6: cadence/accel + tilt-shift DoF + scale-aware motion blur); #8 (learned/physics motion) planned as a v2-targeted Tier-2 research spike. Logged **AUTH #043** + `design/proposals/movement-fluidity-realism-v1.md` + auth-request. Built the deterministic **Brain-B reference** (no frozen-schema or movement.json change): `services/traversal/anticipation.py` (per-edge anticipation hints — contact point, hand pre-reach, gaze look-ahead, lead-time, plant foot) + `locomotion_ref.py` (`stride_scale`, Bible §5 `landing_response`, miniature cadence dial), 30 tests. Created tickets **M1-MOVE-03..07** (gj-gameplay C# runtime) + **M1-MOVE-08** (Brain-B, in-progress). The `movement.json` `locomotion`/`anticipation`/`landingResponse` blocks + Bible §2/§3/§5/§8/§10 + a DESIGN_SYSTEM camera note are the AUTH #043 **6-file + C# lockstep — Operator-gated, bundled with the pending #036**. |
+| 2026-10-01 | fast-forward to main (no PR; Coordinator/Builder) | AUTH #043 default -> more-real; M2-RES-01 (#8 opened) | Owner decisions (2026-10-01): (1) ship the **more-miniature-real** profile as the v1 default - locomotion_ref defaults cadenceScale 1.5->1.9, accelTimeSec 0.14->0.10 (stride compresses to ~0.81 at run; miniature realism fraction 0.20->0.37 at 1:12), and gravityScale 0.8->0.9 in the Operator-gated lockstep; keep-the-fantasy becomes the variant (proposal, auth-request, M1-MOVE-07, and an AUTH #043 addendum updated). (2) **Opened + explored #8** (learned/physics motion): ticket M2-RES-01 + research/tier2/learned-physics-motion-2026-10.md - landscape (learned motion matching = mobile-feasible + DB-shrinking; diffusion = offline generator; physics-RL/PARC = v2 north star) + a 3-experiment Tier-2 spike (A LMM runtime, B offline clip augmentation feeding v1, C physics-RL feasibility) on the existing #040/#039 compute, each go/no-go, none gating v1 (which ships classic motion matching). 77 traversal tests green. |

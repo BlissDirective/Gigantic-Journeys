@@ -1,0 +1,78 @@
+{
+  "id": "M2-RES-01",
+  "title": "Learned / physics-based motion spike (#8, Tier-2 R&D)",
+  "milestone": "M2",
+  "area": "RES",
+  "owner": "gj-operator",
+  "qa": null,
+  "status": "in-progress",
+  "priority": "P2",
+  "size": "L",
+  "summary": "Forward/v2 research spike for AUTH #043 item #8 (learned/physics-based motion), opened and explored by the Builder now; GPU experiments run on the Operator's return. Three offline experiments, each with a go/no-go gate, none gating v1 (which ships classic motion matching, M1-MOVE-01): (A) Learned Motion Matching on the ~110-clip whitelist — DB compression + on-device per-frame cost vs the classic baseline; (B) offline neural augmentation of the traversal vocabulary on scanned-terrain variants, fed into the v1 clip DB (the sound form of 'video -> usable motion'); (C) physics-RL (AMP/ASE/PARC-style) feasibility on one traversal verb + a distillation verdict. All on Tier-2 compute; our own mocap + the consented corpus only (SPEC §3.3), never user scans.",
+  "deliverables": [
+    "research/tier2/learned-physics-motion-2026-10.md (landscape + feasibility + spike plan + go/no-go)",
+    "Experiment reports (A/B/C) under research/tier2/ when the GPU runs happen"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "A grounded landscape + mobile-feasibility exploration of learned motion matching, neural synthesis/diffusion, and physics-RL control, with a per-approach fit assessment and a three-experiment spike plan with go/no-go gates, is delivered.",
+      "evidence": "research/tier2/learned-physics-motion-2026-10.md",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "Experiment A: Learned Motion Matching reproduced on the whitelist; DB size and transition quality vs the classic baseline, plus a Sentis/Core ML on-device per-frame cost on a reference iPhone, are measured against the 60 MB / 4 ms budget.",
+      "evidence": "RunPod run log + report + on-device numbers",
+      "automated": false,
+      "level": "suggested"
+    },
+    {
+      "id": "AT-3",
+      "test": "Experiment B: offline neural augmentation produces a measurable clip-coverage/quality gain on corpus rooms, within the DB budget and clean-IP (our mocap + CC0/licensed only), suitable to fold into the v1 DB.",
+      "evidence": "augmented clip set + corpus coverage report",
+      "automated": false,
+      "level": "suggested"
+    },
+    {
+      "id": "AT-4",
+      "test": "Experiment C: a physics-RL (PARC-style) feasibility prototype on one traversal verb with an adaptivity measurement and a credible runtime-distillation verdict (or a clear hardware-gated v2+ conclusion).",
+      "evidence": "sim prototype + feasibility memo",
+      "automated": false,
+      "level": "suggested"
+    }
+  ],
+  "security": ["SPEC §3.3 (training on our own infra; no user scans — our mocap + consented corpus only)"],
+  "depends_on": ["M1-MOVE-01", "M1-RES-01"],
+  "blocked_by": [
+    "Operator GPU availability (Tier-2 AUTH #040 / #039 RunPod)",
+    "the classic motion-matching baseline (M1-MOVE-01) for the Experiment A comparison"
+  ],
+  "auth_required": [
+    {
+      "type": "spend",
+      "what": "Tier-2 GPU compute for the spike experiments (within the existing $500/mo line)",
+      "auth_id": "AUTH #040",
+      "status": "approved"
+    }
+  ],
+  "references": [
+    "AUTH #043 (plan item #8)",
+    "AUTH #040 (Tier-2 compute), AUTH #039 (RunPod)",
+    "design/proposals/movement-fluidity-realism-v1.md §4",
+    "MOVEMENT_BIBLE §13 (motion-matching spike), §15 (reference library)"
+  ],
+  "branch": "claude/gigantic-journeys-governance-f0wgak",
+  "pr": null,
+  "created": "2026-10-01",
+  "updated": "2026-10-01",
+  "history": [
+    {
+      "date": "2026-10-01",
+      "event": "Opened by Owner direction ('open the #8 learned physics/motion spike and explore it right now'). Builder delivered the landscape + mobile-feasibility exploration + the three-experiment spike plan (research/tier2/learned-physics-motion-2026-10.md); AT-1 met. GPU experiments A/B/C await the Operator and the M1-MOVE-01 baseline. open -> in-progress.",
+      "by": "claude-builder"
+    }
+  ],
+  "notes": "v1 ships classic motion matching regardless. Experiment B can feed v1 quality (more/better clips) at zero runtime cost; A targets a v1.1/v2 runtime upgrade; C is the v2 north star. Any learned runtime motion must still honor the deterministic reach contract (movement.json + 0.85 margin) so Brain A and Brain B never disagree."
+}
