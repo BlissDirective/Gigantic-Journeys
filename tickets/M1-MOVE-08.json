@@ -1,0 +1,65 @@
+{
+  "id": "M1-MOVE-08",
+  "title": "Brain-B movement reference: anticipation + locomotion contracts (AUTH #043)",
+  "milestone": "M1",
+  "area": "MOVE",
+  "owner": "claude-builder",
+  "qa": "gj-qa-release",
+  "status": "in-progress",
+  "priority": "P1",
+  "size": "M",
+  "summary": "The deterministic Python reference the Unity runtime (Brain A) must match for the AUTH #043 fluidity/realism pack: an anticipation planner over the traversal graph and the stride/landing/scale reference math. Derived/reference only (like reach.py) — no frozen v1.0.0 schema field and no movement.json edit here.",
+  "deliverables": [
+    "services/traversal/anticipation.py",
+    "services/traversal/locomotion_ref.py",
+    "services/traversal/tests/test_anticipation.py",
+    "services/traversal/tests/test_locomotion_ref.py"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "anticipation.plan_anticipation emits deterministic per-edge hints for the contact verbs of a route (skipping pure locomotion), with contact point, hand pre-reach, gaze look-ahead, per-category lead-time and plant foot; every frozen-tier verb has an anticipation category.",
+      "evidence": "services/traversal/tests/test_anticipation.py (green)",
+      "automated": true,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "locomotion_ref provides stride_scale (clamped, monotonic), landing_response (Bible §5 tiers + soft-surface bonus) and the miniature cadence dial (sqrt(scale) ceiling + realism fraction), all unit-tested.",
+      "evidence": "services/traversal/tests/test_locomotion_ref.py (green)",
+      "automated": true,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "The C# runtime contracts for #1/#2/#3/#5/#6 are documented for gj-gameplay to implement against.",
+      "evidence": "design/proposals/movement-fluidity-realism-v1.md §2 (CONTRACT per item)",
+      "automated": false,
+      "level": "required"
+    }
+  ],
+  "security": [],
+  "design": ["MOVEMENT_BIBLE §2, §5, §8"],
+  "depends_on": ["M1-DATA-01", "M1-SCEN-04", "M1-SCEN-05"],
+  "auth_required": [
+    {
+      "type": "design-change",
+      "what": "new Brain-B reference modules (no protected path); part of AUTH #043",
+      "auth_id": "AUTH #043",
+      "status": "approved"
+    }
+  ],
+  "references": ["AUTH #043", "design/proposals/movement-fluidity-realism-v1.md (§5)"],
+  "branch": "claude/gigantic-journeys-governance-f0wgak",
+  "pr": null,
+  "created": "2026-10-01",
+  "updated": "2026-10-01",
+  "history": [
+    {
+      "date": "2026-10-01",
+      "event": "created and built by the Builder under AUTH #027/#043: anticipation.py + locomotion_ref.py + 30 tests landed in a756868 (open -> in-progress). AT-1/AT-2 met (Python green); AT-3 lives in the proposal §2 until promoted to a standalone runtime-contract doc.",
+      "by": "claude-builder"
+    }
+  ],
+  "notes": "Reference only; the matching C# runtime is M1-MOVE-03..07 (gj-gameplay). Keep this in-progress until the Operator lands the movement.json lockstep so the reference params can be sourced from MovementConfig instead of the module defaults."
+}

@@ -1,0 +1,57 @@
+{
+  "id": "M1-MOVE-07",
+  "title": "Miniature realism levers: cadence/accel + miniature camera look (AUTH #043)",
+  "milestone": "M1",
+  "area": "MOVE",
+  "owner": "gj-gameplay",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P2",
+  "size": "M",
+  "summary": "Sell the 1:12 miniature read: higher step cadence and snappier accel/decel (movement.json locomotion keys, matching locomotion_ref.cadence_for_scale) plus a URP 'miniature' post volume — tilt-shift depth-of-field focused at the avatar height and scale-aware motion blur — auto-tiered off on low-end devices. Ship two swappable profiles (keep-the-fantasy default; more-miniature-real variant).",
+  "deliverables": [
+    "unity (locomotion cadence/accel; URP miniature VolumeProfile; two profiles)",
+    "config/movement.json locomotion cadence/accel keys (Operator lockstep, AUTH #043)",
+    "design/DESIGN_SYSTEM.md camera note (miniature look) + MOVEMENT_BIBLE §8"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "The chosen cadence multiplier and its realism fraction match locomotion_ref.cadence_for_scale for the 1:12 scale, and both profiles are selectable.",
+      "evidence": "config diff + a cadence/realism-fraction check",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "On the Owner's iPhone the 'miniature' read (cadence + tilt-shift/DoF + motion blur) is present on the quality tier that enables it without dropping below the fps floor; the low-end tier disables the optics cleanly.",
+      "evidence": "device clips on two tiers + overlay report",
+      "automated": false,
+      "level": "suggested"
+    }
+  ],
+  "security": [],
+  "design": ["MOVEMENT_BIBLE §8 (camera), DESIGN_SYSTEM §5/§8 (play screen)"],
+  "depends_on": ["M1-MOVE-03"],
+  "auth_required": [
+    {
+      "type": "design-change",
+      "what": "movement.json locomotion cadence/accel + Bible §8 + DESIGN_SYSTEM camera note (miniature look)",
+      "auth_id": "AUTH #043",
+      "status": "approved"
+    }
+  ],
+  "references": ["AUTH #043", "design/proposals/movement-fluidity-realism-v1.md (#6)", "MOVEMENT_BIBLE §1 (scale), §8"],
+  "branch": null,
+  "pr": null,
+  "created": "2026-10-01",
+  "updated": "2026-10-01",
+  "history": [
+    {
+      "date": "2026-10-01",
+      "event": "created by the Coordinator under AUTH #043 (item #6). Brain-B reference locomotion_ref.cadence_for_scale (sqrt(scale) ceiling + realism fraction) landed in a756868; the Unity cadence/accel + URP miniature volume are this ticket. The identity (keep-fantasy vs more-real) is a tunable two-profile dial.",
+      "by": "claude-builder"
+    }
+  ],
+  "notes": "The optics (DoF + motion blur) are the only GPU-cost items in the pack: half-res/capped and auto-tiered off on low-end devices (AUTH #003 quality tiers). Gravity stays 0.8 by default; the variant raises cadence and gravity slightly."
+}

@@ -1,0 +1,56 @@
+{
+  "id": "M1-MOVE-05",
+  "title": "Procedural landing absorption + impact response (weight) (AUTH #043)",
+  "milestone": "M1",
+  "area": "MOVE",
+  "owner": "gj-gameplay",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P1",
+  "size": "M",
+  "summary": "Replace fixed landing clips with continuous procedural absorption: on ground contact compress and recover over a window scaled by the Bible §5 fall tier and surface class, with a matching camera dip and a brief control-recovery beat. The C# matches the Brain-B reference services/traversal/locomotion_ref.landing_response.",
+  "deliverables": [
+    "unity (landing absorption pose + camera dip + control-lock)",
+    "config/movement.json landingResponse block (Operator lockstep, AUTH #043)"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "Falls of ~1/3/5 A read as soft/roll/hard with distinct weight; the tier, retained-speed fraction, camera dip and control-lock match locomotion_ref.landing_response, and a landing onto walkable-soft is one tier gentler (Bible §5).",
+      "evidence": "Unity test scene + response-match log",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "Landings feel weighty (you feel the impact) without eating responsiveness on the Owner's iPhone.",
+      "evidence": "device clip",
+      "automated": false,
+      "level": "suggested"
+    }
+  ],
+  "security": [],
+  "design": ["MOVEMENT_BIBLE §5 (fall/landing tiers), §8 (camera dip)"],
+  "depends_on": ["M1-MOVE-01"],
+  "auth_required": [
+    {
+      "type": "design-change",
+      "what": "movement.json landingResponse block + Bible §5/§8 (procedural absorption + camera dip)",
+      "auth_id": "AUTH #043",
+      "status": "approved"
+    }
+  ],
+  "references": ["AUTH #043", "design/proposals/movement-fluidity-realism-v1.md (#3)", "MOVEMENT_BIBLE §5, §8"],
+  "branch": null,
+  "pr": null,
+  "created": "2026-10-01",
+  "updated": "2026-10-01",
+  "history": [
+    {
+      "date": "2026-10-01",
+      "event": "created by the Coordinator under AUTH #043 (item #3). Brain-B reference locomotion_ref.landing_response (Bible §5 tiers) landed in a756868; the Unity landing/camera system is this ticket.",
+      "by": "claude-builder"
+    }
+  ],
+  "notes": "Reference contract: services/traversal/locomotion_ref.py::landing_response / landing_tier. Tier thresholds come from movement.json.landing; the absorption curve is the new landingResponse block (Operator lockstep)."
+}

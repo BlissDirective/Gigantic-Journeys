@@ -1,0 +1,48 @@
+{
+  "id": "M1-MOVE-06",
+  "title": "Normal-aware contact IK (hands/feet conform to surfaces) (AUTH #043)",
+  "milestone": "M1",
+  "area": "MOVE",
+  "owner": "gj-gameplay",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P2",
+  "size": "S",
+  "summary": "Orient hand/foot IK to the real surface normal at the contact point (raycast the collision mesh, or use the anticipation hint's surface_id as a fast path), clamped to a max wrist/ankle deviation so the pose never breaks. No schema or movement.json change — normals are derived at runtime from the collision mesh.",
+  "deliverables": [
+    "unity (normal-aware hand/foot IK on top of the existing position IK)"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "On a flat, a tilted, and a curved test surface the contact hand/foot aligns to the surface normal (clamped), reading as a real grab/plant rather than a pasted-on pose.",
+      "evidence": "Unity screenshots on the three test surfaces",
+      "automated": false,
+      "level": "required"
+    }
+  ],
+  "security": [],
+  "design": ["MOVEMENT_BIBLE §2 (Procedural IK), §6 (climb hand IK)"],
+  "depends_on": ["M1-GAME-01", "M1-MOVE-04"],
+  "auth_required": [
+    {
+      "type": "design-change",
+      "what": "Bible §2 note (normal-aware contact IK); no movement.json or schema change",
+      "auth_id": "AUTH #043",
+      "status": "approved"
+    }
+  ],
+  "references": ["AUTH #043", "design/proposals/movement-fluidity-realism-v1.md (#5)", "MOVEMENT_BIBLE §2, §6"],
+  "branch": null,
+  "pr": null,
+  "created": "2026-10-01",
+  "updated": "2026-10-01",
+  "history": [
+    {
+      "date": "2026-10-01",
+      "event": "created by the Coordinator under AUTH #043 (item #5). Pure Unity/runtime: normals derived from the collision mesh (no frozen-schema change); the anticipation hint's surface_id (M1-MOVE-04) is an optional fast path.",
+      "by": "claude-builder"
+    }
+  ],
+  "notes": "No Brain-B artifact: the graph carries surface_id + position but no normal, so Brain A raycasts the collision mesh at the contact. Keep the effector deviation clamped so arbitrary scanned geometry never breaks the pose."
+}

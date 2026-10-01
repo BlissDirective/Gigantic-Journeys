@@ -1,0 +1,56 @@
+{
+  "id": "M1-MOVE-03",
+  "title": "Stride/speed warping to eliminate foot-sliding (AUTH #043)",
+  "milestone": "M1",
+  "area": "MOVE",
+  "owner": "gj-gameplay",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P1",
+  "size": "M",
+  "summary": "Continuously warp the locomotion clip's stride and playback so foot-plant timing matches the actual ground speed on flats, slopes, accel/decel and turns, with foot-plant IK locking a planted foot within footPlantLockRadiusA so no contact slides. The C# matches the Brain-B reference services/traversal/locomotion_ref.stride_scale.",
+  "deliverables": [
+    "unity (stride/speed warp on the locomotion set + foot-plant IK lock)",
+    "config/movement.json locomotion block (Operator lockstep with the C# MovementConfig migration, AUTH #043 bundled with #036)"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "Over 60 s of scripted variable-speed play on a corpus room, measured foot-slip stays within threshold at every speed, and the stride scale matches locomotion_ref.stride_scale for the current ground speed.",
+      "evidence": "Unity test scene + slip measurement",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "Locomotion reads with real-body weight and platformer responsiveness (Bible §0 bar) on the Owner's iPhone.",
+      "evidence": "device clip",
+      "automated": false,
+      "level": "suggested"
+    }
+  ],
+  "security": [],
+  "design": ["MOVEMENT_BIBLE §2 (Animation selection), §3.1"],
+  "depends_on": ["M0-MOVE-01", "M1-MOVE-01"],
+  "auth_required": [
+    {
+      "type": "design-change",
+      "what": "movement.json locomotion block + Bible §2/§3/§10 (stride warp)",
+      "auth_id": "AUTH #043",
+      "status": "approved"
+    }
+  ],
+  "references": ["AUTH #043", "design/proposals/movement-fluidity-realism-v1.md (#1)", "MOVEMENT_BIBLE §2, §3.1"],
+  "branch": null,
+  "pr": null,
+  "created": "2026-10-01",
+  "updated": "2026-10-01",
+  "history": [
+    {
+      "date": "2026-10-01",
+      "event": "created by the Coordinator under AUTH #043 (movement fluidity & realism v1, item #1). Brain-B reference locomotion_ref.stride_scale landed in a756868; the Unity stride-warp + the movement.json locomotion lockstep are this ticket.",
+      "by": "claude-builder"
+    }
+  ],
+  "notes": "Reference contract: services/traversal/locomotion_ref.py::stride_scale / natural_locomotion_speed. The movement.json locomotion block lands with the Operator C# MovementConfig migration (bundled with the pending #036)."
+}

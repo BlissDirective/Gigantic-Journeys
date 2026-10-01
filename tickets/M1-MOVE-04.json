@@ -1,0 +1,56 @@
+{
+  "id": "M1-MOVE-04",
+  "title": "Traversal-graph anticipation layer (telegraphed moves) (AUTH #043)",
+  "milestone": "M1",
+  "area": "MOVE",
+  "owner": "gj-gameplay",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P1",
+  "size": "M",
+  "summary": "A procedural anticipation layer that telegraphs the next move before contact — pre-reach a hand toward the upcoming hold, lean into the next gap, lead the gaze, and pick the plant foot — using the Brain-B hints from services/traversal/anticipation.py (looked ahead within leadTimeSec, never exceeding the Bible §2 two-IK-chain budget).",
+  "deliverables": [
+    "unity (anticipation layer over the animation stack; consumes anticipation hints)",
+    "config/movement.json anticipation block (Operator lockstep, AUTH #043)"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "On a corpus route the avatar visibly pre-reaches/leans/gazes ahead on at least 20 contact edges, and the hints driving it match anticipation.plan_anticipation for that route (contact point, reach target, look-at, lead-time, plant foot).",
+      "evidence": "Unity clip + hint-match log",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "Traversal reads as fluid (the character looks like it knows where it is going) on the Owner's iPhone.",
+      "evidence": "device clip",
+      "automated": false,
+      "level": "suggested"
+    }
+  ],
+  "security": [],
+  "design": ["MOVEMENT_BIBLE §2 (Intent/anticipation), §8 (gaze)"],
+  "depends_on": ["M1-MOVE-01", "M1-SCEN-04", "M1-GAME-01"],
+  "auth_required": [
+    {
+      "type": "design-change",
+      "what": "movement.json anticipation block + Bible §2 anticipation sub-layer",
+      "auth_id": "AUTH #043",
+      "status": "approved"
+    }
+  ],
+  "references": ["AUTH #043", "design/proposals/movement-fluidity-realism-v1.md (#2)", "MOVEMENT_BIBLE §2, §8"],
+  "branch": null,
+  "pr": null,
+  "created": "2026-10-01",
+  "updated": "2026-10-01",
+  "history": [
+    {
+      "date": "2026-10-01",
+      "event": "created by the Coordinator under AUTH #043 (item #2). Brain-B reference planner services/traversal/anticipation.py landed in a756868; the Unity consuming layer is this ticket.",
+      "by": "claude-builder"
+    }
+  ],
+  "notes": "Reference contract: services/traversal/anticipation.py::plan_anticipation (hints are derived, not stored — no frozen-schema change). Surface normals for the pre-reach come from the collision mesh at runtime (M1-MOVE-06), keyed by the hint's surface_id."
+}
