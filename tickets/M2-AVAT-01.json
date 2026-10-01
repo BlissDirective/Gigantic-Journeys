@@ -5,7 +5,7 @@
   "area": "AVAT",
   "owner": "claude-builder",
   "qa": "gj-qa-release",
-  "status": "open",
+  "status": "cancelled",
   "priority": "P0",
   "size": "L",
   "summary": "Build the v1 avatar as a curated roster of pre-made, rigged, semi-photorealistic 1:12 characters (ADR-0006, AUTH #020). Each shares the GJ humanoid skeleton and retargets the shared animation/traversal set; the player selects one; the two cosmetic IAP SKUs reskin it. No face/body capture, no biometric processing. Roster = 8 at launch on an inclusive casting matrix (≥6 floor); one enforced rig standard (Unity Humanoid, IK/contact markers, AUTH #021 carried-tool sockets) checked by an automated rig-conformance gate; grounded semi-photoreal for v1 with a V2 hero-photoreal roadmap on the same rig; cosmetics gated by a verb+tool clip test; sourcing = dual-track with open-base authoring primary at $0 (AUTH #024).",
@@ -68,7 +68,7 @@
   "branch": null,
   "pr": null,
   "created": "2026-09-18",
-  "updated": "2026-09-19",
+  "updated": "2026-10-01",
   "history": [
     {
       "date": "2026-09-18",
@@ -79,6 +79,12 @@
       "date": "2026-09-19",
       "event": "sharpened under AUTH #024 (character roster art spec): roster = 8 on an inclusive casting matrix; automated rig-conformance gate incl. AUTH #021 tool sockets (AT-1); cosmetic verb+tool clip test (AT-2); sourcing/IP + no-real-person-resemblance review (AT-3); inclusive-matrix + 15 cm readability (AT-5); dual-track sourcing with open-base authoring primary at $0.",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-10-01",
+      "event": "CANCELLED — superseded by M1-AVAT-01..05 under AUTH #044 / ADR-0007: custom avatars moved to v1 as parametric variations; the roster is now M1-AVAT-01 (curated avatar_params on the shared rig). AT-3's 'no biometric in v1' premise is reversed (biometric is now a v1, on-device, opt-in, counsel-gated feature).",
+      "by": "claude-builder"
     }
-  ]
+  ],
+  "notes": "Cancelled 2026-10-01: superseded by M1-AVAT-01..05 (custom avatars -> v1, AUTH #044 / ADR-0007). The roster art + rig spec here carries into M1-AVAT-01; the biometric-N/A premise (AT-3) no longer holds."
 }

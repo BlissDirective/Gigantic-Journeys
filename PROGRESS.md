@@ -17,15 +17,15 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 
 | Status | Count |
 |---|---|
-| open | 33 |
-| in-progress | 9 |
+| open | 35 |
+| in-progress | 10 |
 | in-review | 9 |
 | changes-requested | 0 |
-| blocked | 5 |
+| blocked | 7 |
 | merged | 11 |
 | done | 17 |
-| cancelled | 3 |
-| **total** | **87** |
+| cancelled | 4 |
+| **total** | **93** |
 
 | ID | Title | Owner | Pri | Status | Depends on | Branch / PR |
 |---|---|---|---|---|---|---|
@@ -50,6 +50,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | M0-UNITY-02 | Gaussian splat renderer package integrated with a sample scene | gj-capture | P0 | done | M0-UNITY-01 | ticket/M0-UNITY-02-splat-renderer |
 | M0-UNITY-03 | Traversal controller scaffold: five assemblies, movement.json loader, capsule locomotion and jump | gj-gameplay | P0 | in-review | M0-UNITY-01, M0-MOVE-01 | ticket/M0-UNITY-03-traversal-controller |
 | M0-UNITY-04 | Debug overlay — the loop-proving ticket (M0 exit test) | gj-gameplay | P0 | done | M0-UNITY-01 | ticket/M0-UNITY-04-debug-overlay |
+| M1-AVAT-01 | Parameter-set avatar model + roster presets + in-app selection | gj-gameplay | P0 | open | M0-UNITY-01, M0-UNITY-03, M0-MOVE-01 | — |
 | M1-CAPT-01 | In-app guided room capture (ARKit poses + depth, coverage, blur, quality gate) | gj-capture | P0 | blocked | M0-UNITY-01, M0-CAPT-01, M0-OWNER-03 | ticket/M1-CAPT-01-capture-core |
 | M1-CAPT-02 | Upload → reconstruction (self-host/bridge, ADR-0005) → splat + collision mesh stored | gj-platform | P0 | open | M1-CAPT-01, M1-PIPE-01, M1-CAPT-03, M0-LEGAL-03 | — |
 | M1-CAPT-03 | Self-host reconstruction spike + managed-bridge stand-up (ADR-0005) | claude-builder | P0 | in-progress | M0-UNITY-01, M0-UNITY-02, M0-CAPT-01 | claude/gigantic-journeys-governance-f0wgak |
@@ -57,6 +58,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | M1-FORE-01 | M1 checkpoint report | gj-foreman | P0 | open | M1-QA-01, M1-GAME-02, M1-GAME-03, M1-CAPT-02, M1-SCEN-04, M1-PIPE-01, M1-MOVE-01, M1-DATA-01 | — |
 | M1-GAME-01 | Unity loads splat + collision mesh + environment spec | gj-gameplay | P0 | in-progress | M0-UNITY-02, M1-DATA-01, M1-CAPT-02 | claude/gigantic-journeys-governance-f0wgak |
 | M1-GAME-02 | Placeholder capsule journeys to the summit | gj-gameplay | P0 | open | M1-GAME-01, M1-SCEN-05, M1-MOVE-01 | — |
+| M1-LEGAL-01 | Counsel review of biometric consent/retention/labels (v1) | owner | P0 | blocked | M1-AVAT-03 | — |
 | M1-MOVE-01 | Motion-matching vs blend-tree spike (Movement Bible §13) | gj-gameplay | P0 | open | M0-UNITY-03, M0-MOVE-01 | — |
 | M1-PIPE-01 | Inngest pipeline: real steps for reconstruct → scenegraph → journey → package | gj-platform | P0 | in-progress | M0-PIPE-01 | claude/gigantic-journeys-governance-f0wgak |
 | M1-PLAT-01 | Backend staging stand-up: Supabase staging (AUTH #011), Vercel (#012), Inngest (#013) verified | gj-operator | P0 | in-review | M0-PLAT-01 | ticket/M1-PLAT-01-staging-standup |
@@ -67,7 +69,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | M1-SCEN-04 | Summit designation, route generation, vista selection | gj-scenegraph | P0 | in-progress | M1-SCEN-03, M1-SCEN-05 | claude/gigantic-journeys-governance-f0wgak |
 | M1-SCEN-05 | Deterministic reachability validator against movement.json | gj-scenegraph | P0 | done | M0-MOVE-01, M1-SCEN-03 | claude/gigantic-journeys-governance-f0wgak |
 | M1-UNITY-01 | iOS Metal Gaussian-splat render de-risk (depth sort + on-device 30 fps) | claude-builder | P0 | open | M0-UNITY-01, M0-UNITY-02, M1-CAPT-03 | — |
-| M2-AVAT-01 | Character roster: rig, retarget, and in-app selection | claude-builder | P0 | open | M0-UNITY-01, M0-UNITY-03, M0-MOVE-01 | — |
+| M2-AVAT-01 | Character roster: rig, retarget, and in-app selection | claude-builder | P0 | cancelled | M0-UNITY-01, M0-UNITY-03, M0-MOVE-01 | — |
 | M4-DATA-01 | Social data model + RLS + rate-limits (environments, ratings, reports, leaderboard, moderation) (AUTH #026) | gj-platform | P0 | blocked | M0-DATA-01 | ticket/M4-DATA-01-social-migration |
 | M4-DATA-02 | Ranking + anti-gaming: balanced blend, Top-this-week decay, rate-spam resistance (AUTH #026) | gj-data | P0 | in-progress | M4-DATA-01, M1-DATA-01 | claude/gigantic-journeys-governance-f0wgak |
 | M4-DATA-03 | Moderation pipeline + queue + appeal + Apple 1.2 UGC compliance (AUTH #026) | gj-data | P0 | open | M4-DATA-01, M4-PLAT-01 | — |
@@ -94,6 +96,9 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | M0-SKILL-07 | gj-design: research handbook (RESOURCES.md + SKILLS.md) | gj-design | P1 | merged | — | https://github.com/BlissDirective/Gigantic-Journeys/pull/12 |
 | M0-SKILL-08 | gj-qa-release: research handbook (RESOURCES.md + SKILLS.md) | gj-qa-release | P1 | merged | — | https://github.com/BlissDirective/Gigantic-Journeys/pull/13 |
 | M0-SKILL-09 | gj-data: research handbook (RESOURCES.md + SKILLS.md) | gj-data | P1 | merged | — | https://github.com/BlissDirective/Gigantic-Journeys/pull/14 |
+| M1-AVAT-02 | On-device custom-avatar pipeline (face to params, no vendor) | gj-gameplay | P1 | blocked | M1-AVAT-01, M1-AVAT-03 | — |
+| M1-AVAT-03 | Layered consent and opt-in UX and records | gj-gameplay | P1 | open | M1-AVAT-01 | — |
+| M1-AVAT-05 | Avatar data contracts (params + consent) + validator | claude-builder | P1 | in-progress | M0-MOVE-01 | claude/gigantic-journeys-governance-f0wgak |
 | M1-CAPT-04 | On-device reconstruction-readiness predictor + multi-pass 'add a pass' loop (AUTH #025) | gj-capture | P1 | open | M1-CAPT-01 | — |
 | M1-GAME-03 | Tier 0 material feedback wired | gj-gameplay | P1 | open | M1-GAME-02 | — |
 | M1-GAME-04 | Audio system: material×event bank, scale-aware acoustics, spatialized mix (AUTH #022) | claude-builder | P1 | open | M0-UNITY-01, M1-SCEN-02, M1-MOVE-01 | — |
@@ -106,6 +111,7 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | M3-MOVE-01 | Traversal tools: safety-pin grapple + matchstick pole-vault (AUTH #021) | claude-builder | P1 | open | M1-MOVE-01, M1-MOVE-02, M1-SCEN-04, M1-SCEN-05 | — |
 | M4-GAME-02 | Leaderboards + time-trial integrity (ghosts + plausibility floor) (AUTH #026) | gj-gameplay | P1 | open | M1-SCEN-05, M4-DATA-01, M4-GAME-01 | — |
 | M0-REPO-07 | Triage and merge the open Dependabot CI-action bumps (audit A1) | coordinator | P2 | in-review | — | ticket/M0-REPO-07-action-bumps |
+| M1-AVAT-04 | Per-share upload opt-in + gameplay-view capture | gj-gameplay | P2 | open | M1-AVAT-03, M4-DATA-01 | — |
 | M1-DUO-01 | iPhone Duo research spike: posture, Split View, Duo Preview, outer display in Unity 6 | gj-gameplay | P2 | in-review | M0-UNITY-01 | ticket/M1-DUO-01-duo-research |
 | M1-MOVE-06 | Normal-aware contact IK (hands/feet conform to surfaces) (AUTH #043) | gj-gameplay | P2 | open | M1-GAME-01, M1-MOVE-04 | — |
 | M1-MOVE-07 | Miniature realism levers: cadence/accel + miniature camera look (AUTH #043) | gj-gameplay | P2 | open | M1-MOVE-03 | — |
@@ -316,3 +322,4 @@ Milestone states: M0 in progress · M1–M6 not started (SPEC §8).
 | 2026-10-01 | fast-forward to main (no PR; Coordinator/Builder) | AUTH #043 movement fluidity & realism v1 (spec + Brain-B); M1-MOVE-03..08 | Owner directed "proceed to spec+build" for stride/speed warping (#1), traversal-graph anticipation (#2), procedural landing/weight + camera dip (#3), normal-aware contact IK (#5), and miniature realism levers (#6: cadence/accel + tilt-shift DoF + scale-aware motion blur); #8 (learned/physics motion) planned as a v2-targeted Tier-2 research spike. Logged **AUTH #043** + `design/proposals/movement-fluidity-realism-v1.md` + auth-request. Built the deterministic **Brain-B reference** (no frozen-schema or movement.json change): `services/traversal/anticipation.py` (per-edge anticipation hints — contact point, hand pre-reach, gaze look-ahead, lead-time, plant foot) + `locomotion_ref.py` (`stride_scale`, Bible §5 `landing_response`, miniature cadence dial), 30 tests. Created tickets **M1-MOVE-03..07** (gj-gameplay C# runtime) + **M1-MOVE-08** (Brain-B, in-progress). The `movement.json` `locomotion`/`anticipation`/`landingResponse` blocks + Bible §2/§3/§5/§8/§10 + a DESIGN_SYSTEM camera note are the AUTH #043 **6-file + C# lockstep — Operator-gated, bundled with the pending #036**. |
 | 2026-10-01 | fast-forward to main (no PR; Coordinator/Builder) | AUTH #043 default -> more-real; M2-RES-01 (#8 opened) | Owner decisions (2026-10-01): (1) ship the **more-miniature-real** profile as the v1 default - locomotion_ref defaults cadenceScale 1.5->1.9, accelTimeSec 0.14->0.10 (stride compresses to ~0.81 at run; miniature realism fraction 0.20->0.37 at 1:12), and gravityScale 0.8->0.9 in the Operator-gated lockstep; keep-the-fantasy becomes the variant (proposal, auth-request, M1-MOVE-07, and an AUTH #043 addendum updated). (2) **Opened + explored #8** (learned/physics motion): ticket M2-RES-01 + research/tier2/learned-physics-motion-2026-10.md - landscape (learned motion matching = mobile-feasible + DB-shrinking; diffusion = offline generator; physics-RL/PARC = v2 north star) + a 3-experiment Tier-2 spike (A LMM runtime, B offline clip augmentation feeding v1, C physics-RL feasibility) on the existing #040/#039 compute, each go/no-go, none gating v1 (which ships classic motion matching). 77 traversal tests green. |
 | 2026-10-01 | fast-forward to main (no PR; Coordinator/Builder) | M2-RES-01 Experiment B primed (turnkey) | Primed the #8 Experiment B (offline clip augmentation) so the Operator can run it the moment compute is live: `research/tier2/experiment-b-run-spec.md` (inputs = the mocap whitelist + Owner Rokoko/Move.ai captures + corpus traversal graphs + the `movement.json` reach envelope; recipe = demand grid -> baseline -> conditioned generation -> **deterministic accept/reject at the 0.85 margin via `affordances`** -> retarget -> 60 MB-budget selection) and the measurable coverage metric as **tested code**: `services/traversal/motion_coverage.py` (demanded verb×distance×rise grid, coverage, before/after delta; 8 tests on the desk fixture, CLI). Go/no-go: ≥0.80 cells covered + P0 gaps closed, DB ≤60 MB, no quality regression; corpus + our mocap only (SPEC §3.3). No frozen-schema / `movement.json` change. |
+| 2026-10-01 | fast-forward to main (no PR; Coordinator/Builder) | AUTH #044 custom avatars -> v1 (governance + contracts + tickets) | **Owner decision**: move custom avatars into v1 as parametric, on-device, opt-in variations of one base rig (preset OR custom); supersedes the avatar half of #020/ADR-0006. Logged **AUTH #044** (security-sensitive) + `design/proposals/custom-avatars-v1.md` + auth-request. Built the non-biometric **data contracts** `data/schemas/avatar/` (avatar_params + consent_record + validate_avatar + 7 tests; rig-conformant by construction; no media/landmark/template fields). **ADR-0007** records the decision; **SECURITY_CHECKLIST §5/§6 activated for v1** (strengthened on-device-only / no-vendor; §6.2 N/A by design; counsel gate before ship). Tickets **M1-AVAT-01..05** + **M1-LEGAL-01** (counsel review, reinstated); **M2-AVAT-01 cancelled** (superseded). **Binding ship gate**: the on-device biometric runtime (M1-AVAT-02) + consent copy ship only after in-house counsel sign-off (§5.5) + secondary security review (#007). Remaining governed edits (SPEC/DESIGN_SYSTEM reconcile + legal copy reframe) tracked under M1-AVAT-* / M1-LEGAL-01. |

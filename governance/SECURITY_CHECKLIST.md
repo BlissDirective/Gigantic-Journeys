@@ -47,11 +47,11 @@ The app holds two sensitive things: biometric imagery (faces, bodies) and photog
 
 ## 5. Biometric consent gate (BIPA and peers)
 
-> **v1: NOT APPLICABLE — no biometric processing (AUTH #020 / ADR-0006).** v1 uses pre-made characters; there is no face or body capture. This section is a **V2 gate** for the custom-avatar feature — **except row 5.6 (the 13+ age gate), which remains a v1 requirement** (it is independent of biometrics). The other rows apply when V2 ships.
+> **v1: ACTIVE for the custom-avatar feature (AUTH #044, 2026-10-01; supersedes the #020 "V2 gate / not applicable" status).** Custom avatars are a v1 feature, so this gate applies in v1 — **strengthened**: biometric is processed **on-device only** (ARKit/Vision landmarks → coarse `avatar_params`), the photo/video is **discarded on-device and never uploaded** (no vendor), and only the non-identifying parameter set persists. A user who picks a preset triggers none of this. The **on-device biometric runtime and the consent copy ship only after in-house counsel sign-off** (§5.5). Row 5.6 (13+ age gate) remains a v1 requirement regardless.
 
 | # | Control | |
 |---|---|---|
-| 5.1 | No face or body photo bytes leave the device, and no vendor job is created, until a consent record exists: user id, policy version, timestamp, locale, hash of the exact consent text shown, stated retention. | B |
+| 5.1 | **Face/body media is processed on-device only and never leaves the device** (no upload, no vendor); only the non-identifying `avatar_params` persists. No on-device face processing begins until a consent record exists: user id, policy version, timestamp, locale, hash of the exact consent text shown, stated retention. | B |
 | 5.2 | Consent is a separate, explicit step with one plain sentence and a "learn more" sheet; never bundled into onboarding, terms, or the camera permission. | B |
 | 5.3 | Training use of derived avatar data is a separate opt-in toggle, default off. | B |
 | 5.4 | Withdrawal and deletion are one tap from settings and complete within 30 days, including vendor-side deletion. | B |
@@ -63,7 +63,7 @@ The app holds two sensitive things: biometric imagery (faces, bodies) and photog
 | # | Control | |
 |---|---|---|
 | 6.1 | Raw scan video, poses, and depth are deleted from storage automatically when derived assets exist; failed jobs are deleted within 7 days. | B |
-| 6.2 | *(V2, AUTH #020 — no face capture in v1)* Face and body photos are deleted on device, in storage, and at the vendor immediately after avatar generation; a deletion receipt is logged without the media. | V2 |
+| 6.2 | **N/A by design (AUTH #044): no vendor and no server-side photo ever.** The face/body media is processed on-device and discarded on-device immediately after the parameter set is fit; nothing is uploaded or stored server-side, so there is nothing to delete at a vendor. A local deletion is logged without the media. | B |
 | 6.3 | Reconstruction runs on our own infrastructure (self-host, ADR-0005) — the committed, prioritized v1 path. A managed **bridge (KIRI/APS) is conditional**: used only under a **written no-train + DPA + data-residency** commitment on file before use, and only ever on the **consented corpus, never real user scans**; absent that commitment there is no bridge (AUTH #030). **No avatar vendor in v1.** A third party that trains on customer data by default is never sent real user data. | G (M1) |
 | 6.4 | Per-user delete-all removes every data class in `SPEC.md` §7; an end-to-end run on staging is suggested. | G (M5) |
 | 6.5 | Bots never handle raw user photos or video; the test corpus is Owner-supplied and consented. | B |
@@ -123,7 +123,7 @@ Contain (rotate, unpublish), record in `governance/INCIDENTS.md`, notify the Own
 |---|---|
 | M0 | 1.1–1.6, 8.1, 8.2 |
 | M1 | 4.1–4.3 (upload path), 6.1, 6.3 (reconstruction bridge, corpus-only), 7.1–7.2 |
-| M2 | — (biometric rows 5.1–5.4, 6.2 deferred to V2 — AUTH #020; no new v1 security gate at M2) |
+| M2 | — (custom-avatar biometric gate is a v1 item under AUTH #044 — tracked in M1-AVAT-*; no new security gate introduced at M2) |
 | M3 | 9.7, 9.8 (release flags) |
 | M4 | 2.1–2.5, 3.1–3.4, 10.1–10.4 |
-| M5 | 6.4, 8.4, 9.1–9.10, 5.6 (13+ age gate), accurate App Store privacy labels (biometric 5.5 and avatar-vendor DPA deferred to V2 — AUTH #020) |
+| M5 | 6.4, 8.4, 9.1–9.10, 5.6 (13+ age gate), accurate App Store privacy labels (on-device biometric, AUTH #044). **Biometric §5.5 counsel review is a v1 gate before the custom-avatar feature ships** (AUTH #044); no avatar vendor / DPA (on-device, no vendor). |

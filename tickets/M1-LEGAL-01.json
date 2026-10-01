@@ -1,0 +1,43 @@
+{
+  "id": "M1-LEGAL-01",
+  "title": "Counsel review of biometric consent/retention/labels (v1)",
+  "milestone": "M1",
+  "area": "LEGAL",
+  "owner": "owner",
+  "qa": null,
+  "status": "blocked",
+  "priority": "P0",
+  "size": "M",
+  "summary": "In-house counsel review + sign-off of the v1 custom-avatar legal package before the biometric runtime ships: the on-device/no-vendor BIPA consent copy, retention/destruction schedule, deletion flow, minors handling (13+), and App Store privacy labels. Reinstated for v1 under AUTH #044 (was cancelled-for-v1 under #020). Hard ship gate (SECURITY_CHECKLIST §5.5).",
+  "deliverables": [
+    "legal/BIPA_CONSENT.md (reframed on-device/no-vendor)",
+    "legal/RETENTION_SCHEDULE.md",
+    "legal/PRIVACY_POLICY.md",
+    "legal/APP_STORE_UGC_COMPLIANCE.md",
+    "legal/DELETION_FLOW.md"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "Counsel signs off the biometric consent copy (BIPA/CUBI/MHMDA), retention/destruction schedule, minors handling, and App Store privacy labels for the on-device custom-avatar feature; the consent_text_hash can then be frozen.",
+      "evidence": "counsel sign-off recorded in legal/ + governance",
+      "automated": false,
+      "level": "required"
+    }
+  ],
+  "security": ["SECURITY_CHECKLIST §5.5 (counsel review before ship)"],
+  "depends_on": ["M1-AVAT-03"],
+  "blocked_by": ["in-house counsel availability + the drafted on-device legal copy"],
+  "auth_required": [
+    { "type": "design-change", "what": "reinstate counsel review for the v1 custom-avatar feature", "auth_id": "AUTH #044", "status": "approved" }
+  ],
+  "references": ["AUTH #044", "AUTH #016 (in-house legal)", "ADR-0007", "legal/"],
+  "branch": null,
+  "pr": null,
+  "created": "2026-10-01",
+  "updated": "2026-10-01",
+  "history": [
+    { "date": "2026-10-01", "event": "reinstated for v1 under AUTH #044 (custom avatars -> v1). The biometric runtime (M1-AVAT-02) does not ship until this passes.", "by": "claude-builder" }
+  ],
+  "notes": "Hard ship gate. Builder drafts the on-device/no-vendor copy; in-house counsel signs off."
+}

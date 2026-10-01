@@ -1,0 +1,54 @@
+{
+  "id": "M1-AVAT-02",
+  "title": "On-device custom-avatar pipeline (face to params, no vendor)",
+  "milestone": "M1",
+  "area": "AVAT",
+  "owner": "gj-gameplay",
+  "qa": "gj-qa-release",
+  "status": "blocked",
+  "priority": "P1",
+  "size": "L",
+  "summary": "On-device custom-avatar creation: ARKit/Vision face landmarks (+ optional short guided video) fit the coarse avatar_params ('idealized me'); the photo/video + landmarks are discarded on-device and never uploaded (no vendor); only avatar_params persists. Fully opt-in behind the biometric consent (M1-AVAT-03). SHIP-GATED on in-house counsel sign-off (SECURITY_CHECKLIST §5.5) + secondary security review (AUTH #007).",
+  "deliverables": ["unity/ios (on-device capture + landmark fit + params + media discard)"],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "A custom avatar is fit on-device into avatar_params that validates against the schema; the photo/video and landmarks are provably discarded on-device and no media leaves the device (no network egress of media).",
+      "evidence": "on-device test + egress check",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "No face processing begins without a granted custom_avatar_biometric consent record (SECURITY_CHECKLIST §5.1).",
+      "evidence": "consent-gate test",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "The resulting avatar is rig-conformant by construction and moves identically well.",
+      "evidence": "Unity clip",
+      "automated": false,
+      "level": "suggested"
+    }
+  ],
+  "security": ["SECURITY_CHECKLIST §5 (biometric consent gate, v1 under #044)", "§6.2 (N/A by design: on-device, no vendor)", "SPEC §3.9/§7"],
+  "depends_on": ["M1-AVAT-01", "M1-AVAT-03"],
+  "blocked_by": [
+    "in-house counsel sign-off of the biometric consent/retention/labels (SECURITY_CHECKLIST §5.5, AUTH #016) before ship",
+    "secondary security review (AUTH #007)"
+  ],
+  "auth_required": [
+    { "type": "design-change", "what": "on-device biometric custom-avatar pipeline (v1)", "auth_id": "AUTH #044", "status": "approved" }
+  ],
+  "references": ["AUTH #044", "ADR-0007", "design/proposals/custom-avatars-v1.md", "legal/BIPA_CONSENT.md"],
+  "branch": null,
+  "pr": null,
+  "created": "2026-10-01",
+  "updated": "2026-10-01",
+  "history": [
+    { "date": "2026-10-01", "event": "created under AUTH #044. Security-sensitive (biometric); blocked on counsel sign-off + secondary review before ship. On-device only, no vendor.", "by": "claude-builder" }
+  ],
+  "notes": "The on-device C# runtime mirrors data/schemas/avatar/validate_avatar (reference validator + forbidden-key guard). Face never leaves the device."
+}

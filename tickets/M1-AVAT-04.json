@@ -1,0 +1,36 @@
+{
+  "id": "M1-AVAT-04",
+  "title": "Per-share upload opt-in + gameplay-view capture",
+  "milestone": "M1",
+  "area": "AVAT",
+  "owner": "gj-gameplay",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P2",
+  "size": "M",
+  "summary": "Sharing of highlight / summit / competition media is 100% opt-in, per-category, from the gameplay view (which rarely shows the avatar's face). Each upload requires a granted share_* consent record and goes through the M4 publish + moderation pipeline (#026). Default: nothing is uploaded.",
+  "deliverables": ["unity (gameplay-view capture + per-share opt-in -> M4 publish/moderation)"],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "No highlight/summit/competition media uploads without the matching granted share_* consent record; uploaded media enters the M4 moderation path (#026).",
+      "evidence": "share-flow test",
+      "automated": false,
+      "level": "required"
+    }
+  ],
+  "security": ["SECURITY_CHECKLIST §5 (consent)", "SPEC §3.7 (publish/moderation)"],
+  "depends_on": ["M1-AVAT-03", "M4-DATA-01"],
+  "auth_required": [
+    { "type": "design-change", "what": "per-share upload opt-in (v1)", "auth_id": "AUTH #044", "status": "approved" }
+  ],
+  "references": ["AUTH #044", "AUTH #026 (publish/moderation)", "design/proposals/custom-avatars-v1.md"],
+  "branch": null,
+  "pr": null,
+  "created": "2026-10-01",
+  "updated": "2026-10-01",
+  "history": [
+    { "date": "2026-10-01", "event": "created under AUTH #044 (opt-in sharing of gameplay-view media).", "by": "claude-builder" }
+  ],
+  "notes": "Gameplay-view captures rarely show the face; still per-share opt-in + moderated (#026)."
+}

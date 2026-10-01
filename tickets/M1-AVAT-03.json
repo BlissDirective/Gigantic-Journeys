@@ -1,0 +1,43 @@
+{
+  "id": "M1-AVAT-03",
+  "title": "Layered consent and opt-in UX and records",
+  "milestone": "M1",
+  "area": "AVAT",
+  "owner": "gj-gameplay",
+  "qa": "gj-qa-release",
+  "status": "open",
+  "priority": "P1",
+  "size": "M",
+  "summary": "The layered, default-off, purpose-specific opt-in UX + consent records (data/schemas/avatar/consent_record): (A) custom_avatar_biometric, (B) avatar_cloud_sync, (C) per-share upload (highlight/summit/competition), (D) training. Each is a separate explicit screen (never bundled), writes an immutable record before the action, and is withdrawable in one tap. The 13+ age gate precedes consent.",
+  "deliverables": ["unity (consent screens + records + settings withdrawal)"],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "Each purpose is a separate explicit opt-in that writes a schema-valid consent_record before any action in that purpose; no action proceeds without a granted record; withdrawal writes a granted:false record and completes within 30 days.",
+      "evidence": "consent-flow test + records",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "The 13+ age gate precedes consent (SECURITY_CHECKLIST §5.6).",
+      "evidence": "age-gate test",
+      "automated": false,
+      "level": "required"
+    }
+  ],
+  "security": ["SECURITY_CHECKLIST §5.1-§5.6 (v1 under #044)"],
+  "depends_on": ["M1-AVAT-01"],
+  "auth_required": [
+    { "type": "design-change", "what": "layered biometric/sharing consent (v1)", "auth_id": "AUTH #044", "status": "approved" }
+  ],
+  "references": ["AUTH #044", "legal/BIPA_CONSENT.md", "data/schemas/avatar/consent_record.schema.json"],
+  "branch": null,
+  "pr": null,
+  "created": "2026-10-01",
+  "updated": "2026-10-01",
+  "history": [
+    { "date": "2026-10-01", "event": "created under AUTH #044. Consent copy counsel-gated before ship (§5.5).", "by": "claude-builder" }
+  ],
+  "notes": "Records follow data/schemas/avatar/consent_record; consent copy in legal/BIPA_CONSENT.md (counsel sign-off before ship)."
+}
