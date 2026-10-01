@@ -11,6 +11,8 @@
   "summary": "Forward/v2 research spike for AUTH #043 item #8 (learned/physics-based motion), opened and explored by the Builder now; GPU experiments run on the Operator's return. Three offline experiments, each with a go/no-go gate, none gating v1 (which ships classic motion matching, M1-MOVE-01): (A) Learned Motion Matching on the ~110-clip whitelist — DB compression + on-device per-frame cost vs the classic baseline; (B) offline neural augmentation of the traversal vocabulary on scanned-terrain variants, fed into the v1 clip DB (the sound form of 'video -> usable motion'); (C) physics-RL (AMP/ASE/PARC-style) feasibility on one traversal verb + a distillation verdict. All on Tier-2 compute; our own mocap + the consented corpus only (SPEC §3.3), never user scans.",
   "deliverables": [
     "research/tier2/learned-physics-motion-2026-10.md (landscape + feasibility + spike plan + go/no-go)",
+    "research/tier2/experiment-b-run-spec.md (Experiment B runbook — inputs, recipe, coverage metric)",
+    "services/traversal/motion_coverage.py + tests (the Experiment B coverage metric, Brain-B)",
     "Experiment reports (A/B/C) under research/tier2/ when the GPU runs happen"
   ],
   "acceptance_tests": [
@@ -71,6 +73,11 @@
     {
       "date": "2026-10-01",
       "event": "Opened by Owner direction ('open the #8 learned physics/motion spike and explore it right now'). Builder delivered the landscape + mobile-feasibility exploration + the three-experiment spike plan (research/tier2/learned-physics-motion-2026-10.md); AT-1 met. GPU experiments A/B/C await the Operator and the M1-MOVE-01 baseline. open -> in-progress.",
+      "by": "claude-builder"
+    },
+    {
+      "date": "2026-10-01",
+      "event": "Primed Experiment B for the Operator (Owner direction): run spec research/tier2/experiment-b-run-spec.md + the coverage-metric engine services/traversal/motion_coverage.py (8 tests), reusing affordances.best_affordance as the deterministic accept/reject filter at the 0.85 margin. Turnkey (demand grid -> baseline -> conditioned generation -> accept -> coverage delta); GPU generation + the Owner's captures pending.",
       "by": "claude-builder"
     }
   ],
