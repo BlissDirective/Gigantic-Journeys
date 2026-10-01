@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/BlissDirective/Gigantic-Journeys/data/schemas/avatar/avatar_params.schema.json",
+  "title": "Gigantic Journeys avatar parameter set",
+  "description": "The non-identifying cosmetic parameter set ('genome') on the shared GJ humanoid rig (gj-humanoid-1A). Used identically by preset and custom (on-device-fit) avatars, so any avatar is rig-conformant by construction. Contains NO biometric data: no photo/video bytes, no facial landmarks, no face embedding/template/descriptor, no re-identifying measurement. A custom avatar is fit from the user's face ON-DEVICE; the media is discarded on-device and only this parameter set persists (AUTH #044; SECURITY_CHECKLIST §5/§6).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "base_rig", "provenance", "body", "face", "skin_tone", "hair", "features", "cosmetic"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "base_rig": { "const": "gj-humanoid-1A" },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source"],
+      "properties": {
+        "source": { "enum": ["preset", "custom_on_device"] },
+        "preset_id": { "type": "string", "pattern": "^[a-z0-9-]{1,40}$" },
+        "fit_quality": { "enum": ["low", "medium", "high"] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "source": { "const": "preset" } } },
+          "then": { "required": ["preset_id"] }
+        }
+      ]
+    },
+    "body": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["height", "build"],
+      "properties": {
+        "height": { "type": "number", "minimum": 0, "maximum": 1 },
+        "build": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "face": {
+      "type": "object",
+      "description": "A handful of coarse shape morph weights (0..1) — NOT landmarks, NOT a template.",
+      "additionalProperties": false,
+      "required": ["shape", "width", "jaw", "brow", "nose", "eyes"],
+      "properties": {
+        "shape": { "type": "number", "minimum": 0, "maximum": 1 },
+        "width": { "type": "number", "minimum": 0, "maximum": 1 },
+        "jaw": { "type": "number", "minimum": 0, "maximum": 1 },
+        "brow": { "type": "number", "minimum": 0, "maximum": 1 },
+        "nose": { "type": "number", "minimum": 0, "maximum": 1 },
+        "eyes": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "skin_tone": { "type": "integer", "minimum": 0, "maximum": 31 },
+    "hair": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["style", "color"],
+      "properties": {
+        "style": { "enum": ["none", "buzz", "short", "medium", "long", "curly", "afro", "bun", "ponytail", "braids"] },
+        "color": { "type": "integer", "minimum": 0, "maximum": 31 }
+      }
+    },
+    "features": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["glasses", "facial_hair", "headwear"],
+      "properties": {
+        "glasses": { "enum": ["none", "round", "square", "sunglasses"] },
+        "facial_hair": { "enum": ["none", "stubble", "mustache", "goatee", "full"] },
+        "headwear": { "enum": ["none", "cap", "beanie", "band"] }
+      }
+    },
+    "cosmetic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["outfit", "material_tier"],
+      "properties": {
+        "outfit": { "type": "string", "pattern": "^[a-z0-9-]{1,40}$" },
+        "material_tier": { "enum": ["standard", "realism-plus"] }
+      }
+    }
+  }
+}

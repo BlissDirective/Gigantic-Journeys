@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0.0",
+  "base_rig": "gj-humanoid-1A",
+  "provenance": { "source": "custom_on_device" },
+  "body": { "height": 0.6, "build": 0.55 },
+  "face": { "shape": 0.62, "width": 0.48, "jaw": 0.7, "brow": 0.4, "nose": 0.55, "eyes": 0.5 },
+  "face_landmarks": [[0.1, 0.2], [0.3, 0.4]],
+  "skin_tone": 20,
+  "hair": { "style": "curly", "color": 3 },
+  "features": { "glasses": "round", "facial_hair": "goatee", "headwear": "none" },
+  "cosmetic": { "outfit": "explorer-rust", "material_tier": "realism-plus" }
+}

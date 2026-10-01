@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "base_rig": "gj-humanoid-1A",
+  "provenance": { "source": "preset", "preset_id": "roster-ava-01" },
+  "body": { "height": 0.52, "build": 0.4 },
+  "face": { "shape": 0.5, "width": 0.5, "jaw": 0.45, "brow": 0.5, "nose": 0.5, "eyes": 0.5 },
+  "skin_tone": 12,
+  "hair": { "style": "short", "color": 8 },
+  "features": { "glasses": "none", "facial_hair": "none", "headwear": "none" },
+  "cosmetic": { "outfit": "explorer-teal", "material_tier": "standard" }
+}

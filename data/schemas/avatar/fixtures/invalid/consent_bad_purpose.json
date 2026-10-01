@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "user_id": "u_8f3a2b1c",
+  "purpose": "sell_biometric_data",
+  "granted": true,
+  "policy_version": "consent-v1",
+  "consent_text_hash": "19f2dac80b29c8fdbe4b02d8f2a89e81fef4a3a5969e16dc89a8ddb910e84e4e",
+  "timestamp": "2026-10-01T00:00:00Z",
+  "locale": "en-US",
+  "app_version": "1.0.0"
+}

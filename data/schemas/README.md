@@ -13,6 +13,8 @@ Frozen schemas: telemetry and correction events (M0-DATA-01), scene graph, trave
 | `environment/scene_graph.json` | **1.0.0** | AUTH #037 (2026-09-29) | frozen; M1-SCEN-01/02 output |
 | `environment/traversal_graph.json` | **1.0.0** | AUTH #037 (2026-09-29) | frozen; M1-SCEN-03/05 output |
 | `environment/environment_spec.json` | **1.0.0** | AUTH #037 (2026-09-29) | frozen; playable contract for the Unity loader (M1-GAME-01) |
+| `avatar/avatar_params.schema.json` | **1.0.0** | AUTH #044 (2026-10-01) | v1 custom-avatar contract (non-biometric); additive changes bump minor |
+| `avatar/consent_record.schema.json` | **1.0.0** | AUTH #044 (2026-10-01) | layered opt-in record (non-biometric); additive changes bump minor |
 
 ## Change rule
 
