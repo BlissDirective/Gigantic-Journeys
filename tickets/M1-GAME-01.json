@@ -50,7 +50,7 @@
   "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-09-16",
-  "updated": "2026-09-30",
+  "updated": "2026-10-02",
   "history": [
     {
       "date": "2026-09-16",
@@ -61,6 +61,11 @@
       "date": "2026-09-30",
       "event": "Builder (AUTH #027): loader prep — contract + tests only (no unverified C#, per the Owner). services/packages/CONTRACT.md specifies the package layout, the C# load order (parse environment_spec.json manifest → resolve the asset filenames from its assets block → load the two graph docs in the fixed A/+y/left frame → verify the movement config_sha256 → render splat + collision mesh → place goals) and the DESIGN_SYSTEM §1 placement (summit beacon at summit.position visible-from-start depth-faded; route markers along the selected route's beat edge_ids via the traversal-graph nodes; up to 3 vista sparkles; all drawn on top). services/packages/package.py is the reference implementation the C# loader conforms to: assemble() writes a package from a scene_graph/traversal_graph/environment_spec triple + assets; validate() runs the loader's checks (manifest + both graph schemas, binary assets present under their declared names, and the three docs cross-consistent via the frozen check_consistency). Golden package fixture assembled from the frozen desk-tabletop triple committed to unity/Assets/GiganticJourneys/Tests/Environments/desk-tabletop/ (binary assets are presence-only stubs) for the C# EditMode loader test. 7 tests: reference-validate clean on the frozen triple, the committed golden validates, a drift guard (golden docs == frozen fixtures), and the failure modes (missing asset, missing manifest, inconsistent triple). ruff + format clean. open → in-progress.",
       "by": "claude-builder"
+    },
+    {
+      "date": "2026-10-02",
+      "event": "gj-operator: C# loader + goal elements built and verified on the box (unity/Assets/GiganticJourneys/Environment/, assembly GJ.Environment). EnvironmentPackage implements the CONTRACT load order and checks (package-relative asset names, schema 1.0.0, matching environment_id, A/+y/left frame, movement config_sha256 vs the shipped movement.json, node/edge/vista cross-checks, surface-to-triangle map). GoalPlacement covers spawn yaw, the route polyline and footprints. EnvironmentLoader builds the spawn, summit beam (on by default, player toggle), vista sparkles and route footprints (hidden until a route is selected) with the shared on-top marker shader (GJ/OnTopMarker: additive, ZTest Always, fades behind geometry with the URP depth texture). It also builds the splat (bundled GaussianSplatAsset + tier applier + Metal-safe sort) and the MeshCollider (bundled Mesh). 22/22 EditMode tests, no console errors: qa/reports/M1-GAME-01.md. Remaining: runtime .spz/.glb decode (needs a runtime splat-asset builder and a glTF importer package add) and the AT-2 device look with a corpus package. Status stays in-progress.",
+      "by": "gj-operator"
     }
   ],
   "notes": "Contract + reference validator + golden fixture done (Python, testable). The C# runtime loader + splat/mesh rendering + beacon/marker/vista placement (AT-1/AT-2) are gj-gameplay's, validated in Unity against unity/.../Tests/Environments/desk-tabletop/ and CONTRACT.md; AT-1/AT-2/AT-3 need real corpus packages (Operator reconstruction runs), not the presence-only stub assets. Depends_on M1-CAPT-02 (reconstruction output) still applies for the render side."

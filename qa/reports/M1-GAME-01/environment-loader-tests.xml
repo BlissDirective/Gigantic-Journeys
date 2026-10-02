@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="22" result="Passed" total="22" passed="22" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-02 17:19:59Z" end-time="2026-10-02 17:20:00Z" duration="0.1711398">
+  <test-suite type="TestSuite" id="1000" name="Gigantic Journeys" fullname="Gigantic Journeys" runstate="Runnable" testcasecount="205" result="Passed" start-time="2026-10-02 17:19:59Z" end-time="2026-10-02 17:20:00Z" duration="0.171140" total="22" passed="22" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1235" name="GiganticJourneys.EditMode.Tests.dll" fullname="/workspace/gj-op/unity/Library/ScriptAssemblies/GiganticJourneys.EditMode.Tests.dll" runstate="Runnable" testcasecount="205" result="Passed" start-time="2026-10-02 17:19:59Z" end-time="2026-10-02 17:20:00Z" duration="0.157735" total="22" passed="22" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="3875890" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1236" name="GiganticJourneys" fullname="GiganticJourneys" runstate="Runnable" testcasecount="205" result="Passed" start-time="2026-10-02 17:19:59Z" end-time="2026-10-02 17:20:00Z" duration="0.152423" total="22" passed="22" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1237" name="Tests" fullname="GiganticJourneys.Tests" runstate="Runnable" testcasecount="205" result="Passed" start-time="2026-10-02 17:19:59Z" end-time="2026-10-02 17:20:00Z" duration="0.147189" total="22" passed="22" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1026" name="EnvironmentPackageTests" fullname="GiganticJourneys.Tests.EnvironmentPackageTests" classname="GiganticJourneys.Tests.EnvironmentPackageTests" runstate="Runnable" testcasecount="22" result="Passed" start-time="2026-10-02 17:19:59Z" end-time="2026-10-02 17:20:00Z" duration="0.123543" total="22" passed="22" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1046" name="FootprintsAreEvenlySpacedAndAlternate" fullname="GiganticJourneys.Tests.EnvironmentPackageTests.FootprintsAreEvenlySpacedAndAlternate" methodname="FootprintsAreEvenlySpacedAndAlternate" classname="GiganticJourneys.Tests.EnvironmentPackageTests" runstate="Runnable" seed="1701402673" result="Passed" start-time="2026-10-02 17:19:59Z" end-time="2026-10-02 17:19:59Z" duration="0.027172" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1027" name="GoldenLoadsAgainstTheShippedMovementConfig" fullname="GiganticJourneys.Tests.EnvironmentPackageTests.GoldenLoadsAgainstTheShippedMovementConfig" methodname="GoldenLoadsAgainstTheShippedMovementConfig" classname="GiganticJourneys.Tests.EnvironmentPackageTests" runstate="Runnable" seed="793542180" result="Passed" start-time="2026-10-02 17:19:59Z" end-time="2026-10-02 17:19:59Z" duration="0.012429" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1048" name="LoaderBuildsTheGoalElementsWithNoConsoleErrors" fullname="GiganticJourneys.Tests.EnvironmentPackageTests.LoaderBuildsTheGoalElementsWithNoConsoleErrors" methodname="LoaderBuildsTheGoalElementsWithNoConsoleErrors" classname="GiganticJourneys.Tests.EnvironmentPackageTests" runstate="Runnable" seed="88871121" result="Passed" start-time="2026-10-02 17:19:59Z" end-time="2026-10-02 17:19:59Z" duration="0.025481" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[GJ-ENV] splat.spz: runtime .spz decode not built yet; assign a bundled GaussianSplatAsset to draw the splat
+[GJ-ENV] collision.glb: runtime .glb import not built yet; assign a bundled collision Mesh
+]]></output>
+            </test-case>
+            <test-case id="1044" name="MalformedJsonIsRejectedWithTheFileName" fullname="GiganticJourneys.Tests.EnvironmentPackageTests.MalformedJsonIsRejectedWithTheFileName" methodname="MalformedJsonIsRejectedWithTheFileName" classname="GiganticJourneys.Tests.EnvironmentPackageTests" runstate="Runnable" seed="1083163175" result="Passed" start-time="2026-10-02 17:19:59Z" end-time="2026-10-02 17:19:59Z" duration="0.003553" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1049" name="MarkerShaderCompilesAndDrawsOnTop" fullname="GiganticJourneys.Tests.EnvironmentPackageTests.MarkerShaderCompilesAndDrawsOnTop" methodname="MarkerShaderCompilesAndDrawsOnTop" classname="GiganticJourneys.Tests.EnvironmentPackageTests" runstate="Runnable" seed="59205960" result="Passed" start-time="2026-10-02 17:19:59Z" end-time="2026-10-02 17:19:59Z" duration="0.003640" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1042" name="MismatchedEnvironmentIdIsRejected" fullname="GiganticJourneys.Tests.EnvironmentPackageTests.MismatchedEnvironmentIdIsRejected" methodname="MismatchedEnvironmentIdIsRejected" classname="GiganticJourneys.Tests.EnvironmentPackageTests" runstate="Runnable" seed="1832833080" result="Passed" start-time="2026-10-02 17:19:59Z" end-time="2026-10-02 17:19:59Z" duration="0.002297" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1034" name="MissingAssetIsRejected" fullname="GiganticJourneys.Tests.EnvironmentPackageTests.MissingAssetIsRejected" classname="GiganticJourneys.Tests.EnvironmentPackageTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-02 17:19:59Z" end-time="2026-10-02 17:20:00Z" duration="0.007656" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1031" name="MissingAssetIsRejected(&quot;splat.spz&quot;)" fullname="GiganticJourneys.Tests.EnvironmentPackageTests.MissingAssetIsRejected(&quot;splat.spz&quot;)" methodname="MissingAssetIsRejected" classname="GiganticJourneys.Tests.EnvironmentPackageTests" runstate="Runnable" seed="2052202929" result="Passed" start-time="2026-10-02 17:19:59Z" end-time="2026-10-02 17:19:59Z" duration="0.001725" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1032" name="MissingAssetIsRejected(&quot;collision.glb&quot;)" fullname="GiganticJourneys.Tests.EnvironmentPackageTests.MissingAssetIsRejected(&quot;collision.glb&quot;)" methodname="MissingAssetIsRejected" classname="GiganticJourneys.Tests.EnvironmentPackageTests" runstate="Runnable" seed="521594948" result="Passed" start-time="2026-10-02 17:19:59Z" end-time="2026-10-02 17:19:59Z" duration="0.001347" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1033" name="MissingAssetIsRejected(&quot;traversal_graph.json&quot;)" fullname="GiganticJourneys.Tests.EnvironmentPackageTests.MissingAssetIsRejected(&quot;traversal_graph.json&quot;)" methodname="MissingAssetIsRejected" classname="GiganticJourneys.Tests.EnvironmentPackageTests" runstate="Runnable" seed="150255583" result="Passed" start-time="2026-10-02 17:19:59Z" end-time="2026-10-02 17:20:00Z" duration="0.001327" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1030" name="MissingManifestIsRejected" fullname="GiganticJourneys.Tests.EnvironmentPackageTests.MissingManifestIsRejected" methodname="MissingManifestIsRejected" classname="GiganticJourneys.Tests.EnvironmentPackageTests" runstate="Runnable" seed="1983443916" result="Passed" start-time="2026-10-02 17:20:00Z" end-time="2026-10-02 17:20:00Z" duration="0.001340" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1040" name="NonPackageRelativeAssetNameIsRejected" fullname="GiganticJourneys.Tests.EnvironmentPackageTests.NonPackageRelativeAssetNameIsRejected" classname="GiganticJourneys.Tests.EnvironmentPackageTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-10-02 17:20:00Z" end-time="2026-10-02 17:20:00Z" duration="0.008589" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1035" name="NonPackageRelativeAssetNameIsRejected(&quot;../splat.spz&quot;)" fullname="GiganticJourneys.Tests.EnvironmentPackageTests.NonPackageRelativeAssetNameIsRejected(&quot;../splat.spz&quot;)" methodname="NonPackageRelativeAssetNameIsRejected" classname="GiganticJourneys.Tests.EnvironmentPackageTests" runstate="Runnable" seed="631519013" result="Passed" start-time="2026-10-02 17:20:00Z" end-time="2026-10-02 17:20:00Z" duration="0.001648" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1036" name="NonPackageRelativeAssetNameIsRejected(&quot;https://cdn.example/splat.spz&quot;)" fullname="GiganticJourneys.Tests.EnvironmentPackageTests.NonPackageRelativeAssetNameIsRejected(&quot;https://cdn.example/splat.spz&quot;)" methodname="NonPackageRelativeAssetNameIsRejected" classname="GiganticJourneys.Tests.EnvironmentPackageTests" runstate="Runnable" seed="1885223032" result="Passed" start-time="2026-10-02 17:20:00Z" end-time="2026-10-02 17:20:00Z" duration="0.001485" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1037" name="NonPackageRelativeAssetNameIsRejected(&quot;sub/splat.spz&quot;)" fullname="GiganticJourneys.Tests.EnvironmentPackageTests.NonPackageRelativeAssetNameIsRejected(&quot;sub/splat.spz&quot;)" methodname="NonPackageRelativeAssetNameIsRejected" classname="GiganticJourneys.Tests.EnvironmentPackageTests" runstate="Runnable" seed="2135349317" result="Passed" start-time="2026-10-02 17:20:00Z" end-time="2026-10-02 17:20:00Z" duration="0.001366" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1038" name="NonPackageRelativeAssetNameIsRejected(&quot;C:\\\\splat.spz&quot;)" fullname="GiganticJourneys.Tests.EnvironmentPackageTests.NonPackageRelativeAssetNameIsRejected(&quot;C:\\\\splat.spz&quot;)" methodname="NonPackageRelativeAssetNameIsRejected" classname="GiganticJourneys.Tests.EnvironmentPackageTests" runstate="Runnable" seed="477944632" result="Passed" start-time="2026-10-02 17:20:00Z" end-time="2026-10-02 17:20:00Z" duration="0.001419" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1039" name="NonPackageRelativeAssetNameIsRejected(&quot;.hidden&quot;)" fullname="GiganticJourneys.Tests.EnvironmentPackageTests.NonPackageRelativeAssetNameIsRejected(&quot;.hidden&quot;)" methodname="NonPackageRelativeAssetNameIsRejected" classname="GiganticJourneys.Tests.EnvironmentPackageTests" runstate="Runnable" seed="1882617126" result="Passed" start-time="2026-10-02 17:20:00Z" end-time="2026-10-02 17:20:00Z" duration="0.001488" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1050" name="PackageRelativeNames" fullname="GiganticJourneys.Tests.EnvironmentPackageTests.PackageRelativeNames" methodname="PackageRelativeNames" classname="GiganticJourneys.Tests.EnvironmentPackageTests" runstate="Runnable" seed="1961084087" result="Passed" start-time="2026-10-02 17:20:00Z" end-time="2026-10-02 17:20:00Z" duration="0.001636" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1043" name="RouteNamingAnUnknownEdgeIsRejected" fullname="GiganticJourneys.Tests.EnvironmentPackageTests.RouteNamingAnUnknownEdgeIsRejected" methodname="RouteNamingAnUnknownEdgeIsRejected" classname="GiganticJourneys.Tests.EnvironmentPackageTests" runstate="Runnable" seed="1188369164" result="Passed" start-time="2026-10-02 17:20:00Z" end-time="2026-10-02 17:20:00Z" duration="0.002484" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1045" name="RoutePolylineWalksTheBeatEdgesInOrder" fullname="GiganticJourneys.Tests.EnvironmentPackageTests.RoutePolylineWalksTheBeatEdgesInOrder" methodname="RoutePolylineWalksTheBeatEdgesInOrder" classname="GiganticJourneys.Tests.EnvironmentPackageTests" runstate="Runnable" seed="1968676796" result="Passed" start-time="2026-10-02 17:20:00Z" end-time="2026-10-02 17:20:00Z" duration="0.002896" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1028" name="ShippedMovementShaIsTheBytesOfConfigMovementJson" fullname="GiganticJourneys.Tests.EnvironmentPackageTests.ShippedMovementShaIsTheBytesOfConfigMovementJson" methodname="ShippedMovementShaIsTheBytesOfConfigMovementJson" classname="GiganticJourneys.Tests.EnvironmentPackageTests" runstate="Runnable" seed="904854550" result="Passed" start-time="2026-10-02 17:20:00Z" end-time="2026-10-02 17:20:00Z" duration="0.001632" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1047" name="SpawnFacingIsUnityYaw" fullname="GiganticJourneys.Tests.EnvironmentPackageTests.SpawnFacingIsUnityYaw" methodname="SpawnFacingIsUnityYaw" classname="GiganticJourneys.Tests.EnvironmentPackageTests" runstate="Runnable" seed="2092905656" result="Passed" start-time="2026-10-02 17:20:00Z" end-time="2026-10-02 17:20:00Z" duration="0.002646" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1029" name="StaleMovementShaIsRejected" fullname="GiganticJourneys.Tests.EnvironmentPackageTests.StaleMovementShaIsRejected" methodname="StaleMovementShaIsRejected" classname="GiganticJourneys.Tests.EnvironmentPackageTests" runstate="Runnable" seed="1080684677" result="Passed" start-time="2026-10-02 17:20:00Z" end-time="2026-10-02 17:20:00Z" duration="0.002097" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1041" name="WrongSchemaVersionIsRejected" fullname="GiganticJourneys.Tests.EnvironmentPackageTests.WrongSchemaVersionIsRejected" methodname="WrongSchemaVersionIsRejected" classname="GiganticJourneys.Tests.EnvironmentPackageTests" runstate="Runnable" seed="1410535093" result="Passed" start-time="2026-10-02 17:20:00Z" end-time="2026-10-02 17:20:00Z" duration="0.002074" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Saving results to: /home/box/.config/unity3d/SparkForge Labs/Gigantic Journeys/TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

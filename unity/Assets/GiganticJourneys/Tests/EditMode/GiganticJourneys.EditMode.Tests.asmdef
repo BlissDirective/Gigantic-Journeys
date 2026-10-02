@@ -17,7 +17,8 @@
         "GJ.MotionWarping",
         "GJ.Procedural",
         "GJ.Movement.Controller",
-        "GJ.Capture"
+        "GJ.Capture",
+        "GJ.Environment"
     ],
     "includePlatforms": [
         "Editor"
