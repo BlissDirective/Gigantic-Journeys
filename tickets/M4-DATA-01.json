@@ -8,7 +8,7 @@
   "reviewers": [
     "gj-data"
   ],
-  "status": "blocked",
+  "status": "in-review",
   "priority": "P0",
   "size": "L",
   "summary": "Supabase migrations for the social tables (environments, publishes, ratings, reports, leaderboard_times, moderation_actions) with RLS on every table and the locked policy patterns: owner-only for drafts and creator stats, published-read (published AND moderation-cleared) for public browse/play, service-role-only for the moderation queue and ranking jobs. Ratings, reports, and time submissions are rate-limited per user and device (SPEC §3.7; security-sensitive → secondary review, AUTH #007).",
@@ -62,7 +62,7 @@
   "branch": "ticket/M4-DATA-01-social-migration",
   "pr": null,
   "created": "2026-09-20",
-  "updated": "2026-09-29",
+  "updated": "2026-10-02",
   "history": [
     {
       "date": "2026-09-20",
@@ -78,6 +78,11 @@
       "date": "2026-09-29",
       "event": "APPROVED as AUTH #038 (Owner, re-confirmed 2026-09-29). Coordinator secondary security review complete (AUTH #027): check_rls.py green on the draft (RLS + a policy on every created table); #038 conditions all present — hashed cross-account device_hash (+ privacy label), user_blocks (Apple 1.2), leaderboards expose a handle not a raw user id, narrowed client grants, §10.2 per-user/per-device rate-limit trigger; the 31 RLS/rate-limit tests pass in CI (local ERRORs are only this sandbox's initdb failing to start PostgreSQL). Migration is staging-ready. Two of the three blockers cleared (AUTH + secondary review); the remaining step is the Operator's apply to Supabase staging.",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-10-02",
+      "by": "gj-operator",
+      "event": "Applied the AUTH #038 migration to Supabase STAGING only (never production): moved the draft unchanged under an APPROVED #038 header to supabase/migrations/20261002164500_m4_social.sql and applied it via the session pooler with psql --single-transaction ON_ERROR_STOP, recording version 20261002164500 in supabase_migrations.schema_migrations in the same transaction. Verified live: 7 new tables present; RLS enabled on all 8 public tables with 0 lacking RLS or a policy; 21 policies (owner-only / published-read / service-role-only); rate_limit_rules seeded (ratings 30/45 per h, reports 10/15 per h, leaderboard_times 20/30 per 10 min); BEFORE INSERT rate-limit triggers on ratings/reports/leaderboard_times; enforce_rate_limit not executable by anon/authenticated. Live rolled-back role smoke 8 PASS / 0 FAIL (anon+user denied on moderation_actions, anon sees published+cleared only, rating a draft rejected by RLS, client cannot set time status, 21st time in 10 min -> P0429, anon sees no pending times; 0 rows persisted). staging_smoke.py 12 PASS / 0 FAIL / 0 PENDING (db.rls_every_table 8 tables, db.migrations 2). check_rls green; 31 RLS/rate-limit pytest pass on local PG 17. Evidence: qa/reports/M4-DATA-01.md, qa/reports/STAGING-smoke.md, supabase/scripts/m4_social_live_smoke.sql. Commit ba4b58e on main; CI green (governance, lint incl. the 31 RLS tests, supabase-local live-RLS, secret-scan, unity-tests). All required ATs met -> in-review (Coordinator secondary review of the apply)."
     }
   ],
   "auth_required": [
@@ -88,7 +93,5 @@
       "status": "approved"
     }
   ],
-  "blocked_by": [
-    "Operator applies the validated migration to Supabase staging: add the APPROVED #038 header + timestamp, move design/proposals/m4-data-01-social/20261101000000_m4_social.sql to supabase/migrations/, and run it against staging (requires Supabase access)"
-  ]
+  "blocked_by": []
 }
