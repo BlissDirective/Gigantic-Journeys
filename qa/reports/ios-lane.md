@@ -39,6 +39,7 @@ rejected the binary at validation with two **409** errors:
 | **38** | 37036868207 (push of 6578740, release lane) | release | Xcode 26.6 / iphoneos SDK 26.5. "Successfully uploaded the new binary to App Store Connect", 2026-10-02 12:23 PM CT |
 | **39** | 37040933103 (push of 4d5aadc, release lane) | release | uploaded 2026-10-02 12:55 PM CT |
 | **40** | 37046098523 (workflow_dispatch on 686156b, lane=macos) | internal-debug | uploaded 2026-10-02 1:41 PM CT (TestFlight internal-testing-only, debug overlay included). This is the build for the M0-UNITY-04 on-device check |
+| **41** | 37053104250 (push of 9b16f0f, release lane) | release | uploaded 2026-10-02 2:48 PM CT. First release build that includes the M0-UNITY-03 lockstep, the M1-UNITY-01 Metal-safe sort, the M1-GAME-01 loader and the M1-AVAT-01 roster/picker |
 
 ## Owner follow-ups
 - The icon is a **placeholder** (amber summit beam over an isometric room, on charcoal). gj-design should replace

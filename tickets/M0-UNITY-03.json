@@ -5,7 +5,7 @@
   "area": "UNITY",
   "owner": "gj-gameplay",
   "qa": "gj-qa-release",
-  "status": "in-review",
+  "status": "done",
   "priority": "P0",
   "size": "L",
   "summary": "Lay down the movement architecture from Bible §2 as separate assemblies with the IVerbProvider seam, load config/movement.json at runtime, and prove locomotion plus standing/running jump with coyote time and jump buffering on a capsule in a flat test scene. No contact verbs yet (mantle, climb, hang are M1).",
@@ -82,7 +82,7 @@
   "branch": "ticket/M0-UNITY-03-traversal-controller",
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-29",
+  "updated": "2026-10-02",
   "history": [
     {
       "date": "2026-09-15",
@@ -102,6 +102,11 @@
     {
       "date": "2026-09-29",
       "event": "gj-operator follow-up (QA D1 + M1-DUO-01 BACKLOG item a): ControlCustomization (56–96 pt buttons, opacity, left-handed mirror, drag offset, PlayerPrefs store + Reset) applied by TouchLayout with safe-area/stick-zone clamping; active stick cancelled on safe-area change (Duo fold/Split View). EditMode 151/151 (17 new), PlayMode 18/18 (+1 new). Settings › Controls screen still needs M0-DSGN-02 tokens. Status unchanged (in-review).",
+      "by": "gj-operator"
+    },
+    {
+      "date": "2026-10-02",
+      "event": "gj-operator: AUTH #036 + #043 lockstep landed in one commit (b3c99e0). The six movement.json surfaces (config + schema + Bible §10 + StreamingAssets + Python movement.py/fixture + C# MovementConfig) gained the intent, camera, locomotion, anticipation{leadTimeSec} and landingResponse{controlLockSec} blocks. The default profile is 'more-miniature-real' (gravityScale 0.9; cadenceScale 1.9 and accelTimeSec 0.10 in locomotion). ProvisionalTuning.Intent/.Camera were removed and the consumers read MovementConfig. Strict-loader EditMode tests cover the AUTH036/AUTH043 blocks, nested extra keys and missing keys. CI green on 9b16f0f (unity-tests + ios-build). in-review -> done.",
       "by": "gj-operator"
     }
   ]

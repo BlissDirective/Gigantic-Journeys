@@ -53,12 +53,17 @@
   "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-10-01",
-  "updated": "2026-10-01",
+  "updated": "2026-10-02",
   "history": [
     {
       "date": "2026-10-01",
       "event": "created and built by the Builder under AUTH #027/#043: anticipation.py + locomotion_ref.py + 30 tests landed in a756868 (open -> in-progress). AT-1/AT-2 met (Python green); AT-3 lives in the proposal §2 until promoted to a standalone runtime-contract doc.",
       "by": "claude-builder"
+    },
+    {
+      "date": "2026-10-02",
+      "event": "gj-operator: the C# side of the lockstep landed (b3c99e0). locomotion_ref.LocomotionRef and anticipation.Anticipation gained from_movement_config, with tests pinning their defaults to config/movement.json (more-miniature-real profile).",
+      "by": "gj-operator"
     }
   ],
   "notes": "Reference only; the matching C# runtime is M1-MOVE-03..07 (gj-gameplay). Keep this in-progress until the Operator lands the movement.json lockstep so the reference params can be sourced from MovementConfig instead of the module defaults."

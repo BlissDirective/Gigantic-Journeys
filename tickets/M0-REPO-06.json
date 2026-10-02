@@ -53,6 +53,11 @@
       "date": "2026-10-02",
       "event": "gj-operator: AT-3 first real TestFlight runs, recorded in qa/reports/ios-lane.md. Root cause of the failed uploads (builds 36/37): App Store Connect 409s for the iOS 17.5 SDK (iOS 26 SDK now required) and a missing 1024 px App Store icon. The API key, app record (6815794301) and build-number path were fine. Fixes 6578740 (macos-26 runners + Xcode 26 SDK guard, placeholder opaque App Store icon assigned to every iOS slot + export-time icon check, ITSAppUsesNonExemptEncryption=false) and 4d5aadc (icon smoke tests without UnityEditor.iOS). Uploaded: build 38 (release, run 37036868207), build 39 (release, run 37040933103 on 4d5aadc), build 40 (internal-debug, run 37046098523). Owner follow-ups: final icon art; confirm the export-compliance declaration.",
       "by": "gj-operator"
+    },
+    {
+      "date": "2026-10-02",
+      "event": "gj-operator: build 41 (release, run 37053104250 on 9b16f0f) uploaded to TestFlight at 2:48 PM CT. It is the first build with the M0-UNITY-03 / M1-UNITY-01 / M1-GAME-01 / M1-AVAT-01 stack. Recorded in qa/reports/ios-lane.md. Status unchanged (done).",
+      "by": "gj-operator"
     }
   ],
   "notes": "Landed on main by the Coordinator (fast-forward, no PR) on 2026-09-15; unverified until a Unity project exists."

@@ -45,12 +45,17 @@
   "branch": null,
   "pr": null,
   "created": "2026-10-01",
-  "updated": "2026-10-01",
+  "updated": "2026-10-02",
   "history": [
     {
       "date": "2026-10-01",
       "event": "created by the Coordinator under AUTH #043 (item #6). Brain-B reference locomotion_ref.cadence_for_scale (sqrt(scale) ceiling + realism fraction) landed in a756868; the Unity cadence/accel + URP miniature volume are this ticket. The identity (keep-fantasy vs more-real) is a tunable two-profile dial.",
       "by": "claude-builder"
+    },
+    {
+      "date": "2026-10-02",
+      "event": "gj-operator: unblocked. The AUTH #036/#043 movement.json + C# MovementConfig lockstep landed (b3c99e0, M0-UNITY-03 done). C# can read MovementConfig.Locomotion / .Anticipation / .LandingResponse / .Camera directly, matching the Brain-B reference (services/traversal/locomotion_ref.py, anticipation.py from_movement_config).",
+      "by": "gj-operator"
     }
   ],
   "notes": "The optics (DoF + motion blur) are the only GPU-cost items in the pack: half-res/capped and auto-tiered off on low-end devices (AUTH #003 quality tiers). Gravity 0.9 by default (more-miniature-real profile, Owner 2026-10-01); the keep-the-fantasy variant uses 0.8."

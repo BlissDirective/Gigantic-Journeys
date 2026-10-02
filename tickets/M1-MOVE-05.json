@@ -44,12 +44,17 @@
   "branch": null,
   "pr": null,
   "created": "2026-10-01",
-  "updated": "2026-10-01",
+  "updated": "2026-10-02",
   "history": [
     {
       "date": "2026-10-01",
       "event": "created by the Coordinator under AUTH #043 (item #3). Brain-B reference locomotion_ref.landing_response (Bible §5 tiers) landed in a756868; the Unity landing/camera system is this ticket.",
       "by": "claude-builder"
+    },
+    {
+      "date": "2026-10-02",
+      "event": "gj-operator: unblocked. The AUTH #036/#043 movement.json + C# MovementConfig lockstep landed (b3c99e0, M0-UNITY-03 done). C# can read MovementConfig.Locomotion / .Anticipation / .LandingResponse / .Camera directly, matching the Brain-B reference (services/traversal/locomotion_ref.py, anticipation.py from_movement_config).",
+      "by": "gj-operator"
     }
   ],
   "notes": "Reference contract: services/traversal/locomotion_ref.py::landing_response / landing_tier. Tier thresholds come from movement.json.landing; the absorption curve is the new landingResponse block (Operator lockstep)."

@@ -36,12 +36,17 @@
   "branch": null,
   "pr": null,
   "created": "2026-10-01",
-  "updated": "2026-10-01",
+  "updated": "2026-10-02",
   "history": [
     {
       "date": "2026-10-01",
       "event": "created by the Coordinator under AUTH #043 (item #5). Pure Unity/runtime: normals derived from the collision mesh (no frozen-schema change); the anticipation hint's surface_id (M1-MOVE-04) is an optional fast path.",
       "by": "claude-builder"
+    },
+    {
+      "date": "2026-10-02",
+      "event": "gj-operator: unblocked. The AUTH #036/#043 movement.json + C# MovementConfig lockstep landed (b3c99e0, M0-UNITY-03 done). C# can read MovementConfig.Locomotion / .Anticipation / .LandingResponse / .Camera directly, matching the Brain-B reference (services/traversal/locomotion_ref.py, anticipation.py from_movement_config).",
+      "by": "gj-operator"
     }
   ],
   "notes": "No Brain-B artifact: the graph carries surface_id + position but no normal, so Brain A raycasts the collision mesh at the contact. Keep the effector deviation clamped so arbitrary scanned geometry never breaks the pose."

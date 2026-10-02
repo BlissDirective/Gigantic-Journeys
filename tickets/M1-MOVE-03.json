@@ -44,12 +44,17 @@
   "branch": null,
   "pr": null,
   "created": "2026-10-01",
-  "updated": "2026-10-01",
+  "updated": "2026-10-02",
   "history": [
     {
       "date": "2026-10-01",
       "event": "created by the Coordinator under AUTH #043 (movement fluidity & realism v1, item #1). Brain-B reference locomotion_ref.stride_scale landed in a756868; the Unity stride-warp + the movement.json locomotion lockstep are this ticket.",
       "by": "claude-builder"
+    },
+    {
+      "date": "2026-10-02",
+      "event": "gj-operator: unblocked. The AUTH #036/#043 movement.json + C# MovementConfig lockstep landed (b3c99e0, M0-UNITY-03 done). C# can read MovementConfig.Locomotion / .Anticipation / .LandingResponse / .Camera directly, matching the Brain-B reference (services/traversal/locomotion_ref.py, anticipation.py from_movement_config).",
+      "by": "gj-operator"
     }
   ],
   "notes": "Reference contract: services/traversal/locomotion_ref.py::stride_scale / natural_locomotion_speed. The movement.json locomotion block lands with the Operator C# MovementConfig migration (bundled with the pending #036)."

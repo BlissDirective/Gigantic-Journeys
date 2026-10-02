@@ -44,12 +44,17 @@
   "branch": null,
   "pr": null,
   "created": "2026-10-01",
-  "updated": "2026-10-01",
+  "updated": "2026-10-02",
   "history": [
     {
       "date": "2026-10-01",
       "event": "created by the Coordinator under AUTH #043 (item #2). Brain-B reference planner services/traversal/anticipation.py landed in a756868; the Unity consuming layer is this ticket.",
       "by": "claude-builder"
+    },
+    {
+      "date": "2026-10-02",
+      "event": "gj-operator: unblocked. The AUTH #036/#043 movement.json + C# MovementConfig lockstep landed (b3c99e0, M0-UNITY-03 done). C# can read MovementConfig.Locomotion / .Anticipation / .LandingResponse / .Camera directly, matching the Brain-B reference (services/traversal/locomotion_ref.py, anticipation.py from_movement_config).",
+      "by": "gj-operator"
     }
   ],
   "notes": "Reference contract: services/traversal/anticipation.py::plan_anticipation (hints are derived, not stored — no frozen-schema change). Surface normals for the pre-reach come from the collision mesh at runtime (M1-MOVE-06), keyed by the hint's surface_id."
