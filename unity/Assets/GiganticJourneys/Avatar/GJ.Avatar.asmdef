@@ -1,0 +1,16 @@
+{
+    "name": "GJ.Avatar",
+    "rootNamespace": "GiganticJourneys.Avatars",
+    "references": [
+        "GJ.Movement.Shared"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="19" result="Passed" total="19" passed="19" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-02 17:22:54Z" end-time="2026-10-02 17:22:55Z" duration="0.4115329">
+  <test-suite type="TestSuite" id="1000" name="Gigantic Journeys" fullname="Gigantic Journeys" runstate="Runnable" testcasecount="224" result="Passed" start-time="2026-10-02 17:22:54Z" end-time="2026-10-02 17:22:55Z" duration="0.411533" total="19" passed="19" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1256" name="GiganticJourneys.EditMode.Tests.dll" fullname="/workspace/gj-op/unity/Library/ScriptAssemblies/GiganticJourneys.EditMode.Tests.dll" runstate="Runnable" testcasecount="224" result="Passed" start-time="2026-10-02 17:22:54Z" end-time="2026-10-02 17:22:55Z" duration="0.403761" total="19" passed="19" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="3878312" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1257" name="GiganticJourneys" fullname="GiganticJourneys" runstate="Runnable" testcasecount="224" result="Passed" start-time="2026-10-02 17:22:54Z" end-time="2026-10-02 17:22:55Z" duration="0.402952" total="19" passed="19" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1258" name="Tests" fullname="GiganticJourneys.Tests" runstate="Runnable" testcasecount="224" result="Passed" start-time="2026-10-02 17:22:54Z" end-time="2026-10-02 17:22:55Z" duration="0.402422" total="19" passed="19" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1001" name="CharacterRosterTests" fullname="GiganticJourneys.Tests.CharacterRosterTests" classname="GiganticJourneys.Tests.CharacterRosterTests" runstate="Runnable" testcasecount="19" result="Passed" start-time="2026-10-02 17:22:54Z" end-time="2026-10-02 17:22:55Z" duration="0.399201" total="19" passed="19" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1018" name="AppearanceChangesTheVisualOnlyNeverTheMovementBody" fullname="GiganticJourneys.Tests.CharacterRosterTests.AppearanceChangesTheVisualOnlyNeverTheMovementBody" methodname="AppearanceChangesTheVisualOnlyNeverTheMovementBody" classname="GiganticJourneys.Tests.CharacterRosterTests" runstate="Runnable" seed="1737430760" result="Passed" start-time="2026-10-02 17:22:54Z" end-time="2026-10-02 17:22:54Z" duration="0.036262" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1020" name="PalettesSpanLightToDeep" fullname="GiganticJourneys.Tests.CharacterRosterTests.PalettesSpanLightToDeep" methodname="PalettesSpanLightToDeep" classname="GiganticJourneys.Tests.CharacterRosterTests" runstate="Runnable" seed="572077766" result="Passed" start-time="2026-10-02 17:22:54Z" end-time="2026-10-02 17:22:54Z" duration="0.002700" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1004" name="ParsesAValidParameterSet" fullname="GiganticJourneys.Tests.CharacterRosterTests.ParsesAValidParameterSet" methodname="ParsesAValidParameterSet" classname="GiganticJourneys.Tests.CharacterRosterTests" runstate="Runnable" seed="632874652" result="Passed" start-time="2026-10-02 17:22:54Z" end-time="2026-10-02 17:22:54Z" duration="0.000274" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1021" name="PickerSaysYourCharacterAndRemembersTheChoice" fullname="GiganticJourneys.Tests.CharacterRosterTests.PickerSaysYourCharacterAndRemembersTheChoice" methodname="PickerSaysYourCharacterAndRemembersTheChoice" classname="GiganticJourneys.Tests.CharacterRosterTests" runstate="Runnable" seed="180435839" result="Passed" start-time="2026-10-02 17:22:54Z" end-time="2026-10-02 17:22:54Z" duration="0.319155" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1016" name="RejectsWhatTheSchemaRejects" fullname="GiganticJourneys.Tests.CharacterRosterTests.RejectsWhatTheSchemaRejects" classname="GiganticJourneys.Tests.CharacterRosterTests" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-10-02 17:22:54Z" end-time="2026-10-02 17:22:55Z" duration="0.014066" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1005" name="RejectsWhatTheSchemaRejects(&quot;\&quot;build\&quot;:0.45&quot;,&quot;\&quot;build\&quot;:1.2&quot;,&quot;[0, 1]&quot;)" fullname="GiganticJourneys.Tests.CharacterRosterTests.RejectsWhatTheSchemaRejects(&quot;\&quot;build\&quot;:0.45&quot;,&quot;\&quot;build\&quot;:1.2&quot;,&quot;[0, 1]&quot;)" methodname="RejectsWhatTheSchemaRejects" classname="GiganticJourneys.Tests.CharacterRosterTests" runstate="Runnable" seed="349731212" result="Passed" start-time="2026-10-02 17:22:55Z" end-time="2026-10-02 17:22:55Z" duration="0.002018" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1006" name="RejectsWhatTheSchemaRejects(&quot;\&quot;skin_tone\&quot;:15&quot;,&quot;\&quot;skin_tone\&quot;:32&quot;,&quot;integer in [0, 31]&quot;)" fullname="GiganticJourneys.Tests.CharacterRosterTests.RejectsWhatTheSchemaRejects(&quot;\&quot;skin_tone\&quot;:15&quot;,&quot;\&quot;skin_tone\&quot;:32&quot;,&quot;integer in [0, 31]&quot;)" methodname="RejectsWhatTheSchemaRejects" classname="GiganticJourneys.Tests.CharacterRosterTests" runstate="Runnable" seed="810018067" result="Passed" start-time="2026-10-02 17:22:55Z" end-time="2026-10-02 17:22:55Z" duration="0.000186" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1007" name="RejectsWhatTheSchemaRejects(&quot;\&quot;skin_tone\&quot;:15&quot;,&quot;\&quot;skin_tone\&quot;:1.5&quot;,&quot;integer&quot;)" fullname="GiganticJourneys.Tests.CharacterRosterTests.RejectsWhatTheSchemaRejects(&quot;\&quot;skin_tone\&quot;:15&quot;,&quot;\&quot;skin_tone\&quot;:1.5&quot;,&quot;integer&quot;)" methodname="RejectsWhatTheSchemaRejects" classname="GiganticJourneys.Tests.CharacterRosterTests" runstate="Runnable" seed="1015696949" result="Passed" start-time="2026-10-02 17:22:55Z" end-time="2026-10-02 17:22:55Z" duration="0.000140" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1008" name="RejectsWhatTheSchemaRejects(&quot;\&quot;style\&quot;:\&quot;medium\&quot;&quot;,&quot;\&quot;style\&quot;:\&quot;mohawk\&quot;&quot;,&quot;must be one of&quot;)" fullname="GiganticJourneys.Tests.CharacterRosterTests.RejectsWhatTheSchemaRejects(&quot;\&quot;style\&quot;:\&quot;medium\&quot;&quot;,&quot;\&quot;style\&quot;:\&quot;mohawk\&quot;&quot;,&quot;must be one of&quot;)" methodname="RejectsWhatTheSchemaRejects" classname="GiganticJourneys.Tests.CharacterRosterTests" runstate="Runnable" seed="1103227311" result="Passed" start-time="2026-10-02 17:22:55Z" end-time="2026-10-02 17:22:55Z" duration="0.000130" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1009" name="RejectsWhatTheSchemaRejects(&quot;\&quot;base_rig\&quot;:\&quot;gj-humanoid-1A\&quot;&quot;,&quot;\&quot;base_rig\&quot;:\&quot;other-rig\&quot;&quot;,&quot;one shared rig&quot;)" fullname="GiganticJourneys.Tests.CharacterRosterTests.RejectsWhatTheSchemaRejects(&quot;\&quot;base_rig\&quot;:\&quot;gj-humanoid-1A\&quot;&quot;,&quot;\&quot;base_rig\&quot;:\&quot;other-rig\&quot;&quot;,&quot;one shared rig&quot;)" methodname="RejectsWhatTheSchemaRejects" classname="GiganticJourneys.Tests.CharacterRosterTests" runstate="Runnable" seed="918742610" result="Passed" start-time="2026-10-02 17:22:55Z" end-time="2026-10-02 17:22:55Z" duration="0.000094" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1010" name="RejectsWhatTheSchemaRejects(&quot;\&quot;schema_version\&quot;:\&quot;1.0.0\&quot;&quot;,&quot;\&quot;schema_version\&quot;:\&quot;2.0.0\&quot;&quot;,&quot;schema_version&quot;)" fullname="GiganticJourneys.Tests.CharacterRosterTests.RejectsWhatTheSchemaRejects(&quot;\&quot;schema_version\&quot;:\&quot;1.0.0\&quot;&quot;,&quot;\&quot;schema_version\&quot;:\&quot;2.0.0\&quot;&quot;,&quot;schema_version&quot;)" methodname="RejectsWhatTheSchemaRejects" classname="GiganticJourneys.Tests.CharacterRosterTests" runstate="Runnable" seed="775426371" result="Passed" start-time="2026-10-02 17:22:55Z" end-time="2026-10-02 17:22:55Z" duration="0.000087" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1011" name="RejectsWhatTheSchemaRejects(&quot;,\&quot;preset_id\&quot;:\&quot;roster-ava-01\&quot;&quot;,&quot;&quot;,&quot;preset_id is required&quot;)" fullname="GiganticJourneys.Tests.CharacterRosterTests.RejectsWhatTheSchemaRejects(&quot;,\&quot;preset_id\&quot;:\&quot;roster-ava-01\&quot;&quot;,&quot;&quot;,&quot;preset_id is required&quot;)" methodname="RejectsWhatTheSchemaRejects" classname="GiganticJourneys.Tests.CharacterRosterTests" runstate="Runnable" seed="2145534813" result="Passed" start-time="2026-10-02 17:22:55Z" end-time="2026-10-02 17:22:55Z" duration="0.000097" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1012" name="RejectsWhatTheSchemaRejects(&quot;\&quot;eyes\&quot;:0.55}&quot;,&quot;\&quot;eyes\&quot;:0.55,\&quot;landmarks\&quot;:[1,2,3]}&quot;,&quot;unknown field 'landmarks'&quot;)" fullname="GiganticJourneys.Tests.CharacterRosterTests.RejectsWhatTheSchemaRejects(&quot;\&quot;eyes\&quot;:0.55}&quot;,&quot;\&quot;eyes\&quot;:0.55,\&quot;landmarks\&quot;:[1,2,3]}&quot;,&quot;unknown field 'landmarks'&quot;)" methodname="RejectsWhatTheSchemaRejects" classname="GiganticJourneys.Tests.CharacterRosterTests" runstate="Runnable" seed="233833175" result="Passed" start-time="2026-10-02 17:22:55Z" end-time="2026-10-02 17:22:55Z" duration="0.000102" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1013" name="RejectsWhatTheSchemaRejects(&quot;\&quot;skin_tone\&quot;:15,&quot;,&quot;\&quot;skin_tone\&quot;:15,\&quot;face_embedding\&quot;:[0.1],&quot;,&quot;unknown field 'face_embedding'&quot;)" fullname="GiganticJourneys.Tests.CharacterRosterTests.RejectsWhatTheSchemaRejects(&quot;\&quot;skin_tone\&quot;:15,&quot;,&quot;\&quot;skin_tone\&quot;:15,\&quot;face_embedding\&quot;:[0.1],&quot;,&quot;unknown field 'face_embedding'&quot;)" methodname="RejectsWhatTheSchemaRejects" classname="GiganticJourneys.Tests.CharacterRosterTests" runstate="Runnable" seed="1841342475" result="Passed" start-time="2026-10-02 17:22:55Z" end-time="2026-10-02 17:22:55Z" duration="0.000092" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1014" name="RejectsWhatTheSchemaRejects(&quot;\&quot;outfit\&quot;:\&quot;explorer-amber\&quot;&quot;,&quot;\&quot;outfit\&quot;:\&quot;Explorer Amber\&quot;&quot;,&quot;^[a-z0-9-]&quot;)" fullname="GiganticJourneys.Tests.CharacterRosterTests.RejectsWhatTheSchemaRejects(&quot;\&quot;outfit\&quot;:\&quot;explorer-amber\&quot;&quot;,&quot;\&quot;outfit\&quot;:\&quot;Explorer Amber\&quot;&quot;,&quot;^[a-z0-9-]&quot;)" methodname="RejectsWhatTheSchemaRejects" classname="GiganticJourneys.Tests.CharacterRosterTests" runstate="Runnable" seed="215226327" result="Passed" start-time="2026-10-02 17:22:55Z" end-time="2026-10-02 17:22:55Z" duration="0.000104" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1015" name="RejectsWhatTheSchemaRejects(&quot;,\&quot;jaw\&quot;:0.45&quot;,&quot;&quot;,&quot;missing field 'jaw'&quot;)" fullname="GiganticJourneys.Tests.CharacterRosterTests.RejectsWhatTheSchemaRejects(&quot;,\&quot;jaw\&quot;:0.45&quot;,&quot;&quot;,&quot;missing field 'jaw'&quot;)" methodname="RejectsWhatTheSchemaRejects" classname="GiganticJourneys.Tests.CharacterRosterTests" runstate="Runnable" seed="1486224125" result="Passed" start-time="2026-10-02 17:22:55Z" end-time="2026-10-02 17:22:55Z" duration="0.000117" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1019" name="ScaleStaysWithinTheRigTolerance" fullname="GiganticJourneys.Tests.CharacterRosterTests.ScaleStaysWithinTheRigTolerance" methodname="ScaleStaysWithinTheRigTolerance" classname="GiganticJourneys.Tests.CharacterRosterTests" runstate="Runnable" seed="1398563107" result="Passed" start-time="2026-10-02 17:22:55Z" end-time="2026-10-02 17:22:55Z" duration="0.000948" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1017" name="SchemaFixturesAgree" fullname="GiganticJourneys.Tests.CharacterRosterTests.SchemaFixturesAgree" methodname="SchemaFixturesAgree" classname="GiganticJourneys.Tests.CharacterRosterTests" runstate="Runnable" seed="1846969944" result="Passed" start-time="2026-10-02 17:22:55Z" end-time="2026-10-02 17:22:55Z" duration="0.001577" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1002" name="ShippedRosterHasEightValidPresetsOnTheSharedRig" fullname="GiganticJourneys.Tests.CharacterRosterTests.ShippedRosterHasEightValidPresetsOnTheSharedRig" methodname="ShippedRosterHasEightValidPresetsOnTheSharedRig" classname="GiganticJourneys.Tests.CharacterRosterTests" runstate="Runnable" seed="856673002" result="Passed" start-time="2026-10-02 17:22:55Z" end-time="2026-10-02 17:22:55Z" duration="0.004384" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1003" name="ShippedRosterIsByteIdenticalToTheRepoData" fullname="GiganticJourneys.Tests.CharacterRosterTests.ShippedRosterIsByteIdenticalToTheRepoData" methodname="ShippedRosterIsByteIdenticalToTheRepoData" classname="GiganticJourneys.Tests.CharacterRosterTests" runstate="Runnable" seed="942900961" result="Passed" start-time="2026-10-02 17:22:55Z" end-time="2026-10-02 17:22:55Z" duration="0.007332" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Saving results to: /home/box/.config/unity3d/SparkForge Labs/Gigantic Journeys/TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

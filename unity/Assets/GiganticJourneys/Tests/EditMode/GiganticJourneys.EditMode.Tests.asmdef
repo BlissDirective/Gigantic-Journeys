@@ -18,7 +18,8 @@
         "GJ.Procedural",
         "GJ.Movement.Controller",
         "GJ.Capture",
-        "GJ.Environment"
+        "GJ.Environment",
+        "GJ.Avatar"
     ],
     "includePlatforms": [
         "Editor"
