@@ -6,8 +6,8 @@ namespace GiganticJourneys.Movement.Controller
     /// Fixed follow camera for M0 (Bible §8 subset; orbit, collision and per-verb rules are M1):
     /// distance 4A, height 1.6A, look-ahead 0.8A in the travel direction, +0.5A and +4° FOV at
     /// run/sprint, and no vertical follow for the first 0.2 s of a jump. The yaw stays where the
-    /// scene placed the camera. Numbers from <see cref="ProvisionalTuning.Camera"/> (pending the
-    /// movement.json camera section, DESIGN_SYSTEM decision 5).
+    /// scene placed the camera. Numbers from movement.json <c>camera</c>
+    /// (<see cref="MovementConfig.CameraSection"/>, AUTH #036; DESIGN_SYSTEM decision 5).
     /// </summary>
     [RequireComponent(typeof(Camera))]
     public sealed class FollowCamera : MonoBehaviour
@@ -45,7 +45,6 @@ namespace GiganticJourneys.Movement.Controller
             if (_yawForward.sqrMagnitude <= 0f)
                 _yawForward = Vector3.forward;
             _yawForward.Normalize();
-            _camera.fieldOfView = ProvisionalTuning.Camera.BaseVerticalFovDeg;
         }
 
         void LateUpdate()
@@ -56,35 +55,33 @@ namespace GiganticJourneys.Movement.Controller
             var scale = motor.Scale;
             var pos = target.transform.position;
             var running = motor.Gait == Gait.Run || motor.Gait == Gait.Sprint;
-            var blend = ProvisionalTuning.Camera.BlendSec;
+            var cam = motor.Config.Camera;
+            var blend = cam.BlendSec;
 
             if (!_initialized)
             {
                 _trackedY = pos.y;
-                _distanceA = ProvisionalTuning.Camera.FollowDistanceA;
+                _distanceA = cam.FollowA;
                 _lookAhead = Vector3.zero;
+                _camera.fieldOfView = cam.BaseFovDeg;
                 _initialized = true;
             }
 
-            var holdY =
-                !motor.Grounded
-                && motor.AirborneSeconds < ProvisionalTuning.Camera.JumpVerticalHoldSec;
+            var holdY = !motor.Grounded && motor.AirborneSeconds < cam.JumpHoldSec;
             if (!holdY)
                 _trackedY = Mathf.SmoothDamp(_trackedY, pos.y, ref _trackedYVelocity, blend);
 
-            var wantDistance =
-                ProvisionalTuning.Camera.FollowDistanceA
-                + (running ? ProvisionalTuning.Camera.RunDistanceBonusA : 0f);
+            var wantDistance = cam.FollowA + (running ? cam.RunPullBackA : 0f);
             _distanceA = Mathf.SmoothDamp(_distanceA, wantDistance, ref _distanceVelocity, blend);
-            var wantFov = running ? ProvisionalTuning.Camera.RunFovBonusDeg : 0f;
+            var wantFov = running ? cam.RunFovDeg : 0f;
             _fovBonus = Mathf.SmoothDamp(_fovBonus, wantFov, ref _fovVelocity, blend);
-            _camera.fieldOfView = ProvisionalTuning.Camera.BaseVerticalFovDeg + _fovBonus;
+            _camera.fieldOfView = cam.BaseFovDeg + _fovBonus;
 
             var travel = motor.Velocity;
             travel.y = 0f;
             var wantAhead =
                 travel.sqrMagnitude > 0f
-                    ? travel.normalized * scale.ToWorld(ProvisionalTuning.Camera.LookAheadA)
+                    ? travel.normalized * scale.ToWorld(cam.LookAheadA)
                     : Vector3.zero;
             _lookAhead = Vector3.SmoothDamp(_lookAhead, wantAhead, ref _lookAheadVelocity, blend);
 
@@ -92,7 +89,7 @@ namespace GiganticJourneys.Movement.Controller
             var eye =
                 focus
                 - _yawForward * scale.ToWorld(_distanceA)
-                + Vector3.up * scale.ToWorld(ProvisionalTuning.Camera.HeightA);
+                + Vector3.up * scale.ToWorld(cam.HeightA);
             transform.position = eye;
             var lookAt = focus + Vector3.up * scale.ToWorld(motor.Config.AvatarHeightA * 0.5f);
             transform.rotation = Quaternion.LookRotation(lookAt - eye, Vector3.up);

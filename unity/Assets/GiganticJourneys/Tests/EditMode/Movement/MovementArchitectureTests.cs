@@ -112,8 +112,8 @@ namespace GiganticJourneys.Tests
             Assert.That(typeof(ScriptableObject).IsAssignableFrom(typeof(MoveClip)), Is.True);
         }
 
-        // AT-7: numbers in movement code come from MovementConfig (or, pending the intent/camera
-        // AUTH, the single ProvisionalTuning file). Allowed literals are pure math.
+        // AT-7: numbers in movement code come from MovementConfig (intent/camera since AUTH #036;
+        // body/environment/touch data stay in the single ProvisionalTuning file). Allowed literals are pure math.
         static readonly HashSet<string> Allowed = new HashSet<string>
         {
             "0",
@@ -125,7 +125,7 @@ namespace GiganticJourneys.Tests
 
         static readonly string[] Exempt =
         {
-            "ProvisionalTuning.cs", // the one pending-AUTH constants file
+            "ProvisionalTuning.cs", // body/environment/touch data (not movement tuning)
             "StrictJson.cs", // a JSON parser, no tuning
             "MovementScale.cs", // 9.81 standard gravity, Bible §1
             "TouchControlsView.cs", // placeholder UI styling until design tokens (M0-DSGN-02)
@@ -159,6 +159,17 @@ namespace GiganticJourneys.Tests
                 offenders,
                 Is.Empty,
                 "tuning literals belong in movement.json: " + string.Join(", ", offenders)
+            );
+        }
+
+        // AUTH #036 executed: the stick/intent and follow-camera numbers live only in movement.json.
+        [Test]
+        public void IntentAndCameraTuning_LiveInMovementJson_NotProvisionalTuning()
+        {
+            var nested = typeof(ProvisionalTuning).GetNestedTypes();
+            Assert.That(
+                nested.Select(t => t.Name),
+                Has.None.EqualTo("Intent").And.None.EqualTo("Camera")
             );
         }
     }

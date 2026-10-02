@@ -30,11 +30,11 @@ Five layers, bottom to top. Each is a separate Unity assembly so V2 tools can ad
 
 | Layer | Responsibility | v1 implementation (free) | Fallback |
 |---|---|---|---|
-| **Intent** | Reads input (virtual stick, jump, contextual action, controller), predicts a trajectory 0.6 s ahead | Custom C# | — |
+| **Intent** | Reads input (virtual stick, jump, contextual action, controller), predicts a trajectory 0.6 s ahead (`intent.*`). **Anticipation** sub-layer (AUTH #043 #2): the route's next contacts from the traversal graph drive pre-reach, gaze lead, and plant-foot choice before contact (`anticipation.*`; reference `services/traversal/anticipation.py`) | Custom C# | — |
 | **Traversal query** | Casts against the collision mesh and the traversal graph to find the best available verb for the current intent (Section 3 thresholds) | Custom C#, shares `movement.json` with the validator | — |
-| **Animation selection** | Locomotion and transitions via motion matching; contact verbs via tagged clips | Open MIT motion matching (jlpm22) with inertialized blending; evaluate the community MxM fork in parallel | Blend trees + inertialization if the M1 spike misses budget |
+| **Animation selection** | Locomotion and transitions via motion matching; contact verbs via tagged clips; **stride/speed warping** (AUTH #043 #1) scales stride to ground speed within `locomotion.strideWarpMin`–`strideWarpMax` so feet never slide (reference `locomotion_ref.stride_scale`) | Open MIT motion matching (jlpm22) with inertialized blending; evaluate the community MxM fork in parallel | Blend trees + inertialization if the M1 spike misses budget |
 | **Motion warping** | Stretches contact clips so hands and feet land exactly on the real edge | Kinemation Motion Warping: Climb & Interact | Root-motion scaling + IK |
-| **Procedural** | Foot IK on uneven splat geometry, hand IK on holds, look-at (summit beam, vistas, ledges before a jump), spine lean, secondary motion, Tier 0 feedback triggers | Unity Animation Rigging + custom | — |
+| **Procedural** | Foot IK on uneven splat geometry, hand IK on holds, **normal-aware contact IK** (AUTH #043 #5: effectors oriented to the collision-mesh normal at the contact, clamped), procedural landing absorption (§5), look-at (summit beam, vistas, ledges before a jump), spine lean, secondary motion, Tier 0 feedback triggers | Unity Animation Rigging + custom | — |
 
 **Mobile budgets (reference device: 2023 mid-tier Android, 30 fps floor):**
 - Motion database ≤ **60 MB** compressed on device (target 40). Achieved by 30 fps clip sampling, quaternion compression, and trimming Mixamo to the whitelist in Section 11.
@@ -58,6 +58,8 @@ Each verb: trigger geometry (in A), input, source, and the feel rule that makes 
 | Plant-turn / stop | input reversal or release | stick | Motion matching selects | Never slides on hard surfaces; slides 0.2A on smooth ones |
 | Edge balance-walk | walkable width < 0.5A | auto | Mixamo balance/tightrope + arm IK | Arms out, speed capped at walk, stick deadzone widens |
 | Crouch / low crawl | headroom < 1.1A | auto | Mixamo crouch walk | Auto-enters under shelves and overhangs |
+
+Feel (AUTH #043): locomotion is stride-warped (no foot-sliding at any speed); a small body steps faster and gets to speed sooner — `locomotion.cadenceScale` (1.9× in the default "more miniature-real" profile; "keep the fantasy" variant 1.5×) and `locomotion.accelTimeSec`/`decelTimeSec` (0.10 s; variant 0.14 s); upcoming contacts are telegraphed by the Anticipation sub-layer (§2). Gait bands and timings above are `intent.*` in §10.
 
 ### 3.2 Small verticals (each distinct; no airborne jump unless stated)
 | Verb | Trigger (obstacle height h, depth d) | Input | Source | Feel |
@@ -149,6 +151,8 @@ Fall height measured from launch or leave-edge point to contact.
 
 Off-table or into-void falls on tabletop environments respawn at the last stable surface after a 1.5 s fade.
 
+Procedural landing (AUTH #043 #3): every landing adds a procedural absorption on top of the tier clip — a crouch up to `landingResponse.maxCrouchFraction` of avatar height over `absorbTimeSec`, recovering over `recoverTimeSec`, scaled by tier (soft lightest, hard/recover full) and by `softSurfaceExtra` onto walkable-soft; control locks per tier for `landingResponse.controlLockSec`; the camera dips `camDipA` (§8). Reference `services/traversal/locomotion_ref.py::landing_response`.
+
 ---
 
 ## 6. Climb families
@@ -214,6 +218,9 @@ Each reaction carries a matched sound and, where apt, a Tier 1 soft reaction (a 
 - Balance-walk: locks yaw to the edge direction ±20°.
 - Manual: one-finger drag on the right half orbits; auto-recenters 2 s after release. Never fights the player mid-move.
 - Summit beam and vista sparkle are always drawn on top with depth-fade so orientation is never lost.
+- Landing (AUTH #043 #3): a camera dip of `landingResponse.camDipA` scaled by the landing tier, recovering with the body.
+- Miniature look (AUTH #043 #6): a tilt-shift depth-of-field band focused at the avatar's height plus scale-aware motion blur, as a URP volume profile (rendering config, not `movement.json`) — pronounced DoF + medium blur in the default "more miniature-real" profile, subtle/low in "keep the fantasy"; half-res/capped and auto-tiered off on low-end devices (AUTH #003).
+- All numbers above are `camera.*` in §10 (AUTH #036; `blendSec` smooths distance/FOV/look-ahead/height changes).
 
 ---
 
@@ -255,13 +262,18 @@ Single source of truth for both the controller and the traversal validator. Valu
   "reach": { "ledgeToLedge": 1.5, "holdReach": 1.1, "slipChanceAtMaxReach": 0.15 },
   "narrowWidthA": 0.5,
   "crouchHeadroomA": 1.1,
-  "gravityScale": 0.8,
+  "gravityScale": 0.9,
   "assist": { "coyoteMs": 200, "jumpBonus": 0.2, "slipsOff": true, "autoGrab": true },
   "dive": { "minSpeed": 2.4, "distanceA": 2.0, "rollAboveA": 1.5 },
   "ticTac": { "reboundHeightA": 0.8, "reboundDistanceA": 1.2, "maxChain": 1 },
   "wallRun": { "minWallRunA": 3.0, "maxDurationSec": 1.2, "speed": 3.6, "minEntrySpeed": 3.0, "gravityDampen": 0.5 },
   "poleVault": { "plantWindowSec": 0.25, "minRunSpeed": 2.4, "maxGapA": 3.0, "maxHeightA": 2.0 },
-  "grapple": { "reachA": 6.0, "swingSpeed": 3.0, "swingMaxArcDeg": 120, "ascendSpeed": 0.7, "rappelSpeed": 1.0, "deploySec": 0.4, "reelSec": 0.6, "anchorMinLedgeA": 0.1, "snapAssistA": 0.3 }
+  "grapple": { "reachA": 6.0, "swingSpeed": 3.0, "swingMaxArcDeg": 120, "ascendSpeed": 0.7, "rappelSpeed": 1.0, "deploySec": 0.4, "reelSec": 0.6, "anchorMinLedgeA": 0.1, "snapAssistA": 0.3 },
+  "intent": { "walkMaxStick": 0.40, "jogMaxStick": 0.85, "sprintHoldSec": 1.5, "fallAfterSec": 0.35, "trajectorySec": 0.6, "idleSec": 0.4, "stickDeadzone": 0.1 },
+  "camera": { "followA": 4.0, "heightA": 1.6, "lookAheadA": 0.8, "runPullBackA": 0.5, "runFovDeg": 4, "baseFovDeg": 60, "jumpHoldSec": 0.2, "climbFollowA": 3.0, "climbPitchDeg": 15, "hangPitchDeg": -20, "balanceYawDeg": 20, "recenterSec": 2.0, "occluderFadeA": 1.5, "blendSec": 0.25 },
+  "locomotion": { "refStrideA": 0.9, "refCadence": 2.6, "cadenceScale": 1.9, "accelTimeSec": 0.10, "decelTimeSec": 0.10, "strideWarpMin": 0.6, "strideWarpMax": 1.8, "footPlantLockRadiusA": 0.05 },
+  "anticipation": { "leadTimeSec": { "jump": 0.35, "vault": 0.30, "climb": 0.40, "land": 0.25 }, "reachStartDistA": 1.2, "gazeLeadSec": 0.5, "maxConcurrentReaches": 2 },
+  "landingResponse": { "absorbTimeSec": 0.12, "recoverTimeSec": 0.22, "maxCrouchFraction": 0.35, "camDipA": 0.15, "softSurfaceExtra": 0.5, "controlLockSec": { "soft": 0.0, "roll": 0.15, "hard": 0.3 } }
 }
 ```
 
@@ -348,3 +360,4 @@ Capture and cleanup: Rokoko Vision docs; Move.ai iPhone quickstart; Cascadeur Ba
 - 2026-09-15 (Coordinator, AUTH #003): v1 ships on the iOS App Store only. The §2 reference device (2023 mid-tier Android, 30 fps floor) and the §13 pass/fail thresholds are read as targets measured on the Owner's iPhones, never as merge gates; quality tiers scale per device. SPEC.md §11 governs.
 - 2026-09-18 (Coordinator, AUTH #021): Movement v1 expansion — new verbs (dive-roll, tic-tac, vault variants, wall-run) and the v1 traversal-tools layer (safety-pin grapple: swing/ascend/rappel; matchstick pole-vault) via `IVerbProvider`; edits to §3.2–§3.6, §4, §10, §14. New `movement.json` blocks: `dive`, `ticTac`, `wallRun`, `poleVault`, `grapple`. Tools are the SPEC §4 diegetic character-gear exception. Rationale: `design/proposals/movement-v1-expansion.md`.
 - 2026-09-19 (Coordinator, AUTH #022): Sound design + environment reactivity — §9 extended with the sound system (layering, contact-frame timing, scale-aware acoustic reverb, 3D spatialization, mix buses, restrained adaptive music) covering the new verbs and tools; §7 reactions now carry sound + Tier 1 soft reactions. Applied to SPEC §3.6. Rationale: `design/proposals/sound-reactivity-v1.md`.
+- 2026-10-02 (gj-operator, AUTH #036 + #043 lockstep): `movement.json` gains `intent` + `camera` (#036) and `locomotion` + `anticipation` + `landingResponse` (#043); `gravityScale` 0.8 → 0.9 — the "more miniature-real" profile is the v1 default (Owner addendum 2026-10-01; "keep the fantasy" variant = gravityScale 0.8, cadenceScale 1.5, accelTimeSec 0.14). Landed in one commit with the schema, §10, the Unity copy, the Python loader + agreement fixture, and the C# `MovementConfig` migration (ProvisionalTuning.Intent/Camera deleted); §2/§3.1/§5/§8 prose updated to match.

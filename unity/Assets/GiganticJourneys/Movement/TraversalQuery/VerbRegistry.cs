@@ -78,7 +78,7 @@ namespace GiganticJourneys.Movement.Query
                 verb = context.ActiveJump; // the committed arc keeps its verb until it lands or overruns
             else if (!context.Grounded)
                 verb =
-                    context.AirborneSeconds > ProvisionalTuning.Intent.FallAfterSec
+                    context.AirborneSeconds > config.Intent.FallAfterSec
                         ? Verbs.Fall
                         : Verbs.Airborne;
             else

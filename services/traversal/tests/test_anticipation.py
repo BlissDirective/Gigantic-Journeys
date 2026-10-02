@@ -154,3 +154,10 @@ def test_plant_foot_alternates_across_jumps():
 def test_affordances_import_available():
     # sanity: the tier table the coverage guard depends on is importable
     assert "running-jump" in affordances.VERB_TIER
+
+
+def test_defaults_match_movement_json():
+    """The dataclass defaults are the shipped movement.json block (AUTH #043 lockstep)."""
+    assert (
+        anticipation.AnticipationParams.from_movement_config() == anticipation.DEFAULT_ANTICIPATION
+    )

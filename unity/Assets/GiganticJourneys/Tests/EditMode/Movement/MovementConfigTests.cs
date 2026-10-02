@@ -28,7 +28,60 @@ namespace GiganticJourneys.Tests
             Assert.That(c.Jump.BufferMs, Is.EqualTo(120f));
             Assert.That(c.Assist.SlipsOff, Is.True);
             Assert.That(c.Grapple.SnapAssistA, Is.EqualTo(0.3f));
-            Assert.That(c.GravityScale, Is.EqualTo(0.8f));
+            Assert.That(c.GravityScale, Is.EqualTo(0.9f));
+        }
+
+        // AUTH #036: intent + camera sections (were ProvisionalTuning constants).
+        [Test]
+        public void ShippedFile_IntentAndCamera_AUTH036()
+        {
+            var c = MovementConfigLoader.LoadFile(ShippedPath);
+            Assert.That(c.Intent.WalkMaxStick, Is.EqualTo(0.40f));
+            Assert.That(c.Intent.JogMaxStick, Is.EqualTo(0.85f));
+            Assert.That(c.Intent.SprintHoldSec, Is.EqualTo(1.5f));
+            Assert.That(c.Intent.FallAfterSec, Is.EqualTo(0.35f));
+            Assert.That(c.Intent.TrajectorySec, Is.EqualTo(0.6f));
+            Assert.That(c.Intent.StickDeadzone, Is.EqualTo(0.1f));
+            Assert.That(c.Camera.FollowA, Is.EqualTo(4f));
+            Assert.That(c.Camera.HeightA, Is.EqualTo(1.6f));
+            Assert.That(c.Camera.BaseFovDeg, Is.EqualTo(60f));
+            Assert.That(c.Camera.HangPitchDeg, Is.EqualTo(-20f));
+            Assert.That(c.Camera.BlendSec, Is.EqualTo(0.25f));
+        }
+
+        // AUTH #043 + Owner addendum 2026-10-01: the "more-miniature-real" profile is the default.
+        [Test]
+        public void ShippedFile_MoreMiniatureRealProfile_AUTH043()
+        {
+            var c = MovementConfigLoader.LoadFile(ShippedPath);
+            Assert.That(c.GravityScale, Is.EqualTo(0.9f));
+            Assert.That(c.Locomotion.CadenceScale, Is.EqualTo(1.9f));
+            Assert.That(c.Locomotion.AccelTimeSec, Is.EqualTo(0.10f));
+            Assert.That(c.Locomotion.StrideWarpMax, Is.EqualTo(1.8f));
+            Assert.That(c.Anticipation.LeadTimeSec.Climb, Is.EqualTo(0.40f));
+            Assert.That(c.Anticipation.MaxConcurrentReaches, Is.EqualTo(2f));
+            Assert.That(c.LandingResponse.CamDipA, Is.EqualTo(0.15f));
+            Assert.That(c.LandingResponse.ControlLockSec.Roll, Is.EqualTo(0.15f));
+            Assert.That(c.LandingResponse.ControlLockSec.Hard, Is.EqualTo(0.3f));
+        }
+
+        [Test]
+        public void ExtraNestedKey_InNewSections_IsAHardError()
+        {
+            var text = ShippedText.Replace("\"land\": 0.25 }", "\"land\": 0.25, \"swim\": 1 }");
+            Assert.That(text, Is.Not.EqualTo(ShippedText), "fixture edit applied");
+            var e = Assert.Throws<MovementConfigException>(() => MovementConfig.Parse(text));
+            StringAssert.Contains("unknown key 'anticipation.leadTimeSec.swim'", e.Message);
+        }
+
+        [Test]
+        public void MissingNewSectionKey_IsAHardError()
+        {
+            var text = ShippedText.Replace("\"blendSec\": 0.25 ", "");
+            text = text.Replace("\"occluderFadeA\": 1.5, ", "\"occluderFadeA\": 1.5 ");
+            Assert.That(text, Is.Not.EqualTo(ShippedText), "fixture edit applied");
+            var e = Assert.Throws<MovementConfigException>(() => MovementConfig.Parse(text));
+            StringAssert.Contains("missing required key 'camera.blendSec'", e.Message);
         }
 
         [Test]
@@ -96,7 +149,7 @@ namespace GiganticJourneys.Tests
         [Test]
         public void MissingSection_IsAHardError()
         {
-            var text = ShippedText.Replace("\"gravityScale\": 0.8,", "");
+            var text = ShippedText.Replace("\"gravityScale\": 0.9,", "");
             var e = Assert.Throws<MovementConfigException>(() => MovementConfig.Parse(text));
             StringAssert.Contains("'gravityScale'", e.Message);
         }
@@ -114,10 +167,10 @@ namespace GiganticJourneys.Tests
         {
             var text = ShippedText.Replace(
                 "\"avatarHeightA\": 1.0,",
-                "\"avatarHeightA\": 1.0, \"camera\": {},"
+                "\"avatarHeightA\": 1.0, \"fly\": {},"
             );
             var e = Assert.Throws<MovementConfigException>(() => MovementConfig.Parse(text));
-            StringAssert.Contains("unknown key 'camera'", e.Message);
+            StringAssert.Contains("unknown key 'fly'", e.Message);
         }
 
         [Test]

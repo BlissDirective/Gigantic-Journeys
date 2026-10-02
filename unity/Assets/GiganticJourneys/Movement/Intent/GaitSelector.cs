@@ -2,11 +2,18 @@ namespace GiganticJourneys.Movement.Intent
 {
     /// <summary>
     /// Stick deflection → gait (Bible §3.1): walk &lt; 40 %, jog 40–85 %, run &gt; 85 %, and run
-    /// held continuously for 1.5 s becomes sprint. Bands come from <see cref="ProvisionalTuning.Intent"/>.
+    /// held continuously for 1.5 s becomes sprint. Bands and the sprint hold come from movement.json
+    /// <c>intent</c> (<see cref="MovementConfig.IntentSection"/>, AUTH #036).
     /// </summary>
     public sealed class GaitSelector
     {
+        readonly MovementConfig.IntentSection _intent;
         float _runHeld;
+
+        public GaitSelector(MovementConfig.IntentSection intent)
+        {
+            _intent = intent ?? throw new System.ArgumentNullException(nameof(intent));
+        }
 
         public Gait Current { get; private set; }
 
@@ -22,11 +29,11 @@ namespace GiganticJourneys.Movement.Intent
         /// </summary>
         public Gait Update(float stickMagnitude, float deltaTime, Gait cap = Gait.Sprint)
         {
-            var band = Band(stickMagnitude);
+            var band = Band(stickMagnitude, _intent);
             if (band == Gait.Run)
             {
                 _runHeld += deltaTime;
-                if (_runHeld >= ProvisionalTuning.Intent.SprintHoldSec)
+                if (_runHeld >= _intent.SprintHoldSec)
                     band = Gait.Sprint;
             }
             else
@@ -40,13 +47,13 @@ namespace GiganticJourneys.Movement.Intent
         }
 
         /// <summary>The gait band for a deflection, ignoring the sprint hold.</summary>
-        public static Gait Band(float stickMagnitude)
+        public static Gait Band(float stickMagnitude, MovementConfig.IntentSection intent)
         {
-            if (stickMagnitude < ProvisionalTuning.Intent.StickDeadzone)
+            if (stickMagnitude < intent.StickDeadzone)
                 return Gait.Idle;
-            if (stickMagnitude < ProvisionalTuning.Intent.WalkMaxStick)
+            if (stickMagnitude < intent.WalkMaxStick)
                 return Gait.Walk;
-            if (stickMagnitude <= ProvisionalTuning.Intent.JogMaxStick)
+            if (stickMagnitude <= intent.JogMaxStick)
                 return Gait.Jog;
             return Gait.Run;
         }

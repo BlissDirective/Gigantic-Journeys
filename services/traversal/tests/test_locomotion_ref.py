@@ -136,3 +136,17 @@ def test_recover_tier_locks_control_longest():
 def test_landing_response_rejects_negative_fall():
     with pytest.raises(ValueError):
         lr.landing_response(-1.0)
+
+
+def test_defaults_match_movement_json():
+    """The dataclass defaults are the shipped movement.json profile (AUTH #043 lockstep)."""
+    assert lr.LocomotionParams.from_movement_config() == lr.DEFAULT_LOCOMOTION
+    assert lr.LandingParams.from_movement_config() == lr.DEFAULT_LANDING
+
+
+def test_more_miniature_real_is_the_default_profile():
+    """Owner addendum 2026-10-01 (AUTH #043): gravityScale 0.9, cadenceScale 1.9, accel 0.10."""
+    cfg = movement.load()
+    assert cfg.gravityScale == pytest.approx(0.9)
+    assert cfg.locomotion.cadenceScale == pytest.approx(1.9)
+    assert cfg.locomotion.accelTimeSec == pytest.approx(0.10)

@@ -6,11 +6,12 @@ Deterministic contracts the Unity runtime (Brain A) must match:
 * **#3 procedural landing/weight** → :func:`landing_response` (Bible §5 tiers → absorption).
 * **#6 miniature realism** → :func:`cadence_for_scale` / :func:`realism_fraction`.
 
-The new tuning constants live in ``config/movement.json`` once AUTH #043's lockstep lands
-(new ``locomotion`` / ``landingResponse`` blocks + the C# ``MovementConfig`` migration — see the
-proposal). Until then these dataclasses carry the **proposed defaults** so the reference and its
-tests run now; wire :meth:`from_movement_config` when the blocks exist. Landing-tier *thresholds*
-(soft/roll/hard) already exist in ``movement.json`` and are read from there.
+The tuning constants live in ``config/movement.json`` (``locomotion`` / ``landingResponse``
+blocks, landed with the AUTH #043 lockstep + the C# ``MovementConfig`` migration). The dataclass
+defaults mirror those values so callers without a config still get the shipped profile;
+:meth:`LocomotionParams.from_movement_config` / :meth:`LandingParams.from_movement_config` read the
+live file, and a test pins the defaults to it. Landing-tier *thresholds* (soft/roll/hard) are read
+from ``movement.json.landing``.
 
 Standard library only.
 """
@@ -18,14 +19,14 @@ Standard library only.
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 
 import movement
 
 
 @dataclass(frozen=True)
 class LocomotionParams:
-    """Proposed ``movement.json.locomotion`` block (#1, #6). Values are the "more miniature-real"
+    """``movement.json.locomotion`` block (#1, #6). Values are the "more miniature-real"
     defaults (Owner 2026-10-01); the "keep the fantasy" variant lowers ``cadenceScale`` to 1.5 and
     raises the accel time to 0.14."""
 
@@ -38,10 +39,16 @@ class LocomotionParams:
     strideWarpMax: float = 1.8
     footPlantLockRadiusA: float = 0.05
 
+    @classmethod
+    def from_movement_config(cls, cfg: movement.MovementConfig | None = None) -> LocomotionParams:
+        """Build from ``movement.json.locomotion`` (loads ``config/movement.json`` by default)."""
+        cfg = cfg if cfg is not None else movement.load()
+        return cls(**asdict(cfg.locomotion))
+
 
 @dataclass(frozen=True)
 class LandingParams:
-    """Proposed ``movement.json.landingResponse`` block (#3). Absorption/camera scale with the
+    """``movement.json.landingResponse`` block (#3). Absorption/camera scale with the
     Bible §5 tier; the tier *thresholds* themselves come from ``movement.json.landing``."""
 
     absorbTimeSec: float = 0.12
@@ -52,6 +59,12 @@ class LandingParams:
     controlLockSec: dict[str, float] = field(
         default_factory=lambda: {"soft": 0.0, "roll": 0.15, "hard": 0.3}
     )
+
+    @classmethod
+    def from_movement_config(cls, cfg: movement.MovementConfig | None = None) -> LandingParams:
+        """Build from ``movement.json.landingResponse`` (loads the live file by default)."""
+        cfg = cfg if cfg is not None else movement.load()
+        return cls(**asdict(cfg.landingResponse))
 
 
 DEFAULT_LOCOMOTION = LocomotionParams()

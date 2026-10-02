@@ -142,6 +142,90 @@ class Grapple:
 
 
 @dataclass(frozen=True)
+class Intent:
+    """Stick → gait bands and intent timings (Bible §2, §3.1, §3.4; AUTH #036)."""
+
+    walkMaxStick: float
+    jogMaxStick: float
+    sprintHoldSec: float
+    fallAfterSec: float
+    trajectorySec: float
+    idleSec: float
+    stickDeadzone: float
+
+
+@dataclass(frozen=True)
+class Camera:
+    """Fixed follow camera (Bible §8, DESIGN_SYSTEM decision 5; AUTH #036)."""
+
+    followA: float
+    heightA: float
+    lookAheadA: float
+    runPullBackA: float
+    runFovDeg: float
+    baseFovDeg: float
+    jumpHoldSec: float
+    climbFollowA: float
+    climbPitchDeg: float
+    hangPitchDeg: float
+    balanceYawDeg: float
+    recenterSec: float
+    occluderFadeA: float
+    blendSec: float
+
+
+@dataclass(frozen=True)
+class Locomotion:
+    """Stride/speed warping + miniature cadence/accel (AUTH #043 items #1, #6)."""
+
+    refStrideA: float
+    refCadence: float
+    cadenceScale: float
+    accelTimeSec: float
+    decelTimeSec: float
+    strideWarpMin: float
+    strideWarpMax: float
+    footPlantLockRadiusA: float
+
+
+@dataclass(frozen=True)
+class LeadTimeSec:
+    jump: float
+    vault: float
+    climb: float
+    land: float
+
+
+@dataclass(frozen=True)
+class Anticipation:
+    """Traversal-graph anticipation (AUTH #043 item #2)."""
+
+    leadTimeSec: LeadTimeSec
+    reachStartDistA: float
+    gazeLeadSec: float
+    maxConcurrentReaches: float
+
+
+@dataclass(frozen=True)
+class ControlLockSec:
+    soft: float
+    roll: float
+    hard: float
+
+
+@dataclass(frozen=True)
+class LandingResponse:
+    """Procedural landing absorption + camera dip (AUTH #043 item #3)."""
+
+    absorbTimeSec: float
+    recoverTimeSec: float
+    maxCrouchFraction: float
+    camDipA: float
+    softSurfaceExtra: float
+    controlLockSec: ControlLockSec
+
+
+@dataclass(frozen=True)
 class MovementConfig:
     avatarHeightA: float
     speeds: Speeds
@@ -159,6 +243,11 @@ class MovementConfig:
     wallRun: WallRun
     poleVault: PoleVault
     grapple: Grapple
+    intent: Intent
+    camera: Camera
+    locomotion: Locomotion
+    anticipation: Anticipation
+    landingResponse: LandingResponse
 
 
 def _build(cls: type, data: Any, path: str) -> Any:

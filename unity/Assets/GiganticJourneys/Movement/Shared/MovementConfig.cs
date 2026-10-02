@@ -40,6 +40,11 @@ namespace GiganticJourneys.Movement
         public readonly WallRunSection WallRun;
         public readonly PoleVaultSection PoleVault;
         public readonly GrappleSection Grapple;
+        public readonly IntentSection Intent;
+        public readonly CameraSection Camera;
+        public readonly LocomotionSection Locomotion;
+        public readonly AnticipationSection Anticipation;
+        public readonly LandingResponseSection LandingResponse;
 
         /// <summary>Every constant by dotted JSON path, as read (floats as double, flags as bool).</summary>
         public readonly IReadOnlyDictionary<string, object> Values;
@@ -62,6 +67,11 @@ namespace GiganticJourneys.Movement
             WallRun = new WallRunSection(r.Object("wallRun"));
             PoleVault = new PoleVaultSection(r.Object("poleVault"));
             Grapple = new GrappleSection(r.Object("grapple"));
+            Intent = new IntentSection(r.Object("intent"));
+            Camera = new CameraSection(r.Object("camera"));
+            Locomotion = new LocomotionSection(r.Object("locomotion"));
+            Anticipation = new AnticipationSection(r.Object("anticipation"));
+            LandingResponse = new LandingResponseSection(r.Object("landingResponse"));
             r.RejectUnknown();
             Values = r.Log;
         }
@@ -326,6 +336,168 @@ namespace GiganticJourneys.Movement
                 ReelSec = r.Number("reelSec");
                 AnchorMinLedgeA = r.Number("anchorMinLedgeA");
                 SnapAssistA = r.Number("snapAssistA");
+                r.RejectUnknown();
+            }
+        }
+
+        /// <summary><c>intent</c> section: stick → gait bands and intent timings (Bible §2, §3.1, §3.4; AUTH #036).</summary>
+        public sealed class IntentSection
+        {
+            public readonly float WalkMaxStick;
+            public readonly float JogMaxStick;
+            public readonly float SprintHoldSec;
+            public readonly float FallAfterSec;
+            public readonly float TrajectorySec;
+            public readonly float IdleSec;
+            public readonly float StickDeadzone;
+
+            internal IntentSection(Reader r)
+            {
+                WalkMaxStick = r.Number("walkMaxStick");
+                JogMaxStick = r.Number("jogMaxStick");
+                SprintHoldSec = r.Number("sprintHoldSec");
+                FallAfterSec = r.Number("fallAfterSec");
+                TrajectorySec = r.Number("trajectorySec");
+                IdleSec = r.Number("idleSec");
+                StickDeadzone = r.Number("stickDeadzone");
+                r.RejectUnknown();
+            }
+        }
+
+        /// <summary><c>camera</c> section: fixed follow camera (Bible §8, DESIGN_SYSTEM decision 5; AUTH #036). Lengths in A, angles in degrees.</summary>
+        public sealed class CameraSection
+        {
+            public readonly float FollowA;
+            public readonly float HeightA;
+            public readonly float LookAheadA;
+            public readonly float RunPullBackA;
+            public readonly float RunFovDeg;
+            public readonly float BaseFovDeg;
+            public readonly float JumpHoldSec;
+            public readonly float ClimbFollowA;
+            public readonly float ClimbPitchDeg;
+            public readonly float HangPitchDeg;
+            public readonly float BalanceYawDeg;
+            public readonly float RecenterSec;
+            public readonly float OccluderFadeA;
+            public readonly float BlendSec;
+
+            internal CameraSection(Reader r)
+            {
+                FollowA = r.Number("followA");
+                HeightA = r.Number("heightA");
+                LookAheadA = r.Number("lookAheadA");
+                RunPullBackA = r.Number("runPullBackA");
+                RunFovDeg = r.Number("runFovDeg");
+                BaseFovDeg = r.Number("baseFovDeg");
+                JumpHoldSec = r.Number("jumpHoldSec");
+                ClimbFollowA = r.Number("climbFollowA");
+                ClimbPitchDeg = r.Number("climbPitchDeg");
+                HangPitchDeg = r.Number("hangPitchDeg");
+                BalanceYawDeg = r.Number("balanceYawDeg");
+                RecenterSec = r.Number("recenterSec");
+                OccluderFadeA = r.Number("occluderFadeA");
+                BlendSec = r.Number("blendSec");
+                r.RejectUnknown();
+            }
+        }
+
+        /// <summary><c>locomotion</c> section: stride/speed warping and miniature cadence/accel (AUTH #043 #1, #6; reference <c>services/traversal/locomotion_ref.py</c>).</summary>
+        public sealed class LocomotionSection
+        {
+            public readonly float RefStrideA;
+            public readonly float RefCadence;
+            public readonly float CadenceScale;
+            public readonly float AccelTimeSec;
+            public readonly float DecelTimeSec;
+            public readonly float StrideWarpMin;
+            public readonly float StrideWarpMax;
+            public readonly float FootPlantLockRadiusA;
+
+            internal LocomotionSection(Reader r)
+            {
+                RefStrideA = r.Number("refStrideA");
+                RefCadence = r.Number("refCadence");
+                CadenceScale = r.Number("cadenceScale");
+                AccelTimeSec = r.Number("accelTimeSec");
+                DecelTimeSec = r.Number("decelTimeSec");
+                StrideWarpMin = r.Number("strideWarpMin");
+                StrideWarpMax = r.Number("strideWarpMax");
+                FootPlantLockRadiusA = r.Number("footPlantLockRadiusA");
+                r.RejectUnknown();
+            }
+        }
+
+        /// <summary><c>anticipation.leadTimeSec</c> section: per-move anticipation lead times, seconds.</summary>
+        public sealed class LeadTimeSecSection
+        {
+            public readonly float Jump;
+            public readonly float Vault;
+            public readonly float Climb;
+            public readonly float Land;
+
+            internal LeadTimeSecSection(Reader r)
+            {
+                Jump = r.Number("jump");
+                Vault = r.Number("vault");
+                Climb = r.Number("climb");
+                Land = r.Number("land");
+                r.RejectUnknown();
+            }
+        }
+
+        /// <summary><c>anticipation</c> section: traversal-graph anticipation (AUTH #043 #2; reference <c>services/traversal/anticipation.py</c>).</summary>
+        public sealed class AnticipationSection
+        {
+            public readonly float ReachStartDistA;
+            public readonly float GazeLeadSec;
+            public readonly float MaxConcurrentReaches;
+            public readonly LeadTimeSecSection LeadTimeSec;
+
+            internal AnticipationSection(Reader r)
+            {
+                ReachStartDistA = r.Number("reachStartDistA");
+                GazeLeadSec = r.Number("gazeLeadSec");
+                MaxConcurrentReaches = r.Number("maxConcurrentReaches");
+                LeadTimeSec = new LeadTimeSecSection(r.Object("leadTimeSec"));
+                r.RejectUnknown();
+            }
+        }
+
+        /// <summary><c>landingResponse.controlLockSec</c> section: control lock per landing tier, seconds.</summary>
+        public sealed class ControlLockSecSection
+        {
+            public readonly float Soft;
+            public readonly float Roll;
+            public readonly float Hard;
+
+            internal ControlLockSecSection(Reader r)
+            {
+                Soft = r.Number("soft");
+                Roll = r.Number("roll");
+                Hard = r.Number("hard");
+                r.RejectUnknown();
+            }
+        }
+
+        /// <summary><c>landingResponse</c> section: procedural landing absorption + camera dip (AUTH #043 #3; reference <c>locomotion_ref.landing_response</c>).</summary>
+        public sealed class LandingResponseSection
+        {
+            public readonly float AbsorbTimeSec;
+            public readonly float RecoverTimeSec;
+            public readonly float MaxCrouchFraction;
+            public readonly float CamDipA;
+            public readonly float SoftSurfaceExtra;
+            public readonly ControlLockSecSection ControlLockSec;
+
+            internal LandingResponseSection(Reader r)
+            {
+                AbsorbTimeSec = r.Number("absorbTimeSec");
+                RecoverTimeSec = r.Number("recoverTimeSec");
+                MaxCrouchFraction = r.Number("maxCrouchFraction");
+                CamDipA = r.Number("camDipA");
+                SoftSurfaceExtra = r.Number("softSurfaceExtra");
+                ControlLockSec = new ControlLockSecSection(r.Object("controlLockSec"));
                 r.RejectUnknown();
             }
         }

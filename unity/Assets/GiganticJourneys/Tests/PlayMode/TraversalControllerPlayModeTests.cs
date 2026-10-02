@@ -118,7 +118,7 @@ namespace GiganticJourneys.Tests
             // Run held 1.5 s becomes sprint (Bible §3.1): cap the run capsule to time a full 5 s run.
             caps[2].Motor.MaxGait = Gait.Run;
             // Let sprint engage (run held 1.5 s) before measuring.
-            yield return new WaitForSeconds(ProvisionalTuning.Intent.SprintHoldSec + 0.2f);
+            yield return new WaitForSeconds(caps[3].Config.Intent.SprintHoldSec + 0.2f);
             var z0 = new float[4];
             for (var i = 0; i < 4; i++)
                 z0[i] = caps[i].transform.position.z;

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://giganticjourneys.com/schemas/movement.schema.json",
   "title": "Gigantic Journeys movement tuning constants",
-  "description": "Schema for config/movement.json (Movement Bible §10). Every key is required and no extra keys are allowed, so a malformed or drifted file fails CI (governance.yml, movement-sync). Created under AUTH #028; value changes are a design change (Bible §10) needing their own AUTH.",
+  "description": "Schema for config/movement.json (Movement Bible §10). Every key is required and no extra keys are allowed, so a malformed or drifted file fails CI (governance.yml, movement-sync). Created under AUTH #028; intent + camera added under AUTH #036, locomotion + anticipation + landingResponse under AUTH #043; value changes are a design change (Bible §10) needing their own AUTH.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -21,7 +21,12 @@
     "ticTac",
     "wallRun",
     "poleVault",
-    "grapple"
+    "grapple",
+    "intent",
+    "camera",
+    "locomotion",
+    "anticipation",
+    "landingResponse"
   ],
   "properties": {
     "avatarHeightA": { "type": "number" },
@@ -173,6 +178,99 @@
         "reelSec": { "type": "number" },
         "anchorMinLedgeA": { "type": "number" },
         "snapAssistA": { "type": "number" }
+      }
+    },
+    "intent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["walkMaxStick", "jogMaxStick", "sprintHoldSec", "fallAfterSec", "trajectorySec", "idleSec", "stickDeadzone"],
+      "properties": {
+        "walkMaxStick": { "type": "number" },
+        "jogMaxStick": { "type": "number" },
+        "sprintHoldSec": { "type": "number" },
+        "fallAfterSec": { "type": "number" },
+        "trajectorySec": { "type": "number" },
+        "idleSec": { "type": "number" },
+        "stickDeadzone": { "type": "number" }
+      }
+    },
+    "camera": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["followA", "heightA", "lookAheadA", "runPullBackA", "runFovDeg", "baseFovDeg", "jumpHoldSec", "climbFollowA", "climbPitchDeg", "hangPitchDeg", "balanceYawDeg", "recenterSec", "occluderFadeA", "blendSec"],
+      "properties": {
+        "followA": { "type": "number" },
+        "heightA": { "type": "number" },
+        "lookAheadA": { "type": "number" },
+        "runPullBackA": { "type": "number" },
+        "runFovDeg": { "type": "number" },
+        "baseFovDeg": { "type": "number" },
+        "jumpHoldSec": { "type": "number" },
+        "climbFollowA": { "type": "number" },
+        "climbPitchDeg": { "type": "number" },
+        "hangPitchDeg": { "type": "number" },
+        "balanceYawDeg": { "type": "number" },
+        "recenterSec": { "type": "number" },
+        "occluderFadeA": { "type": "number" },
+        "blendSec": { "type": "number" }
+      }
+    },
+    "locomotion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["refStrideA", "refCadence", "cadenceScale", "accelTimeSec", "decelTimeSec", "strideWarpMin", "strideWarpMax", "footPlantLockRadiusA"],
+      "properties": {
+        "refStrideA": { "type": "number" },
+        "refCadence": { "type": "number" },
+        "cadenceScale": { "type": "number" },
+        "accelTimeSec": { "type": "number" },
+        "decelTimeSec": { "type": "number" },
+        "strideWarpMin": { "type": "number" },
+        "strideWarpMax": { "type": "number" },
+        "footPlantLockRadiusA": { "type": "number" }
+      }
+    },
+    "anticipation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["leadTimeSec", "reachStartDistA", "gazeLeadSec", "maxConcurrentReaches"],
+      "properties": {
+        "leadTimeSec": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["jump", "vault", "climb", "land"],
+          "properties": {
+            "jump": { "type": "number" },
+            "vault": { "type": "number" },
+            "climb": { "type": "number" },
+            "land": { "type": "number" }
+          }
+        },
+        "reachStartDistA": { "type": "number" },
+        "gazeLeadSec": { "type": "number" },
+        "maxConcurrentReaches": { "type": "number" }
+      }
+    },
+    "landingResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["absorbTimeSec", "recoverTimeSec", "maxCrouchFraction", "camDipA", "softSurfaceExtra", "controlLockSec"],
+      "properties": {
+        "absorbTimeSec": { "type": "number" },
+        "recoverTimeSec": { "type": "number" },
+        "maxCrouchFraction": { "type": "number" },
+        "camDipA": { "type": "number" },
+        "softSurfaceExtra": { "type": "number" },
+        "controlLockSec": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["soft", "roll", "hard"],
+          "properties": {
+            "soft": { "type": "number" },
+            "roll": { "type": "number" },
+            "hard": { "type": "number" }
+          }
+        }
       }
     }
   }

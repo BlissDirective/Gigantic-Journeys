@@ -191,7 +191,7 @@
     "template_fallback": false,
     "validator": {
       "margin": 0.85,
-      "movement_config_sha256": "19f2dac80b29c8fdbe4b02d8f2a89e81fef4a3a5969e16dc89a8ddb910e84e4e",
+      "movement_config_sha256": "a828dba31052f596adde640488cdca6036e7d19be010bff6501edb74c4794349",
       "passed": true
     }
   }

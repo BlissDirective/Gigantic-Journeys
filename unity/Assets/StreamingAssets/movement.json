@@ -8,11 +8,16 @@
   "reach": { "ledgeToLedge": 1.5, "holdReach": 1.1, "slipChanceAtMaxReach": 0.15 },
   "narrowWidthA": 0.5,
   "crouchHeadroomA": 1.1,
-  "gravityScale": 0.8,
+  "gravityScale": 0.9,
   "assist": { "coyoteMs": 200, "jumpBonus": 0.2, "slipsOff": true, "autoGrab": true },
   "dive": { "minSpeed": 2.4, "distanceA": 2.0, "rollAboveA": 1.5 },
   "ticTac": { "reboundHeightA": 0.8, "reboundDistanceA": 1.2, "maxChain": 1 },
   "wallRun": { "minWallRunA": 3.0, "maxDurationSec": 1.2, "speed": 3.6, "minEntrySpeed": 3.0, "gravityDampen": 0.5 },
   "poleVault": { "plantWindowSec": 0.25, "minRunSpeed": 2.4, "maxGapA": 3.0, "maxHeightA": 2.0 },
-  "grapple": { "reachA": 6.0, "swingSpeed": 3.0, "swingMaxArcDeg": 120, "ascendSpeed": 0.7, "rappelSpeed": 1.0, "deploySec": 0.4, "reelSec": 0.6, "anchorMinLedgeA": 0.1, "snapAssistA": 0.3 }
+  "grapple": { "reachA": 6.0, "swingSpeed": 3.0, "swingMaxArcDeg": 120, "ascendSpeed": 0.7, "rappelSpeed": 1.0, "deploySec": 0.4, "reelSec": 0.6, "anchorMinLedgeA": 0.1, "snapAssistA": 0.3 },
+  "intent": { "walkMaxStick": 0.40, "jogMaxStick": 0.85, "sprintHoldSec": 1.5, "fallAfterSec": 0.35, "trajectorySec": 0.6, "idleSec": 0.4, "stickDeadzone": 0.1 },
+  "camera": { "followA": 4.0, "heightA": 1.6, "lookAheadA": 0.8, "runPullBackA": 0.5, "runFovDeg": 4, "baseFovDeg": 60, "jumpHoldSec": 0.2, "climbFollowA": 3.0, "climbPitchDeg": 15, "hangPitchDeg": -20, "balanceYawDeg": 20, "recenterSec": 2.0, "occluderFadeA": 1.5, "blendSec": 0.25 },
+  "locomotion": { "refStrideA": 0.9, "refCadence": 2.6, "cadenceScale": 1.9, "accelTimeSec": 0.10, "decelTimeSec": 0.10, "strideWarpMin": 0.6, "strideWarpMax": 1.8, "footPlantLockRadiusA": 0.05 },
+  "anticipation": { "leadTimeSec": { "jump": 0.35, "vault": 0.30, "climb": 0.40, "land": 0.25 }, "reachStartDistA": 1.2, "gazeLeadSec": 0.5, "maxConcurrentReaches": 2 },
+  "landingResponse": { "absorbTimeSec": 0.12, "recoverTimeSec": 0.22, "maxCrouchFraction": 0.35, "camDipA": 0.15, "softSurfaceExtra": 0.5, "controlLockSec": { "soft": 0.0, "roll": 0.15, "hard": 0.3 } }
 }

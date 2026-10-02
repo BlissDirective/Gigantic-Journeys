@@ -84,13 +84,13 @@ namespace GiganticJourneys.Tests
         [TestCase(1f, Gait.Run)]
         public void Gait_StickBands_Bible31(float stick, Gait expected)
         {
-            Assert.That(GaitSelector.Band(stick), Is.EqualTo(expected));
+            Assert.That(GaitSelector.Band(stick, Config.Intent), Is.EqualTo(expected));
         }
 
         [Test]
         public void Gait_RunHeld1Point5Seconds_BecomesSprint_AndResets()
         {
-            var g = new GaitSelector();
+            var g = new GaitSelector(Config.Intent);
             var t = 0f;
             while (t < 1.45f)
             {
@@ -170,7 +170,14 @@ namespace GiganticJourneys.Tests
         public void Trajectory_PredictsSixTenthsOfASecondAhead()
         {
             var samples = new Vector3[6];
-            TrajectoryPredictor.Predict(Vector3.zero, new Vector3(0, 0, 2f), 4f, true, samples);
+            TrajectoryPredictor.Predict(
+                Vector3.zero,
+                new Vector3(0, 0, 2f),
+                4f,
+                true,
+                Config.Intent.TrajectorySec,
+                samples
+            );
             Assert.That(samples[5].z, Is.EqualTo(1.2f).Within(1e-4f));
             Assert.That(samples[5].y, Is.EqualTo(0f));
         }

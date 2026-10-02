@@ -14,7 +14,7 @@ namespace GiganticJourneys.Movement.Controller
     /// </summary>
     public sealed class LocomotionMotor
     {
-        readonly GaitSelector _gait = new GaitSelector();
+        readonly GaitSelector _gait;
         readonly JumpTiming _jump;
         readonly VerbRegistry _verbs = new VerbRegistry();
         readonly bool _assist;
@@ -28,6 +28,7 @@ namespace GiganticJourneys.Movement.Controller
             Config = config;
             Scale = scale;
             _assist = assist;
+            _gait = new GaitSelector(config.Intent);
             _jump = new JumpTiming(config, assist);
             _verbs.Register(new LocomotionVerbProvider());
             Grounded = true;

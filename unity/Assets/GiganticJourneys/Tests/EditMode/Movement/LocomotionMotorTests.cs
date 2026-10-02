@@ -93,7 +93,7 @@ namespace GiganticJourneys.Tests
         public void Sprint_Over5Seconds_WithinTwoPercent()
         {
             var sim = new Sim();
-            var hold = Mathf.CeilToInt(ProvisionalTuning.Intent.SprintHoldSec / Dt) + 1;
+            var hold = Mathf.CeilToInt(Config.Intent.SprintHoldSec / Dt) + 1;
             for (var i = 0; i < hold; i++)
                 sim.Step(Vector2.up, false);
             Assert.That(sim.Motor.Gait, Is.EqualTo(Gait.Sprint));

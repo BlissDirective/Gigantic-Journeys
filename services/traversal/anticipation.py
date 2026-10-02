@@ -16,9 +16,10 @@ Standard library only.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 
 import affordances
+import movement
 
 Vec3 = tuple[float, float, float]
 
@@ -79,8 +80,8 @@ _PLANT_FOOT = ("jump", "vault")
 
 @dataclass(frozen=True)
 class AnticipationParams:
-    """Proposed ``movement.json.anticipation`` block (#2). ``maxConcurrentReaches`` stays ≤ the
-    Bible §2 two-IK-chain budget."""
+    """``movement.json.anticipation`` block (#2); defaults mirror the shipped file.
+    ``maxConcurrentReaches`` stays ≤ the Bible §2 two-IK-chain budget."""
 
     leadTimeSec: dict[str, float] = field(
         default_factory=lambda: {"jump": 0.35, "vault": 0.30, "climb": 0.40, "land": 0.25}
@@ -88,6 +89,13 @@ class AnticipationParams:
     reachStartDistA: float = 1.2
     gazeLeadSec: float = 0.5
     maxConcurrentReaches: int = 2
+
+    @classmethod
+    def from_movement_config(cls, cfg: movement.MovementConfig | None = None) -> AnticipationParams:
+        """Build from ``movement.json.anticipation`` (loads ``config/movement.json`` by default)."""
+        a = asdict((cfg if cfg is not None else movement.load()).anticipation)
+        a["maxConcurrentReaches"] = int(a["maxConcurrentReaches"])
+        return cls(**a)
 
 
 DEFAULT_ANTICIPATION = AnticipationParams()
