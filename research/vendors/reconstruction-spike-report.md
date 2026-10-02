@@ -8,7 +8,7 @@
 - GPU host (provider / instance / $/hr): **Modal** serverless, scale-to-zero (AUTH #033), `gpu="A10G"` (24 GB, sm_86) + 8 CPU cores (hard limit 8 since 2026-09-26) + 16 GiB, 1 h timeout. A10G $1.10/hr, CPU $0.0473/core-hr, memory $0.008/GiB-hr (`modal billing rates`), each billed per second as max(reserved, used) (see §2).
 - Container image (from `services/reconstruction/Dockerfile`, built by Modal `Image.from_dockerfile`, context `services/reconstruction/`): `im-U9j4YPYmNpw5ClLjVEzhES` (built 2026-09-25 in 1042 s, mostly the gsplat CUDA compile). Base `nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04`.
 - Pinned tool versions (since 2026-09-26): **COLMAP 4.1.1 CUDA 12.9** (conda-forge `cuda_129ha585b08_4` + `openimageio=3.1`, micro-arch level x86_64_v3, in `/opt/colmap`; GLOMAP's global mapper is built in as `colmap global_mapper`); smoke run 2026-09-25 used COLMAP 3.7 (Ubuntu apt, no CUDA, CPU SIFT); gsplat 1.4.0 (CUDA extension compiled at build from the `v1.4.0` tag, sm 8.0/8.6/8.9); nerfstudio 1.1.5; torch 2.4.1+cu124 / torchvision 0.19.1; open3d 0.18.0; numpy 1.26.4; Python 3.11 (deadsnakes, `/opt/venv`); Node 22 + `@playcanvas/splat-transform` 3.6.4.
-- Input data (public dataset first, then corpus): **Mip-NeRF 360 `room`**, `images_4` (311 images, **779×519**; an earlier note said ~1557×1038, which is `images_2`), public benchmark (`--source public`). No corpus scan yet.
+- Input data (public dataset first, then corpus): **Mip-NeRF 360 `room`**, `images_4` (311 images, **779×519**; an earlier note said ~1557×1038, which is `images_2`), public benchmark (`--source public`). Corpus: since 2026-09-28, the 15 open-license open-video clips (`gj-corpus:/open-video/`, `--corpus`; §2, §5).
 - Image layering (2026-09-26): one cached Modal layer per `# modal-layer:` Dockerfile section (base → torch → gsplat → nerfstudio → colmap); the `reconstruction/` package is mounted at start. Code edits: **no rebuild** (verified: the final runs started straight away after the code changes); COLMAP-layer edit: 49 s + 7 s; a full cold build: ~20 min, billed ~$0.13 CPU.
 
 ## 1. iOS render path — the #1 risk (do this first)
@@ -37,6 +37,7 @@ Per-scan GPU time & cost:
 | `smoke` (Mip-NeRF 360 room, A10G, 2026-09-25) | 311 (`images_4`), 311/311 registered | ~16.2 (extract 0.15 + exhaustive match 11.5 + mapper 4.3, all CPU) | ~6 (15k iters, ~20 ms/iter) + export | <1 | 0.381 (1371 s pipeline wall) | 1.10 | **$0.42** GPU-only (`cost.json`); **$0.86** actual Modal metered (A10G $0.421 + CPU $0.366 + memory $0.069) |
 | `room-R` / `room-R2` (same room, A10G, 2026-09-26, SfM default: CUDA COLMAP, GPU SIFT + GPU exhaustive match + incremental mapper) | 311, 311/311 registered | 3.0 avg (extract 0.08 + match 0.3 + mapper 2.7) | ~6.5 (incl. export + eval) | 0.2 | 0.162 (582 s avg pipeline wall) | 1.10 | **$0.26** full (GPU+CPU+memory; `cost.json` $0.260 avg vs Modal metered $0.263 avg) |
 | `room-D1` / `D2` / `F1` / `F2` (same room, A10G, 2026-09-26, **current default**: same SfM + `scaled-10k-dense` training, hard splat cap, cleaned mesh) | 311, 311/311 registered | 3.2 avg | 3.5 (incl. cap + eval + export) | 0.2 | 0.115 (413 s avg pipeline wall) | 1.10 | **$0.185** full (`cost.json`; D1/D2 within 2% of Modal metered) |
+| **Open-video corpus, 15 clips** (CC-BY stand-in corpus, A10G, 2026-09-28 + pass 3 2026-10-02; GLOMAP, sequential or exhaustive matching per clip; `qa/reports/M1-CAPT-03-open-video-recon.md`) | 43–357 frames per clip | 1.1–14.1 per clip | 5.7–8.5 | ≤0.7 | 0.14–0.39 per clip | 1.10 | **$0.23–0.63 per clip, median $0.29**; $5.04 for the canonical 15 (in-container meter). Runpod RTX 4090 / A6000 measured on 2 of these clips at **$0.055–0.111** (`research/tier2/gpu-providers-2026-09.md` §7) |
 
 ### Smoke run log (2026-09-25, Modal, Operator)
 - Command: `modal run services/reconstruction/modal_app.py --images ./data/mipnerf360/room/images_4 --scan-id smoke --source public --sfm colmap --rate 1.10` (app `ap-KTh8ClZJ5PXmMFCPgefcNY`).
@@ -187,14 +188,58 @@ Poisson then runs on the cleaned points, with normals oriented toward the camera
 |---|---|---|---|---|
 | `smoke` (Mip-NeRF 360 room) | 431,684 | SPZ (8.0 MB) + OBJ mesh (36.3 MB) | 44.3 | _TODO (iOS render path, M1-UNITY-01)_ |
 | `room-D1` (same room, current default, 2026-09-26) | 407,983 | SPZ (7.3 MB) + cleaned OBJ mesh (3.8 MB, 100K triangles) | 11.1 | _TODO (M1-UNITY-01)_ |
+| Open-video corpus, 15 clips (canonical after pass 3, 2026-10-02) | 170K–780K | SPZ (6–14 MB) + cleaned OBJ mesh (~3.5–3.8 MB, 100K triangles) | 6.8–17.7 | _TODO (M1-UNITY-01, other worker): outputs in `gj-corpus:/open-video-recon/<slug>/` (`splat.ply` for the aras-p importer, `<slug>.spz`, `collision.obj`)_ |
 
 ## 4. Managed bridge (AT-3) — conditional, likely N/A
 Per **AUTH #030**, a managed bridge is used only under a **written no-train + DPA + data-residency** commitment on file (`legal/vendors/`). The cost analysis found Luma discontinued reconstruction and Kiri publishes no such tier, so the expected outcome is **no bridge; self-host is the sole path**.
-- Terms obtained? _TODO (default: no)_
-- Bridge stood up? _TODO (default: no)_
+- Terms obtained? **No** (2026-10-02). Nothing is filed under `legal/vendors/`. Neither KIRI nor Autodesk APS has given a written no-train + DPA + data-residency commitment, and none was requested (that would be an account or vendor step needing its own AUTH).
+- Bridge stood up? **No.** Per AUTH #030 the bridge is skipped, and self-host is the sole reconstruction path. AT-3 is satisfied by the documented skip.
 
 ## 5. Decision note (AT-4)
-- Self-host vs bridge recommendation for the M1 pipeline: _TODO_
-- iOS splat-render risk assessment + chosen mitigation: _TODO_
-- Serverless vs spot/reserved GPU for early production: _TODO_
-- Feeds an **ADR-0005 addendum** (needs Owner AUTH) if the direction firms up: _TODO_
+
+2026-10-02 · gj-operator. Evidence: §2–§3, `qa/reports/M1-CAPT-03-open-video-recon.md` (15-clip corpus,
+2 passes), `research/tier2/gpu-providers-2026-09.md` §7 (Runpod benchmark). The direction below is already
+locked by **AUTH #032 (ADR-0005 addendum 4)** and **#039**. This note confirms it with measurements and
+does not propose a new ADR change.
+
+- **Self-host vs bridge: self-host.**
+  - The commercially licensed stack (COLMAP/GLOMAP BSD, gsplat/Splatfacto Apache-2.0, splat-transform
+    MIT, Open3D MIT) reconstructed 15/15 corpus clips end to end.
+  - 14 of the 15 are usable to some degree: 6 good, 2 usable, 5 partial, 1 weak. One failed (penthouse:
+    FPV drone footage, wrong poses).
+  - Cost: $0.23–0.63 per clip on Modal A10G, and $0.055–0.111 per scene on Runpod Secure.
+  - Every output is a splat under 2M, a 100K-triangle collision mesh, and a package of 7–18 MB.
+  - No bridge has the required terms (§4), so there is nothing to weigh against self-host.
+- **Capture guidance from the corpus (feeds M1-CAPT-01/04 coaching).** What works: slow, continuous,
+  textured walkthroughs and orbits without cuts. What fails or goes partial: fast FPV flight, motion blur,
+  low-texture white or glass surfaces, and multi-room tours with hard cuts. The readiness gate (AUTH #025)
+  should screen for continuity and blur.
+- **Pipeline defaults.**
+  - Photo sets: incremental mapper + `--matcher auto`.
+  - Video: GLOMAP + 2 fps + 4096 features.
+  - Exhaustive matching helps multi-shot clips of ≤ ~400 frames, but it needs a pose-sanity gate
+    (pass 3: 6 of 9 clips improved, 3 over-linked). Builder follow-up.
+- **iOS splat-render risk: still the #1 program risk, and unchanged by this spike.** It is
+  trainer-orthogonal and sits in M1-UNITY-01 (other worker). Mitigations already planned
+  (`design/proposals/ios-splat-render-v1.md`):
+  - replace aras-p's Metal radix sort with a bitonic or tile-local sort, or fall back to a MetalSplatter
+    native plugin;
+  - keep the splat budget at or below the measured 170–780K per corpus scene (the 2M cap holds, with
+    headroom to tighten it to ~1M for older iPhones);
+  - fall back to textured-mesh visuals (ADR-0001 addendum 1).
+
+  The reconstruction side delivers everything the render track consumes: `splat.ply` (3DGS layout, for the
+  aras-p importer), `.spz`, and the collision OBJ, per clip in the private volume.
+- **Serverless vs spot/reserved for early production: serverless per-scan pods.**
+  - **Runpod Secure is primary** (#039): RTX 4090, $0.06–0.11 per scene, 3–4.5× cheaper than Modal at
+    equal quality.
+  - **Modal is the fallback.** It is also the zero-cash choice while its monthly Starter credit lasts.
+  - Reserved capacity only pays at sustained volume, so revisit it at M5 with real scan counts.
+  - Open #039 condition: the full-corpus **Runpod batch validation** (cold start, reliability,
+    region/data-retention) has run on only 2 clips so far. A full 15-clip batch is estimated at
+    **≈ $1.5–2.5** of the $48.57 prepaid balance, inside the existing caps. It was not run this session,
+    because Modal credit covered the corpus pass (Modal-first instruction).
+- **ADR-0005:** no new addendum is needed. Addendum 4 (AUTH #032) already records gsplat-first, serverless
+  GPU and the split render track, and these results support it.
+- **What is left before M1-CAPT-03 can close:** AT-2 (suggested; the iOS render on a physical iPhone, owned
+  by M1-UNITY-01). With AT-1, AT-3 and AT-4 met, the ticket goes **in-review**.

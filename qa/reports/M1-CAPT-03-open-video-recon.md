@@ -54,3 +54,57 @@ All 15 pipeline runs completed and produced an SPZ, a PLY, a collision OBJ, a sp
 - Preview JPEGs and a contact sheet were downloaded to the Operator box for the Owner. They are not committed: they are renders of third-party CC-BY footage, and the evidence standard is PNG-only.
 
 Privacy: the inputs are public, openly licensed videos (attribution in `services/reconstruction/corpus/OPEN_VIDEO_ATTRIBUTION.md`). No user scans and no personal data were used. Media and outputs stay in the private Modal volume; nothing large is committed to git.
+
+## Pass 3 — exhaustive matching on the partial and weak clips (2026-10-02, gj-operator)
+
+**Why.** On GLOMAP, registration followed continuity: each cut or jump between segments usually started a
+separate component, and only the largest was trained. Sequential matching (with loop detection) compares
+nearby frames, so it can miss a segment that revisits an area seen earlier. On ≤ 357 frames, **GPU
+exhaustive matching** (every pair) takes only 19–60 s, so it was tried on the 9 clips that were partial,
+multi-segment or weak. Everything else was unchanged: the same frames (`--skip-extract`), 4096 features,
+GLOMAP, `scaled-10k-dense`, the 2M cap, A10G.
+
+`modal run services/reconstruction/modal_app.py --corpus <9 clips> --skip-extract --corpus-matcher exhaustive --budget 8 --spent 0.04`
+
+Before the run, the 9 canonical outputs were copied to `gj-corpus:/open-video-recon/_pre-pass3/<slug>/`
+(`reconstruct_clip` overwrites in place). Each clip was then judged on held-out metrics and the render
+pairs. Where pass 3 was worse, the 2026-09-28 run was restored and the pass-3 run was archived.
+
+| Clip | Reg % (old → new) | PSNR | SSIM | LPIPS | Pass-3 $ | Decision |
+|---|---|---|---|---|---|---|
+| tabletop/lego-paranal-observatory | 64.4 → **100.0** | 35.6 → 29.3 | 0.973 → 0.944 | 0.034 → 0.065 | 0.39 | **keep**: all 3 shots joined. PSNR is lower because the held-out set now spans the whole model (17 views, was 11); the renders are sharp |
+| rooms/medieval-great-hall-winchester | 55.4 → **85.7** | 24.5 → 24.9 | 0.814 → 0.842 | 0.327 → 0.278 | 0.39 | **keep** (better on every axis) |
+| tabletop/fantasy-diorama-dock-platform | 67.9 → 67.9 | 22.2 → 22.8 | 0.779 → 0.787 | 0.179 → 0.172 | 0.29 | keep (slightly better) |
+| rooms/mediterranean-country-home | 60.1 → 60.1 | 22.5 → 23.2 | 0.847 → 0.858 | 0.250 → 0.229 | 0.31 | keep (better) |
+| tabletop/tudor-dollhouse | 25.5 → 25.5 | 26.2 → 26.6 | 0.887 → 0.894 | 0.183 → 0.173 | 0.36 | keep (slightly better) |
+| rooms/office-warehouse-fpv | 21.2 → 20.3 | 19.5 → **23.4** | 0.809 → 0.819 | 0.258 → 0.272 | 0.24 | keep (weak → usable-partial) |
+| rooms/art-museum-galleries-eric-carle | 39.5 → 39.5 | 29.3 → 25.4 | 0.928 → 0.886 | 0.156 → 0.262 | 0.37 | **restore** old (worse) |
+| rooms/abandoned-farmhouse | 37.2 → 91.5 | 17.7 → 15.3 | 0.761 → 0.695 | 0.406 → 0.541 | 0.29 | **restore** old: the joined segments have wrong poses (half the renders are mush) |
+| rooms/modern-church-fpv | 24.7 → 55.5 | 24.3 → 16.5 | 0.875 → 0.695 | 0.181 → 0.677 | 0.40 | **restore** old (wrong poses) |
+
+**Findings**
+- Exhaustive matching **fixes multi-shot tabletop and hall clips** where the shots overlap (lego 64 → 100 %,
+  Winchester 55 → 86 %), and it nudges the rest up by 0.4–0.7 dB.
+- It **over-links** where it shouldn't. On clips with repetitive texture or blur (the farmhouse's cluttered
+  rooms, the FPV church), it accepts false matches between segments, and GLOMAP then fuses them into one
+  model with wrong poses. Registration % alone would read those runs as better, so the verdict always needs
+  the held-out LPIPS (≥ 0.5 = broken) and a look at the renders.
+- **Recommended corpus default:** exhaustive matching for clips of ≤ ~400 frames, *gated* by a pose-sanity
+  check. Reject the run, falling back to sequential, if held-out LPIPS rises by more than 0.1 or PSNR drops
+  more than 3 dB while registration jumps. This is a Builder follow-up in `modal_app.py`; the defaults were
+  not changed here.
+- SfM cost rose with exhaustive matching (lego 143 → 378 s, Winchester → 372 s), mostly in GLOMAP's
+  rotation averaging and bundle adjustment over the denser view graph, not in matching.
+
+**Canonical corpus after pass 3** (15 clips; `services/reconstruction/corpus/open_video_recon_results.json`):
+6 good (lego observatory, library, Eldon House, mosque, museum case, Winchester), 2 usable (Theed,
+fantasy dock), 5 usable-partial (Eric Carle, Mediterranean, dollhouse, church, office), 1 weak
+(farmhouse), 1 fail (penthouse). Summed in-container cost of the canonical runs: **$5.04** (each clip is
+one A10G run at $0.23–0.63, median $0.29). Splats range from 170K to 780K, which is inside the 2M cap and
+the ~1–2.5M iOS budget (M1-UNITY-01). Packages are 6.8–17.7 MB (SPZ + 100K-triangle collision OBJ), well
+under 150 MB.
+
+**Cost of pass 3.** In-container meter: **$3.04** for 9 clips ($0.24–0.40 each). Modal per-app report: $3.34.
+Workspace October metered: $0.04 → **$6.83**, all covered by Starter credits, **$0 billed**. As on 09-28,
+the workspace summary runs ahead of the per-app report, so the summary is used for cap tracking:
+$6.83 of the $20 limit, $13.17 left. Runpod was not used ($48.57 balance, 0 pods).

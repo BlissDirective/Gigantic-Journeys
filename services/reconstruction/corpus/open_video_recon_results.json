@@ -19,7 +19,9 @@
   "experiments": {
     "_pass1": "gj-corpus:/open-video-recon/_pass1/office-warehouse-fpv (2 fps, replaced by the 4 fps run)",
     "_pass2": "gj-corpus:/open-video-recon/_pass2/{penthouse-apartment-fpv (incremental COLMAP, PSNR 14.1), modern-church-fpv (4 fps, PSNR 20.4)} (not better, not canonical)",
-    "pilot": "tabletop/lego-paranal-observatory at 3 fps / 8192 features / exhaustive / incremental mapper: mapper did not finish in 25 min (stopped); SfM-only bench on the same 196 frames: GLOMAP 196/196 registered but 873 s SfM"
+    "pilot": "tabletop/lego-paranal-observatory at 3 fps / 8192 features / exhaustive / incremental mapper: mapper did not finish in 25 min (stopped); SfM-only bench on the same 196 frames: GLOMAP 196/196 registered but 873 s SfM",
+    "_pre-pass3": "gj-corpus:/open-video-recon/_pre-pass3/<slug>/ for the 6 clips where pass 3 replaced the 2026-09-28 sequential-matching run (spz, ply, collision.obj, sparse, renders, preview, run.json)",
+    "_pass3": "gj-corpus:/open-video-recon/_pass3/{art-museum-galleries-eric-carle (PSNR 29.3 -> 25.4, same registration), abandoned-farmhouse (91.5% registered but wrong poses on joined segments: PSNR 15.3, LPIPS 0.54), modern-church-fpv (55.5% registered, PSNR 16.5, LPIPS 0.68)} (worse, not canonical; the 2026-09-28 runs were restored)"
   },
   "cost": {
     "canonical_clips_measured_usd": 4.73,
@@ -28,7 +30,8 @@
       "workspace_summary_delta": 10.48,
       "note": "workspace metered went 7.00 -> 17.48 during the job; the per-app daily report sums to 7.62 (gap likely reporting lag). Includes pilots, the SfM bench and pass-2 retries."
     },
-    "prices": "A10G $1.10/h + $0.0473/core-h + $0.008/GiB-h"
+    "prices": "A10G $1.10/h + $0.0473/core-h + $0.008/GiB-h",
+    "canonical_clips_measured_usd_after_pass3": 5.04
   },
   "clips": [
     {
@@ -156,7 +159,7 @@
       "category": "tabletop",
       "status": "ok",
       "verdict": "usable",
-      "note": "68% registered; soft in places.",
+      "note": "Pass 3 (exhaustive matching): same registration, slightly better on all three metrics.",
       "frames": {
         "used": 84,
         "candidates": 275,
@@ -169,47 +172,57 @@
       },
       "sfm": {
         "mapper": "global",
-        "matcher": "sequential",
+        "matcher": "exhaustive",
         "max_features": 4096,
         "registered_images": 57,
-        "points": 21204,
-        "mean_track_length": 5.781409,
-        "mean_reprojection_error_px": 0.670705,
-        "sfm_s": 59.72
+        "points": 23053,
+        "mean_track_length": 6.1772,
+        "mean_reprojection_error_px": 0.752779,
+        "sfm_s": 67.53
       },
       "registration_pct": 67.9,
       "quality": {
-        "psnr": 22.2475,
-        "ssim": 0.7788,
-        "lpips": 0.1789,
+        "psnr": 22.8071,
+        "ssim": 0.7873,
+        "lpips": 0.1724,
         "eval_views": 8
       },
-      "splat_count": 631494,
-      "package_bytes": 16265168,
-      "mesh_triangles": 99999,
+      "splat_count": 644854,
+      "package_bytes": 16373543,
+      "mesh_triangles": 100000,
       "stage_seconds": {
-        "sfm": 60.02,
-        "train": 484.1,
-        "compress": 3.84,
-        "mesh": 29.42
+        "sfm": 67.83,
+        "train": 509.55,
+        "compress": 4.43,
+        "mesh": 36.83
       },
-      "function_wall_s": 610.8,
+      "function_wall_s": 646.1,
       "gpu": "A10G",
       "cost_usd": {
-        "gpu": 0.1866,
-        "cpu": 0.0644,
-        "memory": 0.0217,
+        "gpu": 0.1974,
+        "cpu": 0.0682,
+        "memory": 0.023,
         "frames_cpu": 0.0034,
-        "total": 0.2761
+        "total": 0.292
       },
       "config": {
         "sfm": "glomap",
-        "matcher": "sequential",
+        "matcher": "exhaustive",
         "max_features": 4096,
         "profile": "default (scaled-10k-dense)",
         "splat_budget": 2000000
       },
-      "outputs": "gj-corpus:/open-video-recon/fantasy-diorama-dock-platform/"
+      "outputs": "gj-corpus:/open-video-recon/fantasy-diorama-dock-platform/",
+      "pass": "pass3-2026-10-02",
+      "superseded_run": {
+        "registration_pct": 67.9,
+        "psnr": 22.2475,
+        "ssim": 0.7788,
+        "lpips": 0.1789,
+        "cost_usd": 0.2761,
+        "matcher": "sequential",
+        "archived": "gj-corpus:/open-video-recon/_pre-pass3/fantasy-diorama-dock-platform/"
+      }
     },
     {
       "clip_id": "rooms/historic-house-eldon-house",
@@ -276,7 +289,7 @@
       "category": "tabletop",
       "status": "ok",
       "verdict": "good",
-      "note": "Sharp, faithful; 2 of 3 shots joined (64%).",
+      "note": "Pass 3 (exhaustive matching) joined all 3 shots: 132/132 registered (was 64%); PSNR is lower because the held-out set now covers the whole model (17 views, was 11).",
       "frames": {
         "used": 132,
         "candidates": 390,
@@ -289,47 +302,57 @@
       },
       "sfm": {
         "mapper": "global",
-        "matcher": "sequential",
+        "matcher": "exhaustive",
         "max_features": 4096,
-        "registered_images": 85,
-        "points": 20105,
-        "mean_track_length": 14.785327,
-        "mean_reprojection_error_px": 0.376111,
-        "sfm_s": 142.72
+        "registered_images": 132,
+        "points": 29457,
+        "mean_track_length": 16.334997,
+        "mean_reprojection_error_px": 0.394234,
+        "sfm_s": 377.88
       },
-      "registration_pct": 64.4,
+      "registration_pct": 100.0,
       "quality": {
-        "psnr": 35.5785,
-        "ssim": 0.9726,
-        "lpips": 0.0341,
-        "eval_views": 11
+        "psnr": 29.2818,
+        "ssim": 0.9443,
+        "lpips": 0.0646,
+        "eval_views": 17
       },
-      "splat_count": 237876,
-      "package_bytes": 9188925,
-      "mesh_triangles": 100000,
+      "splat_count": 433929,
+      "package_bytes": 14023011,
+      "mesh_triangles": 99999,
       "stage_seconds": {
-        "sfm": 143.09,
-        "train": 380.43,
-        "compress": 1.73,
-        "mesh": 10.1
+        "sfm": 378.28,
+        "train": 436.16,
+        "compress": 2.87,
+        "mesh": 11.86
       },
-      "function_wall_s": 553.6,
+      "function_wall_s": 872.6,
       "gpu": "A10G",
       "cost_usd": {
-        "gpu": 0.1692,
-        "cpu": 0.0582,
-        "memory": 0.0197,
+        "gpu": 0.2666,
+        "cpu": 0.0918,
+        "memory": 0.031,
         "frames_cpu": 0.0027,
-        "total": 0.2498
+        "total": 0.3921
       },
       "config": {
         "sfm": "glomap",
-        "matcher": "sequential",
+        "matcher": "exhaustive",
         "max_features": 4096,
         "profile": "default (scaled-10k-dense)",
         "splat_budget": 2000000
       },
-      "outputs": "gj-corpus:/open-video-recon/lego-paranal-observatory/"
+      "outputs": "gj-corpus:/open-video-recon/lego-paranal-observatory/",
+      "pass": "pass3-2026-10-02",
+      "superseded_run": {
+        "registration_pct": 64.4,
+        "psnr": 35.5785,
+        "ssim": 0.9726,
+        "lpips": 0.0341,
+        "cost_usd": 0.2498,
+        "matcher": "sequential",
+        "archived": "gj-corpus:/open-video-recon/_pre-pass3/lego-paranal-observatory/"
+      }
     },
     {
       "clip_id": "tabletop/lego-theed-diorama",
@@ -395,8 +418,8 @@
       "clip_id": "rooms/medieval-great-hall-winchester",
       "category": "room",
       "status": "ok",
-      "verdict": "usable",
-      "note": "3 segments; 55% registered (one continuous part).",
+      "verdict": "good",
+      "note": "Pass 3 (exhaustive matching) joined the segments: 86% registered (was 55%), PSNR/SSIM/LPIPS all better.",
       "frames": {
         "used": 175,
         "candidates": 664,
@@ -409,54 +432,64 @@
       },
       "sfm": {
         "mapper": "global",
-        "matcher": "sequential",
+        "matcher": "exhaustive",
         "max_features": 4096,
-        "registered_images": 97,
-        "points": 23909,
-        "mean_track_length": 6.970848,
-        "mean_reprojection_error_px": 0.795089,
-        "sfm_s": 216.34
+        "registered_images": 150,
+        "points": 29976,
+        "mean_track_length": 8.226014,
+        "mean_reprojection_error_px": 0.833556,
+        "sfm_s": 371.51
       },
-      "registration_pct": 55.4,
+      "registration_pct": 85.7,
       "quality": {
-        "psnr": 24.5189,
-        "ssim": 0.8139,
-        "lpips": 0.3272,
-        "eval_views": 13
+        "psnr": 24.9342,
+        "ssim": 0.8424,
+        "lpips": 0.2783,
+        "eval_views": 19
       },
-      "splat_count": 660011,
-      "package_bytes": 15959142,
-      "mesh_triangles": 100000,
+      "splat_count": 780004,
+      "package_bytes": 17684562,
+      "mesh_triangles": 99999,
       "stage_seconds": {
-        "sfm": 216.69,
-        "train": 441.07,
-        "compress": 3.03,
-        "mesh": 15.33
+        "sfm": 372.34,
+        "train": 454.25,
+        "compress": 4.32,
+        "mesh": 17.93
       },
-      "function_wall_s": 716.0,
+      "function_wall_s": 854.8,
       "gpu": "A10G",
       "cost_usd": {
-        "gpu": 0.2188,
-        "cpu": 0.0753,
-        "memory": 0.0255,
+        "gpu": 0.2612,
+        "cpu": 0.0899,
+        "memory": 0.0304,
         "frames_cpu": 0.005,
-        "total": 0.3245
+        "total": 0.3865
       },
       "config": {
         "sfm": "glomap",
-        "matcher": "sequential",
+        "matcher": "exhaustive",
         "max_features": 4096,
         "profile": "default (scaled-10k-dense)",
         "splat_budget": 2000000
       },
-      "outputs": "gj-corpus:/open-video-recon/medieval-great-hall-winchester/"
+      "outputs": "gj-corpus:/open-video-recon/medieval-great-hall-winchester/",
+      "pass": "pass3-2026-10-02",
+      "superseded_run": {
+        "registration_pct": 55.4,
+        "psnr": 24.5189,
+        "ssim": 0.8139,
+        "lpips": 0.3272,
+        "cost_usd": 0.3245,
+        "matcher": "sequential",
+        "archived": "gj-corpus:/open-video-recon/_pre-pass3/medieval-great-hall-winchester/"
+      }
     },
     {
       "clip_id": "rooms/mediterranean-country-home",
       "category": "room",
       "status": "ok",
       "verdict": "usable-partial",
-      "note": "60% registered; walls/sky soft (white, low texture).",
+      "note": "Pass 3 (exhaustive matching): same registration, better on all three metrics.",
       "frames": {
         "used": 148,
         "candidates": 451,
@@ -469,47 +502,57 @@
       },
       "sfm": {
         "mapper": "global",
-        "matcher": "sequential",
+        "matcher": "exhaustive",
         "max_features": 4096,
         "registered_images": 89,
-        "points": 30925,
-        "mean_track_length": 5.785384,
-        "mean_reprojection_error_px": 0.562792,
-        "sfm_s": 92.32
+        "points": 32556,
+        "mean_track_length": 5.842671,
+        "mean_reprojection_error_px": 0.609185,
+        "sfm_s": 115.95
       },
       "registration_pct": 60.1,
       "quality": {
-        "psnr": 22.4681,
-        "ssim": 0.8469,
-        "lpips": 0.2499,
+        "psnr": 23.2306,
+        "ssim": 0.8578,
+        "lpips": 0.2293,
         "eval_views": 12
       },
-      "splat_count": 584541,
-      "package_bytes": 14705135,
-      "mesh_triangles": 100000,
+      "splat_count": 610505,
+      "package_bytes": 15044269,
+      "mesh_triangles": 99999,
       "stage_seconds": {
-        "sfm": 92.67,
-        "train": 408.88,
-        "compress": 2.85,
-        "mesh": 16.68
+        "sfm": 116.56,
+        "train": 421.46,
+        "compress": 3.94,
+        "mesh": 25.36
       },
-      "function_wall_s": 569.2,
+      "function_wall_s": 684.9,
       "gpu": "A10G",
       "cost_usd": {
-        "gpu": 0.1739,
-        "cpu": 0.0599,
-        "memory": 0.0202,
+        "gpu": 0.2093,
+        "cpu": 0.0721,
+        "memory": 0.0244,
         "frames_cpu": 0.0043,
-        "total": 0.2583
+        "total": 0.3101
       },
       "config": {
         "sfm": "glomap",
-        "matcher": "sequential",
+        "matcher": "exhaustive",
         "max_features": 4096,
         "profile": "default (scaled-10k-dense)",
         "splat_budget": 2000000
       },
-      "outputs": "gj-corpus:/open-video-recon/mediterranean-country-home/"
+      "outputs": "gj-corpus:/open-video-recon/mediterranean-country-home/",
+      "pass": "pass3-2026-10-02",
+      "superseded_run": {
+        "registration_pct": 60.1,
+        "psnr": 22.4681,
+        "ssim": 0.8469,
+        "lpips": 0.2499,
+        "cost_usd": 0.2583,
+        "matcher": "sequential",
+        "archived": "gj-corpus:/open-video-recon/_pre-pass3/mediterranean-country-home/"
+      }
     },
     {
       "clip_id": "tabletop/model-village-museum-case",
@@ -695,8 +738,8 @@
       "clip_id": "rooms/office-warehouse-fpv",
       "category": "room",
       "status": "ok",
-      "verdict": "weak",
-      "note": "Fast FPV, 21% registered, streaky. Kept the 4 fps retry (PSNR 19.5 vs 17.8).",
+      "verdict": "usable-partial",
+      "note": "Pass 3 (exhaustive matching on the 4 fps frames): PSNR 19.5 -> 23.4, SSIM up, LPIPS +0.014; still ~20% registered (FPV blur).",
       "frames": {
         "used": 222,
         "candidates": 708,
@@ -709,47 +752,57 @@
       },
       "sfm": {
         "mapper": "global",
-        "matcher": "sequential",
+        "matcher": "exhaustive",
         "max_features": 4096,
-        "registered_images": 47,
-        "points": 7872,
-        "mean_track_length": 4.797129,
-        "mean_reprojection_error_px": 0.394341,
-        "sfm_s": 44.7
+        "registered_images": 45,
+        "points": 9631,
+        "mean_track_length": 4.887862,
+        "mean_reprojection_error_px": 0.462616,
+        "sfm_s": 98.03
       },
-      "registration_pct": 21.2,
+      "registration_pct": 20.3,
       "quality": {
-        "psnr": 19.4746,
-        "ssim": 0.8088,
-        "lpips": 0.2581,
+        "psnr": 23.3651,
+        "ssim": 0.8187,
+        "lpips": 0.2724,
         "eval_views": 6
       },
-      "splat_count": 388340,
-      "package_bytes": 11326936,
+      "splat_count": 299375,
+      "package_bytes": 9642795,
       "mesh_triangles": 100000,
       "stage_seconds": {
-        "sfm": 44.98,
-        "train": 387.85,
-        "compress": 2.14,
-        "mesh": 17.32
+        "sfm": 98.46,
+        "train": 342.73,
+        "compress": 2.09,
+        "mesh": 15.48
       },
-      "function_wall_s": 523.1,
+      "function_wall_s": 523.9,
       "gpu": "A10G",
       "cost_usd": {
-        "gpu": 0.1598,
-        "cpu": 0.055,
+        "gpu": 0.1601,
+        "cpu": 0.0551,
         "memory": 0.0186,
         "frames_cpu": 0.0059,
-        "total": 0.2393
+        "total": 0.2397
       },
       "config": {
         "sfm": "glomap",
-        "matcher": "sequential",
+        "matcher": "exhaustive",
         "max_features": 4096,
         "profile": "default (scaled-10k-dense)",
         "splat_budget": 2000000
       },
-      "outputs": "gj-corpus:/open-video-recon/office-warehouse-fpv/"
+      "outputs": "gj-corpus:/open-video-recon/office-warehouse-fpv/",
+      "pass": "pass3-2026-10-02",
+      "superseded_run": {
+        "registration_pct": 21.2,
+        "psnr": 19.4746,
+        "ssim": 0.8088,
+        "lpips": 0.2581,
+        "cost_usd": 0.2393,
+        "matcher": "sequential",
+        "archived": "gj-corpus:/open-video-recon/_pre-pass3/office-warehouse-fpv/"
+      }
     },
     {
       "clip_id": "rooms/penthouse-apartment-fpv",
@@ -876,7 +929,7 @@
       "category": "tabletop",
       "status": "ok",
       "verdict": "usable-partial",
-      "note": "Only 26% registered: 659 s tour of many rooms at 0.54 fps; one room set reconstructed.",
+      "note": "Pass 3 (exhaustive matching): same registration (one connected stretch), slightly better on all three metrics.",
       "frames": {
         "used": 357,
         "candidates": 1200,
@@ -889,47 +942,84 @@
       },
       "sfm": {
         "mapper": "global",
-        "matcher": "sequential",
+        "matcher": "exhaustive",
         "max_features": 4096,
         "registered_images": 91,
-        "points": 13491,
-        "mean_track_length": 9.400786,
-        "mean_reprojection_error_px": 0.565383,
-        "sfm_s": 149.95
+        "points": 14843,
+        "mean_track_length": 9.524153,
+        "mean_reprojection_error_px": 0.612743,
+        "sfm_s": 249.16
       },
       "registration_pct": 25.5,
       "quality": {
-        "psnr": 26.2235,
-        "ssim": 0.8874,
-        "lpips": 0.1831,
+        "psnr": 26.6236,
+        "ssim": 0.8942,
+        "lpips": 0.1731,
         "eval_views": 12
       },
-      "splat_count": 598926,
-      "package_bytes": 14771056,
+      "splat_count": 597503,
+      "package_bytes": 14715000,
       "mesh_triangles": 99999,
       "stage_seconds": {
-        "sfm": 150.26,
-        "train": 445.8,
-        "compress": 2.85,
-        "mesh": 9.78
+        "sfm": 249.63,
+        "train": 427.07,
+        "compress": 3.58,
+        "mesh": 20.02
       },
-      "function_wall_s": 721.0,
+      "function_wall_s": 791.2,
       "gpu": "A10G",
       "cost_usd": {
-        "gpu": 0.2203,
-        "cpu": 0.0758,
-        "memory": 0.0256,
+        "gpu": 0.2418,
+        "cpu": 0.0832,
+        "memory": 0.0281,
         "frames_cpu": 0.0077,
-        "total": 0.3294
+        "total": 0.3608
       },
       "config": {
         "sfm": "glomap",
-        "matcher": "sequential",
+        "matcher": "exhaustive",
         "max_features": 4096,
         "profile": "default (scaled-10k-dense)",
         "splat_budget": 2000000
       },
-      "outputs": "gj-corpus:/open-video-recon/tudor-dollhouse/"
+      "outputs": "gj-corpus:/open-video-recon/tudor-dollhouse/",
+      "pass": "pass3-2026-10-02",
+      "superseded_run": {
+        "registration_pct": 25.5,
+        "psnr": 26.2235,
+        "ssim": 0.8874,
+        "lpips": 0.1831,
+        "cost_usd": 0.3294,
+        "matcher": "sequential",
+        "archived": "gj-corpus:/open-video-recon/_pre-pass3/tudor-dollhouse/"
+      }
     }
-  ]
+  ],
+  "passes": {
+    "pass3-2026-10-02": {
+      "what": "GLOMAP + GPU EXHAUSTIVE matching (was sequential + loop detection) on the 9 clips that were partial, multi-segment or weak; same frames (--skip-extract), same 4096 features, scaled-10k-dense, 2M cap, A10G. Hypothesis: exhaustive matching links revisits across cuts that sequential matching misses.",
+      "command": "modal run services/reconstruction/modal_app.py --corpus <9 clips> --skip-extract --corpus-matcher exhaustive --budget 8 --spent 0.04",
+      "run_by": "gj-operator (Grok Bot)",
+      "kept": [
+        "fantasy-diorama-dock-platform",
+        "lego-paranal-observatory",
+        "medieval-great-hall-winchester",
+        "mediterranean-country-home",
+        "office-warehouse-fpv",
+        "tudor-dollhouse"
+      ],
+      "rejected": [
+        "art-museum-galleries-eric-carle",
+        "abandoned-farmhouse",
+        "modern-church-fpv"
+      ],
+      "measured_usd": 3.0352,
+      "billing": {
+        "per_app_report_usd": 3.34,
+        "workspace_october_metered_usd_after": 6.83,
+        "billed_usd": 0.0,
+        "note": "Starter-plan credits; the workspace summary runs ahead of the per-app report (same gap as 2026-09-28). The $20 workspace limit was not changed."
+      }
+    }
+  }
 }
