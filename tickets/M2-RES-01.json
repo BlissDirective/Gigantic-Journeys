@@ -5,7 +5,7 @@
   "area": "RES",
   "owner": "gj-operator",
   "qa": null,
-  "status": "in-progress",
+  "status": "blocked",
   "priority": "P2",
   "size": "L",
   "summary": "Forward/v2 research spike for AUTH #043 item #8 (learned/physics-based motion), opened and explored by the Builder now; GPU experiments run on the Operator's return. Three offline experiments, each with a go/no-go gate, none gating v1 (which ships classic motion matching, M1-MOVE-01): (A) Learned Motion Matching on the ~110-clip whitelist — DB compression + on-device per-frame cost vs the classic baseline; (B) offline neural augmentation of the traversal vocabulary on scanned-terrain variants, fed into the v1 clip DB (the sound form of 'video -> usable motion'); (C) physics-RL (AMP/ASE/PARC-style) feasibility on one traversal verb + a distillation verdict. All on Tier-2 compute; our own mocap + the consented corpus only (SPEC §3.3), never user scans.",
@@ -45,11 +45,17 @@
       "level": "suggested"
     }
   ],
-  "security": ["SPEC §3.3 (training on our own infra; no user scans — our mocap + consented corpus only)"],
-  "depends_on": ["M1-MOVE-01", "M1-RES-01"],
+  "security": [
+    "SPEC §3.3 (training on our own infra; no user scans — our mocap + consented corpus only)"
+  ],
+  "depends_on": [
+    "M1-MOVE-01",
+    "M1-RES-01"
+  ],
   "blocked_by": [
-    "Operator GPU availability (Tier-2 AUTH #040 / #039 RunPod)",
-    "the classic motion-matching baseline (M1-MOVE-01) for the Experiment A comparison"
+    "Experiment B compute: one round is 'a few GPU-days' (spec §4) ≈ $36–71 on a Runpod Secure RTX 4090 (2–4 days) — inside AUTH #040's $500/mo but beyond the cash caps (Runpod prepaid $48.57 hard cap, auto-pay off; Modal $20/mo, $13.17 left in Oct). Needs an Owner Runpod top-up (≈ $75–100 per round) or a higher Modal limit.",
+    "Experiment B inputs: the ~110-clip seed DB (M1-MOVE-01, open; 0 FBX in repo), the Owner's Rokoko/Move.ai P0-verb captures, corpus traversal graphs (video reconstructions lack metric scale; M1-CAPT-01 / M1-SCEN-01..04), and a motion generator (none in repo).",
+    "Experiment A/C: the classic motion-matching baseline (M1-MOVE-01) and Tier-2 GPU (AUTH #040 / #039 funds)."
   ],
   "auth_required": [
     {
@@ -68,7 +74,7 @@
   "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-10-01",
-  "updated": "2026-10-01",
+  "updated": "2026-10-02",
   "history": [
     {
       "date": "2026-10-01",
@@ -79,6 +85,11 @@
       "date": "2026-10-01",
       "event": "Primed Experiment B for the Operator (Owner direction): run spec research/tier2/experiment-b-run-spec.md + the coverage-metric engine services/traversal/motion_coverage.py (8 tests), reusing affordances.best_affordance as the deterministic accept/reject filter at the 0.85 margin. Turnkey (demand grid -> baseline -> conditioned generation -> accept -> coverage delta); GPU generation + the Owner's captures pending.",
       "by": "claude-builder"
+    },
+    {
+      "date": "2026-10-02",
+      "by": "gj-operator",
+      "event": "Experiment B compute check (run spec §4) before any spend: one round = 'a few GPU-days' = 48–96 GPU-h ≈ $36–71 on a Runpod Secure RTX 4090 ($25–51 A6000; $83–166 Modal A10G). Authorized in principle by AUTH #040 ($500/mo) but it does not fit the cash caps (Runpod prepaid $48.57 hard cap, also the reconstruction overflow; Modal $20/mo with $13.17 left in October) → stopped at the estimate, no GPU used, $0 spent. Inputs are also not ready: no seed clip DB (M1-MOVE-01 open, 0 FBX), no Owner P0-verb captures, no corpus traversal graphs (video SfM has no metric scale), no generator. Coverage delta: not measurable; the coverage engine on the desk-tabletop fixture gives 12 demanded cells, 0 covered (0.00 vs the ≥0.80 go threshold) with the empty inventory. Report research/tier2/experiment-b-report.md. Status → blocked."
     }
   ],
   "notes": "v1 ships classic motion matching regardless. Experiment B can feed v1 quality (more/better clips) at zero runtime cost; A targets a v1.1/v2 runtime upgrade; C is the v2 north star. Any learned runtime motion must still honor the deterministic reach contract (movement.json + 0.85 margin) so Brain A and Brain B never disagree."
