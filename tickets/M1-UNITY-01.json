@@ -5,7 +5,7 @@
   "area": "UNITY",
   "owner": "claude-builder",
   "qa": "gj-qa-release",
-  "status": "open",
+  "status": "in-progress",
   "priority": "P0",
   "size": "L",
   "summary": "Retire the #1 program risk: render a reconstructed Gaussian splat correctly, depth-sorted, at 30 fps on a physical iPhone in Unity 6 URP. Trainer-orthogonal — the failure is Unity's per-frame Metal depth sort (aras-p radix sort glitches on Metal, issue #226). Plan in design/proposals/ios-splat-render-v1.md: baseline aras-p (MIT) on desktop, then fix the Metal sort with a tile-local bitonic sort (msplat approach) or a native Metal plugin wrapping MetalSplatter (MIT); hold splats to ~1-2.5M via gsplat MCMC + SOG/.spz. Render-path-first (Owner decision, AUTH #030 spike).",
@@ -68,10 +68,10 @@
     "M0-UNITY-02",
     "AUTH #030"
   ],
-  "branch": null,
+  "branch": "ticket/M1-UNITY-01-metal-splat-sort",
   "pr": null,
   "created": "2026-09-24",
-  "updated": "2026-09-26",
+  "updated": "2026-10-02",
   "history": [
     {
       "date": "2026-09-24",
@@ -82,6 +82,11 @@
       "date": "2026-09-26",
       "event": "Builder drafted the implementation runbook (unity/docs/splat-render-integration.md): aras-p package wiring + URP feature, splat import + budget, and a Metal-safe sort-fix ladder — global bitonic sort (drop-in for aras-p's radix sort; reference compute kernel included) first, tile-local bitonic / MetalSplatter native plugin only if it misses 30 fps — plus the on-device test procedure. Editor/device implementation is the Operator's next step.",
       "by": "claude-builder"
+    },
+    {
+      "date": "2026-10-02",
+      "event": "gj-operator: Tier B Metal-safe sort built (unity/Assets/GiganticJourneys/Splats/Sorting/). A wave-free flip/disperse bitonic compute sort (threadgroup-local stages, no padding buffer) plus the MetalSafeSplatSort component, which takes over the pinned aras-p package's sort buffers without modifying the package. Auto mode engages on Metal only, and SplatRenderSettingsApplier adds it to every tiered splat. Box evidence: 25/25 EditMode tests, including the GPU sort matching the CPU reference bit for bit on Vulkan (n up to 70 001); the package-binding guard runs in CI. AT-4 LOD/chunked-streaming spec written in qa/reports/M1-ios-splat-render.md. Still open: AT-2 (correct ordering on a physical iPhone, the gate) and AT-3 (fps at 1-2.5M splats) need the device via the internal-debug TestFlight build, which needs a splat in a build scene (M1-GAME-01). AT-5 (signed URLs) waits on the Supabase signed-URL endpoint. open -> in-progress. Delivered as direct commits to main (Operator precedent); the branch name is nominal.",
+      "by": "gj-operator"
     }
   ]
 }

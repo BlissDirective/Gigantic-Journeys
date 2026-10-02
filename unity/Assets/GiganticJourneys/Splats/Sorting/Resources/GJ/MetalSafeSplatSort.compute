@@ -1,0 +1,168 @@
+// Metal-safe replacement for the splat depth sort (ticket M1-UNITY-01, Tier B of
+// unity/docs/splat-render-integration.md). aras-p/UnityGaussianSplatting sorts with a
+// wave-intrinsic LSD radix sort that glitches on Apple GPUs (upstream issue #226). This is
+// a bitonic sort built only from compare-and-swap, threadgroup memory and barriers: no wave
+// ops, no cross-threadgroup forward-progress assumptions, 256-thread groups (safe on every
+// Metal iOS GPU). Uses the "flip / disperse" formulation, in which every comparison is
+// ascending, so a non-power-of-two count works by treating indices >= _Count as +inf.
+// Key/payload layout is the package's: _Keys = FloatToSortableUint(view z), _Values = splat
+// index; ascending key order == the package's draw order.
+// The schedule (which kernel, which k/j) lives in BitonicSortNetwork.cs, mirrored on the CPU
+// for tests. SPDX-License-Identifier: MIT (this file); includes the MIT package's loader.
+
+#pragma kernel CSCalcKeys
+#pragma kernel CSLocalSort
+#pragma kernel CSFlip
+#pragma kernel CSDisperse
+#pragma kernel CSLocalDisperse
+
+#define THREADS 256
+#define BLOCK 512 // elements per threadgroup = 2 * THREADS
+
+#include "Packages/org.nesnausk.gaussian-splatting/Shaders/GaussianSplatting.hlsl"
+
+RWStructuredBuffer<uint> _Keys;
+RWStructuredBuffer<uint> _Values;
+uint _Count;
+uint _K;
+uint _J;
+float4x4 _MatrixMV;
+
+uint FloatToSortableUint(float f)
+{
+    uint fu = asuint(f);
+    uint mask = -((int)(fu >> 31)) | 0x80000000;
+    return fu ^ mask;
+}
+
+// Fresh keys every frame: value = splat index, key = sortable view-space z. Independent of
+// last frame's order, so a bad frame can never poison the next one.
+[numthreads(THREADS, 1, 1)]
+void CSCalcKeys(uint3 id : SV_DispatchThreadID)
+{
+    uint idx = id.x;
+    if (idx >= _Count)
+        return;
+    float3 pos = mul(_MatrixMV, float4(LoadSplatPos(idx), 1)).xyz;
+    _Keys[idx] = FloatToSortableUint(pos.z);
+    _Values[idx] = idx;
+}
+
+void CompareSwapGlobal(uint i, uint l)
+{
+    if (l >= _Count)
+        return; // partner is virtual +inf: ascending order already holds
+    uint a = _Keys[i];
+    uint b = _Keys[l];
+    if (a > b)
+    {
+        _Keys[i] = b;
+        _Keys[l] = a;
+        uint va = _Values[i];
+        _Values[i] = _Values[l];
+        _Values[l] = va;
+    }
+}
+
+// Global flip step for block size _K (>= 2 * BLOCK): i pairs with its mirror in the block.
+[numthreads(THREADS, 1, 1)]
+void CSFlip(uint3 id : SV_DispatchThreadID)
+{
+    uint t = id.x;
+    uint halfK = _K >> 1;
+    uint start = (t / halfK) * _K;
+    uint o = t % halfK;
+    CompareSwapGlobal(start + o, start + _K - 1 - o);
+}
+
+// Global disperse step with stride _J (>= BLOCK).
+[numthreads(THREADS, 1, 1)]
+void CSDisperse(uint3 id : SV_DispatchThreadID)
+{
+    uint t = id.x;
+    uint i = (t / _J) * (_J << 1) + (t % _J);
+    CompareSwapGlobal(i, i + _J);
+}
+
+groupshared uint gKeys[BLOCK];
+groupshared uint gValues[BLOCK];
+
+void LoadBlock(uint gid, uint tid)
+{
+    uint base = gid * BLOCK;
+    [unroll] for (uint r = 0; r < 2; r++)
+    {
+        uint s = tid + r * THREADS;
+        uint g = base + s;
+        gKeys[s] = g < _Count ? _Keys[g] : 0xFFFFFFFFu;
+        gValues[s] = g < _Count ? _Values[g] : 0u;
+    }
+    GroupMemoryBarrierWithGroupSync();
+}
+
+void StoreBlock(uint gid, uint tid)
+{
+    uint base = gid * BLOCK;
+    [unroll] for (uint r = 0; r < 2; r++)
+    {
+        uint s = tid + r * THREADS;
+        uint g = base + s;
+        if (g < _Count)
+        {
+            _Keys[g] = gKeys[s];
+            _Values[g] = gValues[s];
+        }
+    }
+}
+
+void CompareSwapShared(uint i, uint l)
+{
+    uint a = gKeys[i];
+    uint b = gKeys[l];
+    if (a > b)
+    {
+        gKeys[i] = b;
+        gKeys[l] = a;
+        uint va = gValues[i];
+        gValues[i] = gValues[l];
+        gValues[l] = va;
+    }
+}
+
+void LocalDisperseSteps(uint tid, uint fromJ)
+{
+    for (uint j = fromJ; j > 0; j >>= 1)
+    {
+        uint i = (tid / j) * (j << 1) + (tid % j);
+        CompareSwapShared(i, i + j);
+        GroupMemoryBarrierWithGroupSync();
+    }
+}
+
+// Sorts every BLOCK-sized block completely (k = 2 .. BLOCK).
+[numthreads(THREADS, 1, 1)]
+void CSLocalSort(uint3 gid : SV_GroupID, uint3 gtid : SV_GroupThreadID)
+{
+    uint tid = gtid.x;
+    LoadBlock(gid.x, tid);
+    for (uint k = 2; k <= BLOCK; k <<= 1)
+    {
+        uint halfK = k >> 1;
+        uint start = (tid / halfK) * k;
+        uint o = tid % halfK;
+        CompareSwapShared(start + o, start + k - 1 - o);
+        GroupMemoryBarrierWithGroupSync();
+        LocalDisperseSteps(tid, k >> 2);
+    }
+    StoreBlock(gid.x, tid);
+}
+
+// The tail of a global stage: disperse strides BLOCK/2 .. 1 inside each block.
+[numthreads(THREADS, 1, 1)]
+void CSLocalDisperse(uint3 gid : SV_GroupID, uint3 gtid : SV_GroupThreadID)
+{
+    uint tid = gtid.x;
+    LoadBlock(gid.x, tid);
+    LocalDisperseSteps(tid, BLOCK >> 1);
+    StoreBlock(gid.x, tid);
+}

@@ -104,6 +104,12 @@ void SortDispatch(ComputeShader cs, int kernel, ComputeBuffer data, uint n)
 
 Validate on device: depth ordering is now **stable and correct**; record fps @ splat count.
 
+> **Implemented 2026-10-02 (gj-operator):** Tier B landed as
+> `Assets/GiganticJourneys/Splats/Sorting/` (`MetalSafeSplatSort.compute`, a flip/disperse bitonic sort with
+> threadgroup-local stages and no padding buffer, plus the `MetalSafeSplatSort` component, which takes over the pinned package's sort
+> buffers without modifying the package). Status, evidence, what needs the device, and the AT-4 LOD/streaming spec are in
+> `qa/reports/M1-ios-splat-render.md`.
+
 ### Tier C — tile-local bitonic / native Metal plugin (only if B can't hit 30 fps)
 If the global bitonic is too slow at the needed splat count, go tile-based. Two routes, both large:
 - **Port msplat's approach:** a binning pass assigns splats to screen tiles, then one dispatch per tile sorts its ≤N splats in `groupshared` memory with a bitonic network, then per-tile blend. This is a rasterizer rewrite — treat it as adopting msplat, not editing aras-p.

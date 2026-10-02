@@ -1,4 +1,5 @@
 using GaussianSplatting.Runtime;
+using GiganticJourneys.Splats.Sorting;
 using UnityEngine;
 
 namespace GiganticJourneys.Splats
@@ -29,6 +30,9 @@ namespace GiganticJourneys.Splats
         void OnEnable()
         {
             _renderer = GetComponent<GaussianSplatRenderer>();
+            // Every tiered splat gets the Metal-safe sort (M1-UNITY-01); it stays dormant off Metal.
+            if (Application.isPlaying && GetComponent<MetalSafeSplatSort>() == null)
+                gameObject.AddComponent<MetalSafeSplatSort>();
             _appliedQuality = -1;
             Apply();
         }

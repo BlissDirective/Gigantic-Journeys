@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="25" result="Passed" total="25" passed="25" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-02 17:31:43Z" end-time="2026-10-02 17:31:44Z" duration="1.3353782">
+  <test-suite type="TestSuite" id="1000" name="Gigantic Journeys" fullname="Gigantic Journeys" runstate="Runnable" testcasecount="224" result="Passed" start-time="2026-10-02 17:31:43Z" end-time="2026-10-02 17:31:44Z" duration="1.335378" total="25" passed="25" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1256" name="GiganticJourneys.EditMode.Tests.dll" fullname="/workspace/gj-op/unity/Library/ScriptAssemblies/GiganticJourneys.EditMode.Tests.dll" runstate="Runnable" testcasecount="224" result="Passed" start-time="2026-10-02 17:31:43Z" end-time="2026-10-02 17:31:44Z" duration="1.326463" total="25" passed="25" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="3887939" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1257" name="GiganticJourneys" fullname="GiganticJourneys" runstate="Runnable" testcasecount="224" result="Passed" start-time="2026-10-02 17:31:43Z" end-time="2026-10-02 17:31:44Z" duration="1.321533" total="25" passed="25" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1258" name="Tests" fullname="GiganticJourneys.Tests" runstate="Runnable" testcasecount="224" result="Passed" start-time="2026-10-02 17:31:43Z" end-time="2026-10-02 17:31:44Z" duration="1.319201" total="25" passed="25" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1075" name="MetalSafeSplatSortTests" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" testcasecount="25" result="Passed" start-time="2026-10-02 17:31:43Z" end-time="2026-10-02 17:31:44Z" duration="1.312671" total="25" passed="25" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1096" name="AutoModeEngagesOnMetalOnly" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.AutoModeEngagesOnMetalOnly" methodname="AutoModeEngagesOnMetalOnly" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" seed="1741291845" result="Passed" start-time="2026-10-02 17:31:43Z" end-time="2026-10-02 17:31:43Z" duration="0.010734" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1097" name="ComputeShaderShipsInResourcesWithAllKernels" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.ComputeShaderShipsInResourcesWithAllKernels" methodname="ComputeShaderShipsInResourcesWithAllKernels" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" seed="1118726283" result="Passed" start-time="2026-10-02 17:31:43Z" end-time="2026-10-02 17:31:43Z" duration="0.010728" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1091" name="CpuNetworkHandlesDuplicatesAndExtremes" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.CpuNetworkHandlesDuplicatesAndExtremes" methodname="CpuNetworkHandlesDuplicatesAndExtremes" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" seed="318388369" result="Passed" start-time="2026-10-02 17:31:43Z" end-time="2026-10-02 17:31:43Z" duration="0.057674" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1092" name="CpuNetworkLeavesElementsPastCountUntouched" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.CpuNetworkLeavesElementsPastCountUntouched" methodname="CpuNetworkLeavesElementsPastCountUntouched" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" seed="995742274" result="Passed" start-time="2026-10-02 17:31:43Z" end-time="2026-10-02 17:31:43Z" duration="0.002226" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1090" name="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.CpuNetworkSortsEveryCountIncludingNonPowersOfTwo" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-10-02 17:31:43Z" end-time="2026-10-02 17:31:44Z" duration="0.543551" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1076" name="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(0)" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(0)" methodname="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" seed="1016918713" result="Passed" start-time="2026-10-02 17:31:43Z" end-time="2026-10-02 17:31:43Z" duration="0.000417" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1077" name="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(1)" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(1)" methodname="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" seed="2122638838" result="Passed" start-time="2026-10-02 17:31:43Z" end-time="2026-10-02 17:31:43Z" duration="0.000117" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1078" name="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(2)" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(2)" methodname="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" seed="122206749" result="Passed" start-time="2026-10-02 17:31:43Z" end-time="2026-10-02 17:31:43Z" duration="0.000100" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1079" name="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(3)" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(3)" methodname="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" seed="616451945" result="Passed" start-time="2026-10-02 17:31:43Z" end-time="2026-10-02 17:31:43Z" duration="0.000099" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1080" name="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(7)" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(7)" methodname="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" seed="2108274444" result="Passed" start-time="2026-10-02 17:31:43Z" end-time="2026-10-02 17:31:43Z" duration="0.000137" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1081" name="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(255)" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(255)" methodname="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" seed="876223591" result="Passed" start-time="2026-10-02 17:31:43Z" end-time="2026-10-02 17:31:43Z" duration="0.001413" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1082" name="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(511)" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(511)" methodname="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" seed="1546672119" result="Passed" start-time="2026-10-02 17:31:43Z" end-time="2026-10-02 17:31:43Z" duration="0.002959" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1083" name="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(512)" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(512)" methodname="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" seed="533242346" result="Passed" start-time="2026-10-02 17:31:43Z" end-time="2026-10-02 17:31:43Z" duration="0.002926" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1084" name="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(513)" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(513)" methodname="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" seed="1156335569" result="Passed" start-time="2026-10-02 17:31:43Z" end-time="2026-10-02 17:31:43Z" duration="0.002995" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1085" name="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(1000)" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(1000)" methodname="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" seed="1260740205" result="Passed" start-time="2026-10-02 17:31:43Z" end-time="2026-10-02 17:31:43Z" duration="0.005502" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1086" name="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(1024)" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(1024)" methodname="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" seed="128983293" result="Passed" start-time="2026-10-02 17:31:43Z" end-time="2026-10-02 17:31:43Z" duration="0.005601" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1087" name="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(1025)" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(1025)" methodname="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" seed="186122817" result="Passed" start-time="2026-10-02 17:31:43Z" end-time="2026-10-02 17:31:43Z" duration="0.005669" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1088" name="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(4097)" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(4097)" methodname="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" seed="890111735" result="Passed" start-time="2026-10-02 17:31:43Z" end-time="2026-10-02 17:31:43Z" duration="0.022361" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1089" name="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(70001)" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.CpuNetworkSortsEveryCountIncludingNonPowersOfTwo(70001)" methodname="CpuNetworkSortsEveryCountIncludingNonPowersOfTwo" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" seed="1469842040" result="Passed" start-time="2026-10-02 17:31:43Z" end-time="2026-10-02 17:31:44Z" duration="0.488209" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="ParameterizedMethod" id="1102" name="GpuSortMatchesCpuReference" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.GpuSortMatchesCpuReference" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-10-02 17:31:44Z" end-time="2026-10-02 17:31:44Z" duration="0.658205" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1098" name="GpuSortMatchesCpuReference(1)" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.GpuSortMatchesCpuReference(1)" methodname="GpuSortMatchesCpuReference" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" seed="1682700673" result="Passed" start-time="2026-10-02 17:31:44Z" end-time="2026-10-02 17:31:44Z" duration="0.004939" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1099" name="GpuSortMatchesCpuReference(513)" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.GpuSortMatchesCpuReference(513)" methodname="GpuSortMatchesCpuReference" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" seed="1612479088" result="Passed" start-time="2026-10-02 17:31:44Z" end-time="2026-10-02 17:31:44Z" duration="0.016643" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Shader warning in 'MetalSafeSplatSort': loop doesn't seem to do anything, forcing loop to unroll at kernel CSLocalSort at MetalSafeSplatSort.compute(134) (on vulkan)
+]]></output>
+              </test-case>
+              <test-case id="1100" name="GpuSortMatchesCpuReference(4097)" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.GpuSortMatchesCpuReference(4097)" methodname="GpuSortMatchesCpuReference" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" seed="797394656" result="Passed" start-time="2026-10-02 17:31:44Z" end-time="2026-10-02 17:31:44Z" duration="0.028234" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1101" name="GpuSortMatchesCpuReference(70001)" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.GpuSortMatchesCpuReference(70001)" methodname="GpuSortMatchesCpuReference" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" seed="904949739" result="Passed" start-time="2026-10-02 17:31:44Z" end-time="2026-10-02 17:31:44Z" duration="0.606595" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1094" name="NextPow2" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.NextPow2" methodname="NextPow2" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" seed="58676353" result="Passed" start-time="2026-10-02 17:31:44Z" end-time="2026-10-02 17:31:44Z" duration="0.000621" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1095" name="PinnedPackageExposesTheFieldsTheTakeoverNeeds" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.PinnedPackageExposesTheFieldsTheTakeoverNeeds" methodname="PinnedPackageExposesTheFieldsTheTakeoverNeeds" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" seed="1773949602" result="Passed" start-time="2026-10-02 17:31:44Z" end-time="2026-10-02 17:31:44Z" duration="0.000263" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1093" name="ScheduleShapeMatchesTheNetwork" fullname="GiganticJourneys.Tests.MetalSafeSplatSortTests.ScheduleShapeMatchesTheNetwork" methodname="ScheduleShapeMatchesTheNetwork" classname="GiganticJourneys.Tests.MetalSafeSplatSortTests" runstate="Runnable" seed="1067921347" result="Passed" start-time="2026-10-02 17:31:44Z" end-time="2026-10-02 17:31:44Z" duration="0.013162" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Saving results to: /home/box/.config/unity3d/SparkForge Labs/Gigantic Journeys/TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>
