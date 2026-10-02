@@ -35,9 +35,10 @@
   "branch": null,
   "pr": null,
   "created": "2026-10-01",
-  "updated": "2026-10-01",
+  "updated": "2026-10-02",
   "history": [
-    { "date": "2026-10-01", "event": "created under AUTH #044. Consent copy counsel-gated before ship (§5.5).", "by": "claude-builder" }
+    { "date": "2026-10-01", "event": "created under AUTH #044. Consent copy counsel-gated before ship (§5.5).", "by": "claude-builder" },
+    { "date": "2026-10-02", "event": "copy convention (AUTH #044 addendum): the create-flow + consent screens use 'avatar' ('Create your avatar') - the only user-facing use of the word; see DESIGN_SYSTEM section 9 + legal/BIPA_CONSENT.md.", "by": "claude-builder" }
   ],
-  "notes": "Records follow data/schemas/avatar/consent_record; consent copy in legal/BIPA_CONSENT.md (counsel sign-off before ship)."
+  "notes": "Records follow data/schemas/avatar/consent_record; consent copy in legal/BIPA_CONSENT.md (counsel sign-off before ship). Create/consent copy uses 'avatar' (the only user-facing use of the word; AUTH #044 addendum, DESIGN_SYSTEM section 9)."
 }

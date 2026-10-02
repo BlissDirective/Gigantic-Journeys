@@ -162,3 +162,15 @@ consent copy ship **only after in-house counsel sign-off** (SECURITY_CHECKLIST �
 review (AUTH #007). Supersedes the avatar half of #020 / ADR-0006. Type: design-change + milestone-plan
 (SECURITY_CHECKLIST, ADRs, SPEC, DESIGN_SYSTEM, legal, data/schemas). Cost: **$0** (on-device; no vendor).
 Reversible: yes (custom is optional; presets are the default path).
+
+---
+
+## 12. Addendum — copy convention resolved (2026-10-02, Owner; AUTH #044 addendum)
+The open copy question from §8 / DESIGN_SYSTEM §9 is resolved. Player-facing copy in **game, store, and
+results stays "your character"** (the #042 rule holds — one consistent voice). The word **"avatar" is
+user-facing only inside the opt-in custom-create + biometric-consent flow** (the "Create your avatar"
+intro, the create-flow avatar-wait stages, and the consent screens), and remains an internal/engineering
+term everywhere else. Recorded in `design/DESIGN_SYSTEM.md` §9 and the `governance/AUTHORIZATION_LOG.md`
+#044 addendum; tracked for implementation in **M1-AVAT-01** (selection/store copy) and **M1-AVAT-03**
+(create/consent copy). A **counsel brief** scoping the M1-LEGAL-01 review is at
+`legal/COUNSEL_BRIEF_custom-avatars-v1.md`.

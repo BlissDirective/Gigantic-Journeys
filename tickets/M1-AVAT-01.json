@@ -27,7 +27,7 @@
     }
   ],
   "security": [],
-  "design": ["MOVEMENT_BIBLE rig standard (#024)", "DESIGN_SYSTEM decision 4"],
+  "design": ["MOVEMENT_BIBLE rig standard (#024)", "DESIGN_SYSTEM decision 4", "DESIGN_SYSTEM section 9 copy convention (AUTH #044 addendum)"],
   "depends_on": ["M0-UNITY-01", "M0-UNITY-03", "M0-MOVE-01"],
   "auth_required": [
     { "type": "design-change", "what": "custom avatars in v1 (parametric)", "auth_id": "AUTH #044", "status": "approved" }
@@ -36,9 +36,10 @@
   "branch": null,
   "pr": null,
   "created": "2026-10-01",
-  "updated": "2026-10-01",
+  "updated": "2026-10-02",
   "history": [
-    { "date": "2026-10-01", "event": "created under AUTH #044 (custom avatars -> v1). Takes over M2-AVAT-01's roster scope, now v1 on the shared rig.", "by": "claude-builder" }
+    { "date": "2026-10-01", "event": "created under AUTH #044 (custom avatars -> v1). Takes over M2-AVAT-01's roster scope, now v1 on the shared rig.", "by": "claude-builder" },
+    { "date": "2026-10-02", "event": "copy convention (AUTH #044 addendum): selection/store/results copy says 'your character' (not 'avatar'); see DESIGN_SYSTEM section 9.", "by": "claude-builder" }
   ],
-  "notes": "Preset = curated avatar_params; custom = on-device-fit params (M1-AVAT-02). Same representation -> rig-conformant by construction."
+  "notes": "Preset = curated avatar_params; custom = on-device-fit params (M1-AVAT-02). Same representation -> rig-conformant by construction. Player-facing selection/store/results copy says 'your character' (AUTH #044 addendum; DESIGN_SYSTEM section 9)."
 }

@@ -31,13 +31,14 @@
   "auth_required": [
     { "type": "design-change", "what": "reinstate counsel review for the v1 custom-avatar feature", "auth_id": "AUTH #044", "status": "approved" }
   ],
-  "references": ["AUTH #044", "AUTH #016 (in-house legal)", "ADR-0007", "legal/"],
+  "references": ["AUTH #044", "AUTH #016 (in-house legal)", "ADR-0007", "legal/", "legal/COUNSEL_BRIEF_custom-avatars-v1.md"],
   "branch": null,
   "pr": null,
   "created": "2026-10-01",
-  "updated": "2026-10-01",
+  "updated": "2026-10-02",
   "history": [
-    { "date": "2026-10-01", "event": "reinstated for v1 under AUTH #044 (custom avatars -> v1). The biometric runtime (M1-AVAT-02) does not ship until this passes.", "by": "claude-builder" }
+    { "date": "2026-10-01", "event": "reinstated for v1 under AUTH #044 (custom avatars -> v1). The biometric runtime (M1-AVAT-02) does not ship until this passes.", "by": "claude-builder" },
+    { "date": "2026-10-02", "event": "counsel brief assembled to scope the review: legal/COUNSEL_BRIEF_custom-avatars-v1.md (on-device/no-vendor design, statute surface, specific questions, pre-sign-off worklist).", "by": "claude-builder" }
   ],
-  "notes": "Hard ship gate. Builder drafts the on-device/no-vendor copy; in-house counsel signs off."
+  "notes": "Hard ship gate. Builder drafts the on-device/no-vendor copy; in-house counsel signs off. Counsel brief: legal/COUNSEL_BRIEF_custom-avatars-v1.md."
 }
