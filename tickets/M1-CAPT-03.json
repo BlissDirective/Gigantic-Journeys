@@ -5,7 +5,7 @@
   "area": "CAPT",
   "owner": "claude-builder",
   "qa": null,
-  "status": "in-progress",
+  "status": "in-review",
   "priority": "P0",
   "size": "L",
   "summary": "De-risk the reconstruction backend (ADR-0005, AUTH #018/#030): build the self-hosted Gaussian-splat pipeline — the committed, PRIORITIZED v1 path — and prove a captured room reconstructs and renders on a physical iPhone before committing the M1 pipeline. A managed bridge is CONDITIONAL: stand one up only under a written no-train + DPA + data-residency commitment (AUTH #030); otherwise skip it and rely on self-host. GPU long-running ops go to the Grok Operator; the pipeline code is the Builder's.",
@@ -65,7 +65,7 @@
   "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-09-18",
-  "updated": "2026-09-28",
+  "updated": "2026-10-02",
   "history": [
     {
       "date": "2026-09-18",
@@ -101,6 +101,11 @@
       "date": "2026-09-28",
       "event": "Operator (Owner-approved, 2026-09-28): reconstructed all 15 active open-video corpus clips (M0-OWNER-01 rev 2) on Modal A10G. New corpus mode in modal_app.py (--corpus): CPU ffmpeg frame extraction inside Modal from recommended_segments only (<=2 fps, <=300/400 frames, 1600 px, sharpest-of-3 + blur reject; reconstruction/video_frames.py), then GPU reconstruct_clip reading/writing the private gj-corpus volume (/open-video-recon/<slug>/: spz, ply, collision.obj, sparse, renders, preview, run.json). Video SfM defaults: GLOMAP + sequential matching + 4096 SIFT features (the pilot's incremental mapper on 196 dense frames did not finish in 25 min; GLOMAP bench 196/196). Results: 15/15 runs completed, 14 usable (5 good, 3 usable, 4 partial coverage, 2 weak), penthouse-apartment-fpv failed (wrong poses, PSNR 14.4, also with incremental COLMAP). Canonical clips $4.73 measured ($0.19-0.63 each); whole job $7.62 per-app billing (workspace metered 7.00 -> 17.48, now ~$17.5 of the ~$20 limit, all credits). Report qa/reports/M1-CAPT-03-open-video-recon.md; results services/reconstruction/corpus/open_video_recon_results.json. Status unchanged.",
       "by": "gj-operator"
+    },
+    {
+      "date": "2026-10-02",
+      "by": "gj-operator",
+      "event": "Operator: finished the spike's reconstruction side. Corpus pass 3 on Modal A10G (commit 1b8a123): GLOMAP + GPU exhaustive matching on the 9 partial/weak open-video clips (same frames and settings otherwise); kept 6 (lego observatory 64->100% registered, Winchester 55->86%, fantasy dock / Mediterranean / dollhouse / office +0.4-3.9 dB), restored 3 that over-linked into wrong poses (Eric Carle, farmhouse, church; archived in gj-corpus:/open-video-recon/_pass3/, superseded runs in _pre-pass3/). Canonical 15 clips: 6 good / 2 usable / 5 usable-partial / 1 weak / 1 fail (penthouse FPV); $0.23-0.63 per clip on Modal A10G (median $0.29; $5.04 for all 15, in-container meter); Runpod Secure measured $0.055-0.111 per scene on 2 clips (M1-RES-01). Splats 170K-780K, packages 6.8-17.7 MB. Pass-3 spend $3.04 measured / $3.34 per-app; Modal October metered $6.83 of the $20 limit (credits, $0 billed); Runpod not used ($48.57, 0 pods). AT-1 met on the open-license stand-in corpus (Owner captures still pending, M0-OWNER-01); AT-3 met by the documented skip (no no-train/DPA/residency terms on file, AUTH #030); AT-4 decision note in research/vendors/reconstruction-spike-report.md §5 (self-host; Runpod primary / Modal fallback; iOS render risk stays in M1-UNITY-01; no new ADR change). AT-2 (suggested, iPhone render) rides M1-UNITY-01 (other worker). Follow-ups: a pose-sanity-gated exhaustive matcher default (Builder) and the full-corpus Runpod batch validation (#039 condition, ≈$1.5-2.5). Status -> in-review. CI green on 1b8a123."
     }
   ]
 }
