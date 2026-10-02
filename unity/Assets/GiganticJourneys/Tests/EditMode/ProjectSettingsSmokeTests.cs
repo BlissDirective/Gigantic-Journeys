@@ -1,8 +1,9 @@
+using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEditor.Build;
-using UnityEditor.iOS;
 using UnityEngine.Rendering;
 
 namespace GiganticJourneys.Tests
@@ -50,36 +51,62 @@ namespace GiganticJourneys.Tests
         }
 
         // App Store Connect rejects an upload without a 1024 px App Store icon
-        // ("Missing app icon", TestFlight runs 36577265750 / 36760847904).
+        // ("Missing app icon", TestFlight runs 36577265750 / 36760847904). Read from
+        // ProjectSettings.asset directly: the unity-tests image has no iOS module, so the
+        // UnityEditor.iOS icon-kind API is unavailable there.
+        static (int width, int kind, string guid)[] IosIcons()
+        {
+            var yaml = File.ReadAllText("ProjectSettings/ProjectSettings.asset");
+            var block = Regex.Match(
+                yaml,
+                @"m_BuildTargetPlatformIcons:\s*\n\s*- m_BuildTarget: iPhone\n(?<b>(?:\s{4,}.*\n)+)"
+            );
+            Assert.IsTrue(block.Success, "no iPhone icon block in ProjectSettings.asset");
+            return Regex
+                .Matches(
+                    block.Groups["b"].Value,
+                    @"- m_Textures:\s*\n\s*- \{fileID: (?<fid>-?\d+)(?:, guid: (?<guid>[0-9a-f]+))?[^}]*\}\s*\n\s*m_Width: (?<w>\d+)\s*\n\s*m_Height: \d+\s*\n\s*m_Kind: (?<k>\d+)"
+                )
+                .Cast<Match>()
+                .Select(m =>
+                    (
+                        int.Parse(m.Groups["w"].Value),
+                        int.Parse(m.Groups["k"].Value),
+                        m.Groups["guid"].Value
+                    )
+                )
+                .ToArray();
+        }
+
         [Test]
         public void IosAppStoreIconIsAssignedAt1024()
         {
-            var icons = PlayerSettings.GetPlatformIcons(
-                NamedBuildTarget.iOS,
-                iOSPlatformIconKind.Marketing
-            );
-            Assert.IsNotEmpty(icons, "no iOS marketing icon slot");
-            var tex = icons[0].GetTexture();
-            Assert.IsNotNull(tex, "iOS App Store (1024 px) icon is not assigned");
-            var path = AssetDatabase.GetAssetPath(tex);
+            // m_Kind 4 = iOSPlatformIconKind.Marketing (the App Store icon).
+            var marketing = IosIcons().Where(i => i.kind == 4 && i.width == 1024).ToArray();
+            Assert.AreEqual(1, marketing.Length, "no iOS App Store (1024 px) icon slot");
+            var path = AssetDatabase.GUIDToAssetPath(marketing[0].guid);
+            Assert.IsNotEmpty(path, "iOS App Store (1024 px) icon is not assigned");
             var importer = (TextureImporter)AssetImporter.GetAtPath(path);
             importer.GetSourceTextureWidthAndHeight(out var w, out var h);
             Assert.AreEqual(1024, w, path);
             Assert.AreEqual(1024, h, path);
+            Assert.IsFalse(
+                importer.DoesSourceTextureHaveAlpha(),
+                $"{path}: the App Store icon must be opaque"
+            );
         }
 
         [Test]
         public void IosAppIconsAreAllAssigned()
         {
-            foreach (var kind in PlayerSettings.GetSupportedIconKinds(NamedBuildTarget.iOS))
+            var icons = IosIcons();
+            Assert.Greater(icons.Length, 10, "iOS icon slots missing");
+            foreach (var (width, kind, guid) in icons)
             {
-                foreach (var icon in PlayerSettings.GetPlatformIcons(NamedBuildTarget.iOS, kind))
-                {
-                    Assert.IsNotNull(
-                        icon.GetTexture(),
-                        $"iOS icon {kind} {icon.width}x{icon.height} unassigned"
-                    );
-                }
+                Assert.IsNotEmpty(
+                    AssetDatabase.GUIDToAssetPath(guid),
+                    $"iOS icon kind {kind} {width}px unassigned"
+                );
             }
         }
     }
