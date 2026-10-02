@@ -8,7 +8,7 @@
   "status": "open",
   "priority": "P0",
   "size": "L",
-  "summary": "Implement the avatar as one base rig (gj-humanoid-1A) + an avatar_params parameter set (data/schemas/avatar). The 8-character roster (#024) becomes curated parameter sets on that base; in-app character selection applies a parameter set. Preset and custom (M1-AVAT-02) share the representation, so any avatar is rig-conformant by construction and the movement stack (motion matching, #043, IK, tool sockets) works unchanged.",
+  "summary": "Implement the avatar as one base rig (gj-humanoid-1A) + an avatar_params parameter set (data/schemas/avatar). The 8-character roster (#024) becomes curated parameter sets on that base; in-app character selection applies a parameter set. Preset and custom (M1-AVAT-02) share the representation, so any avatar is rig-conformant by construction and the movement stack (motion matching, #043, IK, tool sockets) works unchanged. The canonical preset data is built (data/avatar/roster/, M1-AVAT-05); this ticket is the Unity runtime that loads + applies + selects it.",
   "deliverables": ["unity (base rig + avatar_params application + roster presets + selection UI)"],
   "acceptance_tests": [
     {
@@ -32,14 +32,15 @@
   "auth_required": [
     { "type": "design-change", "what": "custom avatars in v1 (parametric)", "auth_id": "AUTH #044", "status": "approved" }
   ],
-  "references": ["AUTH #044", "ADR-0007", "design/proposals/custom-avatars-v1.md", "data/schemas/avatar/"],
+  "references": ["AUTH #044", "ADR-0007", "design/proposals/custom-avatars-v1.md", "data/schemas/avatar/", "data/avatar/roster/ (canonical preset data, M1-AVAT-05)"],
   "branch": null,
   "pr": null,
   "created": "2026-10-01",
   "updated": "2026-10-02",
   "history": [
     { "date": "2026-10-01", "event": "created under AUTH #044 (custom avatars -> v1). Takes over M2-AVAT-01's roster scope, now v1 on the shared rig.", "by": "claude-builder" },
-    { "date": "2026-10-02", "event": "copy convention (AUTH #044 addendum): selection/store/results copy says 'your character' (not 'avatar'); see DESIGN_SYSTEM section 9.", "by": "claude-builder" }
+    { "date": "2026-10-02", "event": "copy convention (AUTH #044 addendum): selection/store/results copy says 'your character' (not 'avatar'); see DESIGN_SYSTEM section 9.", "by": "claude-builder" },
+    { "date": "2026-10-02", "event": "canonical preset-roster DATA built (data/avatar/roster/: 8 schema-valid avatar_params + manifest, M1-AVAT-05). The Unity selection UI loads these; AT-2's preset validation is covered by data/avatar/roster/tests/test_roster.py. Remaining here: the C# rig application + selection UI (gj-gameplay).", "by": "claude-builder" }
   ],
-  "notes": "Preset = curated avatar_params; custom = on-device-fit params (M1-AVAT-02). Same representation -> rig-conformant by construction. Player-facing selection/store/results copy says 'your character' (AUTH #044 addendum; DESIGN_SYSTEM section 9)."
+  "notes": "Preset = curated avatar_params; custom = on-device-fit params (M1-AVAT-02). Same representation -> rig-conformant by construction. Player-facing selection/store/results copy says 'your character' (AUTH #044 addendum; DESIGN_SYSTEM section 9). Canonical preset data: data/avatar/roster/ (built, M1-AVAT-05)."
 }

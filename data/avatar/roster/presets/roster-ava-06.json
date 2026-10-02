@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "base_rig": "gj-humanoid-1A",
+  "provenance": { "source": "preset", "preset_id": "roster-ava-06" },
+  "body": { "height": 0.40, "build": 0.34 },
+  "face": { "shape": 0.60, "width": 0.44, "jaw": 0.38, "brow": 0.48, "nose": 0.44, "eyes": 0.58 },
+  "skin_tone": 19,
+  "hair": { "style": "braids", "color": 6 },
+  "features": { "glasses": "none", "facial_hair": "none", "headwear": "band" },
+  "cosmetic": { "outfit": "explorer-vermillion", "material_tier": "standard" }
+}

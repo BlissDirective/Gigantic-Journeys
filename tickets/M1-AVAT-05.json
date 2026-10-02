@@ -1,19 +1,21 @@
 {
   "id": "M1-AVAT-05",
-  "title": "Avatar data contracts (params + consent) + validator",
+  "title": "Avatar data contracts (params + consent) + validator + v1 roster data",
   "milestone": "M1",
   "area": "AVAT",
   "owner": "claude-builder",
   "qa": "gj-qa-release",
   "status": "in-progress",
   "priority": "P1",
+  "summary": "The non-biometric data contracts the avatar system is built on: data/schemas/avatar/avatar_params (cosmetic parameter set on the shared rig; no biometric data) + consent_record (layered opt-in), with a reference validator (validate_avatar) + forbidden-key privacy guard + tests. Plus the canonical v1 preset roster built on the contract: data/avatar/roster/ (8 curated avatar_params + manifest), the Brain-B/data half of M1-AVAT-01. The on-device C# runtime mirrors the validator; the Unity selection UI loads the roster data.",
   "size": "M",
-  "summary": "The non-biometric data contracts the avatar system is built on: data/schemas/avatar/avatar_params (cosmetic parameter set on the shared rig; no biometric data) + consent_record (layered opt-in), with a reference validator (validate_avatar) + forbidden-key privacy guard + tests. The on-device C# runtime mirrors the validator.",
   "deliverables": [
     "data/schemas/avatar/avatar_params.schema.json",
     "data/schemas/avatar/consent_record.schema.json",
     "data/schemas/avatar/validate_avatar.py",
-    "data/schemas/avatar/tests/"
+    "data/schemas/avatar/tests/",
+    "data/avatar/roster/ (8 preset avatar_params + roster.json manifest + README)",
+    "data/avatar/roster/tests/test_roster.py"
   ],
   "acceptance_tests": [
     {
@@ -22,20 +24,29 @@
       "evidence": "data/schemas/avatar/tests/test_avatar_schemas.py (green)",
       "automated": true,
       "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "The 8 v1 roster presets (data/avatar/roster/) are schema-valid avatar_params (rig-conformant by construction, non-biometric) and satisfy the AUTH #024 inclusive casting matrix (body/gender/skin-tone/age spread, >=6 floor) with distinct CVD-safe hero colors; manifest and files agree; tests green.",
+      "evidence": "data/avatar/roster/tests/test_roster.py (green)",
+      "automated": true,
+      "level": "required"
     }
   ],
-  "security": ["SECURITY_CHECKLIST §5/§6 (non-biometric contracts)"],
+  "security": ["SECURITY_CHECKLIST §5/§6 (non-biometric contracts + roster data)"],
   "depends_on": ["M0-MOVE-01"],
   "auth_required": [
-    { "type": "design-change", "what": "data/schemas/avatar contracts", "auth_id": "AUTH #044", "status": "approved" }
+    { "type": "design-change", "what": "data/schemas/avatar contracts", "auth_id": "AUTH #044", "status": "approved" },
+    { "type": "design-change", "what": "roster composition implements the #024 casting spec", "auth_id": "AUTH #024", "status": "approved" }
   ],
-  "references": ["AUTH #044", "ADR-0007", "data/schemas/avatar/README.md"],
+  "references": ["AUTH #044", "AUTH #024", "ADR-0007", "data/schemas/avatar/README.md", "data/avatar/roster/README.md"],
   "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-10-01",
-  "updated": "2026-10-01",
+  "updated": "2026-10-02",
   "history": [
-    { "date": "2026-10-01", "event": "built + merged under AUTH #044: data/schemas/avatar (schemas + validate_avatar + 7 tests + fixtures). AT-1 met. in-progress: the C# mirror + SPEC/DESIGN_SYSTEM reconcile remain.", "by": "claude-builder" }
+    { "date": "2026-10-01", "event": "built + merged under AUTH #044: data/schemas/avatar (schemas + validate_avatar + 7 tests + fixtures). AT-1 met. in-progress: the C# mirror + SPEC/DESIGN_SYSTEM reconcile remain.", "by": "claude-builder" },
+    { "date": "2026-10-02", "event": "added the canonical v1 preset roster data (data/avatar/roster/: 8 avatar_params + manifest + README + test) on the contract, implementing the #024 casting matrix; AT-2 met. Scope broadened to include the roster data. Still in-progress for the C# mirror.", "by": "claude-builder" }
   ],
-  "notes": "Non-biometric by construction. The C# runtime (M1-AVAT-02) mirrors validate_avatar.forbidden_keys."
+  "notes": "Non-biometric by construction. The C# runtime (M1-AVAT-02) mirrors validate_avatar.forbidden_keys. The roster data (data/avatar/roster/) feeds the Unity selection UI (M1-AVAT-01); final art/names are gj-design's, hero colors are a CVD-safe (Okabe-Ito) readability basis."
 }

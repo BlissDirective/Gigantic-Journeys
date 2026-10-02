@@ -1,0 +1,17 @@
+{
+  "roster_version": "1.0.0",
+  "base_rig": "gj-humanoid-1A",
+  "authorization": "AUTH #044 (custom avatars v1) / AUTH #024 (roster art + casting spec)",
+  "floor": 6,
+  "note": "Canonical v1 preset roster as DATA — the Brain-B half of M1-AVAT-01. Each file in presets/ is a schema-valid avatar_params on the shared rig, so preset and custom avatars share one representation and every preset is rig-conformant by construction. 'label', 'hero_color', 'gender_presentation' and 'apparent_age' are roster-level presentation/casting metadata, NOT part of avatar_params. Final art, silhouettes and any player-facing names are gj-design/gj-gameplay's; hero_color is a CVD-safe readability basis (Okabe-Ito, with a neutral grey for the 8th) the design team may remap to brand tokens. Player-facing copy calls these 'your character' (DESIGN_SYSTEM section 9, AUTH #044 addendum).",
+  "presets": [
+    { "preset_id": "roster-ava-01", "file": "presets/roster-ava-01.json", "label": "androgynous, young adult, medium build", "hero_color": "#E69F00", "gender_presentation": "androgynous", "apparent_age": "young-adult" },
+    { "preset_id": "roster-ava-02", "file": "presets/roster-ava-02.json", "label": "feminine, adult, slim, long hair", "hero_color": "#56B4E9", "gender_presentation": "feminine", "apparent_age": "adult" },
+    { "preset_id": "roster-ava-03", "file": "presets/roster-ava-03.json", "label": "masculine, adult, broad, glasses", "hero_color": "#009E73", "gender_presentation": "masculine", "apparent_age": "adult" },
+    { "preset_id": "roster-ava-04", "file": "presets/roster-ava-04.json", "label": "feminine, mature, round glasses, bun", "hero_color": "#F0E442", "gender_presentation": "feminine", "apparent_age": "mature" },
+    { "preset_id": "roster-ava-05", "file": "presets/roster-ava-05.json", "label": "masculine, young adult, lean, afro", "hero_color": "#0072B2", "gender_presentation": "masculine", "apparent_age": "young-adult" },
+    { "preset_id": "roster-ava-06", "file": "presets/roster-ava-06.json", "label": "feminine, adult, petite, braids", "hero_color": "#D55E00", "gender_presentation": "feminine", "apparent_age": "adult" },
+    { "preset_id": "roster-ava-07", "file": "presets/roster-ava-07.json", "label": "masculine, mature, tall, full beard", "hero_color": "#CC79A7", "gender_presentation": "masculine", "apparent_age": "mature" },
+    { "preset_id": "roster-ava-08", "file": "presets/roster-ava-08.json", "label": "masculine, adult, tall, cap + goatee", "hero_color": "#999999", "gender_presentation": "masculine", "apparent_age": "adult" }
+  ]
+}
