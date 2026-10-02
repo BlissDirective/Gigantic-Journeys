@@ -4,7 +4,14 @@
 # required for CI. If the repository ever goes private, macOS minutes bill at
 # about 10x Linux and a self-hosted Mac becomes the cheaper path: set the
 # repository variable IOS_MAC_RUNNER to that runner's label (for example
-# "gj-ios") to switch; leave it unset to use GitHub's macos-14.
+# "gj-ios") to switch; leave it unset to use GitHub's macos-26.
+#
+# Xcode / SDK: App Store Connect rejects uploads built with an SDK older than
+# iOS 26 ("SDK version issue", TestFlight runs 36577265750 and 36760847904 on
+# macos-14 / Xcode 15.4), so every macOS job runs on macos-26 and selects an
+# Xcode whose iphoneos SDK is >= 26 (repository variable IOS_XCODE_APP may pin
+# an exact path, for example /Applications/Xcode_26.6.app). macos-14 images
+# are unsupported after 2026-11-02 anyway.
 #
 # Lanes (ticket M3-UNITY-01 for Burst):
 #   - Linux export lane (every push to main, or dispatch with lane=linux): the
@@ -160,12 +167,28 @@ jobs:
   archive:
     name: xcodebuild (unsigned, macOS)
     needs: export
-    runs-on: ${{ vars.IOS_MAC_RUNNER || 'macos-14' }}
+    runs-on: ${{ vars.IOS_MAC_RUNNER || 'macos-26' }}
     steps:
       - uses: actions/download-artifact@v4
         with:
           name: ios-xcode-project
           path: build/iOS
+      - name: Select Xcode with the iOS 26+ SDK (App Store Connect minimum)
+        env:
+          IOS_XCODE_APP: ${{ vars.IOS_XCODE_APP }}
+        run: |
+          set -euo pipefail
+          app="${IOS_XCODE_APP:-}"
+          if [ -z "$app" ]; then app=$(xcode-select -p | sed 's#/Contents/Developer$##'); fi
+          sudo xcode-select -s "$app"
+          xcodebuild -version
+          sdk=$(xcrun --sdk iphoneos --show-sdk-version)
+          major=${sdk%%.*}
+          if [ "$major" -lt 26 ]; then
+            echo "::error::iphoneos SDK $sdk < 26: App Store Connect rejects it. Set IOS_XCODE_APP to an Xcode 26+ app path."
+            exit 1
+          fi
+          echo "::notice::Xcode $(xcodebuild -version | head -n1), iphoneos SDK $sdk"
       - name: xcodebuild (unsigned compile check)
         run: |
           set -euo pipefail
@@ -179,7 +202,7 @@ jobs:
     # After the Linux export so only one Unity activation runs at a time.
     needs: [preflight, export]
     if: ${{ !cancelled() && needs.preflight.outputs.run == 'true' && needs.preflight.outputs.macos == 'true' }}
-    runs-on: ${{ vars.IOS_MAC_RUNNER || 'macos-14' }}
+    runs-on: ${{ vars.IOS_MAC_RUNNER || 'macos-26' }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -231,6 +254,24 @@ jobs:
         env:
           EXPECT: ${{ inputs.flavor == 'internal-debug' && 'present' || 'absent' }}
         run: python3 .github/scripts/ios_debug_flavor.py check build/iOS/GiganticJourneys --expect "$EXPECT"
+      - name: App Store (1024 px, opaque) icon is in the Xcode project
+        run: python3 .github/scripts/ios_app_icon.py build/iOS/GiganticJourneys
+      - name: Select Xcode with the iOS 26+ SDK (App Store Connect minimum)
+        env:
+          IOS_XCODE_APP: ${{ vars.IOS_XCODE_APP }}
+        run: |
+          set -euo pipefail
+          app="${IOS_XCODE_APP:-}"
+          if [ -z "$app" ]; then app=$(xcode-select -p | sed 's#/Contents/Developer$##'); fi
+          sudo xcode-select -s "$app"
+          xcodebuild -version
+          sdk=$(xcrun --sdk iphoneos --show-sdk-version)
+          major=${sdk%%.*}
+          if [ "$major" -lt 26 ]; then
+            echo "::error::iphoneos SDK $sdk < 26: App Store Connect rejects it. Set IOS_XCODE_APP to an Xcode 26+ app path."
+            exit 1
+          fi
+          echo "::notice::Xcode $(xcodebuild -version | head -n1), iphoneos SDK $sdk"
       - name: xcodebuild (unsigned compile check)
         run: |
           set -euo pipefail
@@ -250,7 +291,7 @@ jobs:
     name: signed archive + TestFlight upload (macOS)
     needs: macos-player
     if: ${{ !cancelled() && vars.TESTFLIGHT_ENABLED == 'true' && needs.macos-player.result == 'success' }}
-    runs-on: ${{ vars.IOS_MAC_RUNNER || 'macos-14' }}
+    runs-on: ${{ vars.IOS_MAC_RUNNER || 'macos-26' }}
     env:
       ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
       ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
@@ -262,6 +303,22 @@ jobs:
         with:
           name: ios-xcode-project-burst
           path: build/iOS
+      - name: Select Xcode with the iOS 26+ SDK (App Store Connect minimum)
+        env:
+          IOS_XCODE_APP: ${{ vars.IOS_XCODE_APP }}
+        run: |
+          set -euo pipefail
+          app="${IOS_XCODE_APP:-}"
+          if [ -z "$app" ]; then app=$(xcode-select -p | sed 's#/Contents/Developer$##'); fi
+          sudo xcode-select -s "$app"
+          xcodebuild -version
+          sdk=$(xcrun --sdk iphoneos --show-sdk-version)
+          major=${sdk%%.*}
+          if [ "$major" -lt 26 ]; then
+            echo "::error::iphoneos SDK $sdk < 26: App Store Connect rejects it. Set IOS_XCODE_APP to an Xcode 26+ app path."
+            exit 1
+          fi
+          echo "::notice::Xcode $(xcodebuild -version | head -n1), iphoneos SDK $sdk"
       - name: Install the App Store Connect API key (never printed)
         env:
           ASC_KEY_P8_BASE64: ${{ secrets.ASC_KEY_P8_BASE64 }}
@@ -279,11 +336,18 @@ jobs:
                     open(os.path.expanduser("~/private_keys/asc_api_key.json"), "w"))
           PY
           chmod 600 "$HOME/private_keys/asc_api_key.json"
-      - name: Set the build number
+      # Export compliance: the app only uses the OS's standard HTTPS/TLS (exempt),
+      # so ITSAppUsesNonExemptEncryption=false lets TestFlight builds go straight
+      # to testers instead of waiting on the "Missing Compliance" question in
+      # App Store Connect. Revisit if the app ever ships its own cryptography.
+      - name: Set the build number and export-compliance flag
         run: |
           set -euo pipefail
           cd build/iOS/GiganticJourneys
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" Info.plist || echo "::warning::could not set CFBundleVersion in Info.plist; gj-qa-release to confirm the build-number path on first run"
+          /usr/libexec/PlistBuddy -c "Delete :ITSAppUsesNonExemptEncryption" Info.plist 2>/dev/null || true
+          /usr/libexec/PlistBuddy -c "Add :ITSAppUsesNonExemptEncryption bool false" Info.plist
+          echo "::notice::build $BUILD_NUMBER ($FLAVOR)"
       # The archive is built unsigned and signed once, at export, with an App Store
       # (distribution) profile via cloud-managed signing. A signed archive would
       # need an iOS App Development profile, which Apple only issues when the team
@@ -335,6 +399,7 @@ jobs:
           ipa=$(ls build/iOS/export/*.ipa | head -n1)
           fastlane pilot upload --api_key_path "$HOME/private_keys/asc_api_key.json" --ipa "$ipa" \
             --skip_waiting_for_build_processing true --skip_submission true
+          echo "::notice::uploaded build $BUILD_NUMBER ($FLAVOR) to TestFlight"
       - name: Remove the key material
         if: always()
         run: rm -rf "$HOME/private_keys"

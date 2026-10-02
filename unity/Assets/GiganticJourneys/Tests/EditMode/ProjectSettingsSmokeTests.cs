@@ -2,6 +2,7 @@ using System.Linq;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEditor.Build;
+using UnityEditor.iOS;
 using UnityEngine.Rendering;
 
 namespace GiganticJourneys.Tests
@@ -46,6 +47,40 @@ namespace GiganticJourneys.Tests
                 "UniversalRenderPipelineAsset",
                 GraphicsSettings.defaultRenderPipeline.GetType().Name
             );
+        }
+
+        // App Store Connect rejects an upload without a 1024 px App Store icon
+        // ("Missing app icon", TestFlight runs 36577265750 / 36760847904).
+        [Test]
+        public void IosAppStoreIconIsAssignedAt1024()
+        {
+            var icons = PlayerSettings.GetPlatformIcons(
+                NamedBuildTarget.iOS,
+                iOSPlatformIconKind.Marketing
+            );
+            Assert.IsNotEmpty(icons, "no iOS marketing icon slot");
+            var tex = icons[0].GetTexture();
+            Assert.IsNotNull(tex, "iOS App Store (1024 px) icon is not assigned");
+            var path = AssetDatabase.GetAssetPath(tex);
+            var importer = (TextureImporter)AssetImporter.GetAtPath(path);
+            importer.GetSourceTextureWidthAndHeight(out var w, out var h);
+            Assert.AreEqual(1024, w, path);
+            Assert.AreEqual(1024, h, path);
+        }
+
+        [Test]
+        public void IosAppIconsAreAllAssigned()
+        {
+            foreach (var kind in PlayerSettings.GetSupportedIconKinds(NamedBuildTarget.iOS))
+            {
+                foreach (var icon in PlayerSettings.GetPlatformIcons(NamedBuildTarget.iOS, kind))
+                {
+                    Assert.IsNotNull(
+                        icon.GetTexture(),
+                        $"iOS icon {kind} {icon.width}x{icon.height} unassigned"
+                    );
+                }
+            }
         }
     }
 }
