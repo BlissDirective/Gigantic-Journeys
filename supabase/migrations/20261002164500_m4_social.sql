@@ -1,12 +1,16 @@
--- 20261101000000_m4_social.sql  (DRAFT, not applied, not in supabase/migrations/)
+-- 20261002164500_m4_social.sql
 --
--- AUTH: PENDING. Creating tables is AUTH-gated (SECURITY_CHECKLIST §2.5;
--- projects/skills/platform/SKILLS.md: "the migration still needs its own approval
--- reference"). AUTH #026 approved the design (SPEC §3.7); this file carries NO
--- table-creation approval yet. Request:
--- governance/auth-requests/M4-DATA-01-social-migration.md. When approved, the
--- Coordinator (or the Operator) replaces this header with "APPROVED #n", gives the
--- file a current timestamp, and moves it into supabase/migrations/.
+-- APPROVED #038 (Owner, 2026-09-29; decision packet item 5) — table creation for the
+-- M4 social layer (SECURITY_CHECKLIST §2.5). Security-sensitive: Coordinator + gj-data
+-- secondary security review complete 2026-09-29 (AUTH #007/#027; check_rls green, 31
+-- RLS/rate-limit tests pass). #038 conditions: device ids hashed (device_hash, in the
+-- privacy label), user_blocks included (Apple 1.2), leaderboards expose a handle not a
+-- raw user id (user_id OK for internal M4 testing only), approved starting rate limits.
+-- Drafted 2026-09-29 as design/proposals/m4-data-01-social/20261101000000_m4_social.sql;
+-- moved here unchanged below this header. Applied to the STAGING project only by
+-- gj-operator (M4-DATA-01); production is CI-only (SECURITY_CHECKLIST §8.3).
+--
+-- AUTH: APPROVED #038 (Owner, 2026-09-29).
 --
 -- Scope (M4-DATA-01; SPEC §3.7; design/proposals/publish-browse-rank-moderation-v1.md §5):
 -- the social layer that sits on the existing public.environments table (AUTH #034):

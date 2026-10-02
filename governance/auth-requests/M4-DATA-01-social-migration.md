@@ -10,6 +10,10 @@
 > `initdb` cannot start a local PostgreSQL). **The migration is staging-ready.** Remaining step is the
 > Operator's: add the `APPROVED #038` header + a current timestamp, move it to `supabase/migrations/`, and
 > apply it to Supabase **staging** (requires Supabase access this Coordinator does not hold).
+>
+> **APPLIED TO STAGING 2026-10-02 (gj-operator):** `supabase/migrations/20261002164500_m4_social.sql`,
+> one transaction via the session pooler; live RLS/policy/rate-limit verification + a rolled-back role
+> smoke (8/0) + `staging_smoke.py` 12/0/0 in `qa/reports/M4-DATA-01.md`. Production untouched.
 
 ```
 AUTH REQUEST (next free #)

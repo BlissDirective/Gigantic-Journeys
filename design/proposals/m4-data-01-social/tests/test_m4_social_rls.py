@@ -27,7 +27,7 @@ HERE = Path(__file__).resolve().parent
 PROPOSAL = HERE.parent
 REPO = PROPOSAL.parents[2]
 ENV_MIGRATION = REPO / "supabase" / "migrations" / "20260926120000_m1_environments_staging.sql"
-SOCIAL_MIGRATION = PROPOSAL / "20261101000000_m4_social.sql"
+SOCIAL_MIGRATION = REPO / "supabase" / "migrations" / "20261002164500_m4_social.sql"
 
 A = "aaaaaaaa-0000-4000-8000-000000000001"  # creator of most environments
 B = "bbbbbbbb-0000-4000-8000-000000000002"  # a player

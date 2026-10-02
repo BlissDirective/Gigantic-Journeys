@@ -1,16 +1,19 @@
-# M4-DATA-01 draft: social data model, RLS and rate limits
+# M4-DATA-01: social data model, RLS and rate limits
 
-**Status: DRAFT, awaiting approval.** Filed by gj-operator on 2026-09-29 (overnight worker).
-AUTH #026 approved the design (SPEC §3.7). Creating tables needs its own approval reference
-(SECURITY_CHECKLIST §2.5), so this migration lives here, **not** in `supabase/migrations/`, and
-nothing has been applied to any Supabase project. Request:
+**Status: APPROVED #038 and APPLIED TO STAGING (2026-10-02, gj-operator).** The migration moved
+unchanged (new `APPROVED #038` header + timestamp) to
+[`supabase/migrations/20261002164500_m4_social.sql`](../../../supabase/migrations/20261002164500_m4_social.sql)
+and was applied to Supabase **staging** only; evidence in
+[`qa/reports/M4-DATA-01.md`](../../../qa/reports/M4-DATA-01.md). This folder keeps the design notes and
+the test harness (the tests now load the migration from `supabase/migrations/`). Originally filed by
+gj-operator on 2026-09-29; request:
 [`governance/auth-requests/M4-DATA-01-social-migration.md`](../../../governance/auth-requests/M4-DATA-01-social-migration.md).
 
 ## Files
 
 | File | What |
 |---|---|
-| `20261101000000_m4_social.sql` | The migration. On approval it gets an `APPROVED #n` header and a current timestamp, then moves to `supabase/migrations/`. |
+| `../../../supabase/migrations/20261002164500_m4_social.sql` | The migration (moved from this folder as `20261101000000_m4_social.sql` under APPROVED #038; applied to staging 2026-10-02). |
 | `tests/supabase_stub.sql` | Test-only stand-in for the Supabase parts the migrations touch: the `anon` / `authenticated` / `service_role` roles, `auth.uid()`, `storage.*`, and the default grants. |
 | `tests/test_m4_social_rls.py` | 31 pytest cases. They start a throwaway PostgreSQL, load the stub, the applied environments migration (AUTH #034) and this draft, then act as anon, three users and the service role. |
 

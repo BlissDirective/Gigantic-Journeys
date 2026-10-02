@@ -1,6 +1,6 @@
 # Staging Supabase smoke
 
-Run: 2026-09-27 19:28 UTC · `python supabase/scripts/staging_smoke.py` · target: STAGING project (ref redacted).
+Run: 2026-10-02 16:45 UTC · `python supabase/scripts/staging_smoke.py` · target: STAGING project (ref redacted).
 No keys, URLs, or project refs are recorded here.
 
 | Check | Result | Detail |
@@ -14,8 +14,8 @@ No keys, URLs, or project refs are recorded here.
 | `rest.anon_insert` | PASS | HTTP 401 42501 |
 | `storage.bucket` | PASS | HTTP 200 public=False |
 | `storage.public_url` | PASS | HTTP 400 (must not be 200) |
-| `db.rls_every_table` | PASS | 1 app table(s), all RLS + policy |
-| `db.migrations` | PASS | 1 applied |
+| `db.rls_every_table` | PASS | 8 app table(s), all RLS + policy |
+| `db.migrations` | PASS | 2 applied |
 | `fn.environment_urls` | PASS | HTTP 401 without user JWT |
 
 Totals: 12 PASS · 0 FAIL · 0 PENDING
