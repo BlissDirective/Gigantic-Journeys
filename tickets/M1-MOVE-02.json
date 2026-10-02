@@ -5,12 +5,13 @@
   "area": "MOVE",
   "owner": "claude-builder",
   "qa": "gj-qa-release",
-  "status": "open",
+  "status": "in-progress",
   "priority": "P1",
   "size": "M",
-  "summary": "Add the AUTH #021 verbs to the traversal controller on the shared GJ skeleton, tuned to the new movement.json constants (dive, ticTac, wallRun): dive-roll (committed forward dive chaining to a roll), tic-tac (wall kick for height/redirect), vault variants (kong/dash, speed, underbar), and wall-run (short run across a flat vertical >= 3A). Each registers through the existing layers; the reachability validator is made aware of the new transitions.",
+  "summary": "Add the AUTH #021 verbs to the traversal controller on the shared GJ skeleton, tuned to the new movement.json constants (dive, ticTac, wallRun): dive-roll (committed forward dive chaining to a roll), tic-tac (wall kick for height/redirect), vault variants (kong/dash, speed, underbar), and wall-run (short run across a flat vertical >= 3A). Each registers through the existing layers; the reachability validator is made aware of the new transitions. Brain-B half (AT-2: the shared affordance model + the M1-SCEN-05 validator account for every new verb within the 0.85 margin) is built + proven; the Unity verb implementations + MoveClip tags (AT-1/AT-3) are gj-gameplay.",
   "deliverables": [
-    "unity (verb implementations + MoveClip tags)",
+    "unity (verb implementations + MoveClip tags) [gj-gameplay]",
+    "services/traversal (affordance model + reachability coverage for the new verbs) [claude-builder, done]",
     "design/MOVEMENT_BIBLE.md alignment (already updated §3.2-§3.4)"
   ],
   "acceptance_tests": [
@@ -24,7 +25,7 @@
     {
       "id": "AT-2",
       "test": "The deterministic reachability validator (M1-SCEN-05) accounts for the new transitions so generated routes may use them within the 85% margin.",
-      "evidence": "validator test output",
+      "evidence": "services/traversal/tests/test_verbs_expansion.py (13 green); also test_affordances.py (verb-tier == frozen schema), test_reach.py, test_graph.py (wall-run edge)",
       "automated": true,
       "level": "required"
     },
@@ -44,13 +45,17 @@
   ],
   "references": [
     "AUTH #021",
+    "AUTH #037 (frozen traversal_graph verb enum/tiers)",
     "MOVEMENT_BIBLE §3.2-§3.4, §10",
-    "design/proposals/movement-v1-expansion.md"
+    "design/proposals/movement-v1-expansion.md",
+    "services/traversal/affordances.py",
+    "services/traversal/tests/test_verbs_expansion.py",
+    "data/schemas/environment/traversal_graph.json"
   ],
-  "branch": null,
+  "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-09-18",
-  "updated": "2026-09-18",
+  "updated": "2026-10-02",
   "history": [
     {
       "date": "2026-09-18",
@@ -61,7 +66,12 @@
       "date": "2026-09-29",
       "event": "Freeze fast-follow resolved (Owner re-confirmed AUTH #037 2026-09-29): the canonical vault-variant verb names are speed-vault / kong-vault / lazy-vault (as frozen in data/schemas/environment/traversal_graph.json under #037), superseding the decision-packet's step/speed/kong wording. This ticket's C# verb set must use those three names so the controller matches the frozen traversal_graph + affordance library. crouch stays tier T0 (beat-1-legal, extends the SPEC §3.4 T0 set) as frozen and tested. No schema change (would need its own AUTH); this is the implementation-side reconciliation only.",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-10-02",
+      "event": "Brain-B half built + proven (AT-2). The shared affordance model already carries every new verb (reach model, class matrix, tiers, prereqs reading cfg.dive/ticTac/wallRun); added services/traversal/tests/test_verbs_expansion.py (13 tests) closing the coverage gaps for tic-tac and the vault variants, and proving each new verb is accepted by the M1-SCEN-05 validator within the 0.85 margin and rejected out of envelope, with tiers equal to the frozen schema. No protected/frozen change. AT-1/AT-3 (Unity verb implementations + MoveClip tags) remain gj-gameplay/Operator.",
+      "by": "claude-builder"
     }
   ],
-  "notes": "Canonical AUTH #021 vault names (frozen #037): speed-vault, kong-vault, lazy-vault. crouch = T0. Implement the C# verbs to these names/tiers to match config/movement.json + the traversal_graph schema."
+  "notes": "Canonical AUTH #021 vault names (frozen #037): speed-vault, kong-vault, lazy-vault. crouch = T0. Vault variants are modelled identically to vault in the reach model (same tier/envelope); the Unity animator picks the style. Brain-B AT-2 done (test_verbs_expansion.py); implement the C# verbs to these names/tiers to match config/movement.json + the traversal_graph schema (AT-1, gj-gameplay)."
 }
