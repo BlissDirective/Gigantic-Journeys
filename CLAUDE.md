@@ -20,4 +20,4 @@ You are a Claude Code agent on Gigantic Journeys; your active role is set by its
 `SPEC.md` · `PROGRESS.md` · `BACKLOG.md` · `ADRs/` · `tickets/` (`SCHEMA.json`, `validate.py`) · `governance/` (log, checkpoints, checklist, rubric) · `design/` (locked docs, design system) · `config/movement.json` · `context/` (kit, plan) · `agents/` (Bot role docs, this role) · `.github/` (workflows, gate scripts, templates) · `unity/`, `services/`, `api/`, `supabase/`, `data/`, `legal/`, `qa/`, `release/`, `research/`, `ml/`, `projects/skills/` (Bot-owned trees).
 
 ## Validation before any push
-`ruff check . && ruff format --check .` · `python tickets/validate.py` · `python .github/scripts/check_movement_sync.py` · YAML parse of `.github/workflows/*.yml`.
+`ruff check . && ruff format --check .` · `python tickets/validate.py` · `python .github/scripts/check_movement_sync.py` · `python .github/scripts/check_audio_sync.py` · YAML parse of `.github/workflows/*.yml`.

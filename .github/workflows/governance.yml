@@ -1,6 +1,7 @@
 # Governance checks that make the hard rules mechanical:
 #   tickets        every tickets/*.json validates against tickets/SCHEMA.json
 #   movement-sync  config/movement.json equals Movement Bible §10 and the Unity copy
+#   audio-sync     data/audio/*.json are self-consistent and match the Unity mirror (if present)
 #   auth-gate      PRs touching protected paths must cite an APPROVED #n
 #   qa-evidence    qa/evidence/ follows qa/VISUAL_QA.md §2 (naming, <= 2 MB, PNG only, privacy line)
 # The Coordinator's review is the real gate; this is the first line.
@@ -38,6 +39,17 @@ jobs:
           python-version: "3.12"
       - run: pip install jsonschema==4.26.0
       - run: python .github/scripts/check_movement_sync.py
+
+  audio-sync:
+    name: data/audio single source of truth
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - run: pip install jsonschema==4.26.0
+      - run: python .github/scripts/check_audio_sync.py
 
   rls:
     name: RLS on every table (supabase migrations)

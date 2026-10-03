@@ -28,7 +28,9 @@ contract it mirrors — no audio is synthesized here.
 `data/audio/acoustics.json` and `sound_bank.json` are the single source of truth, like
 `config/movement.json` is for movement. The Unity audio engine reads the same files (or a copied
 StreamingAssets mirror) and reproduces the Sabine reverb + scale math here. Keep them in lockstep; a
-sync check (mirroring `check_movement_sync.py`) can be added when the engine lands.
+sync check now exists: `.github/scripts/check_audio_sync.py` (CI job `audio-sync`) keeps the three
+files self-consistent (bank↔mixer buses, verb coverage, material coverage), and once the engine adds
+`unity/Assets/StreamingAssets/audio/` each file must be **byte-identical** to `data/audio/`.
 
 ## Not here (gj-gameplay / provenance)
 The audio engine, AudioMixer buses + sidechain ducking, 3D spatialization, contact-frame wiring, and
