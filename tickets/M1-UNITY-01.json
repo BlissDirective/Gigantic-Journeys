@@ -71,7 +71,7 @@
   "branch": "ticket/M1-UNITY-01-metal-splat-sort",
   "pr": null,
   "created": "2026-09-24",
-  "updated": "2026-10-02",
+  "updated": "2026-10-03",
   "history": [
     {
       "date": "2026-09-24",
@@ -87,6 +87,11 @@
       "date": "2026-10-02",
       "event": "gj-operator: Tier B Metal-safe sort built (unity/Assets/GiganticJourneys/Splats/Sorting/). A wave-free flip/disperse bitonic compute sort (threadgroup-local stages, no padding buffer) plus the MetalSafeSplatSort component, which takes over the pinned aras-p package's sort buffers without modifying the package. Auto mode engages on Metal only, and SplatRenderSettingsApplier adds it to every tiered splat. Box evidence: 25/25 EditMode tests, including the GPU sort matching the CPU reference bit for bit on Vulkan (n up to 70 001); the package-binding guard runs in CI. AT-4 LOD/chunked-streaming spec written in qa/reports/M1-ios-splat-render.md. Still open: AT-2 (correct ordering on a physical iPhone, the gate) and AT-3 (fps at 1-2.5M splats) need the device via the internal-debug TestFlight build, which needs a splat in a build scene (M1-GAME-01). AT-5 (signed URLs) waits on the Supabase signed-URL endpoint. open -> in-progress. Delivered as direct commits to main (Operator precedent); the branch name is nominal.",
       "by": "gj-operator"
+    },
+    {
+      "date": "2026-10-03",
+      "by": "gj-operator",
+      "event": "gj-operator: device-test splat room for AT-2/AT-3 on the iPhone. Debug-only scene Assets/Scenes/DeviceTest/SplatRoom.unity loads the Winchester Great Hall corpus splat (pass 3, 780,004 splats, CC BY 3.0, credit on screen) at 8x miniature scale with the MovementTest character (stick, jump, follow camera), an invisible floor and walls, a label (name, count, sort tier) and splat lines in the overlay's Save report. The internal-debug overlay gets a scene switcher (one button per other build scene under Save report); release builds still boot MovementTest and contain neither the scene nor the splat (checked on the exported player data; release builds 46 and 47 confirmed). Asset handling: repo-hygiene forbids tracked splats, so nothing is committed; the converted package is in the private staging bucket environments/_devtest/ and the internal-debug lane fetches it through an operator-minted <=15 min signed URL (new dispatch input splat_url, masked, SHA-256 verified; no key in CI). Commits 1dee36e, 4dbe4ec, ca38c31, 2e479fc (PlayMode test isolation fix after unity-tests 37132813149 failed). Internal-debug TestFlight build (pending) (run (pending)) carries the room. Next: the Owner runs AT-2 (ordering/popping while turning) and AT-3 (fps) on the iPhone 14 and saves a report. Details: qa/reports/M1-ios-splat-render.md."
     }
   ]
 }

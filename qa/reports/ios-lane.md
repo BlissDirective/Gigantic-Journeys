@@ -44,6 +44,9 @@ rejected the binary at validation with two **409** errors:
 | **43** | 37082996930 (push of ab5c034) | release | cancelled (superseded by the launch-scene fix; still booted SampleScene) |
 | **44** | 37084777722 (push of b14190d, release lane) | release | uploaded 2026-10-02 (green). **First build that boots into the playable MovementTest scene** (build index 0), with the final icon and the 60 fps cap |
 | **45** | 37086752760 (workflow_dispatch on b14190d, lane=macos) | internal-debug | uploaded 2026-10-02 ~9:02 PM CT (green). MovementTest boot + debug overlay; Owner's next device check / perf report |
+| **46** | 37132813101 (push of ca38c31, release lane) | release | uploaded 2026-10-03 10:45 AM CT (green). Release export check: SplatRoom scene absent, splat absent |
+| **47** | 37134798525 (push of 2e479fc, release lane) | release | upload in progress |
+| **(pending)** | (pending) (workflow_dispatch on 2e479fc, lane=macos, splat_url set) | internal-debug | dispatched after build 47; **M1-UNITY-01 device-test splat room** (Winchester Great Hall, 780,004 splats): three-finger tap → **SplatRoom** button under Save report |
 
 ## Owner follow-ups
 - ~~The icon is a **placeholder**~~ **Done 2026-10-02:** the Owner selected the final app icon (white "GJ", a tiny figure
@@ -74,3 +77,12 @@ looks ahead automatically; touch camera orbit is M1). The debug overlay bootstra
 internal-debug builds. Guards: EditMode `BootSceneIsThePlayableMovementTestScene`, PlayMode
 `BootScene_BuildIndexZero_IsPlayable` (build index 0 loads with TraversalController, TouchControlsView and FollowCamera).
 `FrameRatePolicy` (ab5c034) caps mobile at 60 fps (SPEC §6), not the iOS default of 30.
+
+## Device-test splat room (2026-10-03, M1-UNITY-01)
+Internal-debug builds now carry `Assets/Scenes/DeviceTest/SplatRoom.unity`, appended to the build list on the
+runner only (`ios_debug_flavor.py add-scene`). The overlay's new scene-switcher row reaches it. Boot is unchanged
+(MovementTest, build index 0). The splat is not in git: the dispatch input `splat_url` carries a ≤15 min signed URL
+to the private staging bucket, minted by gj-operator right before dispatch. CI masks it, verifies its SHA-256 and
+unpacks it into a gitignored Resources folder. A dispatch without it still builds, and the room then reports "splat not
+in this build". The step "Device-test scene and splat only in the internal-debug flavor" checks the exported player
+data, so release builds fail if either one leaks in. Details: `qa/reports/M1-ios-splat-render.md`.

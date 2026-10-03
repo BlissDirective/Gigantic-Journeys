@@ -41,11 +41,58 @@
 ## Needs a physical iPhone (Owner / gj-qa-release, via the internal-debug TestFlight build)
 - **AT-2 (gate):** splats render correctly depth-sorted from every angle (the #226 glitch is angle-dependent),
   with no flicker. The device check needs a splat in a build scene: today only `Assets/Capture/Samples/SplatSample.unity`
-  has one and it is not in the build list. M1-GAME-01 puts the golden scene in the build. Then check the log
-  line `[GJ-SPLAT-SORT] engaged on Metal`.
+  has one and it is not in the build list. **Now testable:** the internal-debug SplatRoom scene (below). Then check the log
+  line `[GJ-SPLAT-SORT] engaged on Metal`, or the on-screen label reading "Tier B".
 - **AT-3:** sustained fps at about 1–2.5M splats, plus package MB, using the M0-UNITY-04 debug overlay
   (fps p50/p99, Save report). The bitonic sort is O(n log² n): if it misses 30 fps at budget, first raise
   `sortEveryNthFrame` to 2–3 on Medium (Low already uses 2; it is a per-tier knob), then escalate to Tier C per the runbook.
+
+## Device-test splat room (2026-10-03): AT-2/AT-3 on the iPhone
+Build **(pending)** (internal-debug, run (pending)) adds a debug-only scene,
+`Assets/Scenes/DeviceTest/SplatRoom.unity`, where the movement character walks through one real reconstructed
+corpus room.
+- **Room:** Winchester Great Hall (`medieval-great-hall-winchester`, corpus pass 3, 86% registered), **780,004 splats**.
+  Source: "King Arthur's Round Table and Winchester Castle Walk Through [4K]" by [4K] Free Download Stock Videos,
+  CC BY 3.0, modified (reconstructed). The credit is shown on screen in the scene. The pass-3 `.spz` uses a newer
+  SPZ layout that the pinned aras-p importer can't read, so the asset was converted from the run's `splat.ply` at the
+  package's "Medium" quality (pos/scale Norm11, color Norm8x4, SH Norm6): 36 MB raw, 30.4 MB packed.
+- **Placement:** scale 8 (miniature: the hall is about 11.4 × 6.2 m around the 1 m capsule) and z = −8 to undo the
+  nerfstudio frame's mirror. Box renders from the training-camera poses match the source video frames.
+  Spawn is at the entrance half, facing the Round Table end. There is an invisible floor plus four walls
+  (x ±2.9, z ±5.4); the reconstruction has no collision mesh.
+- **Label and report:** the scene shows name · splat count · sort tier · credit. The overlay's Save report gains
+  `splat_room`, `splat_loaded`, `splat_count`, `sort_tier`, `sort_every_nth_frame`, `sorts_issued` and
+  `sort_dispatches_per_sort`. `sort_ms` reads "not instrumented (GPU)" because the sort runs inside the
+  camera's command buffer, so there's no cheap CPU-side timing (fps/frame-time percentiles cover it).
+- **Reaching it:** release builds still boot MovementTest and contain neither the scene nor the splat. In the
+  internal-debug flavor, the overlay (three-finger tap) gets a scene-switcher row under Save report with one
+  button per other build scene, so tap **SplatRoom**. The `GiganticJourneys.DeviceTest` assembly compiles only
+  in the editor, development or `GJ_DEBUG` builds.
+- **Known reconstruction limits (not sort bugs):** the entrance end (facing −z) is thin and murky. About 80
+  frames of the doors segment were mis-registered in the pass-3 join. Low near-floor views show blobby floaters.
+  Judge ordering and popping while facing the Round Table and the columns.
+
+### Asset handling (public repo)
+`secret-scan.yml` repo-hygiene rejects tracked `.ply/.splat/.spz/.ksplat` ("privacy and size"), and
+corpus media is not kept in git. Committing the converted Unity `.asset/.bytes` would sidestep that rule, not follow
+it, so **no splat data is committed**. Instead:
+- The converted package (deterministic tar.gz, 30,354,343 bytes, sha256 `2bba3810…1618cf`) lives in the
+  **private** staging bucket `environments` at `_devtest/medieval-great-hall-winchester/splat-room-unity.tar.gz`.
+  A public fetch is refused.
+- Right before dispatch, gj-operator mints a ≤15-min signed URL on the box and passes it as the
+  `ios-build.yml` input `splat_url`. CI reads it from the event file, masks it, downloads it, verifies size and
+  SHA-256 against `unity/Assets/GiganticJourneys/DeviceTest/splat-room.json`, and unpacks only that room's
+  asset files into a gitignored `Resources` folder. No Supabase key or Modal token is in CI (SECURITY_CHECKLIST
+  §2.3), and no new secret was added.
+- `check-device-test` verifies the exported Xcode player data: the scene and splat are present only in
+  internal-debug (and the splat only when a URL was given), never in release.
+- Re-running the debug build with the splat needs a fresh URL. An internal-debug dispatch without `splat_url` still
+  builds; the scene then says "splat not in this build".
+
+Guards: EditMode `SplatRoomTests` (descriptor, scene wiring, build-list exclusion, debug-only assembly, gitignore,
+local-asset match, switcher, report hook), PlayMode `SplatRoom_SpawnsCharacterOnFloor_AndReportsTheRoom` (passes with
+and without the asset, and on Vulkan with it), and pytest `test_ios_debug_flavor.py` (fetch/verify/unpack,
+add-scene, export check). Box render: Vulkan follow view, 93.5% of pixels covered by splats.
 
 ## AT-4 — LOD / chunked streaming (specification)
 aras-p has neither LOD nor streaming. The plan uses its 256-splat chunks (`m_GpuChunks`, already used for
