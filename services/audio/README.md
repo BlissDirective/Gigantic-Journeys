@@ -17,8 +17,12 @@ contract it mirrors — no audio is synthesized here.
   round-robin count, impact scaling, scale weight, and whether it varies by surface material.
   `validate_bank()` enforces **coverage of every verb in the frozen traversal_graph enum** (AT-1) and
   well-formedness; locomotion carries ≥ 4 round-robin variants so a 2-minute run never machine-guns.
+- **`mixer.py` + `../../data/audio/mixer.json`** — the **AudioMixer / bus config**: a master, the five
+  category buses (matching the bank), a scale-aware **reverb send** bus (fed by the diegetic buses),
+  **sidechain ducking** so a critical cue always reads and footsteps never mask a landing warning, plus
+  per-bus voice budget + priority. `validate_mixer` cross-checks the buses against the sound bank.
 - **`tests/`** — Sabine correctness, big-live-vs-small-dead reverb, scale pitch/gain monotonicity +
-  clamps, and full bank coverage/validity (15 tests).
+  clamps, bank coverage/validity, and mixer consistency (buses↔bank, ducking, voice budget) — 24 tests.
 
 ## The C# engine mirrors this
 `data/audio/acoustics.json` and `sound_bank.json` are the single source of truth, like

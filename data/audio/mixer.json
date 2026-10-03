@@ -1,0 +1,18 @@
+{
+  "_note": "AudioMixer / bus config (M1-GAME-04 / AUTH #022). The Unity AudioMixer graph + static mix as data: a master, five category buses that match data/audio/sound_bank.json, a scale-aware reverb send bus (fed by the diegetic buses, driven by services/audio/acoustics), sidechain ducking so critical cues always read and footsteps never mask a landing warning, and the mobile voice budget. gain_db is each strip's default; priority is 1 = highest (wins voices/attention). The C# audio engine mirrors this file.",
+  "master": { "gain_db": 0.0, "limiter": true, "target_lufs": -16.0 },
+  "reverb_bus": { "gain_db": -3.0, "source": "services/audio/acoustics (scale-aware room reverb)" },
+  "buses": {
+    "ui":       { "gain_db": -1.0, "reverb_send": false, "max_voices": 6,  "priority": 1 },
+    "tools":    { "gain_db": -2.0, "reverb_send": true,  "max_voices": 6,  "priority": 2 },
+    "movement": { "gain_db": -3.0, "reverb_send": true,  "max_voices": 12, "priority": 3 },
+    "world":    { "gain_db": -6.0, "reverb_send": true,  "max_voices": 8,  "priority": 4 },
+    "music":    { "gain_db": -8.0, "reverb_send": false, "max_voices": 4,  "priority": 5 }
+  },
+  "ducking": [
+    { "name": "cue-over-action", "trigger": "ui", "targets": ["movement", "world"], "duck_db": -8.0, "attack_ms": 15, "release_ms": 250 },
+    { "name": "sting-over-action", "trigger": "music", "targets": ["movement", "world", "tools"], "duck_db": -6.0, "attack_ms": 20, "release_ms": 400 },
+    { "name": "ambience-under-action", "trigger": "movement", "targets": ["world"], "duck_db": -4.0, "attack_ms": 30, "release_ms": 300 }
+  ],
+  "voice_budget": { "total_max": 32 }
+}
