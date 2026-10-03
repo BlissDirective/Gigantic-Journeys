@@ -5,25 +5,26 @@
   "area": "GAME",
   "owner": "claude-builder",
   "qa": "gj-qa-release",
-  "status": "open",
+  "status": "in-progress",
   "priority": "P1",
   "size": "L",
-  "summary": "Ship Tier 1 environment reactivity per SPEC §3.6: object segmentation of the splat plus procedural, shader-driven displacement (NO physics — that is Tier 2/§5). Cushions dent, curtains/plants/paper sway and flutter, cords/soft-hanging swing, dust motes stir — keyed to the scene graph's segmented objects + material labels, and extended to the new verbs/tools (wall-run dust scuff, rappel curtain sway, grapple twine sway). Must hold the 30 fps target (M3 exit).",
+  "summary": "Ship Tier 1 environment reactivity per SPEC §3.6: object segmentation of the splat plus procedural, shader-driven displacement (NO physics -- that is Tier 2/§5). Cushions dent, curtains/plants/paper sway and flutter, cords/soft-hanging swing, dust motes stir -- keyed to the scene graph's segmented objects + material labels, and extended to the new verbs/tools (wall-run dust scuff, rappel curtain sway, grapple twine sway). Must hold the 30 fps target (M3 exit). The Brain-B feedback matrix (material x event reactivity data + validator + tests) is built; the Unity shader-displacement runtime is gj-gameplay.",
   "deliverables": [
-    "unity (Tier 1 shader-displacement reactions, segmentation-driven)"
+    "unity (Tier 1 shader-displacement reactions, segmentation-driven) [gj-gameplay]",
+    "services/reactivity + data/reactivity (reactivity feedback matrix + validator + tests) [claude-builder, done]"
   ],
   "acceptance_tests": [
     {
       "id": "AT-1",
       "test": "Cushions dent, curtains/plants/paper sway and flutter, and cords swing via shader displacement driven by segmentation + material labels, with no rigid/soft-body physics.",
-      "evidence": "test scene + capture",
+      "evidence": "test scene + capture; the per-material displacement map is data/reactivity/reactivity.json (material_response), validated by services/reactivity/tests",
       "automated": false,
       "level": "required"
     },
     {
       "id": "AT-2",
       "test": "Verb/tool reactions land: a wall-run scuffs dust, a rappel sways a curtain, the grapple twine and its anchor object react on mount.",
-      "evidence": "test scene + capture",
+      "evidence": "test scene + capture; the per-event reactions are data/reactivity/reactivity.json (event_reaction), with the wall-run/rappel/grapple cases asserted in services/reactivity/tests",
       "automated": false,
       "level": "required"
     },
@@ -44,17 +45,25 @@
   "references": [
     "AUTH #022",
     "SPEC §3.6",
-    "design/proposals/sound-reactivity-v1.md"
+    "design/proposals/sound-reactivity-v1.md",
+    "services/reactivity/",
+    "data/reactivity/"
   ],
-  "branch": null,
+  "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-09-19",
-  "updated": "2026-09-19",
+  "updated": "2026-10-03",
   "history": [
     {
       "date": "2026-09-19",
       "event": "created by the Coordinator as an AUTH #022 follow-up (Tier 1 soft reactivity).",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-10-03",
+      "event": "Brain-B feedback matrix built: services/reactivity + data/reactivity/reactivity.json. material_response (per scene_graph material: displacement none/dent/sway/flutter/swing + stiffness + particle -- fabric/carpet dent, curtain sways, plant/paper flutter, tile/metal/glass rigid) + event_reaction (per verb/tool/landing: particle/haptic/camera_shake/displaces -- wall-run scuff, rappel/grapple react), scale-by-multiplier, 30 fps budget. validate_reactivity enforces coverage of every scene_graph material + every traversal_graph verb; 9 tests prove AT-1 material displacement + AT-2 verb/tool reactions (the data half). Shares the material/verb source of truth with the audio bank; the particle/haptic/shake channels also feed Tier 0 (M1-GAME-03). open -> in-progress. Remaining: the Unity segmentation + displacement shaders + particles + AT-3 device 30 fps (gj-gameplay), which mirrors data/reactivity.",
+      "by": "claude-builder"
     }
-  ]
+  ],
+  "notes": "Brain-B reactivity matrix (services/reactivity + data/reactivity) done; the Unity shader-displacement runtime is gj-gameplay. One feedback matrix shared with services/audio (same materials + verbs). No physics (Tier 2 is research, SPEC §5). The C# runtime mirrors data/reactivity/reactivity.json; a check_reactivity_sync.py can enforce byte-identity once the engine lands."
 }
