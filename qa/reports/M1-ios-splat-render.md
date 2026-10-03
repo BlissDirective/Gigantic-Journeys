@@ -48,7 +48,7 @@
   `sortEveryNthFrame` to 2–3 on Medium (Low already uses 2; it is a per-tier knob), then escalate to Tier C per the runbook.
 
 ## Device-test splat room (2026-10-03): AT-2/AT-3 on the iPhone
-Build **(pending)** (internal-debug, run (pending)) adds a debug-only scene,
+Build **48** (internal-debug, run 37137079024, uploaded 2026-10-03 12:01 PM CT) adds a debug-only scene,
 `Assets/Scenes/DeviceTest/SplatRoom.unity`, where the movement character walks through one real reconstructed
 corpus room.
 - **Room:** Winchester Great Hall (`medieval-great-hall-winchester`, corpus pass 3, 86% registered), **780,004 splats**.

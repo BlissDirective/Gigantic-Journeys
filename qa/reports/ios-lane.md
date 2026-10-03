@@ -45,8 +45,8 @@ rejected the binary at validation with two **409** errors:
 | **44** | 37084777722 (push of b14190d, release lane) | release | uploaded 2026-10-02 (green). **First build that boots into the playable MovementTest scene** (build index 0), with the final icon and the 60 fps cap |
 | **45** | 37086752760 (workflow_dispatch on b14190d, lane=macos) | internal-debug | uploaded 2026-10-02 ~9:02 PM CT (green). MovementTest boot + debug overlay; Owner's next device check / perf report |
 | **46** | 37132813101 (push of ca38c31, release lane) | release | uploaded 2026-10-03 10:45 AM CT (green). Release export check: SplatRoom scene absent, splat absent |
-| **47** | 37134798525 (push of 2e479fc, release lane) | release | upload in progress |
-| **(pending)** | (pending) (workflow_dispatch on 2e479fc, lane=macos, splat_url set) | internal-debug | dispatched after build 47; **M1-UNITY-01 device-test splat room** (Winchester Great Hall, 780,004 splats): three-finger tap → **SplatRoom** button under Save report |
+| **47** | 37134798525 (push of 2e479fc, release lane) | release | uploaded 2026-10-03 11:29 AM CT (green). Release export check: SplatRoom scene absent, splat absent |
+| **48** | 37137079024 (workflow_dispatch on 83afba4 = code of 2e479fc, lane=macos, splat_url set) | internal-debug | uploaded 2026-10-03 12:01 PM CT (green; splat fetched and SHA-256 verified; export check: scene and splat present). **M1-UNITY-01 device-test splat room** (Winchester Great Hall, 780,004 splats): three-finger tap → **SplatRoom** button under Save report |
 
 ## Owner follow-ups
 - ~~The icon is a **placeholder**~~ **Done 2026-10-02:** the Owner selected the final app icon (white "GJ", a tiny figure
