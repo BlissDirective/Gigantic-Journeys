@@ -1,0 +1,27 @@
+{
+  "_note": "Scale-aware acoustics tuning (M1-GAME-04 / AUTH #022). The Unity/C# audio engine mirrors these values. material_absorption = mid-band (500 Hz-1 kHz) Sabine coefficients per the frozen scene_graph material enum; see services/audio/README.md.",
+  "sabine_k": 0.161,
+  "rt60_clamp_s": { "min": 0.12, "max": 2.5 },
+  "wet": { "min": 0.04, "max": 0.6, "rt60_full_s": 2.0 },
+  "material_absorption": {
+    "wood": 0.10,
+    "tile-stone": 0.02,
+    "carpet-rug": 0.35,
+    "fabric-cushion": 0.55,
+    "lego-plastic": 0.05,
+    "paper-cardboard": 0.22,
+    "metal": 0.03,
+    "glass": 0.03,
+    "plant": 0.20,
+    "curtain": 0.45,
+    "unknown": 0.15
+  },
+  "scale": {
+    "ref_multiplier": 12,
+    "pitch_semitones_per_octave": 6.0,
+    "pitch_clamp_semitones": { "min": -8, "max": 18 },
+    "gain_db_per_octave": -2.0,
+    "gain_clamp_db": { "min": -10, "max": 3 },
+    "weight_pitch_factor": { "light": 1.0, "medium": 0.6, "heavy": 0.25 }
+  }
+}

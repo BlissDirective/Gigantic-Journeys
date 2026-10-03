@@ -5,33 +5,34 @@
   "area": "GAME",
   "owner": "claude-builder",
   "qa": "gj-qa-release",
-  "status": "open",
+  "status": "in-progress",
   "priority": "P1",
   "size": "L",
-  "summary": "Build the v1 audio system per SPEC §3.6 and Movement Bible §9: a material × event sound bank covering every verb and tool, contact-frame-locked to the animation, layered + round-robin + impact-scaled; 3D spatialization with an ambience bed and category mix buses (movement/world/tools/UI/music) with sidechain ducking; scale-aware pitch/gain; scale-aware acoustic reverb computed from the reconstructed room (volume + material absorption); restrained adaptive music (ambient bed + sparse stings + the shrink-transition theme). CC0/royalty-free/self-recorded sourcing only.",
+  "summary": "Build the v1 audio system per SPEC §3.6 and Movement Bible §9: a material × event sound bank covering every verb and tool, contact-frame-locked to the animation, layered + round-robin + impact-scaled; 3D spatialization with an ambience bed and category mix buses (movement/world/tools/UI/music) with sidechain ducking; scale-aware pitch/gain; scale-aware acoustic reverb computed from the reconstructed room (volume + material absorption); restrained adaptive music (ambient bed + sparse stings + the shrink-transition theme). CC0/royalty-free/self-recorded sourcing only. Brain-B half (the bank data + the scale-aware acoustics reference + coverage/validation) is built; the Unity audio engine + CC0 clips are gj-gameplay.",
   "deliverables": [
-    "unity (audio engine, SurfaceMaterial event bank, reverb-from-scenegraph, mix buses)",
+    "unity (audio engine, SurfaceMaterial event bank, reverb-from-scenegraph, mix buses) [gj-gameplay]",
+    "services/audio + data/audio (bank data + scale-aware acoustics reference + tests) [claude-builder, done]",
     "qa/audio-sources.md (CC0/royalty-free provenance)"
   ],
   "acceptance_tests": [
     {
       "id": "AT-1",
       "test": "The material × event bank covers all v1 verbs and tools (incl. grapple pin/twine, pole-vault, wall-run, dive-roll), fires on animation contact frames, and is round-robin + impact-scaled so a 2-minute run has no machine-gun repetition.",
-      "evidence": "test scene + audio log",
+      "evidence": "test scene + audio log; bank coverage of the frozen verb enum proven by services/audio/tests/test_bank.py",
       "automated": false,
       "level": "required"
     },
     {
       "id": "AT-2",
       "test": "Scale-aware acoustic reverb is computed from the scene graph (room volume + material absorption) and audibly differs between a small dead room and a large live one.",
-      "evidence": "A/B capture of two corpus rooms",
+      "evidence": "A/B capture of two corpus rooms; reference proven by services/audio/tests/test_acoustics.py (Sabine; big-live > small-dead)",
       "automated": false,
       "level": "required"
     },
     {
       "id": "AT-3",
       "test": "Pitch, gain, and reverb size scale with the environment multiplier (Lego clicks tiny, floor booms big); category mix buses + ducking keep critical cues (summit/vista/flag) audible; audio is 3D-spatialized.",
-      "evidence": "test scene",
+      "evidence": "test scene; scale pitch/gain reference proven by services/audio/tests/test_acoustics.py",
       "automated": false,
       "level": "required"
     },
@@ -60,17 +61,26 @@
     "AUTH #022",
     "SPEC §3.6",
     "MOVEMENT_BIBLE §9",
-    "design/proposals/sound-reactivity-v1.md"
+    "design/proposals/sound-reactivity-v1.md",
+    "services/audio/",
+    "data/audio/",
+    "qa/audio-sources.md"
   ],
-  "branch": null,
+  "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-09-19",
-  "updated": "2026-09-19",
+  "updated": "2026-10-03",
   "history": [
     {
       "date": "2026-09-19",
       "event": "created by the Coordinator as an AUTH #022 follow-up (audio system).",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-10-03",
+      "event": "Brain-B half built. services/audio + data/audio: the scale-aware acoustics reference (acoustics.py + acoustics.json — Sabine reverb from scene_graph volume + 11-material absorption; scale pitch/gain from scale.multiplier with per-event weight so booms stay big) and the material×event sound bank (sound_bank.json + bank.py — every verb/tool/landing/reaction/UI/music event with bus/layers/round-robin/impact/weight/material, validated for coverage against the frozen traversal_graph verb enum). 15 tests prove AT-1 coverage, AT-2 big-live>small-dead reverb, and AT-3 scale pitch/gain. qa/audio-sources.md provenance scaffold (AT-4 policy). No protected path (AUTH #022 already applied to SPEC/Bible; data under data/audio, not data/schemas). Remaining: the Unity audio engine (mixer buses + ducking, 3D spatialization, contact-frame wiring) and the CC0 clips (gj-gameplay); the C# engine mirrors data/audio like movement.json.",
+      "by": "claude-builder"
     }
-  ]
+  ],
+  "notes": "Brain-B contract (services/audio + data/audio) done; the Unity engine + CC0 clips are gj-gameplay. data/audio/*.json is the source of truth the C# engine mirrors (movement.json pattern); a sync check can be added when the engine lands. Music identity = restrained adaptive stings (AUTH #022)."
 }
