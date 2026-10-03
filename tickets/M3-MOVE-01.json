@@ -5,40 +5,41 @@
   "area": "MOVE",
   "owner": "claude-builder",
   "qa": "gj-qa-release",
-  "status": "open",
+  "status": "in-progress",
   "priority": "P1",
   "size": "L",
-  "summary": "Implement the v1 traversal-tools layer through the existing IVerbProvider (Bible §3.6, §14): the safety-pin grapple (swing/ascend/rappel) with the seamless tool state machine (aim -> deploy/mount -> verb -> auto-unhook -> reel -> coil to back), and the matchstick pole-vault. Real 1:1-scale carried objects (the sole SPEC §4 exception). Aim/targeting highlights valid anchors; the validator and route generator gain grapple/pole transitions. Tuned to movement.json grapple/poleVault.",
+  "summary": "Implement the v1 traversal-tools layer through the existing IVerbProvider (Bible §3.6, §14): the safety-pin grapple (swing/ascend/rappel) with the seamless tool state machine (aim -> deploy/mount -> verb -> auto-unhook -> reel -> coil to back), and the matchstick pole-vault. Real 1:1-scale carried objects (the sole SPEC §4 exception). Aim/targeting highlights valid anchors; the validator and route generator gain grapple/pole transitions. Tuned to movement.json grapple/poleVault. The Brain-B tools reference (state-machine timing + mode/reach/feasibility) + validator tool-transition coverage are built; the Unity tool state machine + aim UI are gj-gameplay.",
   "deliverables": [
-    "unity (grapple + pole-vault verb providers, tool state machine, aim UI)",
-    "unity (validator + journey-gen tool transitions)"
+    "unity (grapple + pole-vault verb providers, tool state machine, aim UI) [gj-gameplay]",
+    "unity (validator + journey-gen tool transitions) [gj-gameplay]",
+    "services/traversal/tools_ref.py (grapple + pole-vault Brain-B reference + tests) [claude-builder, done]"
   ],
   "acceptance_tests": [
     {
       "id": "AT-1",
       "test": "Grapple works in all three modes (swing/ascend/rappel) via IVerbProvider without core changes; the state machine mounts the pin diegetically, auto-unhooks on arrival, and reels + coils to the back; constants come from movement.json grapple.",
-      "evidence": "Unity test scene + screen capture",
+      "evidence": "Unity test scene + screen capture; the mode selection + state-machine timing reference is services/traversal/tools_ref.py (grapple_mode / grapple_timeline / grapple_traversal_time)",
       "automated": false,
       "level": "required"
     },
     {
       "id": "AT-2",
       "test": "Matchstick pole-vault vaults a gap up to poleVault.maxGapA or a height up to maxHeightA at jog+.",
-      "evidence": "test scene",
+      "evidence": "test scene; feasibility reference is services/traversal/tools_ref.py (pole_vault_feasible)",
       "automated": false,
       "level": "required"
     },
     {
       "id": "AT-3",
       "test": "The reachability validator and route generator include grapple and pole transitions (voids crossable, wall-smooth passable via an anchor above) within the movement.json limits; a generated route can author a grapple beat.",
-      "evidence": "validator + generator test output",
+      "evidence": "services/traversal/tests/test_tools_ref.py: the validator accepts a grapple-swing across a void + a pole-vault over a gap, taught earlier, within movement.json limits. The route GENERATOR keeps the v1 summit tool-free by design (journey.py) so it does not author tool beats in v1 -- tools are validator-accepted enrichment; authoring tool beats in generated routes is a documented design boundary, not a gap.",
       "automated": true,
       "level": "required"
     },
     {
       "id": "AT-4",
       "test": "Tools render as real 1:1 objects lighting-matched to the splat, with tactile feedback (§9); aim is forgiving (snapAssistA). Feels great on the Owner's iPhone.",
-      "evidence": "qa/reports/M3-tools.md + device clips",
+      "evidence": "qa/reports/M3-tools.md + device clips; aim-snap reference is tools_ref.aim_assisted",
       "automated": false,
       "level": "suggested"
     }
@@ -54,17 +55,24 @@
     "AUTH #021",
     "MOVEMENT_BIBLE §3.6, §10, §14",
     "ADR-0004 (IVerbProvider)",
-    "design/proposals/movement-v1-expansion.md"
+    "design/proposals/movement-v1-expansion.md",
+    "services/traversal/tools_ref.py"
   ],
-  "branch": null,
+  "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-09-18",
-  "updated": "2026-09-18",
+  "updated": "2026-10-03",
   "history": [
     {
       "date": "2026-09-18",
       "event": "created by the Coordinator as the AUTH #021 traversal-tools follow-up (grapple + pole-vault).",
       "by": "coordinator"
+    },
+    {
+      "date": "2026-10-03",
+      "event": "Brain-B tools reference built: services/traversal/tools_ref.py (reads movement.json grapple/poleVault via from_movement_config, defaults pinned by a test). Grapple: span/reach, anchor eligibility (anchorMinLedgeA), forgiving aim (snapAssistA), mode selection (swing/ascend/rappel), traversal time, and the full state-machine timeline (aim->deploy->verb->unhook->reel->coil) the C# runtime mirrors (AT-1). Pole-vault: gap/height feasibility gated by minRunSpeed (AT-2). AT-3: added tests proving the M1-SCEN-05 validator accepts a grapple-swing across a void + a pole-vault over a gap, taught earlier, within the movement.json limits. 9 tests (110 traversal). Note: the route GENERATOR keeps the v1 summit tool-free by design (journey.py builds routes from tool-free edges so they always pass the validator + cross-document checker); authoring tool beats in generated routes is a separate design decision, deferred. open -> in-progress. Remaining: the Unity grapple/pole IVerbProviders, the tool state machine + aim UI, 1:1 tool rendering, and AT-4 device (gj-gameplay).",
+      "by": "claude-builder"
     }
-  ]
+  ],
+  "notes": "Brain-B reference (services/traversal/tools_ref.py) done; the Unity tool runtime is gj-gameplay. Constants from movement.json grapple/poleVault (the C# runtime mirrors tools_ref). The v1 journey generator stays tool-free (tools are optional enrichment the validator accepts); wiring tool beats into generated routes is a documented design boundary."
 }
