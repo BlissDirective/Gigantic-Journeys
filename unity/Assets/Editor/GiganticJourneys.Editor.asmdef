@@ -9,7 +9,8 @@
         "GaussianSplatting",
         "GaussianSplattingEditor",
         "GJ.Movement.Shared",
-        "GJ.Movement.Controller"
+        "GJ.Movement.Controller",
+        "GiganticJourneys.DeviceTest"
     ],
     "includePlatforms": [
         "Editor"

@@ -10,7 +10,10 @@
         "GJ.Movement.Shared",
         "GJ.Intent",
         "GJ.TraversalQuery",
-        "GJ.Movement.Controller"
+        "GJ.Movement.Controller",
+        "GiganticJourneys.DeviceTest",
+        "GiganticJourneys.Splats",
+        "GaussianSplatting"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

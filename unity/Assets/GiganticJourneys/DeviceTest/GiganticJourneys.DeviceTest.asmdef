@@ -1,0 +1,23 @@
+{
+    "name": "GiganticJourneys.DeviceTest",
+    "rootNamespace": "GiganticJourneys.DeviceTest",
+    "references": [
+        "GiganticJourneys",
+        "GiganticJourneys.DebugOverlay",
+        "GiganticJourneys.Splats",
+        "GaussianSplatting",
+        "GJ.Movement.Shared",
+        "GJ.Movement.Controller"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_EDITOR || DEVELOPMENT_BUILD || GJ_DEBUG"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

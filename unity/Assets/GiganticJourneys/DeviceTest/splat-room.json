@@ -1,0 +1,18 @@
+{
+    "slug": "medieval-great-hall-winchester",
+    "displayName": "Winchester Great Hall",
+    "resource": "GJSplatRoom/medieval-great-hall-winchester",
+    "splatCount": 780004,
+    "credit": "Source: \"King Arthur's Round Table and Winchester Castle Walk Through [4K]\" by [4K] Free Download Stock Videos (youtube.com/watch?v=3Oc3M1MUHRg), CC BY 3.0. Reconstructed as a Gaussian splat by Gigantic Journeys (modified).",
+    "license": "CC BY 3.0 (https://creativecommons.org/licenses/by/3.0/)",
+    "packageObject": "environments/_devtest/medieval-great-hall-winchester/splat-room-unity.tar.gz",
+    "packageSha256": "2bba381074712428eaac67ed60e632e5f7081de06f4e11527718a21d951618cf",
+    "packageBytes": 30354343,
+    "position": [0.2, 1.16, 1.72],
+    "rotation": [0.581981, 0.212542, 0.015489, 0.784783],
+    "scale": [8.0, 8.0, -8.0],
+    "walkMin": [-2.9, -5.4],
+    "walkMax": [2.9, 5.4],
+    "spawn": [0.0, 0.02, -3.0],
+    "spawnYawDeg": 0.0
+}

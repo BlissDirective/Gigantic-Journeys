@@ -143,3 +143,11 @@ data/mipnerf360/
 # Debug-overlay build info, generated per debug build and deleted after it (M0-UNITY-04)
 unity/Assets/Generated/
 unity/Assets/Generated.meta
+
+# ---------------------------------------------------------------------------
+# M1-UNITY-01 device-test splat room: fetched by the internal-debug CI lane
+# (ios_debug_flavor.py fetch-splat) from the private staging bucket. Never commit
+# corpus splats (public repo; repo-hygiene bans scan files).
+# ---------------------------------------------------------------------------
+unity/Assets/GiganticJourneys/DeviceTest/Downloaded/
+unity/Assets/GiganticJourneys/DeviceTest/Downloaded.meta

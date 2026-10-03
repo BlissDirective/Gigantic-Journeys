@@ -19,7 +19,8 @@
         "GJ.Movement.Controller",
         "GJ.Capture",
         "GJ.Environment",
-        "GJ.Avatar"
+        "GJ.Avatar",
+        "GiganticJourneys.DeviceTest"
     ],
     "includePlatforms": [
         "Editor"
