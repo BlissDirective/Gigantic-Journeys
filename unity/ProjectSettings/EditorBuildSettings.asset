@@ -6,10 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: a9f5306c8ce47e866ba3c5a57745e253
-  - enabled: 1
     path: Assets/Scenes/MovementTest.unity
     guid: ddcce6d4c6bd00aeab546991f93496e7
+  - enabled: 1
+    path: Assets/Scenes/SampleScene.unity
+    guid: a9f5306c8ce47e866ba3c5a57745e253
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

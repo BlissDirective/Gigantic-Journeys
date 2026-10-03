@@ -47,7 +47,7 @@ Feature packages, exact-pinned: URP `com.unity.render-pipelines.universal`, Inpu
 ```
 Assets/
   Editor/      ProjectSetup.cs (GiganticJourneys.Editor.asmdef) — idempotent project configuration
-  Scenes/      SampleScene.unity (boot scene; first entry in EditorBuildSettings)
+  Scenes/      MovementTest.unity (boot scene since 2026-10-02; first entry in EditorBuildSettings), SampleScene.unity
   GiganticJourneys/
     Runtime/   GiganticJourneys.asmdef            (root runtime assembly)
     Tests/

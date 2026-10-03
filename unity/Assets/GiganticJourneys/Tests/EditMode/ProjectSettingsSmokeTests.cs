@@ -41,6 +41,21 @@ namespace GiganticJourneys.Tests
         }
 
         [Test]
+        public void BootSceneIsThePlayableMovementTestScene()
+        {
+            Assert.AreEqual(
+                GiganticJourneys.EditorTools.MovementTestScene.ScenePath,
+                ProjectIdentity.BootScenePath
+            );
+            Assert.IsTrue(
+                File.Exists(ProjectIdentity.BootScenePath),
+                ProjectIdentity.BootScenePath
+            );
+            Assert.AreEqual(ProjectIdentity.BootScenePath, EditorBuildSettings.scenes[0].path);
+            Assert.IsTrue(EditorBuildSettings.scenes[0].enabled);
+        }
+
+        [Test]
         public void UrpIsTheDefaultRenderPipeline()
         {
             Assert.IsNotNull(GraphicsSettings.defaultRenderPipeline);

@@ -60,3 +60,14 @@ The Owner selected the final icon on 2026-10-02. `unity/Assets/Art/AppIcon/AppIc
 largest square inside the rounded corners and grey border (934 px), then upscaled with LANCZOS. The path, GUID
 (`6b73e1a8…`) and import settings are unchanged (uncompressed, no mipmaps, alpha source None, max 1024), so every
 `ProjectSettings.asset` icon slot and the EditMode icon guards still apply as before.
+
+## Launch scene (2026-10-02)
+Builds through 42 booted into `SampleScene`, an empty URP scene, which is what the build 40 device report shows. From the next
+build on, **`Assets/Scenes/MovementTest.unity` is build index 0** (`ProjectIdentity.BootScenePath`, `EditorBuildSettings`).
+It is the playable M0 movement scene: an orange capsule on a 12 m floor with 1 A distance stripes, a floating
+touch stick in the left third of the safe area, a jump pad bottom-right, and the M0 fixed follow camera (it trails and
+looks ahead automatically; touch camera orbit is M1). The debug overlay bootstraps independently of the scene
+(`RuntimeInitializeOnLoadMethod(AfterSceneLoad)` on a DontDestroyOnLoad object), so the three-finger tap works there in
+internal-debug builds. Guards: EditMode `BootSceneIsThePlayableMovementTestScene`, PlayMode
+`BootScene_BuildIndexZero_IsPlayable` (build index 0 loads with TraversalController, TouchControlsView and FollowCamera).
+`FrameRatePolicy` (ab5c034) caps mobile at 60 fps (SPEC §6), not the iOS default of 30.

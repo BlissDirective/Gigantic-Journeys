@@ -406,5 +406,25 @@ namespace GiganticJourneys.Tests
             Assert.That(controller.Motor.Grounded, Is.True);
             yield return SceneManager.UnloadSceneAsync(scene);
         }
+
+        [UnityTest]
+        public IEnumerator BootScene_BuildIndexZero_IsPlayable()
+        {
+            // The player launches build index 0: it must be the movement scene with the
+            // controller, touch controls and follow camera (what TestFlight builds open into).
+            Assert.That(
+                SceneUtility.GetScenePathByBuildIndex(0),
+                Is.EqualTo(ProjectIdentity.BootScenePath)
+            );
+            yield return SceneManager.LoadSceneAsync(0, LoadSceneMode.Additive);
+            var scene = SceneManager.GetSceneByBuildIndex(0);
+            Assert.That(scene.isLoaded, Is.True);
+            Assert.That(scene.name, Is.EqualTo("MovementTest"));
+            var controller = Object.FindAnyObjectByType<TraversalController>();
+            Assert.That(controller, Is.Not.Null);
+            Assert.That(Object.FindAnyObjectByType<TouchControlsView>(), Is.Not.Null);
+            Assert.That(Object.FindAnyObjectByType<FollowCamera>(), Is.Not.Null);
+            yield return SceneManager.UnloadSceneAsync(scene);
+        }
     }
 }

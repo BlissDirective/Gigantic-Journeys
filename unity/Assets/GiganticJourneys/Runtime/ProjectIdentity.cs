@@ -10,6 +10,9 @@ namespace GiganticJourneys
         public const string BundleId = "com.sparkforgelabs.giganticjourneys";
         public const string ProductName = "Gigantic Journeys";
         public const string CompanyName = "SparkForge Labs";
-        public const string BootScenePath = "Assets/Scenes/SampleScene.unity";
+
+        // The playable movement scene boots first (touch stick, jump pad, follow camera) so
+        // TestFlight builds open into something the Owner can play (2026-10-02).
+        public const string BootScenePath = "Assets/Scenes/MovementTest.unity";
     }
 }
