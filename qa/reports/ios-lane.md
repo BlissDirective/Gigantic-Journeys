@@ -42,8 +42,9 @@ rejected the binary at validation with two **409** errors:
 | **41** | 37053104250 (push of 9b16f0f, release lane) | release | uploaded 2026-10-02 2:48 PM CT. First release build that includes the M0-UNITY-03 lockstep, the M1-UNITY-01 Metal-safe sort, the M1-GAME-01 loader and the M1-AVAT-01 roster/picker |
 
 ## Owner follow-ups
-- The icon is a **placeholder** (amber summit beam over an isometric room, on charcoal). gj-design should replace
-  `AppIcon-1024.png` with the final mark. Keep it 1024×1024 RGB with no transparency.
+- ~~The icon is a **placeholder**~~ **Done 2026-10-02:** the Owner selected the final app icon (white "GJ", a tiny figure
+  leaping from an armchair toward a coffee table, amber glow on a dark room). It replaced `AppIcon-1024.png` at the same
+  path and GUID, as 1024×1024 RGB with no transparency. See "Final app icon" below.
 - **Confirm the export-compliance answer.** `ITSAppUsesNonExemptEncryption=false` declares that the app uses only
   exempt (OS-provided) encryption. If that ever changes, flip it and file the annual self-classification.
 - **Install build 40 on the iPhone** from TestFlight (internal group) to run the M0-UNITY-04 debug-overlay device
@@ -51,3 +52,10 @@ rejected the binary at validation with two **409** errors:
 
 Note on the release item: builds 38 and 39 are release-flavor runs of the same `testflight` lane (push-triggered, both
 uploaded). No separate release `workflow_dispatch` was run because it would have re-uploaded identical code.
+
+## Final app icon (2026-10-02)
+The Owner selected the final icon on 2026-10-02. `unity/Assets/Art/AppIcon/AppIcon-1024.png` now holds the new master,
+1024×1024 RGB with no alpha and square corners (iOS applies the mask). It was cropped from the Owner's 1152×1712 mockup to the
+largest square inside the rounded corners and grey border (934 px), then upscaled with LANCZOS. The path, GUID
+(`6b73e1a8…`) and import settings are unchanged (uncompressed, no mipmaps, alpha source None, max 1024), so every
+`ProjectSettings.asset` icon slot and the EditMode icon guards still apply as before.
