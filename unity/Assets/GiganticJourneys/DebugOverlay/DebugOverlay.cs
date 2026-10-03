@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using UnityEngine;
@@ -23,6 +24,10 @@ namespace GiganticJourneys.DebugTools
     ///
     /// Toggle: three-finger tap (device), F3 (keyboard, Editor), L3 + R3 together
     /// (gamepad). F4 saves a report while the overlay is visible.
+    ///
+    /// Scene switcher (M1-UNITY-01 device test): below the Save button, one button per other
+    /// scene in the build list loads that scene (for example "SplatRoom", which only the
+    /// internal-debug lane adds to the build). The overlay survives the load.
     ///
     /// Release builds: this type lives in the <c>GiganticJourneys.DebugOverlay</c>
     /// assembly, whose define constraint is
@@ -93,6 +98,12 @@ namespace GiganticJourneys.DebugTools
         public Label StatsLabel { get; private set; }
         public Label InfoLabel { get; private set; }
         public Button SaveButton { get; private set; }
+
+        /// <summary>Row of scene-switch buttons (one per other build scene) below Save.</summary>
+        public VisualElement SceneRow { get; private set; }
+
+        /// <summary>The scene-switch buttons currently shown, in build order.</summary>
+        public IReadOnlyList<Button> SceneButtons => _sceneButtons;
         public string LastReportPath { get; private set; }
 
         /// <summary>Directory for saved reports; null means <see cref="Application.persistentDataPath"/>.</summary>
@@ -101,6 +112,7 @@ namespace GiganticJourneys.DebugTools
         public event Action<string> ReportSaved;
 
         readonly ThreeFingerTapDetector _tap = new ThreeFingerTapDetector();
+        readonly List<Button> _sceneButtons = new List<Button>();
         PanelSettings _panel;
         float _lastPixelsPerPoint;
         float _nextRefresh;
@@ -146,11 +158,14 @@ namespace GiganticJourneys.DebugTools
             }
             Instance = this;
             BuildUi();
+            RebuildSceneButtons();
+            SceneManager.activeSceneChanged += OnActiveSceneChanged;
             SetVisible(false);
         }
 
         void OnDestroy()
         {
+            SceneManager.activeSceneChanged -= OnActiveSceneChanged;
             if (Instance == this)
                 Instance = null;
             if (_panel != null)
@@ -223,19 +238,89 @@ namespace GiganticJourneys.DebugTools
                 name = "gj-debug-save",
                 text = "Save report",
             };
-            SaveButton.style.color = Color.white;
-            SaveButton.style.unityTextAlign = TextAnchor.MiddleCenter;
-            SaveButton.style.flexShrink = 0;
-            SaveButton.style.backgroundColor = new Color(0f, 0f, 0f, 0.72f); // same scrim as the panel
-            SetBorder(SaveButton, 1f);
-            var edge = new Color(1f, 1f, 1f, 0.6f);
-            SaveButton.style.borderLeftColor = SaveButton.style.borderRightColor = edge;
-            SaveButton.style.borderTopColor = SaveButton.style.borderBottomColor = edge;
+            StyleButton(SaveButton);
+
+            SceneRow = new VisualElement
+            {
+                name = "gj-debug-scenes",
+                pickingMode = PickingMode.Ignore,
+            };
+            SceneRow.style.flexDirection = FlexDirection.Row;
+            SceneRow.style.justifyContent = Justify.FlexEnd;
+            SceneRow.style.flexWrap = Wrap.Wrap;
+            SceneRow.style.flexShrink = 0;
 
             Box.Add(column);
             Container.Add(Box);
             Container.Add(SaveButton);
+            Container.Add(SceneRow);
             root.Add(Container);
+        }
+
+        static void StyleButton(Button b)
+        {
+            b.style.color = Color.white;
+            b.style.unityTextAlign = TextAnchor.MiddleCenter;
+            b.style.flexShrink = 0;
+            b.style.backgroundColor = new Color(0f, 0f, 0f, 0.72f); // same scrim as the panel
+            SetBorder(b, 1f);
+            var edge = new Color(1f, 1f, 1f, 0.6f);
+            b.style.borderLeftColor = b.style.borderRightColor = edge;
+            b.style.borderTopColor = b.style.borderBottomColor = edge;
+        }
+
+        /// <summary>Build indices the switcher offers: every build scene except the active one.</summary>
+        public static List<int> SwitchTargets(int sceneCountInBuild, int activeBuildIndex)
+        {
+            var list = new List<int>();
+            for (var i = 0; i < sceneCountInBuild; i++)
+            {
+                if (i != activeBuildIndex)
+                    list.Add(i);
+            }
+            return list;
+        }
+
+        /// <summary>The scene name (file name without extension) at a build index.</summary>
+        public static string SceneNameAt(int buildIndex) =>
+            Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(buildIndex));
+
+        void OnActiveSceneChanged(Scene from, Scene to) => RebuildSceneButtons();
+
+        /// <summary>Recreates the scene-switch buttons for the current build list and active scene.</summary>
+        public void RebuildSceneButtons()
+        {
+            if (SceneRow == null)
+                return;
+            SceneRow.Clear();
+            _sceneButtons.Clear();
+            var targets = SwitchTargets(
+                SceneManager.sceneCountInBuildSettings,
+                SceneManager.GetActiveScene().buildIndex
+            );
+            foreach (var index in targets)
+            {
+                var name = SceneNameAt(index);
+                var b = new Button(() => LoadScene(index))
+                {
+                    name = "gj-debug-scene-" + name,
+                    text = name,
+                };
+                StyleButton(b);
+                SceneRow.Add(b);
+                _sceneButtons.Add(b);
+            }
+            if (Visible)
+                ApplyLayout();
+        }
+
+        /// <summary>Loads a build scene by index (the overlay persists across the load).</summary>
+        public void LoadScene(int buildIndex)
+        {
+            Debug.Log(
+                $"{LogTag} scene switch -> {SceneNameAt(buildIndex)} (build index {buildIndex})"
+            );
+            SceneManager.LoadScene(buildIndex);
         }
 
         static Label MakeLabel(string name)
@@ -310,6 +395,20 @@ namespace GiganticJourneys.DebugTools
             );
             SaveButton.style.paddingTop = SaveButton.style.paddingBottom = 0;
             SetRadius(SaveButton, pad * 2f);
+
+            SceneRow.style.marginTop = pad;
+            SceneRow.style.maxWidth = Mathf.Max(0f, safe.width - 2f * pad);
+            foreach (var b in _sceneButtons)
+            {
+                b.style.fontSize = font;
+                b.style.minWidth = touch;
+                b.style.minHeight = touch;
+                b.style.marginLeft = pad;
+                b.style.marginRight = b.style.marginTop = b.style.marginBottom = 0;
+                b.style.paddingLeft = b.style.paddingRight = Mathf.Max(pad * 3f, touch * 0.25f);
+                b.style.paddingTop = b.style.paddingBottom = 0;
+                SetRadius(b, pad * 2f);
+            }
         }
 
         public void Toggle() => SetVisible(!Visible);
@@ -325,6 +424,7 @@ namespace GiganticJourneys.DebugTools
             Container.style.display = display;
             Box.style.display = display;
             SaveButton.style.display = display;
+            SceneRow.style.display = display;
             if (visible)
             {
                 ApplyLayout();

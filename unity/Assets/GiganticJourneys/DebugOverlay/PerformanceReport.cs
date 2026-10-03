@@ -22,6 +22,16 @@ namespace GiganticJourneys.DebugTools
         public const float WindowSeconds = FrameStats.HistorySeconds;
         public const string FilePrefix = "gj-perf-report-";
 
+        /// <summary>Writes one <c>key: value</c> report line.</summary>
+        public delegate void LineWriter(string key, string value);
+
+        /// <summary>
+        /// Scene-specific lines appended after the standard ones (for example the device-test
+        /// splat room's splat count and sort tier, M1-UNITY-01). A handler that throws is
+        /// reported as an <c>extra_error</c> line instead of losing the report.
+        /// </summary>
+        public static event Action<LineWriter> ExtraLines;
+
         public static string Build(FrameStats stats, DateTime utcNow)
         {
             var ci = CultureInfo.InvariantCulture;
@@ -51,6 +61,20 @@ namespace GiganticJourneys.DebugTools
             Line("quality_level", QualitySettings.names[QualitySettings.GetQualityLevel()]);
             Line("target_frame_rate", Application.targetFrameRate.ToString(ci));
             Line("screen", $"{Screen.width}x{Screen.height}");
+            if (ExtraLines != null)
+            {
+                foreach (var d in ExtraLines.GetInvocationList())
+                {
+                    try
+                    {
+                        ((Action<LineWriter>)d)(Line);
+                    }
+                    catch (Exception e)
+                    {
+                        Line("extra_error", e.GetType().Name + ": " + e.Message);
+                    }
+                }
+            }
             sb.Append(
                 "# fps_pNN = 1000 / (NN-th percentile frame time); p99 is the rate 99% of frames meet or beat.\n"
             );
