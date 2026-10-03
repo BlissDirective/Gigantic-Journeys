@@ -21,14 +21,25 @@ namespace GiganticJourneys.Tests
     {
         const string ScenePath = "Assets/Scenes/DeviceTest/SplatRoom.unity";
 
+        // Additive and unloaded afterwards: a leftover room (its character, floor and walls)
+        // would leak into later scene tests (CI run 37132813149).
+        [UnityTearDown]
+        public IEnumerator UnloadRoom()
+        {
+            var scene = SceneManager.GetSceneByPath(ScenePath);
+            if (scene.isLoaded)
+                yield return SceneManager.UnloadSceneAsync(scene);
+        }
+
         [UnityTest]
         public IEnumerator SplatRoom_SpawnsCharacterOnFloor_AndReportsTheRoom()
         {
             yield return EditorSceneManager.LoadSceneAsyncInPlayMode(
                 ScenePath,
-                new LoadSceneParameters(LoadSceneMode.Single)
+                new LoadSceneParameters(LoadSceneMode.Additive)
             );
             yield return null;
+            Assert.IsTrue(SceneManager.GetSceneByPath(ScenePath).isLoaded);
             var loader = Object.FindFirstObjectByType<SplatRoomLoader>();
             Assert.IsNotNull(loader, "loader in the scene");
             Assert.IsNotNull(loader.Descriptor, loader.Error);
@@ -53,6 +64,23 @@ namespace GiganticJourneys.Tests
             Assert.IsTrue(lines.ContainsKey("sort_tier"));
             StringAssert.Contains(
                 "splat_room: " + loader.Descriptor.slug,
+                PerformanceReport.Build(new FrameStats(), System.DateTime.UtcNow)
+            );
+        }
+
+        [UnityTest]
+        public IEnumerator SplatRoom_UnloadsCleanly_LeavingNoCharacterOrReportHook()
+        {
+            yield return EditorSceneManager.LoadSceneAsyncInPlayMode(
+                ScenePath,
+                new LoadSceneParameters(LoadSceneMode.Additive)
+            );
+            yield return null;
+            yield return SceneManager.UnloadSceneAsync(SceneManager.GetSceneByPath(ScenePath));
+            yield return null;
+            Assert.IsNull(Object.FindFirstObjectByType<SplatRoomLoader>());
+            StringAssert.DoesNotContain(
+                "splat_room:",
                 PerformanceReport.Build(new FrameStats(), System.DateTime.UtcNow)
             );
         }
