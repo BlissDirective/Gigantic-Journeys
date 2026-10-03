@@ -168,3 +168,21 @@ certificates (run 36470704670). The Owner has to generate a key with the Admin r
 that the Operator dispatches `lane=macos, flavor=internal-debug`. The release-flavor assertion has already passed on
 CI: `[GJ-FLAVOR] ... overlay IL2CPP output absent, GJShareSheet.mm absent (expected absent)` (runs 36467562336 and
 36470704670).
+
+## Owner device check: PASS (2026-10-02, gj-operator)
+TestFlight **build 40** (internal-debug, run 37046098523, commit `686156b`) ran on the Owner's **iPhone 14** (`iPhone14,7`,
+iOS 26.6.1). The three-finger tap toggled the overlay, and **Save report** wrote the file and opened the share sheet, so
+**AT-1 device part: PASS**. Scene: `SampleScene` (boot scene). Evidence: `qa/evidence/M0-UNITY-04/run/perf-report-iphone14-7.txt` and the
+README section "Owner device check".
+
+| Metric | Value | Reading |
+|---|---|---|
+| fps_p50 / frame_ms_p50 | 30.0 / 33.3 | vsync-locked at the iOS default cap (`target_frame_rate: -1` = 30 fps on mobile) |
+| fps_avg / frame_ms_p99 | 1.6 / 696.8 | 145 frames over 89.3 s covered: about 84 s in a few long gaps (app backgrounded or share sheet during the window). Not performance |
+
+Finding → fix: SPEC §6 sets a **60 fps target on current iPhones**, and the default cap made it unreachable on every device.
+`unity/Assets/GiganticJourneys/Runtime/FrameRatePolicy.cs` sets `Application.targetFrameRate = 60` on mobile
+(`RuntimeInitializeOnLoadMethod(BeforeSceneLoad)`; `vSyncCount` is ignored on iOS; the Editor and desktop are unchanged so PlayMode tests
+are not throttled). Older iPhones reach their 30 fps target through quality tiering, not this cap. EditMode `FrameRatePolicyTests` (3).
+Re-measure on the next internal-debug build, ideally a clean 60 s with no share sheet until the end.
+Cosmetic: `build_version` reads `0.0.181 (0)`, not the TestFlight build number. The baked build-info has `build_number` 0.

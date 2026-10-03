@@ -40,6 +40,7 @@ rejected the binary at validation with two **409** errors:
 | **39** | 37040933103 (push of 4d5aadc, release lane) | release | uploaded 2026-10-02 12:55 PM CT |
 | **40** | 37046098523 (workflow_dispatch on 686156b, lane=macos) | internal-debug | uploaded 2026-10-02 1:41 PM CT (TestFlight internal-testing-only, debug overlay included). This is the build for the M0-UNITY-04 on-device check |
 | **41** | 37053104250 (push of 9b16f0f, release lane) | release | uploaded 2026-10-02 2:48 PM CT. First release build that includes the M0-UNITY-03 lockstep, the M1-UNITY-01 Metal-safe sort, the M1-GAME-01 loader and the M1-AVAT-01 roster/picker |
+| **42** | 37080628299 (push of 7ea409b, release lane) | release | uploaded 2026-10-02 7:34 PM CT (Xcode 26.6 / iphoneos SDK 26.5). **First build with the Owner-selected final app icon** |
 
 ## Owner follow-ups
 - ~~The icon is a **placeholder**~~ **Done 2026-10-02:** the Owner selected the final app icon (white "GJ", a tiny figure

@@ -56,7 +56,7 @@
   "branch": "ticket/M0-UNITY-04-debug-overlay",
   "pr": null,
   "created": "2026-09-15",
-  "updated": "2026-09-28",
+  "updated": "2026-10-02",
   "history": [
     {
       "date": "2026-09-15",
@@ -86,6 +86,11 @@
     {
       "date": "2026-09-28",
       "event": "AT-1 device-test method assessed by gj-operator: recommended a TestFlight internal-debug flavor (GJ_DEBUG added to the iOS defines in the CI runner's checkout only; exported with testFlightInternalTestingOnly so it cannot reach App Review/external testers; same bundle ID/app record; $0; no UDID or Mac). ios-build.yml gained dispatch input flavor: release | internal-debug and a macOS-lane assertion (.github/scripts/ios_debug_flavor.py) that the overlay is absent from release builds and present in internal-debug ones. Alternatives (ad hoc IPA via UDID; Xcode on a Mac) in qa/reports/M0-UNITY-04.md. Owner action: install the internal-debug build from TestFlight once uploaded (PROGRESS Owner item 12).",
+      "by": "gj-operator"
+    },
+    {
+      "date": "2026-10-02",
+      "event": "AT-1 device part PASSED (Owner, operator chat): TestFlight build 40 (internal-debug, run 37046098523, 686156b) on an iPhone 14 (iPhone14,7, iOS 26.6.1). The three-finger tap toggled the overlay, and Save report wrote the file and opened the share sheet; scene SampleScene. Report filed as qa/evidence/M0-UNITY-04/run/perf-report-iphone14-7.txt (README 'Owner device check'). fps_p50 30 = the iOS default cap (target_frame_rate -1). avg 1.6 fps / p99 697 ms over 145 frames in 89 s come from the app being backgrounded or covered by the share sheet in the window, not performance. Follow-up: GiganticJourneys.FrameRatePolicy caps mobile at 60 fps before the first scene loads (SPEC §6 60 fps target on current iPhones), with EditMode tests. Noted: the overlay's build label reads '0.0.181 (0)', not the TestFlight number, which is cosmetic. Status unchanged (done).",
       "by": "gj-operator"
     }
   ]
