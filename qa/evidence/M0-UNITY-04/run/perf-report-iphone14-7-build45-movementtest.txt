@@ -1,0 +1,22 @@
+# Gigantic Journeys performance report (debug overlay, M0-UNITY-04)
+created_utc: 2026-10-03T11:49:37Z
+window_s: 60.0
+covered_s: 48.3
+frames: 2710
+fps_p50: 60.0
+fps_p99: 56.3
+fps_avg: 56.1
+frame_ms_p50: 16.7
+frame_ms_p99: 17.8
+device_model: iPhone14,7
+os: iOS 26.6.1
+gpu: Apple A15 GPU (Metal)
+build_version: 0.0.191 (0)
+git_sha: b14190d
+built_utc: 2026-10-03T01:40:39Z
+unity: 6000.0.84f1
+scene: MovementTest
+quality_level: High
+target_frame_rate: 60
+screen: 1170x2532
+# fps_pNN = 1000 / (NN-th percentile frame time); p99 is the rate 99% of frames meet or beat.

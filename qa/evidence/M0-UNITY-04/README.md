@@ -62,3 +62,9 @@ Scans: until the M0-OWNER-01 corpus exists, "bright scan" and "dark scan" are th
 with a bright and a dark background and exposure, as `VISUAL_QA.md` §9 allows (labelled substitution).
 
 **Privacy:** the evidence contains no faces, addresses, documents, or screens with personal data. Content: procedural summit splat only (terrain, trees, a flag), the overlay's own text (version, commit SHA, scene name, the generic device model "PC"), and QA guide lines; checked by eye on each of the three PNGs. The report sidecars have no device name, user name or path. The device report holds only the generic model identifier `iPhone14,7`, the OS and GPU versions, and the screen size.
+
+### Device run 2: build 45 (internal-debug, b14190d), MovementTest (2026-10-03)
+Owner ran TestFlight build 45 on iPhone 14 (iPhone14,7, iOS 26.6.1, A15/Metal). Moving and jumping worked; overlay + Save report worked.
+`run/perf-report-iphone14-7-build45-movementtest.txt`: scene MovementTest, target_frame_rate 60, 2710 frames over 48.3 s,
+fps p50 60.0 / p99 56.3 / avg 56.1, frame_ms p50 16.7 / p99 17.8. Confirms the 60 fps cap (FrameRatePolicy) and that the
+build 40 stalls were SampleScene/share-sheet artifacts, not a runtime problem.
