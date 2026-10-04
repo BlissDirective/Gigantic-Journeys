@@ -100,7 +100,7 @@ add-scene, export check). Box render: Vulkan follow view, 93.5% of pixels covere
 large floaters and needle-like overexposed splats near the floor, and the orange capsule turned partly or fully
 black among the splats. He asked to be able to change the view angle independently of movement.
 
-**Fixes (commits bd469b4, 3d07bae), first shipped in the build listed in `ios-lane.md`:**
+**Fixes (commits bd469b4, 3d07bae), first shipped in internal-debug TestFlight build **50** (run 37167356135):**
 - **Black character, root cause:** the package composite (`Hidden/Gaussian Splatting/Composite`) returns
   `col.rgb / col.a`. Where every splat is behind an opaque object (the capsule), the splat buffer is (0,0,0,0), so
   the result is 0/0 = NaN. On Metal (half precision) that NaN survives the `SrcAlpha` blend and writes black. The box

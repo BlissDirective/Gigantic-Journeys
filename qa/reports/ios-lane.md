@@ -47,7 +47,8 @@ rejected the binary at validation with two **409** errors:
 | **46** | 37132813101 (push of ca38c31, release lane) | release | uploaded 2026-10-03 10:45 AM CT (green). Release export check: SplatRoom scene absent, splat absent |
 | **47** | 37134798525 (push of 2e479fc, release lane) | release | uploaded 2026-10-03 11:29 AM CT (green). Release export check: SplatRoom scene absent, splat absent |
 | **48** | 37137079024 (workflow_dispatch on 83afba4 = code of 2e479fc, lane=macos, splat_url set) | internal-debug | uploaded 2026-10-03 12:01 PM CT (green; splat fetched and SHA-256 verified; export check: scene and splat present). **M1-UNITY-01 device-test splat room** (Winchester Great Hall, 780,004 splats): three-finger tap → **SplatRoom** button under Save report |
-| **(pending)** | (pending) (workflow_dispatch on 3d07bae, lane=macos, splat_url = v2 package) | internal-debug | **Splat room v2**: 400K pruned splats, alpha-safe composite (no black capsule), render scale 0.7 / SH 1 / motion-gated sort, touch orbit (drag right side, pinch zoom) |
+| **49** | 37165955870 (push of 3d07bae, release lane) | release | green, uploaded. Release export check: SplatRoom scene absent, splat absent; first release build with the touch orbit camera in MovementTest |
+| **50** | 37167356135 (workflow_dispatch on 15257ef = code of 3d07bae, lane=macos, splat_url = v2 package) | internal-debug | uploaded 2026-10-03 8:36 PM CT (green; v2 package fetched, 400,000 splats, SHA-256 verified; export check: scene and splat present). **Splat room v2**: 400K pruned splats, alpha-safe composite (no black capsule), render scale 0.7 / SH 1 / motion-gated sort, touch orbit (drag right side, pinch zoom) |
 
 ## Owner follow-ups
 - ~~The icon is a **placeholder**~~ **Done 2026-10-02:** the Owner selected the final app icon (white "GJ", a tiny figure
