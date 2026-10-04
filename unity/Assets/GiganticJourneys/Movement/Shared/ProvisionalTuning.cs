@@ -97,6 +97,9 @@ namespace GiganticJourneys.Movement
             /// <summary>Touches the debug overlay's toggle uses; at this many fingers the orbit steps aside.</summary>
             public const int OverlayTapFingers = 3;
 
+            /// <summary>Lowest the eye may get above the ground under the character (m), looking up.</summary>
+            public const float EyeAboveGroundM = 0.02f;
+
             /// <summary>View-yaw half range meaning "no yaw limit" (a full turn either way).</summary>
             public const float FreeYawHalfRangeDeg = 180f;
 

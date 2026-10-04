@@ -57,11 +57,14 @@ namespace GiganticJourneys.Tests
             var d = loader.Descriptor;
             Assert.IsNotNull(loader.Follow, "room camera found");
             Assert.IsTrue(loader.Follow.CameraCollision, "camera collision on in the room");
-            Assert.AreEqual(d.viewYawHalfRangeDeg, loader.Follow.Limits.YawHalfRangeDeg);
+            var limits = SplatRoomLoader.OrbitLimitsFor(d);
+            Assert.AreEqual(limits.YawHalfRangeDeg, loader.Follow.Limits.YawHalfRangeDeg);
+            Assert.AreEqual(limits.MaxElevationDeg, loader.Follow.Limits.MaxElevationDeg);
             if (d.HasCameraBox)
             {
                 var box = d.CameraBox;
                 box.Expand(0.01f);
+                box.SetMinMax(new Vector3(box.min.x, -0.05f, box.min.z), box.max); // low eyes: ground clamp
                 Assert.IsTrue(
                     box.Contains(loader.Follow.transform.position),
                     $"eye {loader.Follow.transform.position} inside the camera box {box}"
@@ -77,16 +80,41 @@ namespace GiganticJourneys.Tests
             {
                 var box = d.CameraBox;
                 box.Expand(0.01f);
+                box.SetMinMax(new Vector3(box.min.x, -0.05f, box.min.z), box.max); // low eyes: ground clamp
                 Assert.IsTrue(box.Contains(eye), $"orbited eye {eye} still inside {box}");
             }
             var fwd = loader.Follow.transform.forward;
             var yaw = Mathf.Atan2(fwd.x, fwd.z) * Mathf.Rad2Deg;
             Assert.That(
-                Mathf.Abs(Mathf.DeltaAngle(d.viewYawCenterDeg, yaw)),
-                Is.LessThanOrEqualTo(d.viewYawHalfRangeDeg + 0.5f),
+                Mathf.Abs(Mathf.DeltaAngle(limits.YawCenterDeg, yaw)),
+                Is.LessThanOrEqualTo(limits.YawHalfRangeDeg + 0.5f),
                 "view yaw stays in the room's window"
             );
-            Assert.That(loader.Follow.Zoom, Is.LessThanOrEqualTo(d.orbitMaxZoom + 1e-4f));
+            Assert.That(loader.Follow.Zoom, Is.LessThanOrEqualTo(limits.MaxZoom + 1e-4f));
+            if (d.IsFreeLook)
+            {
+                // Every direction: turn right round and look up from below; the eye stays in the box.
+                loader.Follow.Orbit(180f, -200f);
+                for (var i = 0; i < 3; i++)
+                    yield return null;
+                Assert.That(
+                    loader.Follow.transform.forward.y,
+                    Is.GreaterThan(0.3f),
+                    "free look can look up from low down"
+                );
+                var low = loader.Follow.transform.position;
+                Assert.That(
+                    low.y,
+                    Is.GreaterThanOrEqualTo(loader.player.position.y),
+                    "looking up never puts the eye under the floor"
+                );
+                if (d.HasCameraBox)
+                {
+                    var box = d.CameraBox;
+                    Assert.That(low.x, Is.InRange(box.min.x - 0.01f, box.max.x + 0.01f));
+                    Assert.That(low.z, Is.InRange(box.min.z - 0.01f, box.max.z + 0.01f));
+                }
+            }
 
             StringAssert.Contains(loader.Descriptor.displayName, loader.LabelText());
             StringAssert.Contains("CC BY", loader.LabelText());

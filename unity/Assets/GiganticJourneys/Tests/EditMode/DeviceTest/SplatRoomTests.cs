@@ -84,10 +84,45 @@ namespace GiganticJourneys.Tests
                     $"occluder {o.name} stays out of the walk area"
                 );
             }
-            var l = SplatRoomLoader.OrbitLimitsFor(d);
+            // Coverage mode applies the coverage window.
+            var coverage = SplatRoomDescriptor.Parse(Committed);
+            coverage.cameraMode = SplatRoomDescriptor.CameraModeCoverage;
+            var l = SplatRoomLoader.OrbitLimitsFor(coverage);
             Assert.AreEqual(d.orbitMaxElevationDeg, l.MaxElevationDeg);
             Assert.AreEqual(d.orbitMaxZoom, l.MaxZoom);
             Assert.AreEqual(d.viewYawCenterDeg, l.YawCenterDeg);
+            Assert.AreEqual(d.viewYawHalfRangeDeg, l.YawHalfRangeDeg);
+        }
+
+        [Test]
+        public void CommittedDescriptor_WinchesterUsesFreeLook_EveryDirection()
+        {
+            var d = SplatRoomDescriptor.Parse(Committed);
+            Assert.IsTrue(
+                d.IsFreeLook,
+                "Owner asked for every direction and angle (build 54 check)"
+            );
+            var l = SplatRoomLoader.OrbitLimitsFor(d);
+            Assert.AreEqual(180f, l.YawHalfRangeDeg, "full 360 degree yaw");
+            Assert.AreEqual(-60f, l.MinElevationDeg);
+            Assert.AreEqual(80f, l.MaxElevationDeg);
+            Assert.AreEqual(0.5f, l.MinZoom);
+            Assert.AreEqual(2.5f, l.MaxZoom);
+            Assert.IsTrue(d.HasCameraBox, "free look keeps the camera box");
+            Assert.That(FollowCamera.ClampViewYaw(-170f, l), Is.EqualTo(-170f).Within(1e-3f));
+        }
+
+        [Test]
+        public void Descriptor_EmptyCameraModeMeansCoverage()
+        {
+            var d = JsonUtility.FromJson<SplatRoomDescriptor>(Committed);
+            d.cameraMode = "";
+            d.Validate();
+            Assert.IsFalse(d.IsFreeLook);
+            Assert.AreEqual(
+                d.viewYawHalfRangeDeg,
+                SplatRoomLoader.OrbitLimitsFor(d).YawHalfRangeDeg
+            );
         }
 
         [TestCase("cameraBox")]
@@ -96,6 +131,9 @@ namespace GiganticJourneys.Tests
         [TestCase("zoom")]
         [TestCase("yaw")]
         [TestCase("occluder")]
+        [TestCase("cameraMode")]
+        [TestCase("freeElevation")]
+        [TestCase("freeZoom")]
         public void Descriptor_RejectsBadCameraLimits(string field)
         {
             var d = JsonUtility.FromJson<SplatRoomDescriptor>(Committed);
@@ -116,6 +154,15 @@ namespace GiganticJourneys.Tests
                     break;
                 case "yaw":
                     d.viewYawHalfRangeDeg = 200f;
+                    break;
+                case "cameraMode":
+                    d.cameraMode = "orbit";
+                    break;
+                case "freeElevation":
+                    d.freeOrbit.minElevationDeg = -90f;
+                    break;
+                case "freeZoom":
+                    d.freeOrbit.maxZoom = 0.8f;
                     break;
                 case "occluder":
                     d.occluders = new[]

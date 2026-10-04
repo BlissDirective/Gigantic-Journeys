@@ -183,6 +183,24 @@ black among the splats. He asked to be able to change the view angle independent
 - **Not fixed by training:** regions the video never saw. Research spike `M1-PIPE-02` (generative repair agent) covers
   them.
 
+## Free-look camera mode (2026-10-04, after build 54)
+- **Owner feedback on build 54:** in SplatRoom he can't turn the camera fully, the way he can in the sample scene; he
+  wants every direction and angle. He also still sees a fair amount of blur and fragmented shapes and lights.
+- **Per-room `cameraMode`** in `splat-room.json`:
+  - `"coverage"` (the default) keeps the training-camera limits from `room_limits.py`.
+  - `"free"` gives full 360° yaw plus the `freeOrbit` pitch and zoom range.
+  - Both modes keep the walk area, the camera box (x/z and top), the occluder walls and camera collision.
+  - The coverage values stay in the file, so a room can switch back.
+- **Winchester now uses `"free"`:** yaw 360°, eye elevation -60..80°, zoom 0.5–2.5×.
+- **Camera fixes that came with it:**
+  - The eye never drops under the ground beneath the character (`EyeAboveGroundM` 0.02 m). The 0.15 m collision
+    sphere is bigger than the miniature character's half height, so the sphere cast alone started inside the floor.
+  - The camera box now bounds x/z and the top even when the look-at point sits below the box floor. For the 0.15 m
+    character it always did sit below, so the box had not been clamping in the room.
+- **Trade-off:** free look shows what the capture never saw. M1-PIPE-02 phase 1 (`weak_regions.py`) finds 83% of the
+  occupied cells within 4 m of the camera box weak (median 2.7 training views), against 2% in the walk area. The
+  blur and fragments the Owner reports sit there. Phase 2 is the repair route; the coverage mode is the fallback.
+
 ## AT-4 — LOD / chunked streaming (specification)
 aras-p has neither LOD nor streaming. The plan uses its 256-splat chunks (`m_GpuChunks`, already used for
 quantization bounds):

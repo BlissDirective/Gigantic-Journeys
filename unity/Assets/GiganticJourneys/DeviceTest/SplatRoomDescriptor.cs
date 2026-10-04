@@ -77,6 +77,31 @@ namespace GiganticJourneys.DeviceTest
         public float viewYawHalfRangeDeg;
         public Occluder[] occluders = new Occluder[0];
 
+        /// <summary>
+        /// Per-room camera mode. <c>"coverage"</c> (default, empty = coverage) applies the
+        /// coverage-derived orbit limits above. <c>"free"</c> lets the player look every way:
+        /// full 360° yaw and the pitch/zoom range in <see cref="freeOrbit"/>. Both modes keep the
+        /// walk area, the camera box, the occluders and camera collision; the coverage values stay
+        /// in the config so a room can switch back.
+        /// </summary>
+        public string cameraMode = CameraModeCoverage;
+        public FreeOrbit freeOrbit = new FreeOrbit();
+
+        public const string CameraModeCoverage = "coverage";
+        public const string CameraModeFree = "free";
+
+        /// <summary>Orbit range for <see cref="CameraModeFree"/> (elevation of the eye, degrees; zoom multiple).</summary>
+        [Serializable]
+        public sealed class FreeOrbit
+        {
+            public float minElevationDeg = -60f;
+            public float maxElevationDeg = 80f;
+            public float minZoom = 0.5f;
+            public float maxZoom = 2.5f;
+        }
+
+        public bool IsFreeLook => cameraMode == CameraModeFree;
+
         /// <summary>A solid box in world space (centre and full size, metres).</summary>
         [Serializable]
         public sealed class Occluder
@@ -211,6 +236,30 @@ namespace GiganticJourneys.DeviceTest
                 );
             if (viewYawHalfRangeDeg < 0f || viewYawHalfRangeDeg > 180f)
                 throw new FormatException("viewYawHalfRangeDeg must be in [0, 180] (0 = free)");
+            if (
+                !string.IsNullOrEmpty(cameraMode)
+                && cameraMode != CameraModeCoverage
+                && cameraMode != CameraModeFree
+            )
+                throw new FormatException(
+                    $"cameraMode must be '{CameraModeCoverage}' or '{CameraModeFree}', not '{cameraMode}'"
+                );
+            if (IsFreeLook)
+            {
+                var f = freeOrbit ?? throw new FormatException("cameraMode 'free' needs freeOrbit");
+                if (
+                    !(
+                        f.minElevationDeg < f.maxElevationDeg
+                        && f.minElevationDeg >= -80f
+                        && f.maxElevationDeg <= 85f
+                    )
+                )
+                    throw new FormatException(
+                        "freeOrbit elevation must be min < max within [-80, 85] degrees"
+                    );
+                if (!(f.minZoom > 0f && f.minZoom <= 1f && f.maxZoom >= 1f))
+                    throw new FormatException("freeOrbit zoom must be 0 < min <= 1 <= max");
+            }
             foreach (var o in occluders ?? new Occluder[0])
             {
                 var size = o.Size;

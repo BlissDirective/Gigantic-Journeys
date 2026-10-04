@@ -253,7 +253,7 @@ namespace GiganticJourneys.DeviceTest
                 var l = Follow.Limits;
                 line(
                     "camera_limits",
-                    $"elev {l.MinElevationDeg.ToString("0.#", ci)}..{l.MaxElevationDeg.ToString("0.#", ci)} deg, "
+                    $"mode {(Descriptor != null && Descriptor.IsFreeLook ? "free" : "coverage")}, elev {l.MinElevationDeg.ToString("0.#", ci)}..{l.MaxElevationDeg.ToString("0.#", ci)} deg, "
                         + $"zoom {l.MinZoom.ToString("0.##", ci)}..{l.MaxZoom.ToString("0.##", ci)}, "
                         + $"yaw {l.YawCenterDeg.ToString("0.#", ci)} +- {l.YawHalfRangeDeg.ToString("0.#", ci)} deg, "
                         + $"box {(Follow.HasCameraBounds ? "on" : "off")}, collision {(Follow.CameraCollision ? "on" : "off")}, "
@@ -387,6 +387,17 @@ namespace GiganticJourneys.DeviceTest
         public static FollowCamera.OrbitLimits OrbitLimitsFor(SplatRoomDescriptor d)
         {
             var l = FollowCamera.OrbitLimits.Default;
+            if (d.IsFreeLook)
+            {
+                // Every direction: full yaw, wide pitch; the camera box and collision still apply.
+                l.MinElevationDeg = d.freeOrbit.minElevationDeg;
+                l.MaxElevationDeg = d.freeOrbit.maxElevationDeg;
+                l.MinZoom = d.freeOrbit.minZoom;
+                l.MaxZoom = d.freeOrbit.maxZoom;
+                l.YawCenterDeg = 0f;
+                l.YawHalfRangeDeg = 180f; // a full turn either way (= no yaw limit)
+                return l;
+            }
             if (d.HasOrbitElevation)
             {
                 l.MinElevationDeg = d.orbitMinElevationDeg;

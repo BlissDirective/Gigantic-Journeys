@@ -314,15 +314,35 @@ namespace GiganticJourneys.Movement.Controller
             var radius = Mathf.Sqrt(distance * distance + rise * rise) * _zoom;
             var e = elevation * Mathf.Deg2Rad;
             var toEye = -forward * Mathf.Cos(e) + Vector3.up * Mathf.Sin(e);
-            transform.position = lookAt + toEye * PulledInRadius(lookAt, toEye, radius);
+            var floorY = _trackedY + ProvisionalTuning.CameraOrbit.EyeAboveGroundM;
+            transform.position = lookAt + toEye * PulledInRadius(lookAt, toEye, radius, floorY);
             transform.rotation = Quaternion.LookRotation(-toEye, Vector3.up);
         }
 
-        // The eye distance after the camera box and (optionally) colliders on the way.
-        float PulledInRadius(Vector3 lookAt, Vector3 toEye, float radius)
+        // The eye distance after the camera box, the ground and (optionally) colliders on the way.
+        float PulledInRadius(Vector3 lookAt, Vector3 toEye, float radius, float floorY)
         {
             if (_hasBounds)
-                radius = Mathf.Min(radius, ExitDistance(_bounds, lookAt, toEye));
+            {
+                // A miniature character's look-at point can sit below the box floor; the box then
+                // still bounds x, z and the top (the ground clamp below handles low eyes).
+                var box = _bounds;
+                if (lookAt.y <= box.min.y)
+                    box.SetMinMax(
+                        new Vector3(
+                            box.min.x,
+                            lookAt.y - ProvisionalTuning.CameraOrbit.EyeAboveGroundM,
+                            box.min.z
+                        ),
+                        box.max
+                    );
+                radius = Mathf.Min(radius, ExitDistance(box, lookAt, toEye));
+            }
+            // Looking up from below: the eye never drops under the ground the character stands
+            // on (the collision sphere is larger than a miniature character's half height, so
+            // the sphere cast alone starts inside the floor and misses it).
+            if (toEye.y < 0f)
+                radius = Mathf.Min(radius, Mathf.Max(0f, lookAt.y - floorY) / -toEye.y);
             if (
                 cameraCollision
                 && Physics.SphereCast(
