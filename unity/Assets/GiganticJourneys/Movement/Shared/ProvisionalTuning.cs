@@ -63,5 +63,39 @@ namespace GiganticJourneys.Movement
             /// <summary>Furthest a dragged control may move from its default anchor, points (the layout also clamps to the safe area).</summary>
             public const float DragOffsetMaxPt = 400f;
         }
+
+        /// <summary>
+        /// Touch / gamepad camera orbit (Bible §8 lists orbit for M1; movement.json has no orbit
+        /// numbers yet, so these stay provisional and outside the AUTH-gated constants).
+        /// </summary>
+        public static class CameraOrbit
+        {
+            /// <summary>Yaw per point of one-finger drag.</summary>
+            public const float YawDegPerPt = 0.3f;
+
+            /// <summary>Pitch per point of one-finger drag (drag up looks down from higher).</summary>
+            public const float PitchDegPerPt = 0.22f;
+
+            /// <summary>Movement before a drag starts orbiting, so taps on buttons never turn the view.</summary>
+            public const float DeadzonePt = 10f;
+
+            /// <summary>Camera elevation above the look-at point, clamped (degrees).</summary>
+            public const float MinElevationDeg = -10f;
+            public const float MaxElevationDeg = 75f;
+
+            /// <summary>Pinch zoom range as a multiple of the follow distance.</summary>
+            public const float MinZoom = 0.5f;
+            public const float MaxZoom = 2.5f;
+
+            /// <summary>Gamepad right-stick orbit speed.</summary>
+            public const float GamepadYawDegPerSec = 150f;
+            public const float GamepadPitchDegPerSec = 90f;
+
+            /// <summary>Right-stick magnitude below which the gamepad does not orbit.</summary>
+            public const float GamepadDeadzone = 0.2f;
+
+            /// <summary>Touches the debug overlay's toggle uses; at this many fingers the orbit steps aside.</summary>
+            public const int OverlayTapFingers = 3;
+        }
     }
 }
