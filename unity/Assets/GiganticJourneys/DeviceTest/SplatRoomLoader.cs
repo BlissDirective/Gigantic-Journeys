@@ -130,10 +130,26 @@ namespace GiganticJourneys.DeviceTest
 
         void Update()
         {
+            SampleFrameTime();
             if (RoomLabel == null || Time.unscaledTime < _nextLabel)
                 return;
             _nextLabel = Time.unscaledTime + 1f;
             RoomLabel.text = LabelText();
+            _labelFrame = Time.frameCount;
+        }
+
+        // Frame N's delta is how long frame N-1 took: tag it with what frame N-1 did.
+        void SampleFrameTime()
+        {
+            var sort = Sort;
+            if (sort == null || !sort.Engaged)
+                return;
+            var previous = Time.frameCount - 1;
+            var kind =
+                sort.LastSortFrame == previous ? FrameTimeSplit.Kind.Sort
+                : _labelFrame == previous ? FrameTimeSplit.Kind.Label
+                : FrameTimeSplit.Kind.Other;
+            FrameTimes.Add(kind, Time.unscaledDeltaTime * 1000f);
         }
 
         void OnDestroy()
@@ -145,6 +161,13 @@ namespace GiganticJourneys.DeviceTest
                 Destroy(_panel);
             }
         }
+
+        /// <summary>Frame times by what the previous frame did (Tier B only), for the report.</summary>
+        public readonly FrameTimeSplit FrameTimes = new FrameTimeSplit(FrameTimeWindow);
+
+        // About a minute at 60 fps per kind, like the overlay's report window.
+        const int FrameTimeWindow = 3600;
+        int _labelFrame = -1;
 
         public MetalSafeSplatSort Sort =>
             splatRenderer != null ? splatRenderer.GetComponent<MetalSafeSplatSort>() : null;
@@ -200,6 +223,9 @@ namespace GiganticJourneys.DeviceTest
                     "resort_threshold",
                     $"{sort.resortMoveMeters.ToString("0.###", ci)} m / {sort.resortAngleDeg.ToString("0.#", ci)} deg"
                 );
+                line("frame_ms_after_sort", FrameTimes.Summary(FrameTimeSplit.Kind.Sort));
+                line("frame_ms_after_label", FrameTimes.Summary(FrameTimeSplit.Kind.Label));
+                line("frame_ms_other", FrameTimes.Summary(FrameTimeSplit.Kind.Other));
                 line(
                     "sort_dispatches_per_sort",
                     (1 + BitonicSortNetwork.Schedule(SplatCount).Count).ToString(ci)
@@ -222,21 +248,30 @@ namespace GiganticJourneys.DeviceTest
         /// <summary>The room's device profile on top of the quality tier (see <see cref="SplatRoomDescriptor.renderScale"/>).</summary>
         void ApplyPerformanceProfile(SplatRoomDescriptor d)
         {
-            if (d.shOrder >= 0)
-                splatRenderer.m_SHOrder = d.shOrder;
             var sort = Sort;
             if (sort != null)
             {
                 sort.resortMoveMeters = d.resortMoveMeters;
                 sort.resortAngleDeg = d.resortAngleDeg;
             }
-            if (d.sortEveryNthFrame > 0)
+            // SH order and cadence go through the tier applier (it re-applies the tier on
+            // quality changes, and the Metal-safe sort adopts the cadence it writes).
+            var applier = splatRenderer.GetComponent<SplatRenderSettingsApplier>();
+            if (applier != null)
             {
-                if (sort != null && sort.Engaged)
-                    sort.sortEveryNthFrame = d.sortEveryNthFrame;
-                else
+                applier.shOrderOverride = d.shOrder;
+                applier.sortEveryNthFrameOverride = d.sortEveryNthFrame;
+                applier.Apply();
+            }
+            else
+            {
+                if (d.shOrder >= 0)
+                    splatRenderer.m_SHOrder = d.shOrder;
+                if (d.sortEveryNthFrame > 0)
                     splatRenderer.m_SortNthFrame = d.sortEveryNthFrame;
             }
+            if (sort != null && sort.Engaged && d.sortEveryNthFrame > 0)
+                sort.sortEveryNthFrame = d.sortEveryNthFrame;
             if (
                 d.renderScale > 0f
                 && (!Application.isEditor || renderScaleInEditor)

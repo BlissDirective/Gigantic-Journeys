@@ -96,6 +96,9 @@ namespace GiganticJourneys.Splats.Sorting
         /// <summary>Camera renders sorted by this component (for the debug HUD / tests).</summary>
         public int SortsIssued { get; private set; }
 
+        /// <summary><c>Time.frameCount</c> of the last frame that issued a sort (-1 = none yet).</summary>
+        public int LastSortFrame { get; private set; } = -1;
+
         /// <summary>Due sorts skipped because the camera was (nearly) still.</summary>
         public int SortsSkippedStill { get; private set; }
 
@@ -231,6 +234,7 @@ namespace GiganticJourneys.Splats.Sorting
             _sorter.Sort(_cmd, keys, values, count);
             Graphics.ExecuteCommandBuffer(_cmd);
             SortsIssued++;
+            LastSortFrame = Time.frameCount;
             _hasSorted = true;
             _sortedKeys = keys;
             _sortedPos = camTr.position;

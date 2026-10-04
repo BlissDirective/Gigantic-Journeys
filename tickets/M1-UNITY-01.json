@@ -71,7 +71,7 @@
   "branch": "ticket/M1-UNITY-01-metal-splat-sort",
   "pr": null,
   "created": "2026-09-24",
-  "updated": "2026-10-03",
+  "updated": "2026-10-04",
   "history": [
     {
       "date": "2026-09-24",
@@ -97,6 +97,11 @@
       "date": "2026-10-03",
       "by": "gj-operator",
       "event": "gj-operator: Owner device check of build 48 (iPhone 14): render and Tier B sort work (label 'Tier B'), but 20-23 fps (p99 frame 43-48 ms), heavy floaters/needle splats near the floor, and the capsule turned black among splats; he asked for a free camera angle. Fixes (commits bd469b4, 3d07bae): (1) black character root cause = the package composite divides by splat alpha, 0/0 = NaN where every splat is behind an opaque object, which blends to black on Metal; GJ alpha-safe composite shader (package unmodified). (2) Display prune tool (services/reconstruction/tools/prune_splat_ply.py, rules in splat_ops.DisplayPrune): 780,004 -> 400,000 splats (faint 138,764, giant 9,619, needle 14,269, out of bounds 7,636, isolated 19,610, then most-opaque budget). (3) Perf profile: render scale 0.7, SH order 1, Tier B sort at most every 2nd frame and only after 3 cm / 1.5 deg of camera motion, MSAA and HDR off on the room camera. (4) Touch orbit camera (drag outside stick/jump to orbit, pinch to zoom, gamepad right stick), on in MovementTest too; provisional numbers, movement.json unchanged. New package environments/_devtest/medieval-great-hall-winchester/splat-room-unity-v2-400k.tar.gz (15,675,479 bytes, sha256 64b182c8...). Internal-debug TestFlight build 50 (run 37167356135, uploaded 8:36 PM CT; release build 49 green). AT-2/AT-3 remain open pending the Owner's re-check."
+    },
+    {
+      "date": "2026-10-04",
+      "by": "gj-operator",
+      "event": "gj-operator: Owner device check of internal-debug build 50 (iPhone 14, iOS 26.6.1; evidence qa/evidence/M1-UNITY-01/: his perf report + 3 screenshots). AT-2 PASS on device (Owner): Tier B Metal-safe sort orders the 400K-splat room correctly, no popping while orbiting or walking; the capsule now shades normally (alpha-safe composite fix confirmed). Device video not captured; the report and screenshots stand in. AT-3 recorded: fps p50 60.0 / avg 57.8, frame p50 16.7 ms / p99 33.4 ms over 60 s (3,470 frames), 400,000 splats, render scale 0.70, SH 1, package 15.7 MB (target 30 fps and <=150 MB met). Owner feedback: orbit camera great; room cleaner but still smeared near floor, columns and entrance, with white blown-out blobs and dark shapes where the capture never looked; Round Table end sharp. Report discrepancy: sort_every_nth_frame 1 although the room asked for 2 - the tier applier re-applied the High tier cadence (1) to the renderer after the Metal-safe sort parked the package sort, and the sort adopts the applier's value on the next camera; fixed by routing the room's SH order and cadence through SplatRenderSettingsApplier overrides, plus a per-frame-kind split of frame times (after sort / after label refresh / other) in the report to tell whether the p99 33 ms frames come from sort frames."
     }
   ]
 }

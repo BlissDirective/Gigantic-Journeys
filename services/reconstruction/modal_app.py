@@ -681,6 +681,102 @@ def reconstruct_clip(
     return {**record, "_preview": preview, "_tile": tile}
 
 
+@app.function(
+    gpu=GPU,
+    cpu=(CPU_CORES, CPU_CORES),
+    memory=MEMORY_MIB,
+    timeout=3600,
+    volumes={CORPUS_MOUNT: corpus_volume},
+)
+def retrain_clip(
+    clip_id: str,
+    profile: str,
+    tag: str,
+    rate_per_hour_usd: float,
+    gpu: str = GPU,
+    splat_budget: int = 1_500_000,
+) -> dict:
+    """Retrain one reconstructed corpus clip from its saved frames + SfM model.
+
+    Reuses ``<recon>/<slug>/frames`` and ``sparse/`` (so the poses and the world
+    frame match the first run) and trains with ``profile`` (``trainer.PROFILES``).
+    Writes ``splat.ply``, ``renders/`` and ``run.json`` under
+    ``<recon>/<slug>/retrain-<tag>/``; the first run's outputs are untouched.
+    """
+    import re
+    import shutil
+    import tempfile
+    import time
+
+    from reconstruction import (
+        CameraPoses,
+        GsplatTrainer,
+        ReconstructionConfig,
+        require_offsite_source,
+    )
+    from reconstruction.cost import ResourceMeter
+
+    slug = _check_clip_id(clip_id)
+    if not re.fullmatch(r"[a-z0-9-]{1,40}", tag):
+        raise ValueError(f"bad tag {tag!r}")
+    require_offsite_source("corpus")
+    started = time.monotonic()
+    meter = ResourceMeter(cores=CPU_CORES, memory_gib=MEMORY_MIB / 1024).start()
+    corpus_volume.reload()
+    src = Path(CORPUS_MOUNT) / CORPUS_RECON_ROOT / slug
+    work = Path(tempfile.mkdtemp())
+    shutil.copytree(src / "frames", work / "images")
+    shutil.copytree(src / "sparse", work / "out" / "sparse")
+    count = sum(1 for p in (work / "images").iterdir() if p.is_file())
+    poses = CameraPoses(slug, work / "out" / "sparse", count, image_dir=work / "images")
+    model = GsplatTrainer(profile=profile).train(
+        poses, work / "out", ReconstructionConfig(splat_budget=splat_budget)
+    )
+    dest = src / f"retrain-{tag}"
+    if dest.exists():
+        shutil.rmtree(dest)
+    (dest / "renders").mkdir(parents=True)
+    shutil.copyfile(model.ply_path, dest / "splat.ply")
+    render_dir = model.ply_path.parent / "eval_renders"
+    for p in sorted(render_dir.glob("*.png")) if render_dir.is_dir() else []:
+        shutil.copyfile(p, dest / "renders" / p.name)
+    usage = meter.stop()
+    wall = time.monotonic() - started
+    gpu_usd = wall / 3600 * rate_per_hour_usd
+    record = {
+        "clip_id": clip_id,
+        "tag": tag,
+        "profile": profile,
+        "gpu": gpu,
+        "splat_budget": splat_budget,
+        "splat_count": model.splat_count,
+        "quality": model.metrics,
+        "wall_s": round(wall, 1),
+        "cost_usd": {
+            "gpu": round(gpu_usd, 4),
+            "cpu": round(usage.cpu_usd(), 4),
+            "memory": round(usage.memory_usd(), 4),
+            "total": round(gpu_usd + usage.cpu_usd() + usage.memory_usd(), 4),
+        },
+        "outputs": f"gj-corpus:/{CORPUS_RECON_ROOT}/{slug}/retrain-{tag}/",
+    }
+    (dest / "run.json").write_text(json.dumps(record, indent=2) + "\n")
+    corpus_volume.commit()
+    return record
+
+
+@app.local_entrypoint()
+def retrain(clip: str, profiles: str, gpu: str = "L40S", splat_budget: int = 1_500_000) -> None:
+    """Retrain ``clip`` once per comma-separated ``profiles`` (in parallel); tag = profile."""
+    if gpu not in GPU_RATES:
+        raise SystemExit(f"--gpu must be one of {sorted(GPU_RATES)}, got {gpu!r}")
+    names = [p for p in profiles.split(",") if p]
+    jobs = [(clip, p, p, GPU_RATES[gpu], gpu, splat_budget) for p in names]
+    fn = retrain_clip.with_options(gpu=gpu)
+    for record in fn.starmap(jobs, return_exceptions=True):
+        print(json.dumps(record, indent=2, default=str))
+
+
 def _tar_images(images: str, source: str) -> bytes:
     # Local import: modal puts this file's directory on sys.path. Validate before
     # any upload so a user scan never leaves the machine.

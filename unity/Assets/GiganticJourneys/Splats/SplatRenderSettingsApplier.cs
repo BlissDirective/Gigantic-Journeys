@@ -27,6 +27,22 @@ namespace GiganticJourneys.Splats
 
         public bool IsCulled => _culled;
 
+        /// <summary>
+        /// A per-scene SH order that wins over the tier's (-1 = use the tier). Set by
+        /// <c>SplatRoomLoader</c> from the room's device profile; survives quality changes.
+        /// </summary>
+        [System.NonSerialized]
+        public int shOrderOverride = -1;
+
+        /// <summary>
+        /// A per-scene sort cadence that wins over the tier's (0 = use the tier). It must go
+        /// through here: <see cref="MetalSafeSplatSort"/> adopts whatever cadence this component
+        /// last wrote to the renderer, so setting the sort's cadence directly was overwritten
+        /// (build 50 reported sort_every_nth_frame 1 although the room asked for 2).
+        /// </summary>
+        [System.NonSerialized]
+        public int sortEveryNthFrameOverride;
+
         void OnEnable()
         {
             _renderer = GetComponent<GaussianSplatRenderer>();
@@ -49,6 +65,14 @@ namespace GiganticJourneys.Splats
                 UpdateCulling();
         }
 
+        /// <summary>The scene's SH order when set (>= 0), else the tier's.</summary>
+        public static int EffectiveShOrder(int tierShOrder, int overrideShOrder) =>
+            overrideShOrder >= 0 ? overrideShOrder : tierShOrder;
+
+        /// <summary>The scene's sort cadence when set (> 0), else the tier's.</summary>
+        public static int EffectiveSortNth(int tierNth, int overrideNth) =>
+            overrideNth > 0 ? overrideNth : tierNth;
+
         /// <summary>Pushes the current tier's knobs onto the renderer.</summary>
         public void Apply()
         {
@@ -56,10 +80,13 @@ namespace GiganticJourneys.Splats
                 return;
             _appliedQuality = QualitySettings.GetQualityLevel();
             var tier = settings.TierFor(_appliedQuality);
-            _renderer.m_SHOrder = tier.shOrder;
+            _renderer.m_SHOrder = EffectiveShOrder(tier.shOrder, shOrderOverride);
             _renderer.m_SplatScale = tier.splatScale;
             _renderer.m_OpacityScale = tier.opacityScale;
-            _renderer.m_SortNthFrame = tier.sortEveryNthFrame;
+            _renderer.m_SortNthFrame = EffectiveSortNth(
+                tier.sortEveryNthFrame,
+                sortEveryNthFrameOverride
+            );
 
             var count = _renderer.m_Asset != null ? _renderer.m_Asset.splatCount : 0;
             var overBudget = count > tier.maxSplats;

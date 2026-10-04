@@ -1,0 +1,35 @@
+# Gigantic Journeys performance report (debug overlay, M0-UNITY-04)
+created_utc: 2026-10-04T19:27:31Z
+window_s: 60.0
+covered_s: 60.0
+frames: 3470
+fps_p50: 60.0
+fps_p99: 29.9
+fps_avg: 57.8
+frame_ms_p50: 16.7
+frame_ms_p99: 33.4
+device_model: iPhone14,7
+os: iOS 26.6.1
+gpu: Apple A15 GPU (Metal)
+build_version: 0.0.206 (0)
+git_sha: 15257ef
+built_utc: 2026-10-04T01:18:19Z
+unity: 6000.0.84f1
+scene: SplatRoom
+quality_level: High
+target_frame_rate: 60
+screen: 1170x2532
+splat_room: medieval-great-hall-winchester
+splat_loaded: true
+splat_count: 400000
+sort_tier: Tier B (Metal-safe bitonic)
+sort_every_nth_frame: 1
+sorts_issued: 711
+sorts_skipped_still: 1797
+resort_threshold: 0.03 m / 1.5 deg
+sort_dispatches_per_sort: 67
+sh_order: 1
+render_scale: 0.70
+camera_msaa_hdr: off/off
+sort_ms: not instrumented (GPU); see frame_ms
+# fps_pNN = 1000 / (NN-th percentile frame time); p99 is the rate 99% of frames meet or beat.

@@ -131,6 +131,33 @@ PROFILES: dict[str, TrainProfile] = {
 }
 DEFAULT_PROFILE = "scaled-10k-dense"
 
+# Display-quality retrain recipes (M1-UNITY-01 splat room v3), all nerfstudio
+# 1.1.5 Splatfacto flags: the full 30k schedule; gsplat's antialiased
+# rasterizer (Mip-Splatting-style 2D filter, kills aliasing shimmer and the
+# over-thin splats that blow up when seen from a new distance); a per-image
+# bilateral grid (Bilateral Guided Radiance Field Processing) that absorbs the
+# video's exposure / white-balance drift during training only, so it is not
+# baked into the splat colours as bright and dark patches; scale regularisation
+# (caps the max/min axis ratio, fewer needles). ``-camopt`` also refines the
+# camera poses (SO3xR3), which sharpens a video SfM with small pose errors.
+QUALITY_ARGS = (
+    "--pipeline.model.rasterize-mode",
+    "antialiased",
+    "--pipeline.model.use-bilateral-grid",
+    "True",
+    "--pipeline.model.use-scale-regularization",
+    "True",
+)
+CAMOPT_ARGS = ("--pipeline.model.camera-optimizer.mode", "SO3xR3")
+QUALITY_PROFILES: dict[str, TrainProfile] = {
+    p.name: p
+    for p in (
+        TrainProfile.scaled(30_000, "quality-30k", *QUALITY_ARGS),
+        TrainProfile.scaled(30_000, "quality-30k-camopt", *QUALITY_ARGS, *CAMOPT_ARGS),
+    )
+}
+PROFILES.update(QUALITY_PROFILES)
+
 
 _NO_GROWTH_LIMIT = 2**62
 
