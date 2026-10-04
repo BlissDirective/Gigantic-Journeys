@@ -94,6 +94,49 @@ local-asset match, switcher, report hook), PlayMode `SplatRoom_SpawnsCharacterOn
 and without the asset, and on Vulkan with it), and pytest `test_ios_debug_flavor.py` (fetch/verify/unpack,
 add-scene, export check). Box render: Vulkan follow view, 93.5% of pixels covered by splats.
 
+## Device check of build 48 and the v2 room (2026-10-03)
+**Owner's result on the iPhone 14 (build 48):** it renders and Tier B is engaged (the label says "Tier B"). It ran at **20–23 fps**
+(p99 frame time 43–48 ms; one portrait shot showed 40 fps), so it fails AT-3 against 60. The view was blurry, with
+large floaters and needle-like overexposed splats near the floor, and the orange capsule turned partly or fully
+black among the splats. He asked to be able to change the view angle independently of movement.
+
+**Fixes (commits bd469b4, 3d07bae), first shipped in the build listed in `ios-lane.md`:**
+- **Black character, root cause:** the package composite (`Hidden/Gaussian Splatting/Composite`) returns
+  `col.rgb / col.a`. Where every splat is behind an opaque object (the capsule), the splat buffer is (0,0,0,0), so
+  the result is 0/0 = NaN. On Metal (half precision) that NaN survives the `SrcAlpha` blend and writes black. The box
+  (Vulkan) doesn't show it. That's why the black area follows the capsule outline exactly and why splats in front of it
+  (alpha > 0) "fix" parts of it. The GJ shader `Splats/Shaders/GJSplatCompositeSafe.shader` discards pixels with
+  alpha < 1/255 (a NaN-safe test) and clamps the un-premultiplied colour, which also stops faint fringes from blowing
+  out to white. The package stays unmodified: `GaussianSplatRenderer.m_ShaderComposite` points at it
+  (`SampleSplat.AssignRendererResources`). Lighting wasn't the cause: the scene has a sun and trilight ambient.
+- **Splat cleanup (offline):** `services/reconstruction/tools/prune_splat_ply.py` (rules in `splat_ops.DisplayPrune`,
+  pytest-pinned) on the pass-3 `splat.ply`: 780,004 → **400,000**. Removed: alpha < 0.1 (138,764), largest axis above
+  the 98.5th percentile (9,619), needles with anisotropy > 20 and largest axis above the 80th percentile (14,269),
+  outside the robust 0.5–99.5% box (7,636), and isolated splats with < 12 in their 3×3×3 cell neighbourhood on a 160³
+  grid (19,610). Then the 400,000 most opaque were kept. The training cap's `importance()` favours big splats, which
+  are exactly what this removes, so it isn't used here. A dark floor 0.25 m below the walk plane and a warm dark
+  background fill the gaps that the old floor floaters used to cover.
+- **Performance profile** (descriptor fields, applied by the loader on top of the High tier the iPhone runs):
+  - Render scale **0.7** in players. It scales the URP target, so the splat pass's fill rate and overdraw drop about 2×,
+    and it is restored when the scene unloads.
+  - **SH order 1**: cheaper view data, less view-dependent sparkle.
+  - **Tier B sort at most every 2nd frame, and only after 3 cm / 1.5° of camera motion** (`MetalSafeSplatSort.resortMoveMeters` /
+    `resortAngleDeg`; a still camera keeps a valid order, so standing still costs no sort).
+  - **MSAA and HDR off on the room camera.** The splat pass is an unsafe render-graph pass, so a 4× MSAA HDR target is
+    stored and reloaded around it every frame.
+  - Together with the halved splat count, these target the sort (about 2.4× fewer elements, sorted only when moving)
+    and the fill rate (0.49× pixels, no MSAA, fewer large splats). New report lines: `render_scale`, `sh_order`,
+    `sorts_skipped_still`, `resort_threshold`, `camera_msaa_hdr`.
+- **Orbit camera:** see the build note in `ios-lane.md`. Drag on the right or empty part of the screen to orbit, pinch to
+  zoom.
+- **Box check:** `/workspace/splat-check-v2.png` on the box (not committed; it's a render of CC BY corpus content),
+  before (780K) vs after (400K) from the device-aspect follow view at the spawn, mid-hall facing the side wall, and the
+  overview. The Round Table end now reads clearly from the spawn, and the floor streaks are gone. Holes remain where
+  the capture is thin (side walls, entrance end).
+- **Package:** `environments/_devtest/medieval-great-hall-winchester/splat-room-unity-v2-400k.tar.gz`
+  (private bucket, 15,675,479 bytes, sha256 `64b182c8…bfabc`, pinned in `splat-room.json`). Same handling as v1:
+  operator-minted ≤15 min signed URL, no key in CI.
+
 ## AT-4 — LOD / chunked streaming (specification)
 aras-p has neither LOD nor streaming. The plan uses its 256-splat chunks (`m_GpuChunks`, already used for
 quantization bounds):

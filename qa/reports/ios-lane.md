@@ -47,6 +47,7 @@ rejected the binary at validation with two **409** errors:
 | **46** | 37132813101 (push of ca38c31, release lane) | release | uploaded 2026-10-03 10:45 AM CT (green). Release export check: SplatRoom scene absent, splat absent |
 | **47** | 37134798525 (push of 2e479fc, release lane) | release | uploaded 2026-10-03 11:29 AM CT (green). Release export check: SplatRoom scene absent, splat absent |
 | **48** | 37137079024 (workflow_dispatch on 83afba4 = code of 2e479fc, lane=macos, splat_url set) | internal-debug | uploaded 2026-10-03 12:01 PM CT (green; splat fetched and SHA-256 verified; export check: scene and splat present). **M1-UNITY-01 device-test splat room** (Winchester Great Hall, 780,004 splats): three-finger tap → **SplatRoom** button under Save report |
+| **(pending)** | (pending) (workflow_dispatch on 3d07bae, lane=macos, splat_url = v2 package) | internal-debug | **Splat room v2**: 400K pruned splats, alpha-safe composite (no black capsule), render scale 0.7 / SH 1 / motion-gated sort, touch orbit (drag right side, pinch zoom) |
 
 ## Owner follow-ups
 - ~~The icon is a **placeholder**~~ **Done 2026-10-02:** the Owner selected the final app icon (white "GJ", a tiny figure
@@ -86,3 +87,11 @@ to the private staging bucket, minted by gj-operator right before dispatch. CI m
 unpacks it into a gitignored Resources folder. A dispatch without it still builds, and the room then reports "splat not
 in this build". The step "Device-test scene and splat only in the internal-debug flavor" checks the exported player
 data, so release builds fail if either one leaks in. Details: `qa/reports/M1-ios-splat-render.md`.
+
+## Splat room v2 (2026-10-03, M1-UNITY-01)
+After the Owner's check of build 48 (20–23 fps, floaters, black capsule), the internal-debug splat room got a pruned
+400K-splat package (`splat-room-unity-v2-400k.tar.gz`, new size/sha pin), an alpha-safe splat composite, a device perf
+profile and a touch-orbit follow camera. **Orbit controls (also in MovementTest):** drag one finger anywhere outside the
+left-third stick zone and the jump pad to orbit (left/right = yaw, up/down = pitch, clamped); pinch with two fingers to
+zoom (0.5–2.5×). Taps (under 10 pt of movement) never turn the view, and the three-finger overlay tap is left alone.
+The stick walks in the direction the camera faces. Details: `qa/reports/M1-ios-splat-render.md`.
