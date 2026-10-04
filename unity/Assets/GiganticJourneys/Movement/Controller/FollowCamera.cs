@@ -18,6 +18,11 @@ namespace GiganticJourneys.Movement.Controller
     /// <see cref="ProvisionalTuning.CameraOrbit"/>). The stick already moves relative to the
     /// camera, so walking follows the orbited view. No auto-recenter yet (movement.json
     /// <c>recenterSec</c> is reserved for it).
+    /// A scene can narrow the orbit (<see cref="Limits"/>: elevation, zoom and a world view-yaw
+    /// window), keep the eye inside a box (<see cref="SetCameraBounds"/>) and, with
+    /// <see cref="cameraCollision"/>, pull the eye in front of colliders on the ray from the
+    /// look-at point. The splat room sets all three from the training camera coverage so the
+    /// view stays where the capture looked (M1-UNITY-01).
     /// </summary>
     [RequireComponent(typeof(Camera))]
     public sealed class FollowCamera : MonoBehaviour
@@ -28,6 +33,43 @@ namespace GiganticJourneys.Movement.Controller
         [Tooltip("Touch drag / pinch and gamepad right-stick orbit and zoom.")]
         [SerializeField]
         bool touchOrbit = true;
+
+        [Tooltip("Pull the eye in front of colliders between the look-at point and the eye.")]
+        [SerializeField]
+        bool cameraCollision;
+
+        [SerializeField]
+        LayerMask collisionMask = Physics.DefaultRaycastLayers;
+
+        /// <summary>Orbit limits; elevation in degrees above the look-at point, zoom as a follow-distance multiple.</summary>
+        public struct OrbitLimits
+        {
+            public float MinElevationDeg;
+            public float MaxElevationDeg;
+            public float MinZoom;
+            public float MaxZoom;
+
+            /// <summary>World yaw (degrees, 0 = +Z) the view may turn around.</summary>
+            public float YawCenterDeg;
+
+            /// <summary>How far the view may turn from <see cref="YawCenterDeg"/> either way (180 = free).</summary>
+            public float YawHalfRangeDeg;
+
+            public static OrbitLimits Default =>
+                new OrbitLimits
+                {
+                    MinElevationDeg = ProvisionalTuning.CameraOrbit.MinElevationDeg,
+                    MaxElevationDeg = ProvisionalTuning.CameraOrbit.MaxElevationDeg,
+                    MinZoom = ProvisionalTuning.CameraOrbit.MinZoom,
+                    MaxZoom = ProvisionalTuning.CameraOrbit.MaxZoom,
+                    YawCenterDeg = 0f,
+                    YawHalfRangeDeg = ProvisionalTuning.CameraOrbit.FreeYawHalfRangeDeg,
+                };
+        }
+
+        OrbitLimits _limits = OrbitLimits.Default;
+        bool _hasBounds;
+        Bounds _bounds;
 
         readonly CameraOrbitGesture _gesture = new CameraOrbitGesture();
         readonly List<OrbitTouch> _touches = new List<OrbitTouch>();
@@ -74,6 +116,34 @@ namespace GiganticJourneys.Movement.Controller
 
         public CameraOrbitGesture Gesture => _gesture;
 
+        public OrbitLimits Limits
+        {
+            get => _limits;
+            set
+            {
+                _limits = value;
+                _zoom = Mathf.Clamp(_zoom, value.MinZoom, value.MaxZoom);
+            }
+        }
+
+        public bool CameraCollision
+        {
+            get => cameraCollision;
+            set => cameraCollision = value;
+        }
+
+        /// <summary>Keeps the eye inside <paramref name="bounds"/> (pulled in along the look-at ray).</summary>
+        public void SetCameraBounds(Bounds bounds)
+        {
+            _bounds = bounds;
+            _hasBounds = true;
+        }
+
+        public void ClearCameraBounds() => _hasBounds = false;
+
+        public bool HasCameraBounds => _hasBounds;
+        public Bounds CameraBounds => _bounds;
+
         /// <summary>Turns the camera around the character (pitch is clamped in <see cref="LateUpdate"/>).</summary>
         public void Orbit(float yawDeg, float pitchDeg)
         {
@@ -85,20 +155,57 @@ namespace GiganticJourneys.Movement.Controller
         public void ZoomBy(float factor)
         {
             if (factor > 0f && !float.IsNaN(factor))
-                _zoom = Mathf.Clamp(
-                    _zoom * factor,
-                    ProvisionalTuning.CameraOrbit.MinZoom,
-                    ProvisionalTuning.CameraOrbit.MaxZoom
-                );
+                _zoom = Mathf.Clamp(_zoom * factor, _limits.MinZoom, _limits.MaxZoom);
         }
 
         /// <summary>Elevation angle of the eye above the look-at point for a pitch offset, clamped.</summary>
         public static float ElevationDeg(float heightAboveLookAt, float distance, float pitchDeg) =>
+            ElevationDeg(heightAboveLookAt, distance, pitchDeg, OrbitLimits.Default);
+
+        /// <summary>As <see cref="ElevationDeg(float, float, float)"/> with explicit limits.</summary>
+        public static float ElevationDeg(
+            float heightAboveLookAt,
+            float distance,
+            float pitchDeg,
+            OrbitLimits limits
+        ) =>
             Mathf.Clamp(
                 Mathf.Atan2(heightAboveLookAt, distance) * Mathf.Rad2Deg + pitchDeg,
-                ProvisionalTuning.CameraOrbit.MinElevationDeg,
-                ProvisionalTuning.CameraOrbit.MaxElevationDeg
+                limits.MinElevationDeg,
+                limits.MaxElevationDeg
             );
+
+        /// <summary>World yaw (degrees, 0 = +Z) clamped into the limits' view window.</summary>
+        public static float ClampViewYaw(float worldYawDeg, OrbitLimits limits)
+        {
+            if (limits.YawHalfRangeDeg >= ProvisionalTuning.CameraOrbit.FreeYawHalfRangeDeg)
+                return worldYawDeg;
+            var d = Mathf.DeltaAngle(limits.YawCenterDeg, worldYawDeg);
+            return limits.YawCenterDeg
+                + Mathf.Clamp(d, -limits.YawHalfRangeDeg, limits.YawHalfRangeDeg);
+        }
+
+        /// <summary>
+        /// Distance along the unit <paramref name="dir"/> from <paramref name="origin"/> to where the
+        /// ray leaves <paramref name="box"/>; +infinity when the origin is outside (nothing to keep in).
+        /// </summary>
+        public static float ExitDistance(Bounds box, Vector3 origin, Vector3 dir)
+        {
+            if (!box.Contains(origin))
+                return float.PositiveInfinity;
+            return Mathf.Min(
+                AxisExit(box.min.x, box.max.x, origin.x, dir.x),
+                Mathf.Min(
+                    AxisExit(box.min.y, box.max.y, origin.y, dir.y),
+                    AxisExit(box.min.z, box.max.z, origin.z, dir.z)
+                )
+            );
+        }
+
+        static float AxisExit(float lo, float hi, float o, float d) =>
+            d > 0f ? (hi - o) / d
+            : d < 0f ? (lo - o) / d
+            : float.PositiveInfinity;
 
         void ReadOrbitInput()
         {
@@ -194,15 +301,42 @@ namespace GiganticJourneys.Movement.Controller
             var distance = scale.ToWorld(_distanceA);
             var rise = scale.ToWorld(cam.HeightA - motor.Config.AvatarHeightA * 0.5f);
             var baseElevation = Mathf.Atan2(rise, distance) * Mathf.Rad2Deg;
-            var elevation = ElevationDeg(rise, distance, _orbitPitchDeg);
+            var elevation = ElevationDeg(rise, distance, _orbitPitchDeg, _limits);
             _orbitPitchDeg = elevation - baseElevation;
             var forward = Quaternion.AngleAxis(_orbitYawDeg, Vector3.up) * _yawForward;
+            var worldYaw = Mathf.Atan2(forward.x, forward.z) * Mathf.Rad2Deg;
+            var clampedYaw = ClampViewYaw(worldYaw, _limits);
+            if (!Mathf.Approximately(clampedYaw, worldYaw))
+            {
+                _orbitYawDeg = Mathf.DeltaAngle(0f, _orbitYawDeg + (clampedYaw - worldYaw));
+                forward = Quaternion.AngleAxis(_orbitYawDeg, Vector3.up) * _yawForward;
+            }
             var radius = Mathf.Sqrt(distance * distance + rise * rise) * _zoom;
             var e = elevation * Mathf.Deg2Rad;
-            var eye =
-                lookAt - forward * (radius * Mathf.Cos(e)) + Vector3.up * (radius * Mathf.Sin(e));
-            transform.position = eye;
-            transform.rotation = Quaternion.LookRotation(lookAt - eye, Vector3.up);
+            var toEye = -forward * Mathf.Cos(e) + Vector3.up * Mathf.Sin(e);
+            transform.position = lookAt + toEye * PulledInRadius(lookAt, toEye, radius);
+            transform.rotation = Quaternion.LookRotation(-toEye, Vector3.up);
+        }
+
+        // The eye distance after the camera box and (optionally) colliders on the way.
+        float PulledInRadius(Vector3 lookAt, Vector3 toEye, float radius)
+        {
+            if (_hasBounds)
+                radius = Mathf.Min(radius, ExitDistance(_bounds, lookAt, toEye));
+            if (
+                cameraCollision
+                && Physics.SphereCast(
+                    lookAt,
+                    ProvisionalTuning.CameraOrbit.CollisionRadiusM,
+                    toEye,
+                    out var hit,
+                    radius,
+                    collisionMask,
+                    QueryTriggerInteraction.Ignore
+                )
+            )
+                radius = Mathf.Min(radius, hit.distance);
+            return radius;
         }
     }
 }

@@ -47,6 +47,91 @@ namespace GiganticJourneys.Tests
             Assert.That(spawn.z, Is.InRange(d.WalkMin.y, d.WalkMax.y));
         }
 
+        [Test]
+        public void CommittedDescriptor_LimitsTheCameraToTheCapturedZone()
+        {
+            var d = SplatRoomDescriptor.Parse(Committed);
+            Assert.IsTrue(d.HasCameraBox, "camera box from room_limits.py");
+            var box = d.CameraBox;
+            Assert.IsTrue(box.Contains(d.Spawn + Vector3.up), "spawn inside the camera box");
+            Assert.That(
+                d.orbitMaxElevationDeg,
+                Is.InRange(10f, 45f),
+                "captured views rarely looked down"
+            );
+            Assert.That(d.orbitMinElevationDeg, Is.LessThan(d.orbitMaxElevationDeg));
+            Assert.That(d.viewYawHalfRangeDeg, Is.InRange(30f, 180f));
+            Assert.That(d.orbitMaxZoom, Is.InRange(1f, 2.5f));
+            Assert.That(
+                Mathf.Abs(Mathf.DeltaAngle(d.viewYawCenterDeg, d.spawnYawDeg)),
+                Is.LessThanOrEqualTo(d.viewYawHalfRangeDeg),
+                "spawn faces into the view window"
+            );
+            foreach (var o in d.occluders)
+            {
+                var ob = new Bounds(o.Center, o.Size);
+                Assert.IsFalse(
+                    ob.Intersects(
+                        new Bounds(
+                            new Vector3(
+                                (d.WalkMin.x + d.WalkMax.x) / 2f,
+                                1f,
+                                (d.WalkMin.y + d.WalkMax.y) / 2f
+                            ),
+                            new Vector3(d.WalkMax.x - d.WalkMin.x, 2f, d.WalkMax.y - d.WalkMin.y)
+                        )
+                    ),
+                    $"occluder {o.name} stays out of the walk area"
+                );
+            }
+            var l = SplatRoomLoader.OrbitLimitsFor(d);
+            Assert.AreEqual(d.orbitMaxElevationDeg, l.MaxElevationDeg);
+            Assert.AreEqual(d.orbitMaxZoom, l.MaxZoom);
+            Assert.AreEqual(d.viewYawCenterDeg, l.YawCenterDeg);
+        }
+
+        [TestCase("cameraBox")]
+        [TestCase("cameraBoxMissesWalk")]
+        [TestCase("elevation")]
+        [TestCase("zoom")]
+        [TestCase("yaw")]
+        [TestCase("occluder")]
+        public void Descriptor_RejectsBadCameraLimits(string field)
+        {
+            var d = JsonUtility.FromJson<SplatRoomDescriptor>(Committed);
+            switch (field)
+            {
+                case "cameraBox":
+                    d.cameraMax = new[] { d.cameraMin[0] - 1f, 3f, 3f };
+                    break;
+                case "cameraBoxMissesWalk":
+                    d.cameraMin = new[] { 0f, 0.25f, 0f };
+                    break;
+                case "elevation":
+                    d.orbitMinElevationDeg = 30f;
+                    d.orbitMaxElevationDeg = 20f;
+                    break;
+                case "zoom":
+                    d.orbitMinZoom = 1.5f;
+                    break;
+                case "yaw":
+                    d.viewYawHalfRangeDeg = 200f;
+                    break;
+                case "occluder":
+                    d.occluders = new[]
+                    {
+                        new SplatRoomDescriptor.Occluder
+                        {
+                            name = "flat",
+                            center = new[] { 0f, 1f, 0f },
+                            size = new[] { 1f, 0f, 1f },
+                        },
+                    };
+                    break;
+            }
+            Assert.Throws<FormatException>(() => d.Validate());
+        }
+
         [TestCase("credit", "")]
         [TestCase("packageSha256", "abc")]
         [TestCase("spawn", "[9.0, 0.0, 99.0]")]

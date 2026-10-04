@@ -193,5 +193,62 @@ namespace GiganticJourneys.Tests
                 "turned"
             );
         }
+
+        [Test]
+        public void ViewYaw_ClampsIntoTheRoomWindow_OrStaysFree()
+        {
+            var free = FollowCamera.OrbitLimits.Default;
+            Assert.AreEqual(170f, FollowCamera.ClampViewYaw(170f, free), 1e-4f);
+            var room = free;
+            room.YawCenterDeg = 5f;
+            room.YawHalfRangeDeg = 45f;
+            Assert.AreEqual(30f, FollowCamera.ClampViewYaw(30f, room), 1e-4f);
+            Assert.AreEqual(50f, FollowCamera.ClampViewYaw(120f, room), 1e-4f);
+            Assert.AreEqual(-40f, FollowCamera.ClampViewYaw(-100f, room), 1e-4f);
+            Assert.AreEqual(50f, FollowCamera.ClampViewYaw(-190f + 360f, room), 1e-4f, "wraps");
+        }
+
+        [Test]
+        public void CameraBox_PullsTheEyeInAlongTheRay()
+        {
+            var box = new Bounds(Vector3.zero, new Vector3(4f, 2f, 10f));
+            Assert.AreEqual(2f, FollowCamera.ExitDistance(box, Vector3.zero, Vector3.right), 1e-4f);
+            Assert.AreEqual(1f, FollowCamera.ExitDistance(box, Vector3.zero, Vector3.up), 1e-4f);
+            var diag = new Vector3(0f, 1f, -1f).normalized;
+            Assert.AreEqual(
+                Mathf.Sqrt(2f),
+                FollowCamera.ExitDistance(box, Vector3.zero, diag),
+                1e-4f
+            );
+            Assert.IsTrue(
+                float.IsPositiveInfinity(
+                    FollowCamera.ExitDistance(box, new Vector3(9f, 0f, 0f), Vector3.right)
+                ),
+                "outside the box: nothing to keep in"
+            );
+        }
+
+        [Test]
+        public void RoomLimits_NarrowElevationAndZoom()
+        {
+            var room = FollowCamera.OrbitLimits.Default;
+            room.MaxElevationDeg = 22f;
+            room.MaxZoom = 1.3f;
+            Assert.AreEqual(22f, FollowCamera.ElevationDeg(1f, 1f, 60f, room), 1e-4f);
+            var go = new GameObject("cam", typeof(Camera));
+            try
+            {
+                var f = go.AddComponent<FollowCamera>();
+                f.ZoomBy(2f);
+                f.Limits = room;
+                Assert.AreEqual(1.3f, f.Zoom, 1e-4f, "a narrower range re-clamps the zoom");
+                f.ZoomBy(5f);
+                Assert.AreEqual(1.3f, f.Zoom, 1e-4f);
+            }
+            finally
+            {
+                Object.DestroyImmediate(go);
+            }
+        }
     }
 }

@@ -56,6 +56,57 @@ namespace GiganticJourneys.DeviceTest
         public float resortMoveMeters;
         public float resortAngleDeg;
 
+        /// <summary>
+        /// Camera and play-area limits from the training camera coverage
+        /// (<c>services/reconstruction/tools/room_limits.py</c>): the splat only holds up from where
+        /// the source video looked. The follow camera's eye stays inside the
+        /// <see cref="cameraMin"/>..<see cref="cameraMax"/> box (empty = no box), its elevation in
+        /// <see cref="orbitMinElevationDeg"/>..<see cref="orbitMaxElevationDeg"/> (both 0 = the
+        /// provisional defaults), its pinch zoom in <see cref="orbitMinZoom"/>..<see cref="orbitMaxZoom"/>
+        /// (0 = default) and its world view yaw within <see cref="viewYawHalfRangeDeg"/> of
+        /// <see cref="viewYawCenterDeg"/> (0 = free). <see cref="occluders"/> are solid boxes (rendered
+        /// with the floor material, with colliders) where coverage is thin.
+        /// </summary>
+        public float[] cameraMin = new float[0];
+        public float[] cameraMax = new float[0];
+        public float orbitMinElevationDeg;
+        public float orbitMaxElevationDeg;
+        public float orbitMinZoom;
+        public float orbitMaxZoom;
+        public float viewYawCenterDeg;
+        public float viewYawHalfRangeDeg;
+        public Occluder[] occluders = new Occluder[0];
+
+        /// <summary>A solid box in world space (centre and full size, metres).</summary>
+        [Serializable]
+        public sealed class Occluder
+        {
+            public string name;
+            public float[] center = new float[3];
+            public float[] size = new float[3];
+
+            public Vector3 Center => V3(center, nameof(center));
+            public Vector3 Size => V3(size, nameof(size));
+        }
+
+        public bool HasCameraBox => cameraMin != null && cameraMin.Length > 0;
+
+        /// <summary>The camera box (only when <see cref="HasCameraBox"/>).</summary>
+        public Bounds CameraBox
+        {
+            get
+            {
+                var lo = V3(cameraMin, nameof(cameraMin));
+                var hi = V3(cameraMax, nameof(cameraMax));
+                var b = new Bounds();
+                b.SetMinMax(lo, hi);
+                return b;
+            }
+        }
+
+        public bool HasOrbitElevation => orbitMinElevationDeg != 0f || orbitMaxElevationDeg != 0f;
+        public bool HasOrbitZoom => orbitMinZoom > 0f || orbitMaxZoom > 0f;
+
         public string PackageSha256 => packageSha256;
 
         public Vector3 Position => V3(position, nameof(position));
@@ -123,6 +174,50 @@ namespace GiganticJourneys.DeviceTest
             var sp = Spawn;
             if (sp.x < lo.x || sp.x > hi.x || sp.z < lo.y || sp.z > hi.y)
                 throw new FormatException("spawn must lie inside the walkable rectangle");
+            ValidateCameraLimits(lo, hi);
+        }
+
+        void ValidateCameraLimits(Vector2 walkLo, Vector2 walkHi)
+        {
+            if (HasCameraBox)
+            {
+                var box = CameraBox;
+                if (!(box.size.x > 0f && box.size.y > 0f && box.size.z > 0f))
+                    throw new FormatException("cameraMax must exceed cameraMin on every axis");
+                if (
+                    walkLo.x < box.min.x
+                    || walkHi.x > box.max.x
+                    || walkLo.y < box.min.z
+                    || walkHi.y > box.max.z
+                )
+                    throw new FormatException("the camera box must contain the walkable rectangle");
+            }
+            else if (cameraMax != null && cameraMax.Length > 0)
+                throw new FormatException("cameraMax without cameraMin");
+            if (
+                HasOrbitElevation
+                && !(
+                    orbitMinElevationDeg < orbitMaxElevationDeg
+                    && orbitMinElevationDeg >= -45f
+                    && orbitMaxElevationDeg <= 85f
+                )
+            )
+                throw new FormatException(
+                    "orbit elevation must be min < max within [-45, 85] degrees (both 0 = default)"
+                );
+            if (HasOrbitZoom && !(orbitMinZoom > 0f && orbitMinZoom <= 1f && orbitMaxZoom >= 1f))
+                throw new FormatException(
+                    "orbit zoom must be 0 < min <= 1 <= max (both 0 = default)"
+                );
+            if (viewYawHalfRangeDeg < 0f || viewYawHalfRangeDeg > 180f)
+                throw new FormatException("viewYawHalfRangeDeg must be in [0, 180] (0 = free)");
+            foreach (var o in occluders ?? new Occluder[0])
+            {
+                var size = o.Size;
+                _ = o.Center;
+                if (!(size.x > 0f && size.y > 0f && size.z > 0f))
+                    throw new FormatException($"occluder '{o.name}' needs a positive size");
+            }
         }
 
         /// <summary>"780,004" style count for the on-screen label.</summary>

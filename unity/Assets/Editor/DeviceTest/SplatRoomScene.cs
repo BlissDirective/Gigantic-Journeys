@@ -141,9 +141,10 @@ namespace GiganticJourneys.EditorTools.DeviceTest
                 new Vector3(mid.x, FloorVisualDepth, mid.y),
                 Quaternion.Euler(90f, 0f, 0f)
             );
+            // Wider than the walk area: the camera sees floor gaps well beyond it.
             floor.transform.localScale = new Vector3(
-                walkHi.x - walkLo.x + 2f,
-                walkHi.y - walkLo.y + 2f,
+                walkHi.x - walkLo.x + 2f * FloorVisualMargin,
+                walkHi.y - walkLo.y + 2f * FloorVisualMargin,
                 1f
             );
             var floorRenderer = floor.GetComponent<MeshRenderer>();
@@ -154,6 +155,7 @@ namespace GiganticJourneys.EditorTools.DeviceTest
             loader.descriptorJson = json;
             loader.splatRenderer = renderer;
             loader.player = player.transform;
+            loader.occluderMaterial = FloorMaterial();
 
             EditorSceneManager.SaveScene(scene, ScenePath);
             AssetDatabase.SaveAssets();
@@ -167,6 +169,9 @@ namespace GiganticJourneys.EditorTools.DeviceTest
         /// scatter a little around the fitted plane) stay in front of it; it only shows through gaps.
         /// </summary>
         public const float FloorVisualDepth = -0.25f;
+
+        /// <summary>How far the visual floor extends beyond the walkable rectangle (m).</summary>
+        public const float FloorVisualMargin = 8f;
 
         public const string FloorMaterialPath = "Assets/GiganticJourneys/DeviceTest/RoomFloor.mat";
 

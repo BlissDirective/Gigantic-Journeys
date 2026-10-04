@@ -53,6 +53,41 @@ namespace GiganticJourneys.Tests
             Assert.That(p.y, Is.InRange(-0.05f, 0.3f), "character rests on the floor, not falling");
             Assert.That(new Vector2(p.x - spawn.x, p.z - spawn.z).magnitude, Is.LessThan(0.5f));
 
+            // Camera limits from the training coverage: eye inside the camera box, occluders built.
+            var d = loader.Descriptor;
+            Assert.IsNotNull(loader.Follow, "room camera found");
+            Assert.IsTrue(loader.Follow.CameraCollision, "camera collision on in the room");
+            Assert.AreEqual(d.viewYawHalfRangeDeg, loader.Follow.Limits.YawHalfRangeDeg);
+            if (d.HasCameraBox)
+            {
+                var box = d.CameraBox;
+                box.Expand(0.01f);
+                Assert.IsTrue(
+                    box.Contains(loader.Follow.transform.position),
+                    $"eye {loader.Follow.transform.position} inside the camera box {box}"
+                );
+            }
+            Assert.AreEqual(d.occluders.Length, loader.Occluders.childCount, "occluders built");
+            loader.Follow.Orbit(170f, 80f);
+            loader.Follow.ZoomBy(10f);
+            for (var i = 0; i < 3; i++)
+                yield return null;
+            var eye = loader.Follow.transform.position;
+            if (d.HasCameraBox)
+            {
+                var box = d.CameraBox;
+                box.Expand(0.01f);
+                Assert.IsTrue(box.Contains(eye), $"orbited eye {eye} still inside {box}");
+            }
+            var fwd = loader.Follow.transform.forward;
+            var yaw = Mathf.Atan2(fwd.x, fwd.z) * Mathf.Rad2Deg;
+            Assert.That(
+                Mathf.Abs(Mathf.DeltaAngle(d.viewYawCenterDeg, yaw)),
+                Is.LessThanOrEqualTo(d.viewYawHalfRangeDeg + 0.5f),
+                "view yaw stays in the room's window"
+            );
+            Assert.That(loader.Follow.Zoom, Is.LessThanOrEqualTo(d.orbitMaxZoom + 1e-4f));
+
             StringAssert.Contains(loader.Descriptor.displayName, loader.LabelText());
             StringAssert.Contains("CC BY", loader.LabelText());
             if (!loader.Loaded)

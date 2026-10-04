@@ -96,6 +96,12 @@ namespace GiganticJourneys.Movement
 
             /// <summary>Touches the debug overlay's toggle uses; at this many fingers the orbit steps aside.</summary>
             public const int OverlayTapFingers = 3;
+
+            /// <summary>View-yaw half range meaning "no yaw limit" (a full turn either way).</summary>
+            public const float FreeYawHalfRangeDeg = 180f;
+
+            /// <summary>Radius of the sphere cast that pulls the camera in front of colliders (m).</summary>
+            public const float CollisionRadiusM = 0.15f;
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using GaussianSplatting.Runtime;
 using GiganticJourneys.DebugTools;
+using GiganticJourneys.Movement.Controller;
 using GiganticJourneys.Splats;
 using GiganticJourneys.Splats.Sorting;
 using UnityEngine;
@@ -39,6 +40,9 @@ namespace GiganticJourneys.DeviceTest
         [Tooltip("The movement character; moved to the descriptor's spawn.")]
         public Transform player;
 
+        [Tooltip("Material for the descriptor's solid occluders (the room floor material).")]
+        public Material occluderMaterial;
+
         public bool showLabel = true;
 
         [Tooltip(
@@ -51,6 +55,8 @@ namespace GiganticJourneys.DeviceTest
         public bool Loaded => Asset != null;
         public string Error { get; private set; }
         public Transform Colliders { get; private set; }
+        public Transform Occluders { get; private set; }
+        public FollowCamera Follow { get; private set; }
         public Label RoomLabel { get; private set; }
 
         UIDocument _doc;
@@ -80,7 +86,9 @@ namespace GiganticJourneys.DeviceTest
                 return;
             }
             BuildColliders(Descriptor);
+            BuildOccluders(Descriptor);
             PlacePlayer(Descriptor);
+            ApplyCameraLimits(Descriptor);
             Asset = Resources.Load<GaussianSplatAsset>(Descriptor.resource);
             if (Asset == null)
             {
@@ -240,6 +248,18 @@ namespace GiganticJourneys.DeviceTest
                     "camera_msaa_hdr",
                     $"{(cam.allowMSAA ? "on" : "off")}/{(cam.allowHDR ? "on" : "off")}"
                 );
+            if (Follow != null)
+            {
+                var l = Follow.Limits;
+                line(
+                    "camera_limits",
+                    $"elev {l.MinElevationDeg.ToString("0.#", ci)}..{l.MaxElevationDeg.ToString("0.#", ci)} deg, "
+                        + $"zoom {l.MinZoom.ToString("0.##", ci)}..{l.MaxZoom.ToString("0.##", ci)}, "
+                        + $"yaw {l.YawCenterDeg.ToString("0.#", ci)} +- {l.YawHalfRangeDeg.ToString("0.#", ci)} deg, "
+                        + $"box {(Follow.HasCameraBounds ? "on" : "off")}, collision {(Follow.CameraCollision ? "on" : "off")}, "
+                        + $"occluders {(Occluders != null ? Occluders.childCount : 0).ToString(ci)}"
+                );
+            }
             // The sort runs on the GPU inside the frame; this build has no GPU timer for it,
             // so compare frame_ms against MovementTest (same build) for its cost.
             line("sort_ms", "not instrumented (GPU); see frame_ms");
@@ -327,6 +347,62 @@ namespace GiganticJourneys.DeviceTest
             go.transform.SetParent(Colliders, false);
             go.transform.localPosition = center;
             go.AddComponent<BoxCollider>().size = size;
+            // The boundary walls only stop the character; the camera may look past them (its
+            // own box and the occluders limit it), so keep them out of the camera's sphere cast.
+            if (name.StartsWith("Wall", StringComparison.Ordinal))
+                go.layer = LayerMask.NameToLayer("Ignore Raycast");
+        }
+
+        void BuildOccluders(SplatRoomDescriptor d)
+        {
+            Occluders = new GameObject("Room occluders").transform;
+            Occluders.SetParent(transform, false);
+            foreach (var o in d.occluders ?? new SplatRoomDescriptor.Occluder[0])
+            {
+                var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                go.name = "Occluder " + o.name;
+                go.transform.SetParent(Occluders, false);
+                go.transform.localPosition = o.Center;
+                go.transform.localScale = o.Size;
+                var r = go.GetComponent<MeshRenderer>();
+                if (occluderMaterial != null)
+                    r.sharedMaterial = occluderMaterial;
+                r.shadowCastingMode = ShadowCastingMode.Off;
+            }
+        }
+
+        /// <summary>The room's orbit limits, camera box and camera collision (see the descriptor).</summary>
+        void ApplyCameraLimits(SplatRoomDescriptor d)
+        {
+            var cam = Camera.main;
+            Follow = cam != null ? cam.GetComponent<FollowCamera>() : null;
+            if (Follow == null)
+                return;
+            Follow.Limits = OrbitLimitsFor(d);
+            if (d.HasCameraBox)
+                Follow.SetCameraBounds(d.CameraBox);
+            Follow.CameraCollision = true;
+        }
+
+        public static FollowCamera.OrbitLimits OrbitLimitsFor(SplatRoomDescriptor d)
+        {
+            var l = FollowCamera.OrbitLimits.Default;
+            if (d.HasOrbitElevation)
+            {
+                l.MinElevationDeg = d.orbitMinElevationDeg;
+                l.MaxElevationDeg = d.orbitMaxElevationDeg;
+            }
+            if (d.HasOrbitZoom)
+            {
+                l.MinZoom = d.orbitMinZoom;
+                l.MaxZoom = d.orbitMaxZoom;
+            }
+            if (d.viewYawHalfRangeDeg > 0f)
+            {
+                l.YawCenterDeg = d.viewYawCenterDeg;
+                l.YawHalfRangeDeg = d.viewYawHalfRangeDeg;
+            }
+            return l;
         }
 
         void PlacePlayer(SplatRoomDescriptor d)

@@ -9,9 +9,9 @@
   "packageSha256": "64b182c8ec453578d3bdbef9dba4bf43df36f88a03f5701a2c9c2be1081bfabc",
   "packageBytes": 15675479,
   "position": [
-    0.2,
-    1.16,
-    1.72
+    0.32,
+    1.84,
+    2.73
   ],
   "rotation": [
     0.581981,
@@ -20,27 +20,71 @@
     0.784783
   ],
   "scale": [
-    8.0,
-    8.0,
-    -8.0
+    12.69,
+    12.69,
+    -12.69
   ],
   "walkMin": [
-    -2.9,
-    -5.4
+    -2.26,
+    -3.86
   ],
   "walkMax": [
-    2.9,
-    5.4
+    2.39,
+    0.79
   ],
   "spawn": [
-    0.0,
+    -0.05,
     0.02,
-    -3.0
+    -3.03
   ],
-  "spawnYawDeg": 0.0,
+  "spawnYawDeg": 4.4,
   "renderScale": 0.7,
   "shOrder": 1,
   "sortEveryNthFrame": 2,
   "resortMoveMeters": 0.03,
-  "resortAngleDeg": 1.5
+  "resortAngleDeg": 1.5,
+  "cameraMin": [
+    -3.26,
+    0.25,
+    -4.86
+  ],
+  "cameraMax": [
+    3.39,
+    4.46,
+    1.79
+  ],
+  "orbitMinElevationDeg": -10.0,
+  "orbitMaxElevationDeg": 22.6,
+  "viewYawCenterDeg": 4.4,
+  "viewYawHalfRangeDeg": 45.0,
+  "orbitMinZoom": 0.6,
+  "orbitMaxZoom": 1.3,
+  "occluders": [
+    {
+      "name": "Wall -X",
+      "center": [
+        -3.36,
+        2.48,
+        -1.54
+      ],
+      "size": [
+        0.2,
+        4.96,
+        7.05
+      ]
+    },
+    {
+      "name": "Wall +X",
+      "center": [
+        3.49,
+        2.48,
+        -1.54
+      ],
+      "size": [
+        0.2,
+        4.96,
+        7.05
+      ]
+    }
+  ]
 }
