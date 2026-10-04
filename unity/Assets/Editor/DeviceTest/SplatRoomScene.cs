@@ -117,12 +117,38 @@ namespace GiganticJourneys.EditorTools.DeviceTest
             cam.nearClipPlane = 0.01f;
             cam.farClipPlane = 100f;
             cam.clearFlags = CameraClearFlags.SolidColor;
-            cam.backgroundColor = new Color(0.08f, 0.08f, 0.1f);
+            cam.backgroundColor = new Color(0.11f, 0.09f, 0.07f); // warm dark: pruned gaps read as shadow
+            // AT-3: the splat pass is an unsafe render-graph pass, so MSAA/HDR camera targets get
+            // stored and reloaded around it every frame (4x MSAA HDR at 2532x1170 on the A15).
+            // The splats bring their own soft edges; the capsule can do without MSAA here.
+            cam.allowMSAA = false;
+            cam.allowHDR = false;
             camGo.AddComponent<AudioListener>();
             PlaceFollowCamera(camGo.transform, player.transform, a);
             var follow = camGo.AddComponent<FollowCamera>();
             follow.Target = controller;
             controller.CameraTransform = camGo.transform;
+
+            // A plain dark floor under the splats: pruning removed the floaters that used to fake
+            // the floor at grazing angles, so this fills those gaps and grounds the character.
+            var floor = GameObject.CreatePrimitive(PrimitiveType.Quad);
+            floor.name = "Floor (visual)";
+            UnityEngine.Object.DestroyImmediate(floor.GetComponent<MeshCollider>());
+            var walkLo = descriptor.WalkMin;
+            var walkHi = descriptor.WalkMax;
+            var mid = (walkLo + walkHi) * 0.5f;
+            floor.transform.SetPositionAndRotation(
+                new Vector3(mid.x, FloorVisualDepth, mid.y),
+                Quaternion.Euler(90f, 0f, 0f)
+            );
+            floor.transform.localScale = new Vector3(
+                walkHi.x - walkLo.x + 2f,
+                walkHi.y - walkLo.y + 2f,
+                1f
+            );
+            var floorRenderer = floor.GetComponent<MeshRenderer>();
+            floorRenderer.sharedMaterial = FloorMaterial();
+            floorRenderer.shadowCastingMode = ShadowCastingMode.Off;
 
             var loader = new GameObject("Splat room loader").AddComponent<SplatRoomLoader>();
             loader.descriptorJson = json;
@@ -134,6 +160,32 @@ namespace GiganticJourneys.EditorTools.DeviceTest
             Debug.Log(
                 $"[SplatRoomScene] built {ScenePath} for {descriptor.slug} (1 A = {a:0.0000} m)"
             );
+        }
+
+        /// <summary>
+        /// The visual floor sits below the walkable y = 0 so the reconstructed floor splats (which
+        /// scatter a little around the fitted plane) stay in front of it; it only shows through gaps.
+        /// </summary>
+        public const float FloorVisualDepth = -0.25f;
+
+        public const string FloorMaterialPath = "Assets/GiganticJourneys/DeviceTest/RoomFloor.mat";
+
+        static Material FloorMaterial()
+        {
+            var mat = AssetDatabase.LoadAssetAtPath<Material>(FloorMaterialPath);
+            if (mat != null)
+                return mat;
+            mat = new Material(
+                Shader.Find("Universal Render Pipeline/Lit")
+                    ?? throw new InvalidOperationException("URP Lit shader not found")
+            )
+            {
+                name = "RoomFloor",
+            };
+            mat.SetColor("_BaseColor", new Color(0.16f, 0.13f, 0.1f));
+            mat.SetFloat("_Smoothness", 0f);
+            AssetDatabase.CreateAsset(mat, FloorMaterialPath);
+            return mat;
         }
 
         static void PlaceFollowCamera(Transform cam, Transform player, float a)
@@ -186,11 +238,12 @@ namespace GiganticJourneys.EditorTools.DeviceTest
         }
 
         /// <summary>
-        /// Renders the room in edit mode from the follow camera at the spawn and from a high
-        /// overview, side by side, into <paramref name="outPng"/>. Returns the splat coverage
+        /// Renders the room in edit mode at the iPhone's aspect (19.5:9): the follow camera at the
+        /// spawn, the follow camera mid-hall facing the side wall, and a high overview, side by
+        /// side, into <paramref name="outPng"/>. Returns the splat coverage
         /// (fraction of pixels that differ from a splat-off baseline) of the follow view.
         /// </summary>
-        public static float Screenshot(string outPng, int width = 960, int height = 540)
+        public static float Screenshot(string outPng, int width = 780, int height = 360)
         {
             if (SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null)
                 throw new InvalidOperationException(
@@ -227,6 +280,18 @@ namespace GiganticJourneys.EditorTools.DeviceTest
             var follow = Render(cam, width, height);
             var coverage = Coverage(follow, baseline);
 
+            // Device-like second view: mid-hall, turned toward the side wall and columns.
+            var spawnPos = player.position;
+            var spawnRot = player.rotation;
+            player.SetPositionAndRotation(
+                new Vector3(0.8f, spawnPos.y, 1.5f),
+                Quaternion.Euler(0f, 90f, 0f)
+            );
+            PlaceFollowCamera(cam.transform, player, a);
+            Render(cam, width, height);
+            var side = Render(cam, width, height);
+            player.SetPositionAndRotation(spawnPos, spawnRot);
+
             // Overview: above and behind the spawn, looking down the room.
             var back = player.rotation * Vector3.back;
             cam.transform.position = player.position + back * 1.5f + Vector3.up * 1.6f;
@@ -237,13 +302,14 @@ namespace GiganticJourneys.EditorTools.DeviceTest
             Render(cam, width, height);
             var overview = Render(cam, width, height);
 
-            var sheet = new Texture2D(width * 2, height, TextureFormat.RGB24, false);
+            var sheet = new Texture2D(width * 3, height, TextureFormat.RGB24, false);
             sheet.SetPixels(0, 0, width, height, follow.GetPixels());
-            sheet.SetPixels(width, 0, width, height, overview.GetPixels());
+            sheet.SetPixels(width, 0, width, height, side.GetPixels());
+            sheet.SetPixels(width * 2, 0, width, height, overview.GetPixels());
             sheet.Apply();
             Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(outPng)) ?? ".");
             File.WriteAllBytes(outPng, sheet.EncodeToPNG());
-            foreach (var t in new[] { baseline, follow, overview, sheet })
+            foreach (var t in new[] { baseline, follow, side, overview, sheet })
                 UnityEngine.Object.DestroyImmediate(t);
             Debug.Log(
                 $"[SplatRoomScene] screenshot {outPng}: follow-view splat coverage {coverage:P1} on {SystemInfo.graphicsDeviceType}"

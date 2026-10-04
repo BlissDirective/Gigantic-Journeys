@@ -41,6 +41,21 @@ namespace GiganticJourneys.DeviceTest
         public float[] spawn = new float[3];
         public float spawnYawDeg;
 
+        /// <summary>
+        /// Device performance profile for this room (AT-3 on the A15). Applied by the loader on
+        /// top of the quality tier: <see cref="renderScale"/> scales the URP render target (the
+        /// splat pass's fill rate and overdraw), <see cref="shOrder"/> limits spherical harmonics
+        /// (view-dependent colour; also the source of sparkle on faint splats), and the Tier B sort
+        /// runs at most every <see cref="sortEveryNthFrame"/> frames and only once the camera has
+        /// moved <see cref="resortMoveMeters"/> or turned <see cref="resortAngleDeg"/> since the last
+        /// sort. Zero or negative means "keep the tier's value" (renderScale 0 = untouched).
+        /// </summary>
+        public float renderScale;
+        public int shOrder = -1;
+        public int sortEveryNthFrame;
+        public float resortMoveMeters;
+        public float resortAngleDeg;
+
         public string PackageSha256 => packageSha256;
 
         public Vector3 Position => V3(position, nameof(position));
@@ -97,6 +112,14 @@ namespace GiganticJourneys.DeviceTest
             var hi = WalkMax;
             if (!(hi.x > lo.x && hi.y > lo.y))
                 throw new FormatException("walkMax must exceed walkMin");
+            if (renderScale != 0f && !(renderScale >= 0.5f && renderScale <= 1f))
+                throw new FormatException("renderScale must be 0 (untouched) or in [0.5, 1]");
+            if (shOrder > 3)
+                throw new FormatException("shOrder must be at most 3 (-1 = tier)");
+            if (resortMoveMeters < 0f || resortAngleDeg < 0f || sortEveryNthFrame < 0)
+                throw new FormatException(
+                    "sort cadence and resort thresholds must not be negative"
+                );
             var sp = Spawn;
             if (sp.x < lo.x || sp.x > hi.x || sp.z < lo.y || sp.z > hi.y)
                 throw new FormatException("spawn must lie inside the walkable rectangle");

@@ -5,6 +5,8 @@ using GaussianSplatting.Runtime;
 using GiganticJourneys.DebugTools;
 using GiganticJourneys.DeviceTest;
 using GiganticJourneys.EditorTools.DeviceTest;
+using GiganticJourneys.EditorTools.Splats;
+using GiganticJourneys.Movement.Controller;
 using GiganticJourneys.Splats;
 using NUnit.Framework;
 using UnityEditor;
@@ -97,6 +99,11 @@ namespace GiganticJourneys.Tests
                 Assert.IsNull(r.m_Asset, "no splat asset is referenced by the committed scene");
                 Assert.IsNotNull(r.m_ShaderSplats);
                 Assert.IsNotNull(r.m_ShaderComposite);
+                Assert.AreEqual(
+                    SampleSplat.AlphaSafeCompositePath,
+                    AssetDatabase.GetAssetPath(r.m_ShaderComposite),
+                    "GJ alpha-safe composite (the package's turns opaque objects black on Metal)"
+                );
                 Assert.IsNotNull(r.m_CSSplatUtilities);
                 var applier = r.GetComponent<SplatRenderSettingsApplier>();
                 Assert.IsNotNull(
@@ -104,6 +111,15 @@ namespace GiganticJourneys.Tests
                     "tier settings assigned"
                 );
                 Assert.IsNotNull(Camera.main, "main camera");
+                Assert.IsFalse(Camera.main.allowMSAA, "no MSAA store/reload around the splat pass");
+                Assert.IsFalse(Camera.main.allowHDR, "LDR camera target in the splat room");
+                Assert.IsTrue(Camera.main.GetComponent<FollowCamera>().TouchOrbit, "orbit on");
+                Assert.IsTrue(
+                    roots.Any(g =>
+                        g.name == "Floor (visual)" && g.GetComponent<MeshRenderer>() != null
+                    ),
+                    "visual floor under the splats"
+                );
             }
             finally
             {
@@ -151,6 +167,42 @@ namespace GiganticJourneys.Tests
                     "splat not fetched in this checkout (CI fetches it only for internal-debug builds)"
                 );
             Assert.AreEqual(d.splatCount, asset.splatCount);
+        }
+
+        [Test]
+        public void CommittedDescriptor_CarriesTheDevicePerformanceProfile()
+        {
+            var d = SplatRoomScene.LoadDescriptor();
+            Assert.That(d.renderScale, Is.InRange(0.6f, 0.75f), "reduced splat-pass resolution");
+            Assert.That(d.shOrder, Is.InRange(0, 2));
+            Assert.That(d.sortEveryNthFrame, Is.GreaterThanOrEqualTo(1));
+            Assert.That(d.resortMoveMeters, Is.GreaterThan(0f));
+            Assert.That(d.resortAngleDeg, Is.GreaterThan(0f));
+            Assert.That(d.splatCount, Is.InRange(300_000, 400_000), "pruned display splat");
+        }
+
+        [TestCase("renderScale", "0.3")]
+        [TestCase("shOrder", "4")]
+        [TestCase("resortAngleDeg", "-1")]
+        public void Descriptor_RejectsBadPerformanceProfile(string field, string value)
+        {
+            var json = File.ReadAllText(SplatRoomScene.DescriptorPath);
+            json = System.Text.RegularExpressions.Regex.Replace(
+                json,
+                "\"" + field + "\":\\s*[^,\\n]+",
+                "\"" + field + "\": " + value
+            );
+            Assert.Throws<System.FormatException>(() => SplatRoomDescriptor.Parse(json));
+        }
+
+        [Test]
+        public void AlphaSafeComposite_SkipsEmptyPixels_AndClamps()
+        {
+            var src = File.ReadAllText(SampleSplat.AlphaSafeCompositePath);
+            StringAssert.Contains("discard", src);
+            StringAssert.Contains("!(col.a >= 1.0 / 255.0)", src, "NaN-safe empty-pixel test");
+            StringAssert.Contains("saturate(col.rgb / col.a)", src);
+            Assert.IsNotNull(Shader.Find("Hidden/GJ/Gaussian Splatting/Composite Alpha-Safe"));
         }
 
         [Test]

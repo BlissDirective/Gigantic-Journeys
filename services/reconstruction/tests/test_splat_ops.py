@@ -94,3 +94,22 @@ def test_ply_layout_matches_nerfstudio_export():
     header = ply_header(3, fields, "1.1.5").decode()
     assert "element vertex 3\n" in header and header.endswith("end_header\n")
     assert header.count("property float") == 62
+
+
+def test_display_prune_drops_faint_giant_and_needle_splats():
+    from reconstruction.splat_ops import DisplayPrune, display_shape_keep
+
+    rules = DisplayPrune()
+    cap, floor = math.log(0.02), math.log(0.005)
+    ok = [math.log(0.004)] * 3
+    assert display_shape_keep(2.0, ok, rules, cap, floor)
+    assert not display_shape_keep(-5.0, ok, rules, cap, floor), "faint"
+    assert not display_shape_keep(2.0, [math.log(0.05), -6.0, -6.0], rules, cap, floor), "giant"
+    needle = [math.log(0.01), math.log(0.0002), math.log(0.0002)]
+    assert not display_shape_keep(2.0, needle, rules, cap, floor), "needle"
+    small_needle = [math.log(0.004), math.log(0.0001), math.log(0.0001)]
+    assert display_shape_keep(2.0, small_needle, rules, cap, floor), "tiny streaks stay"
+    with pytest.raises(ReconstructionError):
+        DisplayPrune(max_anisotropy=1.0)
+    with pytest.raises(ReconstructionError):
+        DisplayPrune(budget=0)

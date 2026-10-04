@@ -154,3 +154,75 @@ def robust_bounds(
 def inside(point: Sequence[float], bounds) -> bool:
     lo, hi = bounds
     return all(lo[i] <= point[i] <= hi[i] for i in range(3))
+
+
+@dataclass(frozen=True)
+class DisplayPrune:
+    """Splat -> on-device display cleaning rules (``tools/prune_splat_ply.py``).
+
+    A raw reconstruction carries floaters and streaks that look like haze, giant
+    overexposed needles and blobs when the camera walks among them, and cost fill rate
+    on a phone (M1-UNITY-01, build 48 on the iPhone 14). Applied in this order:
+
+    - ``min_opacity``: drop faint splats (alpha below this).
+    - ``max_scale_percentile``: drop splats whose largest axis is above this percentile of
+      all largest axes (giant blobs).
+    - ``max_anisotropy`` / ``needle_scale_percentile``: drop needles, i.e. a largest/smallest
+      axis ratio above ``max_anisotropy`` while the largest axis is above that percentile.
+    - ``bounds_percentile`` / ``bounds_margin``: crop to the robust box of the survivors.
+    - ``density_grid`` / ``min_neighbourhood``: on a ``density_grid``-cell grid over that box,
+      drop splats whose 3x3x3 cell neighbourhood holds fewer than ``min_neighbourhood`` splats
+      (isolated floaters far from dense surfaces).
+    - ``budget``: finally keep the ``budget`` most opaque splats (not :func:`importance`, which
+      favours the large splats this is meant to remove).
+    """
+
+    min_opacity: float = 0.1
+    max_scale_percentile: float = 98.5
+    max_anisotropy: float = 20.0
+    needle_scale_percentile: float = 80.0
+    bounds_percentile: float = 0.5
+    bounds_margin: float = 0.05
+    density_grid: int = 160
+    min_neighbourhood: int = 12
+    budget: int = 400_000
+
+    def __post_init__(self) -> None:
+        if not 0.0 <= self.min_opacity < 1.0:
+            raise ReconstructionError("min_opacity must be in [0, 1)")
+        for name in ("max_scale_percentile", "needle_scale_percentile"):
+            if not 0.0 < getattr(self, name) <= 100.0:
+                raise ReconstructionError(f"{name} must be in (0, 100]")
+        if self.max_anisotropy <= 1.0:
+            raise ReconstructionError("max_anisotropy must be above 1")
+        if not 0.0 <= self.bounds_percentile < 50.0:
+            raise ReconstructionError("bounds_percentile must be in [0, 50)")
+        if self.density_grid < 1 or self.min_neighbourhood < 0 or self.budget <= 0:
+            raise ReconstructionError("density_grid, min_neighbourhood and budget must be positive")
+
+    @property
+    def min_opacity_logit(self) -> float:
+        if self.min_opacity <= 0.0:
+            return -math.inf
+        return math.log(self.min_opacity / (1.0 - self.min_opacity))
+
+
+def display_shape_keep(
+    opacity_logit: float,
+    log_scales: Sequence[float],
+    rules: DisplayPrune,
+    max_scale_cap: float,
+    needle_scale_floor: float,
+) -> bool:
+    """Per-splat part of :class:`DisplayPrune` (opacity, giant and needle rules).
+
+    ``max_scale_cap`` / ``needle_scale_floor`` are the largest-axis log-scale percentiles
+    (``max_scale_percentile`` / ``needle_scale_percentile``) over the whole cloud.
+    """
+    if opacity_logit < rules.min_opacity_logit:
+        return False
+    big = max(log_scales)
+    if big > max_scale_cap:
+        return False
+    anisotropy = math.exp(big - min(log_scales))
+    return not (anisotropy > rules.max_anisotropy and big > needle_scale_floor)

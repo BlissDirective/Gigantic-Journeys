@@ -39,7 +39,9 @@ namespace GiganticJourneys.EditorTools.Splats
 
         // Renderer shader + compute GUIDs (package MonoImporter default references).
         const string ShaderSplatsGuid = "ed800126ae8844a67aad1974ddddd59c";
-        const string ShaderCompositeGuid = "7e184af7d01193a408eb916d8acafff9";
+        const string ShaderCompositeGuid = "7e184af7d01193a408eb916d8acafff9"; // package composite (replaced)
+        public const string AlphaSafeCompositePath =
+            "Assets/GiganticJourneys/Splats/Shaders/GJSplatCompositeSafe.shader";
         const string ShaderDebugPointsGuid = "b44409fc67214394f8f47e4e2648425e";
         const string ShaderDebugBoxesGuid = "4006f2680fd7c8b4cbcb881454c782be";
         const string CsSplatUtilitiesGuid = "ec84f78b836bd4f96a105d6b804f08bd";
@@ -203,7 +205,10 @@ namespace GiganticJourneys.EditorTools.Splats
         public static void AssignRendererResources(GaussianSplatRenderer r)
         {
             r.m_ShaderSplats = Load<Shader>(ShaderSplatsGuid);
-            r.m_ShaderComposite = Load<Shader>(ShaderCompositeGuid);
+            // GJ's alpha-safe composite instead of the package's (NaN -> black opaque objects on Metal).
+            r.m_ShaderComposite =
+                AssetDatabase.LoadAssetAtPath<Shader>(AlphaSafeCompositePath)
+                ?? throw new InvalidOperationException($"{AlphaSafeCompositePath} not found");
             r.m_ShaderDebugPoints = Load<Shader>(ShaderDebugPointsGuid);
             r.m_ShaderDebugBoxes = Load<Shader>(ShaderDebugBoxesGuid);
             r.m_CSSplatUtilities = Load<ComputeShader>(CsSplatUtilitiesGuid);

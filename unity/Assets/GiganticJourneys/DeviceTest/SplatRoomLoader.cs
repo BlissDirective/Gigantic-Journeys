@@ -6,6 +6,7 @@ using GiganticJourneys.Splats;
 using GiganticJourneys.Splats.Sorting;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UIElements;
 
 namespace GiganticJourneys.DeviceTest
@@ -40,6 +41,11 @@ namespace GiganticJourneys.DeviceTest
 
         public bool showLabel = true;
 
+        [Tooltip(
+            "Apply the descriptor's renderScale in the editor too (it edits the active URP asset until the scene unloads; players always apply it)."
+        )]
+        public bool renderScaleInEditor;
+
         public SplatRoomDescriptor Descriptor { get; private set; }
         public GaussianSplatAsset Asset { get; private set; }
         public bool Loaded => Asset != null;
@@ -50,6 +56,14 @@ namespace GiganticJourneys.DeviceTest
         UIDocument _doc;
         PanelSettings _panel;
         float _nextLabel;
+        UniversalRenderPipelineAsset _scaledPipeline;
+        float _previousRenderScale;
+
+        /// <summary>The URP render scale in effect while the room is loaded.</summary>
+        public float RenderScale =>
+            GraphicsSettings.currentRenderPipeline is UniversalRenderPipelineAsset urp
+                ? urp.renderScale
+                : 1f;
 
         void Awake()
         {
@@ -98,6 +112,7 @@ namespace GiganticJourneys.DeviceTest
             t.localScale = Descriptor.Scale;
             splatRenderer.m_Asset = Asset;
             splatRenderer.gameObject.SetActive(true);
+            ApplyPerformanceProfile(Descriptor);
             Debug.Log(
                 $"{LogTag} loaded {Descriptor.slug}: {Asset.splatCount} splats on {SystemInfo.graphicsDeviceType}"
             );
@@ -123,6 +138,7 @@ namespace GiganticJourneys.DeviceTest
 
         void OnDestroy()
         {
+            RestoreRenderScale();
             if (_panel != null)
             {
                 Destroy(_panel.themeStyleSheet);
@@ -161,7 +177,7 @@ namespace GiganticJourneys.DeviceTest
             if (Descriptor == null)
                 return "Splat room: " + Error;
             var head = Loaded
-                ? $"{Descriptor.displayName}  ·  {SplatRoomDescriptor.FormatCount(SplatCount)} splats  ·  sort: {SortTier}"
+                ? $"{Descriptor.displayName}  ·  {SplatRoomDescriptor.FormatCount(SplatCount)} splats  ·  sort: {SortTier}  ·  render {RenderScale.ToString("0.##", CultureInfo.InvariantCulture)}x"
                 : $"{Descriptor.displayName}: {Error}";
             return head + "\n" + Descriptor.credit;
         }
@@ -179,14 +195,66 @@ namespace GiganticJourneys.DeviceTest
             {
                 line("sort_every_nth_frame", sort.sortEveryNthFrame.ToString(ci));
                 line("sorts_issued", sort.SortsIssued.ToString(ci));
+                line("sorts_skipped_still", sort.SortsSkippedStill.ToString(ci));
+                line(
+                    "resort_threshold",
+                    $"{sort.resortMoveMeters.ToString("0.###", ci)} m / {sort.resortAngleDeg.ToString("0.#", ci)} deg"
+                );
                 line(
                     "sort_dispatches_per_sort",
                     (1 + BitonicSortNetwork.Schedule(SplatCount).Count).ToString(ci)
                 );
             }
+            if (Loaded)
+                line("sh_order", splatRenderer.m_SHOrder.ToString(ci));
+            line("render_scale", RenderScale.ToString("0.00", ci));
+            var cam = Camera.main;
+            if (cam != null)
+                line(
+                    "camera_msaa_hdr",
+                    $"{(cam.allowMSAA ? "on" : "off")}/{(cam.allowHDR ? "on" : "off")}"
+                );
             // The sort runs on the GPU inside the frame; this build has no GPU timer for it,
             // so compare frame_ms against MovementTest (same build) for its cost.
             line("sort_ms", "not instrumented (GPU); see frame_ms");
+        }
+
+        /// <summary>The room's device profile on top of the quality tier (see <see cref="SplatRoomDescriptor.renderScale"/>).</summary>
+        void ApplyPerformanceProfile(SplatRoomDescriptor d)
+        {
+            if (d.shOrder >= 0)
+                splatRenderer.m_SHOrder = d.shOrder;
+            var sort = Sort;
+            if (sort != null)
+            {
+                sort.resortMoveMeters = d.resortMoveMeters;
+                sort.resortAngleDeg = d.resortAngleDeg;
+            }
+            if (d.sortEveryNthFrame > 0)
+            {
+                if (sort != null && sort.Engaged)
+                    sort.sortEveryNthFrame = d.sortEveryNthFrame;
+                else
+                    splatRenderer.m_SortNthFrame = d.sortEveryNthFrame;
+            }
+            if (
+                d.renderScale > 0f
+                && (!Application.isEditor || renderScaleInEditor)
+                && GraphicsSettings.currentRenderPipeline is UniversalRenderPipelineAsset urp
+            )
+            {
+                _scaledPipeline = urp;
+                _previousRenderScale = urp.renderScale;
+                urp.renderScale = d.renderScale;
+            }
+        }
+
+        void RestoreRenderScale()
+        {
+            if (_scaledPipeline == null)
+                return;
+            _scaledPipeline.renderScale = _previousRenderScale;
+            _scaledPipeline = null;
         }
 
         void BuildColliders(SplatRoomDescriptor d)

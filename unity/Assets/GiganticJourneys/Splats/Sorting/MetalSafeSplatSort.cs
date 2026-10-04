@@ -37,6 +37,18 @@ namespace GiganticJourneys.Splats.Sorting
         [Min(1)]
         public int sortEveryNthFrame = 1;
 
+        [Tooltip(
+            "Skip a due sort while the camera has moved less than this (world metres) since the last one. 0 = always sort on cadence."
+        )]
+        [Min(0f)]
+        public float resortMoveMeters;
+
+        [Tooltip(
+            "Skip a due sort while the camera has turned less than this (degrees) since the last one. Used with resortMoveMeters."
+        )]
+        [Min(0f)]
+        public float resortAngleDeg;
+
         const BindingFlags Any =
             BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
         static readonly Type R = typeof(GaussianSplatRenderer);
@@ -73,12 +85,41 @@ namespace GiganticJourneys.Splats.Sorting
         int _packageSortNth;
         int _frame;
         bool _engaged;
+        bool _hasSorted;
+        GraphicsBuffer _sortedKeys;
+        Vector3 _sortedPos;
+        Quaternion _sortedRot;
 
         /// <summary>True while this component (not the package) is sorting.</summary>
         public bool Engaged => _engaged;
 
         /// <summary>Camera renders sorted by this component (for the debug HUD / tests).</summary>
         public int SortsIssued { get; private set; }
+
+        /// <summary>Due sorts skipped because the camera was (nearly) still.</summary>
+        public int SortsSkippedStill { get; private set; }
+
+        /// <summary>
+        /// Whether a due sort is needed: always when gating is off (both thresholds 0) or nothing
+        /// was sorted yet, else once the camera moved at least <paramref name="minMove"/> or turned
+        /// at least <paramref name="minAngleDeg"/> since the last sort. The draw order depends on
+        /// the view position and direction only, so a still camera keeps a valid order.
+        /// </summary>
+        public static bool NeedsResort(
+            bool hasSorted,
+            Vector3 lastPos,
+            Quaternion lastRot,
+            Vector3 pos,
+            Quaternion rot,
+            float minMove,
+            float minAngleDeg
+        )
+        {
+            if (!hasSorted || (minMove <= 0f && minAngleDeg <= 0f))
+                return true;
+            return (pos - lastPos).sqrMagnitude >= minMove * minMove
+                || Quaternion.Angle(lastRot, rot) >= minAngleDeg;
+        }
 
         void OnEnable()
         {
@@ -112,6 +153,7 @@ namespace GiganticJourneys.Splats.Sorting
             _cmd?.Release();
             _cmd = null;
             _engaged = false;
+            _hasSorted = false;
         }
 
         void LateUpdate() => _frame++;
@@ -143,6 +185,23 @@ namespace GiganticJourneys.Splats.Sorting
             var count = Mathf.Min(_renderer.splatCount, keys?.count ?? 0);
             if (keys == null || values == null || pos == null || chunks == null || count <= 0)
                 return;
+            var camTr = cam.transform;
+            // A new buffer (asset swap, re-enable) always needs a sort.
+            if (
+                !NeedsResort(
+                    _hasSorted && keys == _sortedKeys,
+                    _sortedPos,
+                    _sortedRot,
+                    camTr.position,
+                    camTr.rotation,
+                    resortMoveMeters,
+                    resortAngleDeg
+                )
+            )
+            {
+                SortsSkippedStill++;
+                return;
+            }
 
             // Same view-space z convention as the package's CalcDistances.
             var worldToCam = cam.worldToCameraMatrix;
@@ -172,6 +231,10 @@ namespace GiganticJourneys.Splats.Sorting
             _sorter.Sort(_cmd, keys, values, count);
             Graphics.ExecuteCommandBuffer(_cmd);
             SortsIssued++;
+            _hasSorted = true;
+            _sortedKeys = keys;
+            _sortedPos = camTr.position;
+            _sortedRot = camTr.rotation;
         }
     }
 }
