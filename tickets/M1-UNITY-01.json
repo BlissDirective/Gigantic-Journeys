@@ -112,6 +112,11 @@
       "date": "2026-10-04",
       "by": "gj-operator",
       "event": "gj-operator: internal-debug TestFlight build 54 (ios-build run 37234179777, workflow_dispatch on 233766a, lane=macos) uploaded 4:23 PM CT, green: v3 splat package fetched via a 15-min signed URL and SHA-256 verified, scene and splat present in the export. Carries splat room v3, the sort-cadence fix, the frame-time split lines and the camera/play-area limits. Next: Owner device check (AT-3 p99 split: are the 33 ms frames sort frames?)."
+    },
+    {
+      "date": "2026-10-04",
+      "by": "gj-operator",
+      "event": "Owner feedback on build 54: he can't turn the SplatRoom camera fully as in the sample scene, and blur/fragments remain. Added a per-room cameraMode (coverage | free) to splat-room.json. Winchester is free: 360 deg yaw, eye elevation -60..80 deg, zoom 0.5-2.5x, with walk area, camera box, occluders and collision kept (0dbae11). Also fixed the eye dropping under the floor at low angles and the camera box not clamping while the miniature character's look-at point sits below its floor. Internal-debug TestFlight build 56 (ios-build run 37244154837, dispatch on 0dbae11, lane=macos) uploaded 6:59 PM CT, green, v3 package fetched and SHA-256 verified. Release build 55 green. M1-PIPE-02 phase 1 finds 83% of cells within 4 m of the camera box weak (median 2.7 training views), so free look shows more unreconstructed area; repair is tracked in M1-PIPE-02."
     }
   ]
 }

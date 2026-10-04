@@ -53,6 +53,8 @@ rejected the binary at validation with two **409** errors:
 | **52** | 37231577185 (push of 3517ff8, release lane) | release | cancelled (superseded by the 233766a push; the number is used, nothing uploaded) |
 | **53** | 37232058738 (push of 233766a, release lane) | release | uploaded 2026-10-04 3:58 PM CT (green). Release export check: SplatRoom scene absent, splat absent; camera limits are splat-room-only |
 | **54** | 37234179777 (workflow_dispatch on 233766a, lane=macos, splat_url = v3 package) | internal-debug | uploaded 2026-10-04 4:23 PM CT (green; v3 package fetched, 400,000 splats, 15,067,234 bytes, SHA-256 verified; export check: scene and splat present). **Splat room v3**: retrained 30k antialiased + exposure-compensated splat pruned to 400K, sort every 2nd frame (cadence fix), frame-time split lines in Save report, camera and play-area limits from the training cameras (walk area, orbit pitch -10..22.6 deg, zoom 0.6-1.3x, view yaw +/-45 deg, occluder walls, camera collision). For the Owner's next device check |
+| **55** | 37241954402 (push of 0dbae11, release lane) | release | uploaded 2026-10-04 6:27 PM CT (green). Release export check: SplatRoom scene absent, splat absent; first release build with the ground clamp for low camera angles in MovementTest |
+| **56** | 37244154837 (workflow_dispatch on 0dbae11, lane=macos, splat_url = v3 package) | internal-debug | uploaded 2026-10-04 6:59 PM CT (green; v3 package fetched via a fresh 15-min signed URL, SHA-256 verified; export check: scene and splat present). **Free-look splat room**: Winchester `cameraMode` "free" = 360 deg yaw, eye elevation -60..80 deg, zoom 0.5-2.5x; walk area, camera box, occluder walls and camera collision kept; eye never drops under the floor. For the Owner's next device check |
 
 ## Owner follow-ups
 - ~~The icon is a **placeholder**~~ **Done 2026-10-02:** the Owner selected the final app icon (white "GJ", a tiny figure
@@ -113,3 +115,9 @@ You can walk only where the video looked. The orbit is limited to -10..22.6° pi
 capture's view direction. Grey occluder walls close the thin-coverage sides, and the camera pulls in instead of clipping
 through walls. MovementTest keeps the free orbit. Details: `qa/reports/M1-ios-splat-render.md`.
 
+## Free-look camera in the splat room (2026-10-04, M1-UNITY-01)
+After build 54 the Owner asked to turn the SplatRoom camera every way, as in the sample scene. Rooms now carry a
+`cameraMode`: "coverage" keeps the training-camera limits, "free" allows full 360 deg yaw. Winchester is "free":
+pitch -60..80 deg (looking up from near the floor down to almost straight down) and zoom 0.5-2.5x. The walk area,
+camera box, occluder walls and camera collision stay. Build 56. Expect smears where the video never looked
+(M1-PIPE-02 phase 1 maps them).
