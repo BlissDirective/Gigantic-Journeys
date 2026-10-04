@@ -5,9 +5,9 @@
   "splatCount": 400000,
   "credit": "Source: \"King Arthur's Round Table and Winchester Castle Walk Through [4K]\" by [4K] Free Download Stock Videos (youtube.com/watch?v=3Oc3M1MUHRg), CC BY 3.0. Reconstructed as a Gaussian splat by Gigantic Journeys (modified).",
   "license": "CC BY 3.0 (https://creativecommons.org/licenses/by/3.0/)",
-  "packageObject": "environments/_devtest/medieval-great-hall-winchester/splat-room-unity-v2-400k.tar.gz",
-  "packageSha256": "64b182c8ec453578d3bdbef9dba4bf43df36f88a03f5701a2c9c2be1081bfabc",
-  "packageBytes": 15675479,
+  "packageObject": "environments/_devtest/medieval-great-hall-winchester/splat-room-unity-v3-400k.tar.gz",
+  "packageSha256": "c9969c402b5531ec2cc7627adfc3df40748a2acbc313dc406558bd723e897e3c",
+  "packageBytes": 15067234,
   "position": [
     0.32,
     1.84,

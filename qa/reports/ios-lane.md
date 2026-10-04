@@ -96,3 +96,16 @@ profile and a touch-orbit follow camera. **Orbit controls (also in MovementTest)
 left-third stick zone and the jump pad to orbit (left/right = yaw, up/down = pitch, clamped); pinch with two fingers to
 zoom (0.5–2.5×). Taps (under 10 pt of movement) never turn the view, and the three-finger overlay tap is left alone.
 The stick walks in the direction the camera faces. Details: `qa/reports/M1-ios-splat-render.md`.
+
+## Splat room v3 (2026-10-04, M1-UNITY-01)
+After build 50 (60 fps p50, AT-2 pass, smears where the capture is thin), the internal-debug splat room got:
+- a retrained 400K package (`splat-room-unity-v3-400k.tar.gz`, new size/sha pin; antialiased 30k-iteration training
+  with per-image exposure compensation);
+- the Tier B sort cadence fix (every 2nd frame, as intended);
+- frame-time split lines in Save report;
+- **camera and play-area limits** derived from the training cameras.
+
+You can walk only where the video looked. The orbit is limited to -10..22.6° pitch, 0.6–1.3× zoom and ±45° around the
+capture's view direction. Grey occluder walls close the thin-coverage sides, and the camera pulls in instead of clipping
+through walls. MovementTest keeps the free orbit. Details: `qa/reports/M1-ios-splat-render.md`.
+

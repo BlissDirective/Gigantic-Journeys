@@ -137,6 +137,52 @@ black among the splats. He asked to be able to change the view angle independent
   (private bucket, 15,675,479 bytes, sha256 `64b182c8…bfabc`, pinned in `splat-room.json`). Same handling as v1:
   operator-minted ≤15 min signed URL, no key in CI.
 
+## Device check of build 50 and the v3 room (2026-10-04)
+- **Build 50 on the Owner's iPhone 14** (evidence `qa/evidence/M1-UNITY-01/`): AT-2 PASS (Tier B order correct, no
+  popping while orbiting), AT-3 fps p50 60.0 / avg 57.8, frame p99 33.4 ms, 400K splats, render 0.70. The capsule now
+  shades normally. Still smeared near the floor, columns and entrance, with white blobs and dark shapes where the video
+  never looked; the Round Table end is sharp.
+- **Sort cadence:** the report said `sort_every_nth_frame: 1`. `SplatRenderSettingsApplier.OnEnable` re-applied the High
+  tier's cadence after the Metal-safe sort parked the package sort. Fixed in `05eda83` (applier overrides for SH order
+  and cadence). The report now splits frame times into `frame_ms_after_sort`, `frame_ms_after_label` and
+  `frame_ms_other`, so the next device report shows whether the p99 spikes are sort frames. The sort is not spread
+  across frames yet. If the split points at sort frames, that is the next step.
+- **Retrain (Modal L40S, `modal_app.py::retrain`, frames and COLMAP model reused):**
+
+  | run | recipe | splats | held-out PSNR / SSIM / LPIPS | cost |
+  |---|---|---|---|---|
+  | v1 (pass 3) | splatfacto 10k | 780,004 | 24.93 / 0.842 / 0.278 | - |
+  | `quality-30k` | 30k, antialiased rasterize, bilateral grid (per-image exposure/colour), scale regularisation | 828,710 | 23.70 / 0.832 / **0.253** | $0.60 |
+  | `quality-30k-camopt` | same + SO3xR3 pose refinement | 732,623 | 17.76 / 0.643 / 0.406 | $0.68 |
+
+  The bilateral grid is applied only during training. Eval frames get the base colours, so PSNR is penalised for the exposure
+  differences the grid absorbs, and LPIPS (structure) is the fairer number. The camopt run's held-out poses are not refined,
+  so its eval views are visibly offset; rejected. nerfstudio 1.1.5 splatfacto has no depth/normal loss without depth data,
+  and opacity resets are on by default; no extra floater term was added.
+- **Box comparison** (`/workspace/splat-v3-compare.png` on the box, not committed: renders of CC BY corpus content).
+  v2 = v1 pruned to 400K. v3 = `quality-30k` pruned 828,710 -> 400,000 (`tools/prune_splat_ply.py`, defaults). Same three
+  `SplatRoomScene.Screenshot` views plus held-out eval view 6 (source | v1 | v3). v3 is sharper (Round Table, columns,
+  windows, floor texture; Laplacian variance 0.0039 -> 0.0072 in the follow view), has fewer large white floor blobs in
+  the overview (blown-out pixels 7.0% -> 6.3%) and loses the big white floater in eval view 6. Remaining: speckled floor
+  fragments and dark gaps beside the left column. The mid-hall side view is outside the captured zone and is bad in both
+  (the new camera limits keep the player out of it). **Shipped v3.**
+- **Package:** `environments/_devtest/medieval-great-hall-winchester/splat-room-unity-v3-400k.tar.gz` (private bucket,
+  15,067,234 bytes, sha256 `c9969c40…897e3c`, pinned in `splat-room.json`).
+- **Camera and play-area limits (`3517ff8`):** `services/reconstruction/tools/room_limits.py` maps the COLMAP training
+  cameras into the splat's frame (the nerfstudio dataparser transform; points land on the splat with a median 1 mm NN
+  distance). It counts how many camera frustums see each floor cell and writes the limits into `splat-room.json`.
+  - Walk area: x -2.26..2.39, z -3.86..0.79 m (largest rectangle seen by >= 8 cameras).
+  - Spawn: (-0.05, 0.02, -3.03), yaw 4.4°.
+  - Camera box: walk area + 1 m, y 0.25..4.46.
+  - Orbit pitch: -10..22.6°.
+  - Zoom: 0.6..1.3x.
+  - View yaw: 4.4° ± 45°. The 20 cameras that see the walk area all look +z, with pitch -17..21°.
+  - Occluder walls on the thin-coverage sides: x = -3.36 and x = 3.49, each 4.96 m high and 7.05 m long, drawn with
+    the floor material.
+  - `FollowCamera` pulls the eye back into the camera box and sphere-casts (r 0.15 m) against walls/occluders.
+- **Not fixed by training:** regions the video never saw. Research spike `M1-PIPE-02` (generative repair agent) covers
+  them.
+
 ## AT-4 — LOD / chunked streaming (specification)
 aras-p has neither LOD nor streaming. The plan uses its 256-splat chunks (`m_GpuChunks`, already used for
 quantization bounds):

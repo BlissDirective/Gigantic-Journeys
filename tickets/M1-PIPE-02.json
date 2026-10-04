@@ -1,0 +1,103 @@
+{
+  "id": "M1-PIPE-02",
+  "title": "Research: generative-repair agent for poorly reconstructed splat regions (detect, choose a fix, verify)",
+  "milestone": "M1",
+  "area": "PIPE",
+  "owner": "gj-capture",
+  "qa": "gj-data",
+  "status": "blocked",
+  "priority": "P2",
+  "size": "L",
+  "summary": "Research spike, corpus only. Build and evaluate an offline agent that finds the badly reconstructed regions of a room splat and repairs them, keeping only repairs that measurably improve the room against its source frames. Motivation: the Owner's iPhone 14 checks of the Winchester Great Hall splat room (builds 48 and 50, M1-UNITY-01) showed sharp regions where the video looked, and smears, white blown-out blobs and dark shapes near the floor, columns and entrance where it did not. Training-side fixes (antialiased rasterisation, bilateral-grid exposure compensation, scale regularisation, pruning) and camera limits (services/reconstruction/tools/room_limits.py) narrow the problem but cannot invent content the video never saw. (1) Detect: per region (floor grid cell / voxel), score low training-view coverage (frustum counts and viewing-angle spread from the COLMAP poses, as room_limits.py does), splat statistics (opacity and scale variance, needle and giant splats, isolated splats) and render-versus-source error on held-out frames (PSNR/SSIM/LPIPS per region). (2) Choose a fix per region, cheapest first: (a) retrain with targeted settings (pose refinement, more iterations, densification limits) or re-extract more frames for that part of the video; (b) diffusion novel-view repair: render pseudo-views from poses interpolated from the training cameras toward the bad region, clean them with a single-step image diffusion fixer conditioned on the nearest real frame, and distil them back into the splat progressively (the Difix3D+ recipe, arXiv 2503.01774); (c) copy from a well-captured duplicate (repeated columns, windows, symmetric walls) found by feature matching or symmetry detection, transformed into place; (d) replace with a clean proxy (textured box/plane or mesh from the collision mesh) or a solid occluder. (3) Verify: every fix is re-scored on held-out source frames and on fixed novel-view probes (no-reference sharpness plus a reviewer pass); a fix that does not improve the region's held-out error, or that worsens any neighbouring region, is reverted. Licence findings so far (web-checked 2026-10-04): Difix3D+ code and the nvidia/difix weights are under the NVIDIA License, whose section 3.3 limits the work and derivatives to non-commercial research or evaluation use, plus the Stability AI Community License for the SD-Turbo base - so Difix may be used to evaluate the approach on the corpus but its outputs must not ship; GSFix3D includes Gaussian-Splatting-licensed code (non-commercial only) and RAIL++-M models; the 3DGS-Enhancer authors have not released the spatial-temporal decoder or confidence-aware 3DGS parts. Shippable path to evaluate: a fixer trained by us with img2img-turbo/pix2pix-turbo (MIT) on SD-Turbo (Stability AI Community License: commercial use allowed below USD 1M annual revenue after registering, outputs owned by us; Enterprise licence above that), with LaMa (Apache-2.0 code and Big-LaMa weights) as a per-view inpainting baseline, and gsplat/nerfstudio (Apache-2.0) for training. Data policy: corpus clips only, no user captures (SPEC section 6.3, ADR-0005: reconstruction is corpus-only on our own infrastructure); generated content is added only to rooms whose source licence allows adaptation (e.g. CC BY with the 'modified' credit already used by the splat room), never to NC/ND or unknown-licence clips; generated regions are recorded per room so they can be flagged or removed. Cost (Modal list prices recorded in M1-RES-01: A10G $1.10/h, L40S $1.95/h, A100 80 GB $2.50/h): measured today, one Winchester retrain with the quality recipe cost $0.60 on an L40S (30k iterations in about 14 min of training, 15 min wall; the two-variant retrain app came to $1.37 on the Modal bill), and it gave a sharper room with fewer floaters but left the out-of-coverage smears that this spike targets; detection is CPU-side (coverage and splat statistics in seconds) plus one held-out render pass; Difix-style repair per room adds pseudo-view fixing (the paper reports 76 ms per single-step fix on an A100; a few hundred to a few thousand fixes per room is minutes of GPU) and one to three progressive retrains, so an estimated $2-6 per room per repair pass on L40S, and $5-15 per room including a failed attempt and verification renders. Training our own fixer: the paper fine-tunes Difix in 'a few hours on a single consumer graphics card'; budget about 10-20 A100-hours ($25-50) for data generation and fine-tuning, plus the pair-generation retrains. Phase 1 (detection + report on 5 corpus rooms, about $10), phase 2 (retrain and proxy fixes with verification, about $25), phase 3 (evaluate Difix3D+ non-commercially on 3 rooms as the quality reference, about $20), phase 4 (train our own MIT/SD-Turbo fixer and compare, about $50-75). Suggested total spend request: $150 for the spike, inside the Modal workspace limit. AUTH spend request note: needs an Owner spend AUTH before any GPU run beyond the M1-UNITY-01 retrain; the AUTH Decisions table entry is the Owner's to write.",
+  "scope_out": [
+    "Shipping any output of Difix3D+, GSFix3D or other non-commercial-licence models in a build or package",
+    "User captures or any non-corpus imagery",
+    "Runtime (on-device) neural enhancement; this spike is offline only",
+    "M1-AVAT-02 work"
+  ],
+  "deliverables": [
+    "research/generative-repair/README.md (method survey with licences, measured results, cost table, recommendation)",
+    "services/reconstruction/tools/region_report.py (coverage + splat-statistics + held-out error per region)",
+    "qa/reports/M1-PIPE-02-generative-repair.md (before/after renders from fixed probes, per-room verdicts)"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "A region report for at least 5 corpus rooms ranks regions by coverage, splat statistics and held-out render error, and its worst regions match the artifacts reviewers mark on fixed probe views (the Winchester floor/column/entrance smears among them).",
+      "evidence": "region_report output + probe renders with marked regions",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "For each tried fix type (retrain, diffusion repair, duplicate copy, proxy/occluder) the agent records before/after held-out PSNR/SSIM/LPIPS per region and keeps only fixes that improve the region without worsening neighbours; reverted fixes are listed with the reason.",
+      "evidence": "per-room fix log + before/after renders",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "Licence and data-policy check per component (code, weights, base model, training data) is written up; nothing from a non-commercial-licence model is written into a shippable package, and generated content only enters rooms whose source licence allows adaptation, with the credit marked 'modified'.",
+      "evidence": "research/generative-repair/README.md licence table + package manifest check",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-4",
+      "test": "Measured GPU cost per room per fix type (cost.json style: GPU + CPU + memory) is reported against the estimates in this ticket, and total spend stays within the approved AUTH line.",
+      "evidence": "cost table + Modal billing summary",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-5",
+      "test": "Recommendation: which fix types to automate in the reconstruction pipeline (M1-PIPE-01 / M1-CAPT-03), with expected cost per room and the quality gain on device (an iPhone check of one repaired room).",
+      "evidence": "README recommendation + device screenshots",
+      "automated": false,
+      "level": "suggested"
+    }
+  ],
+  "security": [
+    "Corpus only; no user imagery (SPEC section 6.3, ADR-0005)",
+    "Model weights pulled only from the official repositories; licences recorded before download",
+    "No secrets or signed URLs in reports or logs"
+  ],
+  "depends_on": [
+    "M1-UNITY-01",
+    "M1-CAPT-03"
+  ],
+  "blocked_by": [
+    "Owner spend AUTH for the research GPU budget (suggested $150) not yet requested"
+  ],
+  "auth_required": [
+    {
+      "type": "spend",
+      "what": "Generative-repair research GPU compute on Modal (suggested $150 total across 4 phases)",
+      "auth_id": null,
+      "status": "pending"
+    }
+  ],
+  "references": [
+    "Difix3D+ (CVPR 2025): https://arxiv.org/abs/2503.01774, code https://github.com/nv-tlabs/Difix3D (NVIDIA License, non-commercial), weights https://huggingface.co/nvidia/difix",
+    "3DGS-Enhancer (NeurIPS 2024): https://github.com/xiliu8006/3DGS-Enhancer",
+    "GSFix3D: https://github.com/GSFix3D/GSFix3D (non-commercial Gaussian-Splatting licence parts, RAIL++-M models)",
+    "img2img-turbo / pix2pix-turbo (MIT): https://github.com/GaParmar/img2img-turbo",
+    "SD-Turbo, Stability AI Community License: https://huggingface.co/stabilityai/sd-turbo",
+    "LaMa (Apache-2.0): https://github.com/advimman/lama",
+    "gsplat (Apache-2.0), nerfstudio Splatfacto (Apache-2.0)",
+    "services/reconstruction/tools/room_limits.py (training-camera coverage)",
+    "qa/evidence/M1-UNITY-01/ (Owner device screenshots of the artifacts)",
+    "SPEC section 6.3, ADR-0005"
+  ],
+  "branch": null,
+  "pr": null,
+  "created": "2026-10-04",
+  "updated": "2026-10-04",
+  "history": [
+    {
+      "date": "2026-10-04",
+      "event": "created by gj-operator at the Owner's request after the build-50 device check (M1-UNITY-01); methods and licences web-checked the same day; cost figures are estimates from the measured Winchester retrain and the Difix3D+ paper's reported timings, not measurements of the repair itself.",
+      "by": "gj-operator"
+    }
+  ]
+}
