@@ -1,0 +1,180 @@
+{
+ "room": "owner-room-01 (Owner's own bedroom, AUTH #046 internal test capture)",
+ "date": "2026-10-04",
+ "privacy": "Metrics and text only. Video, frames, poses, splats, renders and packages stay on the box (chmod 700), the private Modal volume and the private staging bucket; nothing media-derived is in git. Deletable on request.",
+ "source_video": {
+  "device": "iPhone",
+  "codec": "HEVC",
+  "resolution": "1920x1080 (rotation -90: portrait for the whole clip, not mixed)",
+  "fps": 30,
+  "duration_s": 71.84,
+  "frames": 2155
+ },
+ "frame_selection": {
+  "candidate_fps": 12,
+  "candidates": 862,
+  "kept": 274,
+  "rule": "sharpest (variance of Laplacian) per 3-frame window, very blurry windows dropped",
+  "blurry_windows_dropped": 14,
+  "median_sharpness": 75.5,
+  "metadata": "stripped (no EXIF/location in frames)"
+ },
+ "masking_before_upload": {
+  "frames_masked": 108,
+  "methods": [
+   "YuNet face detector (2 scales)",
+   "framed-shelf-photo band tracked by SIFT homography from 2 reference frames",
+   "manual boxes on shelf frames the tracker missed",
+   "TV screen masked (Owner's reflection)"
+  ],
+  "verification": "contact sheets reviewed; residual detector pass (YuNet + Haar frontal/profile): 79 boxes on masked frames, 30 on 29 held-out splat renders, 8 on in-engine renders, all false positives (lace, carpet, shelving, red bag); no face survives"
+ },
+ "sfm": {
+  "method": "GLOMAP, exhaustive matching, 8192 SIFT features",
+  "registered": 229,
+  "frames": 274,
+  "registered_share": 0.836,
+  "points": 104024,
+  "reprojection_px": 0.566
+ },
+ "training": {
+  "recipe": "quality-30k (antialiased, bilateral grid, scale reg, 30k iterations)",
+  "gpu": "L40S",
+  "trained_splats": 1461038,
+  "heldout_views": 29,
+  "psnr": 24.73,
+  "ssim": 0.945,
+  "lpips": 0.11
+ },
+ "shipped": {
+  "display_prune_splats": 400000,
+  "package_bytes": 14963543,
+  "package_sha256": "113df1c9298cefa406efb17eae81932c93157ef37b33dd8168f3bcd80571ab87"
+ },
+ "placement": {
+  "floor": "RANSAC floor plane",
+  "scale_basis": "assumed 2.44 m (8 ft) ceiling; ceiling plane weakly observed (59 inliers)",
+  "scale": 1.5245,
+  "room_m": "about 3.6 x 4.0 (wall to wall)",
+  "median_camera_height_m": 1.41,
+  "camera_pitch_median_deg": -59.2
+ },
+ "walk": {
+  "tool": "room_limits --obstacles --blockers",
+  "walk_min": [
+   -1.87,
+   -1.83
+  ],
+  "walk_max": [
+   1.53,
+   1.67
+  ],
+  "open_floor_m2": 5.52,
+  "blockers": 12,
+  "walk_bounds_mean_views": 13.0
+ },
+ "weak_regions": {
+  "tool": "services/reconstruction/tools/weak_regions.py",
+  "cell_m": 0.5,
+  "whole_room": {
+   "cells": 90,
+   "splats": 1390265,
+   "weak_cells": 29,
+   "weak_share": 0.322,
+   "median_views": 12.0,
+   "giant_share": 0.0001,
+   "needle_share": 0.0005,
+   "faint_share": 0.1276,
+   "isolated_share": 0.0,
+   "pruned_share": 0.7134,
+   "median_heldout_abs_err": 0.022
+  },
+  "walk_area": {
+   "cells": 49,
+   "splats": 1099262,
+   "weak_cells": 10,
+   "weak_share": 0.204,
+   "median_views": 12.0,
+   "giant_share": 0.0,
+   "needle_share": 0.0003,
+   "faint_share": 0.1192,
+   "isolated_share": 0.0,
+   "pruned_share": 0.7053,
+   "median_heldout_abs_err": 0.0217
+  },
+  "visible_from_box": {
+   "cells": 34,
+   "splats": 251274,
+   "weak_cells": 17,
+   "weak_share": 0.5,
+   "median_views": 11.8,
+   "giant_share": 0.0002,
+   "needle_share": 0.0016,
+   "faint_share": 0.1606,
+   "isolated_share": 0.0001,
+   "pruned_share": 0.7452,
+   "median_heldout_abs_err": 0.0248
+  },
+  "worst_cells_in_camera_box": [
+   {
+    "x": 1.25,
+    "z": -1.75,
+    "score": 0.929,
+    "views": 3.3,
+    "view_spread": 0.015,
+    "heldout_err": 0.0451
+   },
+   {
+    "x": 0.75,
+    "z": -1.25,
+    "score": 0.847,
+    "views": 3.3,
+    "view_spread": 0.007,
+    "heldout_err": 0.0554
+   },
+   {
+    "x": 0.75,
+    "z": -1.75,
+    "score": 0.821,
+    "views": 4.0,
+    "view_spread": 0.01,
+    "heldout_err": 0.0304
+   },
+   {
+    "x": 0.75,
+    "z": 0.25,
+    "score": 0.802,
+    "views": 2.7,
+    "view_spread": 0.198,
+    "heldout_err": 0.0549
+   },
+   {
+    "x": 0.75,
+    "z": -0.25,
+    "score": 0.762,
+    "views": 3.7,
+    "view_spread": 0.059,
+    "heldout_err": 0.0579
+   },
+   {
+    "x": 1.25,
+    "z": -1.25,
+    "score": 0.735,
+    "views": 5.3,
+    "view_spread": 0.018,
+    "heldout_err": 0.092
+   }
+  ],
+  "summary": "Weakest: the east / south-east third (x 0.5..1.5 m, z -1.75..0.25 m: the dresser's east end and the floor between the foot of the bed and the dresser), 2.7-5.3 views with almost no view spread. The ceiling was barely filmed. Low (character-height) views are soft everywhere because every training view is from 1.3-1.7 m looking down about 60 deg."
+ },
+ "coaching_inputs": [
+  "Move slower: 14 of the 288 selection windows (0.25 s each) were too blurry to use.",
+  "Overlap more: 45 of 274 frames did not register; keep at least two-thirds overlap between consecutive views, especially when turning toward the dresser and door.",
+  "Walk a full loop around the bed and dresser (east side and the gap at the foot of the bed were seen from only 3-5 directions).",
+  "Add a low pass at knee height (30-50 cm) and a few views tilted up: the miniature character's eye is near the floor, and the ceiling sets the scale.",
+  "Keep the camera on the room, not the carpet: the last part of the clip was a long carpet-only tail.",
+  "Turn the TV off or angle away from it (reflections); lay framed photos face down or remove them before filming.",
+  "Hold the phone one way the whole time (this clip was portrait throughout, which is fine; landscape gives a wider horizontal view)."
+ ],
+ "gpu_cost_usd": 0.95
+}
