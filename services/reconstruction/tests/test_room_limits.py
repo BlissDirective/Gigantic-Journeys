@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import math
 
 import pytest
@@ -54,3 +55,37 @@ def test_views_of_counts_only_cameras_facing_the_point():
     t = math.tan(math.radians(30))
     assert rl.views_of(np.array([0.0, 1.0, 3.0]), centres, forwards, t, t, 10.0) == 1
     assert rl.views_of(np.array([0.0, 1.0, 30.0]), centres, forwards, t, t, 10.0) == 0
+
+
+def test_blocked_cells_marks_furniture_in_the_height_band():
+    np = pytest.importorskip("numpy")
+    xs = np.arange(0.0, 1.01, 0.25)
+    zs = np.arange(0.0, 0.51, 0.25)
+    bed = [[0.5, 0.4, 0.25]] * 50  # 50 splats 0.4 m up over cell (z 0.25, x 0.5)
+    rug = [[0.0, 0.02, 0.0]] * 80  # floor splats never block
+    lamp = [[1.0, 1.6, 0.5]] * 80  # above the band
+    few = [[0.25, 0.5, 0.5]] * 10  # too sparse
+    grid = rl.blocked_cells(bed + rug + lamp + few, xs, zs, 0.25, 0.12, 1.2, 40)
+    assert grid.shape == (3, 5)
+    assert grid.sum() == 1 and grid[1, 2]
+
+
+def test_floor_around_a_bed_becomes_walk_bounds_plus_blockers():
+    np = pytest.importorskip("numpy")
+    # 10 x 12 floor (rows = z), a 4 x 5 bed with 3-cell aisles, a 1-cell leak past the wall
+    free = np.zeros((12, 16), dtype=bool)
+    free[1:11, 1:13] = True
+    free[4:8, 4:9] = False  # bed
+    free[5, 13:16] = True  # thin leak past the wall: opened away
+    comp = rl.connected_from(rl.opened(free), (1, 1))
+    rows, cols = np.flatnonzero(comp.any(1)), np.flatnonzero(comp.any(0))
+    assert (rows[0], rows[-1], cols[0], cols[-1]) == (1, 10, 1, 12)
+    sub = ~comp[1:11, 1:13]
+    args = argparse.Namespace(obstacle_high=1.2, blocker_min_cells=3, max_blockers=12)
+    xs = np.arange(1, 13) * 0.1
+    zs = np.arange(1, 11) * 0.1
+    boxes = rl.blocker_boxes(sub, xs, zs, 0.1, args)
+    assert len(boxes) == 1
+    b = boxes[0]
+    assert b["size"] == [0.5, 1.2, 0.4]
+    assert b["center"] == [0.6, 0.6, 0.55]

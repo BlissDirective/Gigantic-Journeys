@@ -27,6 +27,18 @@ Steps:
    deviation (both over the cameras that see the walk area); the camera box is the walk
    rectangle grown by ``--camera-margin`` and capped at the
    95th-percentile camera height + 0.5 m.
+   With ``--obstacles <splat.ply>`` (furnished rooms, e.g. a bedroom), floor cells under
+   furniture are not walkable either: a cell is blocked when at least ``--obstacle-splats``
+   opaque splats (opacity >= 0.5) sit between ``--obstacle-low`` and ``--obstacle-high``
+   metres above the floor, so the character walks the open floor, not through the bed; and a
+   cell is walkable only where the floor itself was reconstructed (at least
+   ``--floor-splats`` opaque splats within ``--floor-band`` m of y = 0), so the coverage test
+   (which has no depth test) cannot pick floor behind a wall.
+   Add ``--blockers`` and the walk area becomes the whole connected open floor (cells with at
+   least ``--walk-min-views`` views, reconstructed floor and no furniture) around that
+   rectangle: its bounding box is the walk rectangle and the furniture inside it is covered by
+   up to ``--max-blockers`` invisible blocker boxes (greedy largest rectangles, spots under
+   ``--blocker-min-cells`` cells stay walkable), so the character can walk around the bed.
 5. Occluders: a solid wall just outside the camera box on each side whose next ``--band``
    metres are thinly covered (< half of ``--min-views``), so the camera never looks into the
    unreconstructed side; never on the side the cameras faced (within 45 degrees of the mean
@@ -233,11 +245,33 @@ def propose(sparse: Path, room: dict, args) -> dict:
                 views_of(np.array([x, hgt, z]), cams, fwd, tw, th, args.max_view)
                 for hgt in (args.knee, args.head)
             )
-    covered = (cov >= args.min_views).tolist()
+    blocked = None
+    if getattr(args, "obstacles", None):
+        blocked, no_floor = obstacle_grid(args.obstacles, room, k, xs, zs, args)
+        blocked |= no_floor
+    ok_cells = cov >= args.min_views
+    if blocked is not None:
+        ok_cells &= ~blocked
+    covered = ok_cells.tolist()
     rect = largest_rectangle(covered)
     if rect is None:
         raise SystemExit("no covered floor cell; lower --min-views")
     r0, r1, c0, c1 = rect
+    blockers: list[dict] = []
+    walk_cells = None
+    if getattr(args, "blockers", False) and blocked is not None:
+        # Whole floor: the connected free floor around the best rectangle, with the furniture
+        # inside its bounding box as invisible blocker boxes (a rectangle alone would be tiny
+        # in a furnished room).
+        free = opened((cov >= getattr(args, "walk_min_views", args.min_views)) & ~blocked)
+        comp = connected_from(free, ((r0 + r1) // 2, (c0 + c1) // 2))
+        rows = np.flatnonzero(comp.any(1))
+        cols = np.flatnonzero(comp.any(0))
+        r0, r1, c0, c1 = int(rows[0]), int(rows[-1]), int(cols[0]), int(cols[-1])
+        walk_cells = int(comp.sum())
+        blockers = blocker_boxes(
+            ~comp[r0 : r1 + 1, c0 : c1 + 1], xs[c0 : c1 + 1], zs[r0 : r1 + 1], cell, args
+        )
     walk_min = [float(xs[c0]) + args.inset, float(zs[r0]) + args.inset]
     walk_max = [float(xs[c1]) - args.inset, float(zs[r1]) - args.inset]
 
@@ -340,6 +374,7 @@ def propose(sparse: Path, room: dict, args) -> dict:
         "viewYawCenterDeg": round(yaw_c, 1),
         "viewYawHalfRangeDeg": round(yaw_half, 1),
         "occluders": occluders,
+        "blockers": blockers,
         "stats": {
             "cameras": len(images),
             "median_camera_height_before_m": round(median_h, 3),
@@ -352,8 +387,107 @@ def propose(sparse: Path, room: dict, args) -> dict:
             "their_pitch_p5_p50_p95_deg": r2(np.percentile(pitch, [5, 50, 95])),
             "covered_cells": int((cov >= args.min_views).sum()),
             "walk_rect_mean_views": round(float(cov[r0 : r1 + 1, c0 : c1 + 1].mean()), 1),
+            "obstacle_cells": int(blocked.sum()) if blocked is not None else None,
+            "walk_floor_m2": round(walk_cells * cell * cell, 2) if walk_cells else None,
         },
     }
+
+
+def opened(mask):
+    """Morphological opening with a 3 x 3 square: drops strips one or two cells wide."""
+    np = _np()
+
+    def neighbours(a):
+        p = np.pad(a, 1)
+        return [
+            p[1 + dr : p.shape[0] - 1 + dr, 1 + dc : p.shape[1] - 1 + dc]
+            for dr in (-1, 0, 1)
+            for dc in (-1, 0, 1)
+        ]
+
+    eroded = np.logical_and.reduce(neighbours(np.asarray(mask, dtype=bool)))
+    return np.logical_or.reduce(neighbours(eroded))
+
+
+def connected_from(mask, seed):
+    """4-connected True region of a 2D bool grid that contains ``seed`` (row, col)."""
+    np = _np()
+    m = np.asarray(mask, dtype=bool)
+    out = np.zeros_like(m)
+    if not m[seed]:
+        hits = np.argwhere(m)
+        if not len(hits):
+            return out
+        seed = tuple(hits[np.abs(hits - np.array(seed)).sum(1).argmin()])
+    stack = [tuple(int(v) for v in seed)]
+    while stack:
+        r, c = stack.pop()
+        if out[r, c] or not m[r, c]:
+            continue
+        out[r, c] = True
+        for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            rr, cc = r + dr, c + dc
+            if 0 <= rr < m.shape[0] and 0 <= cc < m.shape[1] and m[rr, cc] and not out[rr, cc]:
+                stack.append((rr, cc))
+    return out
+
+
+def blocker_boxes(mask, xs, zs, cell: float, args) -> list[dict]:
+    """Greedy largest-rectangle cover of the non-walkable cells inside the walk bounds."""
+    np = _np()
+    left = np.asarray(mask, dtype=bool).copy()
+    boxes = []
+    min_cells = getattr(args, "blocker_min_cells", 3)
+    height = args.obstacle_high
+    while len(boxes) < getattr(args, "max_blockers", 12):
+        rect = largest_rectangle(left.tolist())
+        if rect is None:
+            break
+        r0, r1, c0, c1 = rect
+        if (r1 - r0 + 1) * (c1 - c0 + 1) < min_cells:
+            break
+        left[r0 : r1 + 1, c0 : c1 + 1] = False
+        x0, x1 = float(xs[c0]) - cell / 2, float(xs[c1]) + cell / 2
+        z0, z1 = float(zs[r0]) - cell / 2, float(zs[r1]) + cell / 2
+        boxes.append(
+            {
+                "name": f"Furniture {len(boxes) + 1}",
+                "center": [round((x0 + x1) / 2, 2), round(height / 2, 2), round((z0 + z1) / 2, 2)],
+                "size": [round(x1 - x0, 2), round(height, 2), round(z1 - z0, 2)],
+            }
+        )
+    return boxes
+
+
+def blocked_cells(points, xs, zs, cell: float, low: float, high: float, min_splats: int):
+    """Grid cells (rows = z, cols = x) holding >= ``min_splats`` points in the height band."""
+    np = _np()
+    pts = np.asarray(points, dtype=float)
+    band = pts[(pts[:, 1] >= low) & (pts[:, 1] <= high)]
+    counts = np.zeros((len(zs), len(xs)), dtype=int)
+    if len(band):
+        j = np.floor((band[:, 0] - xs[0]) / cell + 0.5).astype(int)
+        i = np.floor((band[:, 2] - zs[0]) / cell + 0.5).astype(int)
+        keep = (i >= 0) & (i < len(zs)) & (j >= 0) & (j < len(xs))
+        np.add.at(counts, (i[keep], j[keep]), 1)
+    return counts >= min_splats
+
+
+def obstacle_grid(ply: Path, room: dict, k: float, xs, zs, args):
+    """(furniture cells, cells without reconstructed floor) from the trained splat."""
+    np = _np()
+    from tools.prune_splat_ply import read_ply
+
+    _header, v = read_ply(Path(ply))
+    xyz = np.c_[v["x"], v["y"], v["z"]].astype(np.float64)
+    opacity = 1.0 / (1.0 + np.exp(-v["opacity"].astype(np.float64)))
+    pts = to_room(xyz[opacity >= 0.5], room, k)
+    furniture = blocked_cells(
+        pts, xs, zs, args.cell, args.obstacle_low, args.obstacle_high, args.obstacle_splats
+    )
+    band = args.floor_band
+    floor = blocked_cells(pts, xs, zs, args.cell, -band, band, args.floor_splats)
+    return furniture, ~floor
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -375,6 +509,20 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument(
         "--band", type=float, default=2.0, help="metres beyond the camera box checked for occluders"
     )
+    ap.add_argument("--obstacles", type=Path, help="trained splat PLY: keep furniture off the walk")
+    ap.add_argument("--obstacle-low", type=float, default=0.12, help="m above the floor")
+    ap.add_argument("--obstacle-high", type=float, default=1.2, help="m above the floor")
+    ap.add_argument("--obstacle-splats", type=int, default=40, help="splats that block a cell")
+    ap.add_argument("--floor-band", type=float, default=0.08, help="m around y = 0 that is floor")
+    ap.add_argument("--floor-splats", type=int, default=10, help="floor splats a walk cell needs")
+    ap.add_argument(
+        "--blockers",
+        action="store_true",
+        help="walk = the whole connected floor; furniture inside it becomes blocker boxes",
+    )
+    ap.add_argument("--walk-min-views", type=int, default=4, help="views a --blockers cell needs")
+    ap.add_argument("--blocker-min-cells", type=int, default=3, help="smaller blocked spots stay")
+    ap.add_argument("--max-blockers", type=int, default=12)
     args = ap.parse_args(argv)
     room = json.loads(args.room.read_text(encoding="utf-8"))
     json.dump(propose(args.sparse, room, args), sys.stdout, indent=2)
