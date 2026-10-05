@@ -55,6 +55,7 @@ rejected the binary at validation with two **409** errors:
 | **54** | 37234179777 (workflow_dispatch on 233766a, lane=macos, splat_url = v3 package) | internal-debug | uploaded 2026-10-04 4:23 PM CT (green; v3 package fetched, 400,000 splats, 15,067,234 bytes, SHA-256 verified; export check: scene and splat present). **Splat room v3**: retrained 30k antialiased + exposure-compensated splat pruned to 400K, sort every 2nd frame (cadence fix), frame-time split lines in Save report, camera and play-area limits from the training cameras (walk area, orbit pitch -10..22.6 deg, zoom 0.6-1.3x, view yaw +/-45 deg, occluder walls, camera collision). For the Owner's next device check |
 | **55** | 37241954402 (push of 0dbae11, release lane) | release | uploaded 2026-10-04 6:27 PM CT (green). Release export check: SplatRoom scene absent, splat absent; first release build with the ground clamp for low camera angles in MovementTest |
 | **56** | 37244154837 (workflow_dispatch on 0dbae11, lane=macos, splat_url = v3 package) | internal-debug | uploaded 2026-10-04 6:59 PM CT (green; v3 package fetched via a fresh 15-min signed URL, SHA-256 verified; export check: scene and splat present). **Free-look splat room**: Winchester `cameraMode` "free" = 360 deg yaw, eye elevation -60..80 deg, zoom 0.5-2.5x; walk area, camera box, occluder walls and camera collision kept; eye never drops under the floor. For the Owner's next device check |
+| **58** | 37255020576 (workflow_dispatch on 7130393, lane=macos, splat_url = Winchester v3 package, splat_url_2 = owner-room-01 package) | internal-debug | uploaded 2026-10-04 9:43 PM CT (green; both packages fetched via fresh 15-min signed URLs and SHA-256 verified: Winchester 400,000 splats / 15,067,234 bytes, owner-room-01 400,000 splats / 14,963,543 bytes; export checks: scene, both splats and overlay present). **Bedroom test room** (Owner's own room, AUTH #046): debug overlay -> "Bedroom" button; SplatRoom stays Winchester. Release build 57 (37252706776, push of 7130393) green 9:19 PM CT: SplatRoom scene and splats absent |
 
 ## Owner follow-ups
 - ~~The icon is a **placeholder**~~ **Done 2026-10-02:** the Owner selected the final app icon (white "GJ", a tiny figure
@@ -121,3 +122,14 @@ After build 54 the Owner asked to turn the SplatRoom camera every way, as in the
 pitch -60..80 deg (looking up from near the floor down to almost straight down) and zoom 0.5-2.5x. The walk area,
 camera box, occluder walls and camera collision stay. Build 56. Expect smears where the video never looked
 (M1-PIPE-02 phase 1 maps them).
+
+## Bedroom test room (2026-10-04, M1-PIPE-02 / AUTH #046)
+Internal-debug build 58 carries a second splat room: the Owner's own bedroom (capture room-01, AUTH #046). Open
+the debug overlay (three-finger tap) and press **Bedroom**; **SplatRoom** still opens Winchester. 400,000 splats
+at real metric scale (the room is about 3.6 x 4 m, so the 14.6 cm character is about 1/12 of a person). The walk
+bounds span the open floor around the bed (3.40 x 3.50 m, 5.5 m2 of open floor) with 12 invisible furniture
+blockers; spawn on the carpet facing the bed; free-look camera (pitch -60..80 deg, zoom 0.5-2.5x) inside a box
+just inside the walls. Faces in framed photos and the TV reflection were masked before any frame left the box.
+The package lives only in the private staging bucket (`environments/_devtest/owner-room-01/`); the repo holds
+its hash and path. Expect soft, smeary views from character height: the video was filmed from 1.3-1.7 m looking
+down, and the east side of the room was seen from only a few directions.
