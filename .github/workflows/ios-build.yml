@@ -204,7 +204,7 @@ jobs:
     needs: export
     runs-on: ${{ vars.IOS_MAC_RUNNER || 'macos-26' }}
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: ios-xcode-project
           path: build/iOS
@@ -390,7 +390,7 @@ jobs:
       BUILD_NUMBER: ${{ github.run_number }}
       FLAVOR: ${{ inputs.flavor || 'release' }}
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: ios-xcode-project-burst
           path: build/iOS
