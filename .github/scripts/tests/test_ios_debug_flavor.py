@@ -152,3 +152,28 @@ def test_check_device_test(tmp_path, scene, splat, expect_scene, expect_splat, r
     blob += f"GJSplatRoom/{SLUG}".encode()  # the descriptor alone is not the splat
     (data / "globalgamemanagers").write_bytes(blob)
     assert flavor.check_device_test(tmp_path, expect_scene, expect_splat, SLUG) == rc
+
+
+def test_extra_room_manifests_are_valid_private_pointers():
+    """Every splat-room-<slug>.json: slug-named, private-bucket path, hash + size only."""
+    folder = ROOT / "unity" / "Assets" / "GiganticJourneys" / "DeviceTest"
+    extras = sorted(folder.glob("splat-room-*.json"))
+    for path in extras:
+        m = json.loads(path.read_text())
+        assert path.name == f"splat-room-{m['slug']}.json"
+        assert m["resource"] == f"GJSplatRoom/{m['slug']}"
+        assert m["packageObject"].startswith(f"environments/_devtest/{m['slug']}/")
+        assert len(m["packageSha256"]) == 64 and int(m["packageBytes"]) > 0
+        assert int(m["packageBytes"]) <= flavor.MAX_PACKAGE_BYTES
+
+
+def test_internal_debug_builds_never_save_the_library_cache():
+    """The macOS job imports private splats for internal-debug: restore-only cache there."""
+    wf = (ROOT / ".github" / "workflows" / "ios-build.yml").read_text()
+    mac = wf[wf.index("Internal-debug fetches the device-test splat room") :]
+    save = mac.index("uses: actions/cache@v6")
+    assert "if: ${{ inputs.flavor != 'internal-debug' }}" in mac[save - 80 : save]
+    restore = mac.index("uses: actions/cache/restore@v6")
+    assert "if: ${{ inputs.flavor == 'internal-debug' }}" in mac[restore - 80 : restore]
+    # Both fetch steps run before any cache step.
+    assert mac.index("fetches the second device-test room") < save

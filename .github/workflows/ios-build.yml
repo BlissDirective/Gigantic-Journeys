@@ -48,6 +48,11 @@
 #     into a gitignored Resources folder. The URL is read from the event file
 #     and masked (never echoed); no key is used here. Release builds contain
 #     neither the scene nor the splat (checked on the exported player data).
+#     A second room (splat_url_2 + splat_room_2, e.g. the Owner's own-room test
+#     capture, AUTH #046) is fetched the same way against
+#     DeviceTest/splat-room-<splat_room_2>.json; the overlay offers it as a
+#     SplatRoom variant. Internal-debug runs only RESTORE the Library cache and
+#     never save it, so no imported splat ever lands in the Actions cache.
 # Secrets (CI-only, added by the Owner, ticket M0-REPO-05): ASC_KEY_ID,
 # ASC_ISSUER_ID, ASC_KEY_P8_BASE64. Variable: APPLE_TEAM_ID.
 # The build number is the workflow run number. gj-qa-release verifies the
@@ -81,6 +86,14 @@ on:
         description: "internal-debug only: short-lived (<=15 min) signed URL of the device-test splat package (M1-UNITY-01), minted by gj-operator from the private staging bucket right before dispatch; empty = no splat"
         type: string
         default: ""
+      splat_url_2:
+        description: "internal-debug only: short-lived (<=15 min) signed URL of a second device-test room package (manifest DeviceTest/splat-room-<splat_room_2>.json); empty = none"
+        type: string
+        default: ""
+      splat_room_2:
+        description: "slug of the second room (lowercase letters, digits, dashes)"
+        type: string
+        default: "owner-room-01"
 
 permissions:
   contents: read
@@ -233,10 +246,34 @@ jobs:
           python3 .github/scripts/ios_debug_flavor.py fetch-splat --file "$pkg" \
             --manifest unity/Assets/GiganticJourneys/DeviceTest/splat-room.json \
             --dest unity/Assets/GiganticJourneys/DeviceTest/Downloaded/Resources/GJSplatRoom
-      - uses: actions/cache@v6
+      - name: Internal-debug fetches the second device-test room (signed URL, SHA-256 verified)
+        if: ${{ inputs.flavor == 'internal-debug' && inputs.splat_url_2 != '' }}
+        run: |
+          set -euo pipefail
+          url=$(jq -r '.inputs.splat_url_2 // ""' "$GITHUB_EVENT_PATH")
+          echo "::add-mask::$url"
+          room=$(jq -r '.inputs.splat_room_2 // ""' "$GITHUB_EVENT_PATH")
+          [[ "$room" =~ ^[a-z0-9][a-z0-9-]{0,40}$ ]] || { echo "::error::bad splat_room_2"; exit 1; }
+          pkg="$RUNNER_TEMP/splat-room-2.tar.gz"
+          curl -fsS --retry 2 --max-filesize 67108864 -o "$pkg" "$url"
+          python3 .github/scripts/ios_debug_flavor.py fetch-splat --file "$pkg" \
+            --manifest "unity/Assets/GiganticJourneys/DeviceTest/splat-room-$room.json" \
+            --dest unity/Assets/GiganticJourneys/DeviceTest/Downloaded/Resources/GJSplatRoom
+          rm -f "$pkg"
+      # Release / push builds restore and save the Library cache; internal-debug builds
+      # (which import the private device-test splats) only restore it.
+      - if: ${{ inputs.flavor != 'internal-debug' }}
+        uses: actions/cache@v6
         with:
           path: unity/Library
           key: LibraryMac-ios-${{ inputs.flavor == 'internal-debug' && 'debug-' || '' }}${{ hashFiles('unity/Assets/**', 'unity/Packages/**', 'unity/ProjectSettings/**') }}
+          restore-keys: |
+            LibraryMac-ios-
+      - if: ${{ inputs.flavor == 'internal-debug' }}
+        uses: actions/cache/restore@v6
+        with:
+          path: unity/Library
+          key: LibraryMac-ios-debug-${{ hashFiles('unity/Assets/**', 'unity/Packages/**', 'unity/ProjectSettings/**') }}
           restore-keys: |
             LibraryMac-ios-
       - name: Internal-debug flavor adds GJ_DEBUG (this runner's checkout only)
@@ -288,6 +325,15 @@ jobs:
           SCENE: ${{ inputs.flavor == 'internal-debug' && 'present' || 'absent' }}
           SPLAT: ${{ inputs.flavor == 'internal-debug' && inputs.splat_url != '' && 'present' || 'absent' }}
         run: python3 .github/scripts/ios_debug_flavor.py check-device-test build/iOS/GiganticJourneys --scene "$SCENE" --splat "$SPLAT"
+      - name: Second device-test room only in the internal-debug flavor
+        env:
+          SCENE: ${{ inputs.flavor == 'internal-debug' && 'present' || 'absent' }}
+          SPLAT: ${{ inputs.flavor == 'internal-debug' && inputs.splat_url_2 != '' && 'present' || 'absent' }}
+        run: |
+          set -euo pipefail
+          room=$(jq -r '.inputs.splat_room_2 // "owner-room-01"' "$GITHUB_EVENT_PATH")
+          [[ "$room" =~ ^[a-z0-9][a-z0-9-]{0,40}$ ]] || { echo "::error::bad splat_room_2"; exit 1; }
+          python3 .github/scripts/ios_debug_flavor.py check-device-test build/iOS/GiganticJourneys --scene "$SCENE" --splat "$SPLAT" --slug "$room"
       - name: App Store (1024 px, opaque) icon is in the Xcode project
         run: python3 .github/scripts/ios_app_icon.py build/iOS/GiganticJourneys
       - name: Select Xcode with the iOS 26+ SDK (App Store Connect minimum)
