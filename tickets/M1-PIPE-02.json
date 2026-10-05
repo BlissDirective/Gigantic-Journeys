@@ -127,6 +127,11 @@
       "date": "2026-10-05",
       "by": "gj-operator",
       "event": "AUTH REQUEST #047 filed as https://github.com/BlissDirective/Gigantic-Journeys/issues/17 (Owner proceed 2026-10-05 16:50 CT after widget 05:57 CT chose file-AUTH-then-change). ios-build: when internal-debug fetched splat_url/splat_url_2, retention-days of ios-xcode-project-burst is 1 and the TestFlight job deletes that artifact when done (actions: write). Stops a repeat of build 58 / artifact 11323035373 (AUTH #046). Coordinator still needs to log Decision #047 and close #17."
+    },
+    {
+      "date": "2026-10-05",
+      "by": "coordinator",
+      "event": "Secondary review sign-off (AUTH #007) -- own-room #046 execution (commits 982ba59..5bd5e01): PASS. Verified no media/PII/secrets in git (only owner-room-01-capture.json [metrics + text] and the splat-room descriptor; the splat package stays in the private staging bucket, fetched by a 15-min signed URL at build); faces + framed shelf photos + the TV reflection masked before upload with a residual-detector pass confirming no face survives; EXIF/location stripped; processing on the box + private Modal volume only; tagged private / not-for-distribution / deletable; GPU $0.95 within the #045 cap. #046's binding conditions upheld."
     }
   ]
 }
