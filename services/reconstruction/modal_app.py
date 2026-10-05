@@ -765,6 +765,153 @@ def retrain_clip(
     return record
 
 
+# Owner-consented own-room test captures (AUTH #046): kept apart from the
+# open-video corpus under gj-corpus:/owner-capture/<id>/. The operator box
+# extracts the frames and blurs every face (framed photos, reflections)
+# BEFORE uploading ``frames/``; the video itself never leaves the box. Nothing
+# from here is ever committed (metrics + text only); everything under the
+# capture folder is deletable on request.
+OWNER_CAPTURE_ROOT = "owner-capture"
+OWNER_CAPTURE_ID_RE = r"^room-[0-9]{2}$"
+
+
+def _check_capture_id(capture_id: str) -> str:
+    """Validate an Owner capture id (``room-NN``)."""
+    import re
+
+    if not re.match(OWNER_CAPTURE_ID_RE, capture_id):
+        raise ValueError(f"not an owner capture id: {capture_id!r}")
+    return capture_id
+
+
+@app.function(
+    gpu=GPU,
+    cpu=(CPU_CORES, CPU_CORES),
+    memory=MEMORY_MIB,
+    timeout=3600,
+    volumes={CORPUS_MOUNT: corpus_volume},
+)
+def reconstruct_owner_capture(
+    capture_id: str,
+    rate_per_hour_usd: float,
+    gpu: str = GPU,
+    profile: str = "quality-30k",
+    splat_budget: int = 1_500_000,
+    sfm: str = "glomap",
+    matcher: str = "exhaustive",
+    max_features: int = 8192,
+) -> dict:
+    """SfM + display-quality training of one Owner capture from its blurred frames.
+
+    Reads ``owner-capture/<id>/frames`` (already face-blurred on the box) and
+    writes ``splat.ply``, ``sparse/``, ``renders/`` (held-out ground truth |
+    render) and ``run.json`` next to them. The source label is ``corpus``
+    (Owner-supplied, consented: AUTH #046); real user scans stay rejected.
+    """
+    import shutil
+    import tempfile
+    import time
+    import traceback
+
+    from reconstruction import (
+        CostLedger,
+        GsplatTrainer,
+        Open3DMesher,
+        ReconstructionConfig,
+        ScanInput,
+        SplatTransformCompressor,
+        require_offsite_source,
+        run_pipeline,
+        select_sfm,
+    )
+    from reconstruction.cost import ResourceMeter
+    from reconstruction.spike import cost_sheet
+
+    cid = _check_capture_id(capture_id)
+    scan_source = require_offsite_source("corpus")
+    started = time.monotonic()
+    job_meter = ResourceMeter(cores=CPU_CORES, memory_gib=MEMORY_MIB / 1024).start()
+    meter = ResourceMeter(cores=CPU_CORES, memory_gib=MEMORY_MIB / 1024)
+    corpus_volume.reload()
+    out = Path(CORPUS_MOUNT) / OWNER_CAPTURE_ROOT / cid
+    work = Path(tempfile.mkdtemp())
+    shutil.copytree(out / "frames", work / "images")
+    count = sum(1 for p in (work / "images").iterdir() if p.is_file())
+    record: dict = {
+        "capture_id": cid,
+        "gpu": gpu,
+        "rate_per_hour_usd": rate_per_hour_usd,
+        "frames_used": count,
+        "outputs": f"gj-corpus:/{OWNER_CAPTURE_ROOT}/{cid}/",
+        "config": {
+            "sfm": sfm,
+            "matcher": matcher,
+            "max_features": max_features,
+            "profile": profile,
+            "splat_budget": splat_budget,
+        },
+    }
+    try:
+        use_gpu = os.environ.get("GJ_COLMAP_CUDA") == "1"
+        run = run_pipeline(
+            ScanInput(cid, work / "images", count, scan_source),
+            ReconstructionConfig(splat_budget=splat_budget, sfm=sfm),
+            sfm=select_sfm(sfm, use_gpu=use_gpu, matcher=matcher, max_features=max_features),
+            trainer=GsplatTrainer(profile=profile),
+            compressor=SplatTransformCompressor(),
+            mesher=Open3DMesher(),
+            work_dir=work / "out",
+            ledger=CostLedger(),
+            gpu_rate_per_hour_usd=rate_per_hour_usd,
+            meter=meter,
+        )
+        registered = run.poses.registered_images if run.poses else 0
+        record.update(
+            status="ok",
+            registered_images=registered,
+            registration_pct=round(100 * registered / max(count, 1), 1),
+            pipeline=cost_sheet(run),
+        )
+        shutil.copyfile(run.model.ply_path, out / "splat.ply")
+        if run.poses:
+            if (out / "sparse").exists():
+                shutil.rmtree(out / "sparse")
+            shutil.copytree(run.poses.sparse_dir, out / "sparse")
+        render_dir = run.model.ply_path.parent / "eval_renders"
+        if (out / "renders").exists():
+            shutil.rmtree(out / "renders")
+        (out / "renders").mkdir()
+        for p in sorted(render_dir.glob("*.png")) if render_dir.is_dir() else []:
+            shutil.copyfile(p, out / "renders" / p.name)
+    except Exception as exc:  # noqa: BLE001 - record why the run failed
+        record.update(status="fail", error=f"{type(exc).__name__}: {exc}"[:500])
+        record["traceback"] = traceback.format_exc()[-2000:]
+    wall = time.monotonic() - started
+    usage = job_meter.stop()
+    gpu_usd = wall / 3600 * rate_per_hour_usd
+    record["timings_s"] = {"function_wall": round(wall, 1)}
+    record["cost_usd"] = {
+        "gpu": round(gpu_usd, 4),
+        "cpu": round(usage.cpu_usd(), 4),
+        "memory": round(usage.memory_usd(), 4),
+        "total": round(gpu_usd + usage.cpu_usd() + usage.memory_usd(), 4),
+    }
+    (out / "run.json").write_text(json.dumps(record, indent=2) + "\n")
+    corpus_volume.commit()
+    return record
+
+
+@app.local_entrypoint()
+def owner_capture(capture: str, gpu: str = "L40S", profile: str = "quality-30k") -> None:
+    """Reconstruct one Owner capture already uploaded (blurred) to the volume."""
+    if gpu not in GPU_RATES:
+        raise SystemExit(f"--gpu must be one of {sorted(GPU_RATES)}, got {gpu!r}")
+    _check_capture_id(capture)
+    fn = reconstruct_owner_capture.with_options(gpu=gpu)
+    record = fn.remote(capture, GPU_RATES[gpu], gpu, profile)
+    print(json.dumps(record, indent=2, default=str))
+
+
 @app.local_entrypoint()
 def retrain(clip: str, profiles: str, gpu: str = "L40S", splat_budget: int = 1_500_000) -> None:
     """Retrain ``clip`` once per comma-separated ``profiles`` (in parallel); tag = profile."""

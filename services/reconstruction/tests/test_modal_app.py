@@ -22,12 +22,19 @@ def test_user_scans_are_rejected_locally_and_in_the_container():
     assert "require_offsite_source" in _calls(fns["main"])
     assert "require_offsite_source" in _calls(fns["reconstruct"])
     assert "require_offsite_source" in _calls(fns["reconstruct_clip"])
+    assert "require_offsite_source" in _calls(fns["reconstruct_owner_capture"])
 
 
 def test_corpus_functions_validate_clip_ids():
     fns = _functions()
     assert "_check_clip_id" in _calls(fns["extract_clip_frames"])
     assert "_check_clip_id" in _calls(fns["reconstruct_clip"])
+
+
+def test_owner_capture_functions_validate_capture_ids():
+    fns = _functions()
+    assert "_check_capture_id" in _calls(fns["reconstruct_owner_capture"])
+    assert "_check_capture_id" in _calls(fns["owner_capture"])
 
 
 def _attr_calls(name: str) -> list[ast.Call]:
