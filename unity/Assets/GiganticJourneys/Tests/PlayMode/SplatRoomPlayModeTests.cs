@@ -44,7 +44,11 @@ namespace GiganticJourneys.Tests
             Assert.IsNotNull(loader, "loader in the scene");
             Assert.IsNotNull(loader.Descriptor, loader.Error);
             Assert.IsNotNull(loader.Colliders, "floor + walls built");
-            Assert.AreEqual(5, loader.Colliders.childCount, "floor and four walls");
+            Assert.AreEqual(
+                5 + loader.Descriptor.blockers.Length,
+                loader.Colliders.childCount,
+                "floor, four walls and the furniture blockers"
+            );
 
             for (var i = 0; i < 60; i++)
                 yield return null;

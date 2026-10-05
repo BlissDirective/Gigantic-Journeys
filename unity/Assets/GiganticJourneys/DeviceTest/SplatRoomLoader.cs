@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using GaussianSplatting.Runtime;
 using GiganticJourneys.DebugTools;
@@ -31,8 +32,59 @@ namespace GiganticJourneys.DeviceTest
         public const float WallHeight = 2.5f;
         public const float WallThickness = 0.2f;
 
-        [Tooltip("splat-room.json (placement, credit, integrity hash).")]
+        [Tooltip("splat-room.json (placement, credit, integrity hash): the default room.")]
         public TextAsset descriptorJson;
+
+        [Tooltip(
+            "Further rooms (splat-room-<slug>.json), chosen from the debug overlay's scene switcher."
+        )]
+        public TextAsset[] extraDescriptors = new TextAsset[0];
+
+        public const string SceneName = "SplatRoom";
+
+        /// <summary>
+        /// The extra rooms the overlay offers as SplatRoom variants (slug, button label). Must
+        /// match <see cref="extraDescriptors"/> (EditMode test); the default room keeps the plain
+        /// "SplatRoom" button.
+        /// </summary>
+        public static readonly KeyValuePair<string, string>[] ExtraRooms =
+        {
+            new KeyValuePair<string, string>("owner-room-01", "Bedroom"),
+        };
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void RegisterRoomVariants() =>
+            DebugOverlay.SceneVariantProvider = name => name == SceneName ? ExtraRooms : null;
+
+        /// <summary>
+        /// The descriptor for <paramref name="slug"/> among <paramref name="jsons"/> (the first
+        /// is the default, used when the slug is empty).
+        /// </summary>
+        public static SplatRoomDescriptor Select(IReadOnlyList<string> jsons, string slug)
+        {
+            if (jsons == null || jsons.Count == 0)
+                throw new FormatException("no splat room descriptor");
+            if (string.IsNullOrEmpty(slug))
+                return SplatRoomDescriptor.Parse(jsons[0]);
+            foreach (var j in jsons)
+            {
+                var d = SplatRoomDescriptor.Parse(j);
+                if (d.slug == slug)
+                    return d;
+            }
+            throw new FormatException($"no splat room '{slug}' in this scene");
+        }
+
+        List<string> DescriptorTexts()
+        {
+            var list = new List<string> { descriptorJson != null ? descriptorJson.text : null };
+            foreach (var t in extraDescriptors ?? new TextAsset[0])
+            {
+                if (t != null)
+                    list.Add(t.text);
+            }
+            return list;
+        }
 
         [Tooltip("Inactive splat renderer in the scene (shader/compute references assigned).")]
         public GaussianSplatRenderer splatRenderer;
@@ -75,9 +127,7 @@ namespace GiganticJourneys.DeviceTest
         {
             try
             {
-                Descriptor = SplatRoomDescriptor.Parse(
-                    descriptorJson != null ? descriptorJson.text : null
-                );
+                Descriptor = Select(DescriptorTexts(), DebugOverlay.RequestedSceneVariant);
             }
             catch (FormatException e)
             {
@@ -339,6 +389,8 @@ namespace GiganticJourneys.DeviceTest
             );
             Box("Wall -Z", new Vector3(c.x, h * 0.5f, lo.y - t * 0.5f), new Vector3(size.x, h, t));
             Box("Wall +Z", new Vector3(c.x, h * 0.5f, hi.y + t * 0.5f), new Vector3(size.x, h, t));
+            foreach (var b in d.blockers ?? new SplatRoomDescriptor.Occluder[0])
+                Box("Blocker " + b.name, b.Center, b.Size);
         }
 
         void Box(string name, Vector3 center, Vector3 size)

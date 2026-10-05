@@ -1,0 +1,228 @@
+{
+  "slug": "owner-room-01",
+  "displayName": "Owner bedroom (test capture)",
+  "resource": "GJSplatRoom/owner-room-01",
+  "splatCount": 400000,
+  "credit": "Owner's own room, Owner-consented internal test capture (AUTH #046). Internal-debug builds only; faces in framed photos and reflections blurred before processing; deletable on request.",
+  "license": "Private: Owner-consented internal test capture (AUTH #046); not for distribution.",
+  "packageObject": "environments/_devtest/owner-room-01/splat-room-unity-v1-400k.tar.gz",
+  "packageSha256": "113df1c9298cefa406efb17eae81932c93157ef37b33dd8168f3bcd80571ab87",
+  "packageBytes": 14963543,
+  "position": [
+    0.3647,
+    1.4357,
+    0.0756
+  ],
+  "rotation": [
+    0.434529,
+    0.560436,
+    -0.546248,
+    0.445768
+  ],
+  "scale": [
+    1.5245,
+    1.5245,
+    -1.5245
+  ],
+  "walkMin": [
+    -1.87,
+    -1.83
+  ],
+  "walkMax": [
+    1.53,
+    1.67
+  ],
+  "spawn": [
+    -0.6,
+    0.02,
+    -0.85
+  ],
+  "spawnYawDeg": 15.0,
+  "renderScale": 0.7,
+  "shOrder": 1,
+  "sortEveryNthFrame": 2,
+  "resortMoveMeters": 0.03,
+  "resortAngleDeg": 1.5,
+  "cameraMin": [
+    -1.9,
+    0.25,
+    -1.9
+  ],
+  "cameraMax": [
+    1.56,
+    2.17,
+    2.15
+  ],
+  "orbitMinElevationDeg": -10.0,
+  "orbitMaxElevationDeg": 45.0,
+  "viewYawCenterDeg": -148.9,
+  "viewYawHalfRangeDeg": 94.5,
+  "orbitMinZoom": 0.6,
+  "orbitMaxZoom": 1.3,
+  "cameraMode": "free",
+  "freeOrbit": {
+    "minElevationDeg": -60.0,
+    "maxElevationDeg": 80.0,
+    "minZoom": 0.5,
+    "maxZoom": 2.5
+  },
+  "occluders": [],
+  "blockers": [
+    {
+      "name": "Furniture 1",
+      "center": [
+        -0.02,
+        0.6,
+        0.87
+      ],
+      "size": [
+        2.2,
+        1.2,
+        1.9
+      ]
+    },
+    {
+      "name": "Furniture 2",
+      "center": [
+        0.33,
+        0.6,
+        -1.63
+      ],
+      "size": [
+        2.7,
+        1.2,
+        0.7
+      ]
+    },
+    {
+      "name": "Furniture 3",
+      "center": [
+        -1.87,
+        0.6,
+        -1.13
+      ],
+      "size": [
+        0.3,
+        1.2,
+        1.7
+      ]
+    },
+    {
+      "name": "Furniture 4",
+      "center": [
+        -1.92,
+        0.6,
+        1.07
+      ],
+      "size": [
+        0.2,
+        1.2,
+        1.5
+      ]
+    },
+    {
+      "name": "Furniture 5",
+      "center": [
+        1.58,
+        0.6,
+        0.52
+      ],
+      "size": [
+        0.2,
+        1.2,
+        1.4
+      ]
+    },
+    {
+      "name": "Furniture 6",
+      "center": [
+        1.53,
+        0.6,
+        -0.93
+      ],
+      "size": [
+        0.3,
+        1.2,
+        0.7
+      ]
+    },
+    {
+      "name": "Furniture 7",
+      "center": [
+        0.53,
+        0.6,
+        -0.28
+      ],
+      "size": [
+        0.5,
+        1.2,
+        0.4
+      ]
+    },
+    {
+      "name": "Furniture 8",
+      "center": [
+        0.73,
+        0.6,
+        -1.23
+      ],
+      "size": [
+        1.3,
+        1.2,
+        0.1
+      ]
+    },
+    {
+      "name": "Furniture 9",
+      "center": [
+        -1.67,
+        0.6,
+        -1.38
+      ],
+      "size": [
+        0.1,
+        1.2,
+        1.2
+      ]
+    },
+    {
+      "name": "Furniture 10",
+      "center": [
+        -1.17,
+        0.6,
+        1.27
+      ],
+      "size": [
+        0.1,
+        1.2,
+        1.1
+      ]
+    },
+    {
+      "name": "Furniture 11",
+      "center": [
+        -1.17,
+        0.6,
+        -1.83
+      ],
+      "size": [
+        0.3,
+        1.2,
+        0.3
+      ]
+    },
+    {
+      "name": "Furniture 12",
+      "center": [
+        -1.67,
+        0.6,
+        1.32
+      ],
+      "size": [
+        0.3,
+        1.2,
+        0.2
+      ]
+    }
+  ]
+}

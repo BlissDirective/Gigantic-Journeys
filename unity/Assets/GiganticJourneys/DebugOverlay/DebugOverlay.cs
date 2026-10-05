@@ -27,7 +27,10 @@ namespace GiganticJourneys.DebugTools
     ///
     /// Scene switcher (M1-UNITY-01 device test): below the Save button, one button per other
     /// scene in the build list loads that scene (for example "SplatRoom", which only the
-    /// internal-debug lane adds to the build). The overlay survives the load.
+    /// internal-debug lane adds to the build). The overlay survives the load. A scene can offer
+    /// variants (<see cref="SceneVariantProvider"/>, for example one button per splat room):
+    /// each variant gets its own button, and the chosen one is left in
+    /// <see cref="RequestedSceneVariant"/> for the loaded scene to read.
     ///
     /// Release builds: this type lives in the <c>GiganticJourneys.DebugOverlay</c>
     /// assembly, whose define constraint is
@@ -66,6 +69,19 @@ namespace GiganticJourneys.DebugTools
 
         /// <summary>QA and tests: pixels per point (the iOS screen scale, e.g. 3 on an iPhone 15 Pro).</summary>
         public static float? PixelsPerPointOverride;
+
+        /// <summary>
+        /// Scene name -> extra variants (id, button label) of that scene, or null for none. Set by
+        /// debug-only assemblies (the splat-room device test registers its rooms); the overlay
+        /// cannot reference them.
+        /// </summary>
+        public static Func<
+            string,
+            IReadOnlyList<KeyValuePair<string, string>>
+        > SceneVariantProvider;
+
+        /// <summary>The variant id chosen with the last scene switch (null = the scene's default).</summary>
+        public static string RequestedSceneVariant { get; set; }
 
         /// <summary>Pixels per point used for touch-target sizing.</summary>
         public static float PixelsPerPoint =>
@@ -130,6 +146,8 @@ namespace GiganticJourneys.DebugTools
             AutoCreate = true;
             SafeAreaOverride = null;
             PixelsPerPointOverride = null;
+            SceneVariantProvider = null;
+            RequestedSceneVariant = null;
         }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -287,6 +305,53 @@ namespace GiganticJourneys.DebugTools
 
         void OnActiveSceneChanged(Scene from, Scene to) => RebuildSceneButtons();
 
+        /// <summary>One scene-switch button: a build scene, optionally one of its variants.</summary>
+        public readonly struct SwitchTarget
+        {
+            public readonly int BuildIndex;
+            public readonly string Variant;
+            public readonly string Label;
+
+            public SwitchTarget(int buildIndex, string variant, string label)
+            {
+                BuildIndex = buildIndex;
+                Variant = variant;
+                Label = label;
+            }
+        }
+
+        /// <summary>
+        /// The buttons the switcher offers: every other build scene (its default), plus each
+        /// variant of every scene except the one running now; the active scene's default only
+        /// when a variant of it is running.
+        /// </summary>
+        public static List<SwitchTarget> SwitchTargetsWithVariants(
+            IReadOnlyList<string> sceneNames,
+            int activeBuildIndex,
+            string activeVariant,
+            Func<string, IReadOnlyList<KeyValuePair<string, string>>> variants
+        )
+        {
+            var list = new List<SwitchTarget>();
+            for (var i = 0; i < sceneNames.Count; i++)
+            {
+                var name = sceneNames[i];
+                var active = i == activeBuildIndex;
+                if (!active || !string.IsNullOrEmpty(activeVariant))
+                    list.Add(new SwitchTarget(i, null, name));
+                var extra = variants?.Invoke(name);
+                if (extra == null)
+                    continue;
+                foreach (var v in extra)
+                {
+                    if (active && v.Key == activeVariant)
+                        continue;
+                    list.Add(new SwitchTarget(i, v.Key, v.Value));
+                }
+            }
+            return list;
+        }
+
         /// <summary>Recreates the scene-switch buttons for the current build list and active scene.</summary>
         public void RebuildSceneButtons()
         {
@@ -294,17 +359,25 @@ namespace GiganticJourneys.DebugTools
                 return;
             SceneRow.Clear();
             _sceneButtons.Clear();
-            var targets = SwitchTargets(
-                SceneManager.sceneCountInBuildSettings,
-                SceneManager.GetActiveScene().buildIndex
+            var names = new List<string>();
+            for (var i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
+                names.Add(SceneNameAt(i));
+            var targets = SwitchTargetsWithVariants(
+                names,
+                SceneManager.GetActiveScene().buildIndex,
+                RequestedSceneVariant,
+                SceneVariantProvider
             );
-            foreach (var index in targets)
+            foreach (var t in targets)
             {
-                var name = SceneNameAt(index);
-                var b = new Button(() => LoadScene(index))
+                var target = t;
+                var b = new Button(() => LoadScene(target.BuildIndex, target.Variant))
                 {
-                    name = "gj-debug-scene-" + name,
-                    text = name,
+                    name =
+                        "gj-debug-scene-"
+                        + names[t.BuildIndex]
+                        + (t.Variant != null ? "-" + t.Variant : ""),
+                    text = t.Label,
                 };
                 StyleButton(b);
                 SceneRow.Add(b);
@@ -315,10 +388,14 @@ namespace GiganticJourneys.DebugTools
         }
 
         /// <summary>Loads a build scene by index (the overlay persists across the load).</summary>
-        public void LoadScene(int buildIndex)
+        public void LoadScene(int buildIndex) => LoadScene(buildIndex, null);
+
+        /// <summary>Loads a build scene, recording the chosen variant (null = default) first.</summary>
+        public void LoadScene(int buildIndex, string variant)
         {
+            RequestedSceneVariant = variant;
             Debug.Log(
-                $"{LogTag} scene switch -> {SceneNameAt(buildIndex)} (build index {buildIndex})"
+                $"{LogTag} scene switch -> {SceneNameAt(buildIndex)}{(variant != null ? " [" + variant + "]" : "")} (build index {buildIndex})"
             );
             SceneManager.LoadScene(buildIndex);
         }

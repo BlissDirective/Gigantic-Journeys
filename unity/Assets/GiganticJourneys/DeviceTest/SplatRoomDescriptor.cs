@@ -78,6 +78,27 @@ namespace GiganticJourneys.DeviceTest
         public Occluder[] occluders = new Occluder[0];
 
         /// <summary>
+        /// Invisible solid boxes (colliders only, world space) inside the walk rectangle: the
+        /// furniture of a furnished room (room_limits <c>--blockers</c>), so the walk rectangle
+        /// can span the whole open floor and the character walks around the bed, not through it.
+        /// The follow camera collides with them too.
+        /// </summary>
+        public Occluder[] blockers = new Occluder[0];
+
+        /// <summary>True when <paramref name="xz"/> lies inside a blocker's footprint.</summary>
+        public bool IsBlocked(Vector2 xz)
+        {
+            foreach (var b in blockers ?? new Occluder[0])
+            {
+                var c = b.Center;
+                var s = b.Size * 0.5f;
+                if (Mathf.Abs(xz.x - c.x) <= s.x && Mathf.Abs(xz.y - c.z) <= s.z)
+                    return true;
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Per-room camera mode. <c>"coverage"</c> (default, empty = coverage) applies the
         /// coverage-derived orbit limits above. <c>"free"</c> lets the player look every way:
         /// full 360° yaw and the pitch/zoom range in <see cref="freeOrbit"/>. Both modes keep the
@@ -267,6 +288,15 @@ namespace GiganticJourneys.DeviceTest
                 if (!(size.x > 0f && size.y > 0f && size.z > 0f))
                     throw new FormatException($"occluder '{o.name}' needs a positive size");
             }
+            foreach (var o in blockers ?? new Occluder[0])
+            {
+                var size = o.Size;
+                _ = o.Center;
+                if (!(size.x > 0f && size.y > 0f && size.z > 0f))
+                    throw new FormatException($"blocker '{o.name}' needs a positive size");
+            }
+            if (IsBlocked(new Vector2(Spawn.x, Spawn.z)))
+                throw new FormatException("spawn must not be inside a blocker");
         }
 
         /// <summary>"780,004" style count for the on-screen label.</summary>

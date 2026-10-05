@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using GaussianSplatting.Runtime;
@@ -6,6 +7,7 @@ using GiganticJourneys.DebugTools;
 using GiganticJourneys.DeviceTest;
 using GiganticJourneys.EditorTools.DeviceTest;
 using GiganticJourneys.EditorTools.Splats;
+using GiganticJourneys.Movement;
 using GiganticJourneys.Movement.Controller;
 using GiganticJourneys.Splats;
 using NUnit.Framework;
@@ -220,6 +222,11 @@ namespace GiganticJourneys.Tests
                     .Select(g => g.GetComponent<SplatRoomLoader>())
                     .Single(l => l != null);
                 Assert.IsNotNull(loader.descriptorJson, "descriptor assigned");
+                CollectionAssert.AreEqual(
+                    SplatRoomScene.DescriptorPaths().Skip(1).ToArray(),
+                    loader.extraDescriptors.Select(AssetDatabase.GetAssetPath).ToArray(),
+                    "every splat-room-<slug>.json is wired as an extra room"
+                );
                 Assert.IsNotNull(loader.player, "player assigned");
                 Assert.IsNotNull(loader.player.GetComponent<CharacterController>());
                 var r = loader.splatRenderer;
@@ -361,6 +368,114 @@ namespace GiganticJourneys.Tests
             CollectionAssert.AreEqual(new[] { 0, 1 }, DebugOverlay.SwitchTargets(3, 2));
             CollectionAssert.AreEqual(new[] { 0 }, DebugOverlay.SwitchTargets(1, -1));
             CollectionAssert.IsEmpty(DebugOverlay.SwitchTargets(1, 0));
+        }
+
+        [Test]
+        public void SceneSwitcher_OffersSceneVariants_ExceptTheRunningOne()
+        {
+            var names = new[] { "MovementTest", "SplatRoom" };
+            IReadOnlyList<KeyValuePair<string, string>> Rooms(string scene) =>
+                scene == "SplatRoom"
+                    ? new[] { new KeyValuePair<string, string>("owner-room-01", "Bedroom") }
+                    : null;
+            string Labels(List<DebugOverlay.SwitchTarget> t) =>
+                string.Join(",", t.Select(x => $"{x.BuildIndex}:{x.Variant ?? "-"}:{x.Label}"));
+
+            Assert.AreEqual(
+                "1:-:SplatRoom,1:owner-room-01:Bedroom",
+                Labels(DebugOverlay.SwitchTargetsWithVariants(names, 0, null, Rooms))
+            );
+            Assert.AreEqual(
+                "0:-:MovementTest,1:owner-room-01:Bedroom",
+                Labels(DebugOverlay.SwitchTargetsWithVariants(names, 1, null, Rooms))
+            );
+            Assert.AreEqual(
+                "0:-:MovementTest,1:-:SplatRoom",
+                Labels(DebugOverlay.SwitchTargetsWithVariants(names, 1, "owner-room-01", Rooms))
+            );
+            Assert.AreEqual(
+                "1:-:SplatRoom",
+                Labels(DebugOverlay.SwitchTargetsWithVariants(names, 0, null, null))
+            );
+        }
+
+        [Test]
+        public void ExtraRooms_MatchTheDescriptorFiles_AndSelectBySlug()
+        {
+            var paths = SplatRoomScene.DescriptorPaths();
+            var extras = paths.Skip(1).Select(p => SplatRoomDescriptor.Parse(File.ReadAllText(p)));
+            CollectionAssert.AreEquivalent(
+                SplatRoomLoader.ExtraRooms.Select(r => r.Key).ToArray(),
+                extras.Select(d => d.slug).ToArray(),
+                "each overlay room variant has exactly one splat-room-<slug>.json"
+            );
+            foreach (var p in paths.Skip(1))
+            {
+                var d = SplatRoomDescriptor.Parse(File.ReadAllText(p));
+                Assert.AreEqual($"splat-room-{d.slug}.json", Path.GetFileName(p));
+                Assert.AreEqual($"GJSplatRoom/{d.slug}", d.resource, "same Resources folder");
+            }
+            var texts = paths.Select(File.ReadAllText).ToArray();
+            var main = SplatRoomDescriptor.Parse(Committed).slug;
+            Assert.AreEqual(main, SplatRoomLoader.Select(texts, null).slug, "default room");
+            Assert.AreEqual(main, SplatRoomLoader.Select(texts, "").slug);
+            foreach (var r in SplatRoomLoader.ExtraRooms)
+                Assert.AreEqual(r.Key, SplatRoomLoader.Select(texts, r.Key).slug);
+            Assert.Throws<FormatException>(() => SplatRoomLoader.Select(texts, "no-such-room"));
+        }
+
+        [Test]
+        public void OwnerRoom_IsPrivate_MetricsAndPointersOnly()
+        {
+            // AUTH #046: the repo holds only a hash, a private-bucket path and numbers.
+            var path = $"{SplatRoomScene.DeviceTestFolder}/splat-room-owner-room-01.json";
+            var d = SplatRoomDescriptor.Parse(File.ReadAllText(path));
+            StringAssert.StartsWith("environments/_devtest/owner-room-01/", d.packageObject);
+            StringAssert.Contains("AUTH #046", d.credit);
+            Assert.IsTrue(d.IsFreeLook, "free-look camera");
+            Assert.IsTrue(d.HasCameraBox, "camera box from room_limits");
+            var size = d.WalkMax - d.WalkMin;
+            Assert.Greater(Mathf.Min(size.x, size.y), 2.5f, "the walk bounds span the bedroom");
+
+            // The open floor around the bed (walk rectangle minus the furniture blockers).
+            Assert.Greater(d.blockers.Length, 0, "furniture blockers from room_limits --blockers");
+            var open = 0;
+            for (var x = d.WalkMin.x + 0.05f; x < d.WalkMax.x; x += 0.1f)
+            for (var z = d.WalkMin.y + 0.05f; z < d.WalkMax.y; z += 0.1f)
+                if (!d.IsBlocked(new Vector2(x, z)))
+                    open++;
+            Assert.Greater(open * 0.01f, 4f, "at least 4 m2 of open floor to walk");
+            Assert.IsFalse(d.IsBlocked(new Vector2(d.Spawn.x, d.Spawn.z)), "spawn on open floor");
+
+            // Real metric scale with a miniature character: the room is many body heights wide.
+            var a = MovementScale
+                .Create(
+                    MovementConfigLoader.LoadFile(MovementConfigLoader.DefaultPath),
+                    ProvisionalTuning.Body.DefaultRealHeightMeters,
+                    ProvisionalTuning.Environment.DefaultScale
+                )
+                .WorldUnitsPerA;
+            Assert.Greater(Mathf.Max(size.x, size.y) / a, 20f, "the bedroom reads giant");
+        }
+
+        [Test]
+        public void Descriptor_RejectsSpawnInsideABlocker_AndEmptyBlockers()
+        {
+            var d = JsonUtility.FromJson<SplatRoomDescriptor>(Committed);
+            d.blockers = new[]
+            {
+                new SplatRoomDescriptor.Occluder
+                {
+                    name = "bed",
+                    center = new[] { d.spawn[0], 0.3f, d.spawn[2] },
+                    size = new[] { 0.5f, 0.6f, 0.5f },
+                },
+            };
+            Assert.Throws<FormatException>(() => d.Validate());
+            d.blockers[0].center = new[] { d.spawn[0] + 2f, 0.3f, d.spawn[2] };
+            d.Validate();
+            d.blockers[0].size = new[] { 0.5f, 0f, 0.5f };
+            Assert.Throws<FormatException>(() => d.Validate());
         }
 
         [Test]

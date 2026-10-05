@@ -326,6 +326,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   descriptorJson: {fileID: 4900000, guid: f4e3e7c5fbf734706b5980d0225394ca, type: 3}
+  extraDescriptors:
+  - {fileID: 4900000, guid: 2cb7dcd957c31b19c9ed2955b10fcc94, type: 3}
   splatRenderer: {fileID: 1741344262}
   player: {fileID: 434755282}
   occluderMaterial: {fileID: 2100000, guid: 0aebc4ed225c8db9283858d24b64bce6, type: 2}

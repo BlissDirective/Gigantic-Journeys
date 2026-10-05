@@ -27,7 +27,11 @@ namespace GiganticJourneys.EditorTools.DeviceTest
     /// Batchmode:
     /// <c>-executeMethod GiganticJourneys.EditorTools.DeviceTest.SplatRoomScene.RunBuild</c> (scene),
     /// <c>...RunImport -gjSplatPly &lt;slug&gt;.ply</c> (converts a PLY into the Resources folder, box only),
-    /// <c>...RunScreenshot -gjOut &lt;png&gt;</c> (renders the room from the spawn; needs a GPU, e.g. xvfb + Vulkan).
+    /// <c>...RunScreenshot -gjOut &lt;png&gt; [-gjRoom &lt;slug&gt;]</c> (renders the room from the spawn; needs a GPU, e.g. xvfb + Vulkan).
+    ///
+    /// More rooms: every <c>splat-room-&lt;slug&gt;.json</c> next to <see cref="DescriptorPath"/> is
+    /// wired into the loader's <c>extraDescriptors</c> (the overlay offers it as a SplatRoom
+    /// variant, <see cref="SplatRoomLoader.ExtraRooms"/>); its splat lands in the same Resources folder.
     /// </summary>
     public static class SplatRoomScene
     {
@@ -39,8 +43,20 @@ namespace GiganticJourneys.EditorTools.DeviceTest
         public const string DownloadFolder = DeviceTestFolder + "/Downloaded";
         public const string ResourcesFolder = DownloadFolder + "/Resources/GJSplatRoom";
 
-        public static SplatRoomDescriptor LoadDescriptor() =>
-            SplatRoomDescriptor.Parse(File.ReadAllText(DescriptorPath));
+        /// <summary>The default descriptor, then every extra room's (sorted by file name).</summary>
+        public static string[] DescriptorPaths() =>
+            new[] { DescriptorPath }
+                .Concat(
+                    Directory
+                        .GetFiles(DeviceTestFolder, "splat-room-*.json")
+                        .Select(p => p.Replace('\\', '/'))
+                        .OrderBy(p => p, StringComparer.Ordinal)
+                )
+                .ToArray();
+
+        /// <summary>The descriptor for <paramref name="slug"/> (null or empty = the default room).</summary>
+        public static SplatRoomDescriptor LoadDescriptor(string slug = null) =>
+            SplatRoomLoader.Select(DescriptorPaths().Select(File.ReadAllText).ToArray(), slug);
 
         [MenuItem("Gigantic Journeys/Device Test/Build Splat Room Scene")]
         public static void Build()
@@ -153,6 +169,13 @@ namespace GiganticJourneys.EditorTools.DeviceTest
 
             var loader = new GameObject("Splat room loader").AddComponent<SplatRoomLoader>();
             loader.descriptorJson = json;
+            loader.extraDescriptors = DescriptorPaths()
+                .Skip(1)
+                .Select(p =>
+                    AssetDatabase.LoadAssetAtPath<TextAsset>(p)
+                    ?? throw new InvalidOperationException($"{p} is not imported")
+                )
+                .ToArray();
             loader.splatRenderer = renderer;
             loader.player = player.transform;
             loader.occluderMaterial = FloorMaterial();
@@ -209,11 +232,13 @@ namespace GiganticJourneys.EditorTools.DeviceTest
         /// <summary>Converts a 3DGS PLY (named &lt;slug&gt;.ply) into <see cref="ResourcesFolder"/>.</summary>
         public static GaussianSplatAsset Import(string plyPath)
         {
-            var descriptor = LoadDescriptor();
-            var expected = Path.GetFileName(descriptor.resource);
-            if (Path.GetFileNameWithoutExtension(plyPath) != expected)
-                throw new ArgumentException(
-                    $"PLY must be named {expected}.ply to match {DescriptorPath}"
+            var stem = Path.GetFileNameWithoutExtension(plyPath);
+            var descriptor =
+                DescriptorPaths()
+                    .Select(p => SplatRoomDescriptor.Parse(File.ReadAllText(p)))
+                    .FirstOrDefault(d => Path.GetFileName(d.resource) == stem)
+                ?? throw new ArgumentException(
+                    $"PLY must be named after a room descriptor's resource (<resource>.ply), got {stem}.ply"
                 );
             EnsureFolder(ResourcesFolder);
             var asset = SampleSplat.ConvertPly(plyPath, ResourcesFolder);
@@ -248,20 +273,29 @@ namespace GiganticJourneys.EditorTools.DeviceTest
         /// side, into <paramref name="outPng"/>. Returns the splat coverage
         /// (fraction of pixels that differ from a splat-off baseline) of the follow view.
         /// </summary>
-        public static float Screenshot(string outPng, int width = 780, int height = 360)
+        public static float Screenshot(
+            string outPng,
+            int width = 780,
+            int height = 360,
+            string slug = null
+        )
         {
             if (SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null)
                 throw new InvalidOperationException(
                     "no graphics device; run under xvfb with -force-vulkan"
                 );
             EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
-            var descriptor = LoadDescriptor();
+            var descriptor = LoadDescriptor(slug);
             var asset =
                 AssetDatabase.LoadAssetAtPath<GaussianSplatAsset>(
                     $"{ResourcesFolder}/{Path.GetFileName(descriptor.resource)}.asset"
                 ) ?? throw new InvalidOperationException($"no splat asset under {ResourcesFolder}");
             var loader = UnityEngine.Object.FindFirstObjectByType<SplatRoomLoader>();
             var r = loader.splatRenderer;
+            loader.player.SetPositionAndRotation(
+                descriptor.Spawn,
+                Quaternion.Euler(0f, descriptor.spawnYawDeg, 0f)
+            );
             r.transform.SetLocalPositionAndRotation(descriptor.Position, descriptor.Rotation);
             r.transform.localScale = descriptor.Scale;
             r.m_Asset = asset;
@@ -285,12 +319,18 @@ namespace GiganticJourneys.EditorTools.DeviceTest
             var follow = Render(cam, width, height);
             var coverage = Coverage(follow, baseline);
 
-            // Device-like second view: mid-hall, turned toward the side wall and columns.
+            // Device-like second view: mid-hall, turned toward the side wall and columns
+            // (other rooms: the middle of the walkable area, or the spawn if furniture stands
+            // there, turned 90 degrees from the spawn).
             var spawnPos = player.position;
             var spawnRot = player.rotation;
+            var mid = (descriptor.WalkMin + descriptor.WalkMax) * 0.5f;
+            var isDefault = string.IsNullOrEmpty(slug) || slug == LoadDescriptor().slug;
             player.SetPositionAndRotation(
-                new Vector3(0.8f, spawnPos.y, 1.5f),
-                Quaternion.Euler(0f, 90f, 0f)
+                isDefault ? new Vector3(0.8f, spawnPos.y, 1.5f)
+                    : descriptor.IsBlocked(mid) ? spawnPos
+                    : new Vector3(mid.x, spawnPos.y, mid.y),
+                Quaternion.Euler(0f, isDefault ? 90f : descriptor.spawnYawDeg + 90f, 0f)
             );
             PlaceFollowCamera(cam.transform, player, a);
             Render(cam, width, height);
@@ -398,7 +438,10 @@ namespace GiganticJourneys.EditorTools.DeviceTest
         public static void RunScreenshot() =>
             Batch(() =>
             {
-                var coverage = Screenshot(Arg("-gjOut") ?? "Temp/splat-check.png");
+                var coverage = Screenshot(
+                    Arg("-gjOut") ?? "Temp/splat-check.png",
+                    slug: Arg("-gjRoom")
+                );
                 if (coverage < 0.05f)
                     throw new InvalidOperationException(
                         $"splat covers only {coverage:P1} of the follow view"
