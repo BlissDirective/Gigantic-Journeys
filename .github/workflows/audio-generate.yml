@@ -1,0 +1,61 @@
+# Manual-only SFX generation (M1-GAME-04, AUTH #048). Runs the sound-bank recipe through the
+# ElevenLabs provider on the Owner's account (ELEVENLABS_API_KEY secret). It SPENDS per run, so
+# `limit` caps the number of provider calls; the default dispatch (ui-publish, limit 1) is a ~1-call
+# smoke. Clips are uploaded as a short-retention artifact and never committed (generic SFX;
+# provenance in qa/audio-sources.md). The full manifest is ~1,841 calls -- raise `limit` deliberately.
+name: audio-generate
+
+on:
+  workflow_dispatch:
+    inputs:
+      event:
+        description: "Only this bank event (blank = all events; always pair with a limit)"
+        type: string
+        default: "ui-publish"
+      material:
+        description: "Only this material (blank = all applicable)"
+        type: string
+        default: ""
+      limit:
+        description: "Max provider calls = cost guard (each call is roughly one clip)"
+        type: string
+        default: "1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: audio-generate
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: ffmpeg (post-process)
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends ffmpeg
+      - name: Generate (ElevenLabs, capped)
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${ELEVENLABS_API_KEY:-}" ]; then
+            echo "::error::ELEVENLABS_API_KEY secret is not set (add it under repo Settings > Secrets > Actions)."
+            exit 1
+          fi
+          python services/audio/generate_audio.py \
+            --execute \
+            --event "${{ inputs.event }}" \
+            --material "${{ inputs.material }}" \
+            --limit "${{ inputs.limit }}"
+      - name: Upload generated clips
+        uses: actions/upload-artifact@v4
+        with:
+          name: gj-audio-${{ inputs.event || 'all' }}
+          path: services/audio/_generated/
+          retention-days: 7
+          if-no-files-found: warn

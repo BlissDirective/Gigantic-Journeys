@@ -131,6 +131,8 @@ def main() -> int:
     ap.add_argument("--no-postprocess", action="store_true")
     ap.add_argument("--provider", choices=["dry-run", "elevenlabs"], default="elevenlabs")
     args = ap.parse_args()
+    event = args.event or None  # a CI input of "" means "all events", not an impossible filter
+    material = args.material or None
 
     est = estimate()
     print(
@@ -142,8 +144,8 @@ def main() -> int:
             sources.DryRunProvider(),
             args.out,
             dry_run=True,
-            event=args.event,
-            material=args.material,
+            event=event,
+            material=material,
         )
         print(f"DRY RUN (no spend): {res['planned_families']} families planned; pass --execute.")
         return 0
@@ -160,8 +162,8 @@ def main() -> int:
         limit=args.limit,
         dry_run=False,
         postprocess=not args.no_postprocess,
-        event=args.event,
-        material=args.material,
+        event=event,
+        material=material,
     )
     print(f"generated: {res}")
     return 0

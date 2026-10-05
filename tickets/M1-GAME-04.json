@@ -99,6 +99,11 @@
       "date": "2026-10-05",
       "event": "Built the ElevenLabs generation provider + batch runner (AUTH #048). services/audio/elevenlabs_provider.py implements the sources.AudioProvider port against ElevenLabs text-to-sound-effects (POST /v1/sound-generation, model eleven_text_to_sound_v2): the API key is read from ELEVENLABS_API_KEY (env/CI secret, never committed) and the HTTP call is injectable so tests run with no network/spend; each request maps to {text=prompt, duration_seconds, loop, prompt_influence, output_format}. services/audio/generate_audio.py walks the manifest, generates, saves, and applies the ffmpeg post-process; it DEFAULTS TO A DRY RUN ($0, no key) and caps real runs with --limit (the full manifest is ~1,841 calls / 422 families -> run capped + incrementally). Generated clips are git-ignored (services/audio/_generated/); provenance in qa/audio-sources.md. 9 new tests (45 audio total; mock provider, no network/spend). The Owner authorized ElevenLabs on their own account (AUTH #048); running the real batch is the Owner/Operator's step once ELEVENLABS_API_KEY is set, and the Unity audio engine + StreamingAssets wiring remain gj-gameplay.",
       "by": "claude-builder"
+    },
+    {
+      "date": "2026-10-05",
+      "event": "Wired the CI run path: the Owner added ELEVENLABS_API_KEY to GitHub Actions secrets, so generation runs in a job, not from a session shell (Actions secrets are not exposed to the agent's shell). Added .github/workflows/audio-generate.yml (workflow_dispatch; inputs event/material/limit; maps ELEVENLABS_API_KEY from secrets; runs generate_audio.py --execute capped by --limit; uploads clips as a 7-day artifact, never committed) and coerced empty CI inputs to 'all' in generate_audio.main. A ~1-call smoke (event=ui-publish, limit=1) is dispatched to prove the end-to-end path before any wider, capped batch (full manifest ~1,841 calls).",
+      "by": "claude-builder"
     }
   ],
   "notes": "Brain-B contract (services/audio + data/audio) done; the Unity engine + CC0 clips are gj-gameplay. data/audio/*.json is the source of truth the C# engine mirrors (movement.json pattern); a sync check can be added when the engine lands. Music identity = restrained adaptive stings (AUTH #022)."

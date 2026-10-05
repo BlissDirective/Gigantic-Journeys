@@ -30,7 +30,9 @@ event it serves.
    committed**); nothing in the repo holds a key. Generate with `services/audio/generate_audio.py`,
    which **defaults to a dry run** ($0, no key) and caps real runs with `--limit` — the full manifest
    is ~1,841 calls / 422 families, so **run it capped + incrementally, not in one shot**. Clips land
-   in the git-ignored `services/audio/_generated/`.
+   in the git-ignored `services/audio/_generated/`. On CI (the key lives in **Actions secrets**, not
+   the repo) dispatch the **`audio-generate`** workflow (`workflow_dispatch`: `event` / `material` /
+   `limit`); it runs the capped generator and uploads the clips as a 7-day artifact.
 
 **Post-process (every non-loop clip), from `sources.ffmpeg_filters(post_process)`:** trim
 leading/trailing near-silence from both ends, then loudness-normalise to the entry's target LUFS
