@@ -177,3 +177,26 @@ def test_internal_debug_builds_never_save_the_library_cache():
     assert "if: ${{ inputs.flavor == 'internal-debug' }}" in mac[restore - 80 : restore]
     # Both fetch steps run before any cache step.
     assert mac.index("fetches the second device-test room") < save
+
+
+def test_private_splat_runs_delete_the_xcode_artifact_and_shorten_retention():
+    """AUTH #047: public-repo artifact must not keep private splat packages."""
+    wf = (ROOT / ".github" / "workflows" / "ios-build.yml").read_text()
+    perms = wf.split("permissions:", 1)[1].split("# One Unity", 1)[0]
+    assert "actions: write" in perms
+    burst = wf[wf.index("name: ios-xcode-project-burst") :]
+    # Retention is 1 day when a private splat URL was passed; else 3.
+    assert "inputs.flavor == 'internal-debug'" in burst
+    assert "inputs.splat_url != '' || inputs.splat_url_2 != ''" in burst
+    assert "&& 1 || 3" in burst[burst.index("retention-days") : burst.index("retention-days") + 200]
+    # Linux export artifact stays at a plain 3 days (no private splats there).
+    linux = wf[wf.index("name: ios-xcode-project") : wf.index("name: ios-xcode-project-burst")]
+    assert "retention-days: 3" in linux
+    tf = wf[wf.index("Upload to TestFlight (fastlane pilot)") :]
+    title = "Delete the Xcode project artifact when it held private splat packages (AUTH #047)"
+    assert title in tf
+    assert "if: ${{ always() && inputs.flavor == 'internal-debug'" in tf
+    assert "inputs.splat_url != '' || inputs.splat_url_2 != ''" in tf
+    assert "actions/artifacts/" in tf and "DELETE" in tf
+    # Delete runs after the download (artifact already local) and after key cleanup.
+    assert tf.index("Remove the key material") < tf.index("Delete the Xcode project artifact")

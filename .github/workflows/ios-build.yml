@@ -53,6 +53,12 @@
 #     DeviceTest/splat-room-<splat_room_2>.json; the overlay offers it as a
 #     SplatRoom variant. Internal-debug runs only RESTORE the Library cache and
 #     never save it, so no imported splat ever lands in the Actions cache.
+#     AUTH #047 / #046: when splat_url or splat_url_2 was set, the Xcode project
+#     holds private splat packages. The macos-player job still uploads
+#     ios-xcode-project-burst for the TestFlight job (retention-days: 1), and
+#     the TestFlight job deletes that artifact as soon as it is done with it
+#     (success or failure), so a public-repo Actions artifact never keeps the
+#     private packages. Release builds keep retention-days: 3 and no delete.
 # Secrets (CI-only, added by the Owner, ticket M0-REPO-05): ASC_KEY_ID,
 # ASC_ISSUER_ID, ASC_KEY_P8_BASE64. Variable: APPLE_TEAM_ID.
 # The build number is the workflow run number. gj-qa-release verifies the
@@ -97,6 +103,9 @@ on:
 
 permissions:
   contents: read
+  # AUTH #047: the TestFlight job deletes ios-xcode-project-burst when this run
+  # fetched private splat packages (splat_url / splat_url_2).
+  actions: write
 
 # One Unity sign-in at a time across all Unity workflows.
 concurrency:
@@ -365,7 +374,9 @@ jobs:
           path: |
             build/iOS
             !build/iOS/DerivedData
-          retention-days: 3
+          # AUTH #047: 1 day when private splat packages were fetched (defense in
+          # depth; the TestFlight job also deletes the artifact when done).
+          retention-days: ${{ (inputs.flavor == 'internal-debug' && (inputs.splat_url != '' || inputs.splat_url_2 != '')) && 1 || 3 }}
 
   testflight:
     name: signed archive + TestFlight upload (macOS)
@@ -483,6 +494,26 @@ jobs:
       - name: Remove the key material
         if: always()
         run: rm -rf "$HOME/private_keys"
+      # AUTH #047 / #046: private splat packages were in this Xcode project. The
+      # job has already downloaded the artifact; delete it from the public repo
+      # so it is not left downloadable (incident: build 58 / artifact 11323035373).
+      - name: Delete the Xcode project artifact when it held private splat packages (AUTH #047)
+        if: ${{ always() && inputs.flavor == 'internal-debug' && (inputs.splat_url != '' || inputs.splat_url_2 != '') }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          name=ios-xcode-project-burst
+          ids=$(gh api "repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts"             --paginate --jq '.artifacts[] | select(.name=="ios-xcode-project-burst") | .id')
+          if [ -z "${ids}" ]; then
+            echo "::warning::AUTH #047: no $name artifact on this run to delete"
+            exit 0
+          fi
+          for id in $ids; do
+            gh api --method DELETE "repos/${{ github.repository }}/actions/artifacts/${id}"
+            echo "[GJ-FLAVOR] AUTH #047: deleted Actions artifact $name id=$id (private splat package(s) were in this run)"
+            echo "::notice::deleted public artifact $name (id $id) - private splat packages must not remain downloadable"
+          done
 
   gate:
     name: ios build gate

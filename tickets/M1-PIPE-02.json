@@ -122,6 +122,11 @@
       "date": "2026-10-05",
       "by": "gj-operator",
       "event": "Internal-debug TestFlight build 58 (run 37255020576, dispatch on 7130393, uploaded 2026-10-04 21:43 CT, green) carries owner-room-01 as a second splat room next to Winchester. Both packages were fetched via fresh 15-minute signed URLs and SHA-256 verified; the export check found the scene and both splats. To reach it: debug overlay -> 'Bedroom'. Release build 57 (push of 7130393) is green, with the SplatRoom scene and splats absent. Box render check: the face detector and a visual review found no face (renders stay on the box). Awaiting the Owner's device check."
+    },
+    {
+      "date": "2026-10-05",
+      "by": "gj-operator",
+      "event": "AUTH REQUEST #047 filed as https://github.com/BlissDirective/Gigantic-Journeys/issues/17 (Owner proceed 2026-10-05 16:50 CT after widget 05:57 CT chose file-AUTH-then-change). ios-build: when internal-debug fetched splat_url/splat_url_2, retention-days of ios-xcode-project-burst is 1 and the TestFlight job deletes that artifact when done (actions: write). Stops a repeat of build 58 / artifact 11323035373 (AUTH #046). Coordinator still needs to log Decision #047 and close #17."
     }
   ]
 }

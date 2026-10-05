@@ -71,7 +71,7 @@
   "branch": "ticket/M1-UNITY-01-metal-splat-sort",
   "pr": null,
   "created": "2026-09-24",
-  "updated": "2026-10-04",
+  "updated": "2026-10-05",
   "history": [
     {
       "date": "2026-09-24",
@@ -117,6 +117,11 @@
       "date": "2026-10-04",
       "by": "gj-operator",
       "event": "Owner feedback on build 54: he can't turn the SplatRoom camera fully as in the sample scene, and blur/fragments remain. Added a per-room cameraMode (coverage | free) to splat-room.json. Winchester is free: 360 deg yaw, eye elevation -60..80 deg, zoom 0.5-2.5x, with walk area, camera box, occluders and collision kept (0dbae11). Also fixed the eye dropping under the floor at low angles and the camera box not clamping while the miniature character's look-at point sits below its floor. Internal-debug TestFlight build 56 (ios-build run 37244154837, dispatch on 0dbae11, lane=macos) uploaded 6:59 PM CT, green, v3 package fetched and SHA-256 verified. Release build 55 green. M1-PIPE-02 phase 1 finds 83% of cells within 4 m of the camera box weak (median 2.7 training views), so free look shows more unreconstructed area; repair is tracked in M1-PIPE-02."
+    },
+    {
+      "date": "2026-10-05",
+      "by": "gj-operator",
+      "event": "AUTH REQUEST #047 filed as https://github.com/BlissDirective/Gigantic-Journeys/issues/17 (Owner proceed 2026-10-05 16:50 CT after widget 05:57 CT chose file-AUTH-then-change). ios-build: when internal-debug fetched splat_url/splat_url_2, retention-days of ios-xcode-project-burst is 1 and the TestFlight job deletes that artifact when done (actions: write). Stops a repeat of build 58 / artifact 11323035373 (AUTH #046). Coordinator still needs to log Decision #047 and close #17."
     }
   ]
 }
