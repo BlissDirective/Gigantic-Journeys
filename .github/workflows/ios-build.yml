@@ -193,7 +193,7 @@ jobs:
           # Burst off for this compile-check export only (M3-UNITY-01); the
           # committed iOS Burst state stays ENABLED. See the [GJ-BURST] log line.
           customParameters: -gjIosBurstOff
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ios-xcode-project
           path: build/iOS
@@ -368,7 +368,7 @@ jobs:
           xcodebuild -project Unity-iPhone.xcodeproj -scheme Unity-iPhone -configuration Release \
             -sdk iphoneos -derivedDataPath ../DerivedData \
             CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO build
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ios-xcode-project-burst
           path: |
