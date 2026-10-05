@@ -6,7 +6,8 @@ contracts the game and journey generator consume.
 - M1-SCEN-02: surface classification — segment the cleaned mesh into planar patches,
   give each a Bible §4 class + A-unit measurements, and emit ``scene_graph.json``
   (``segment`` / ``classify`` / ``scene``). The material/semantic vision pass is a
-  deferred, self-hosted port (SPEC §3.3).
+  self-hosted port (SPEC §3.3); its survey contract + the ``SurveyVisionLabeler`` that
+  drives M1-SCEN-02 labels and the M3-GAME-01 object set live in ``vision_survey``.
 
 Downstream stages (traversal graph -> reachability validator -> route generation)
 build on data/schemas/environment.
@@ -33,6 +34,18 @@ from .cleanup import (
 from .mesh import Mesh, MeshError, read_obj, write_obj
 from .scene import CaptureMeta, build_scene_graph
 from .segment import Patch, segment_planar
+from .vision_survey import (
+    SceneSurvey,
+    SurveyObject,
+    SurveySurface,
+    SurveyVisionLabeler,
+    classify_separability,
+    normalize_material,
+    normalize_semantic,
+    parse_survey,
+    segmented_objects,
+    validate_survey,
+)
 
 __all__ = [
     # mesh
@@ -58,4 +71,15 @@ __all__ = [
     "measure_patch",
     "CaptureMeta",
     "build_scene_graph",
+    # vision-pass survey (M1-SCEN-02 labels + M3-GAME-01 objects)
+    "SceneSurvey",
+    "SurveySurface",
+    "SurveyObject",
+    "SurveyVisionLabeler",
+    "normalize_material",
+    "normalize_semantic",
+    "classify_separability",
+    "segmented_objects",
+    "validate_survey",
+    "parse_survey",
 ]

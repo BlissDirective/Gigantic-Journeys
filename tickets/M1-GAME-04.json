@@ -64,12 +64,14 @@
     "design/proposals/sound-reactivity-v1.md",
     "services/audio/",
     "data/audio/",
-    "qa/audio-sources.md"
+    "qa/audio-sources.md",
+    "services/audio/sources.py",
+    "data/audio/source_manifest.json"
   ],
   "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-09-19",
-  "updated": "2026-10-03",
+  "updated": "2026-10-05",
   "history": [
     {
       "date": "2026-09-19",
@@ -84,6 +86,11 @@
     {
       "date": "2026-10-03",
       "event": "Brain-B follow-on: the AudioMixer/bus config as data (services/audio/mixer.py + data/audio/mixer.json). Master + the five category buses (matching the sound bank), a scale-aware reverb send bus fed by the diegetic buses (ui/music stay dry), sidechain ducking (a ui cue ducks movement/world so a landing warning always reads; music stings duck action; ambience ducks under movement), per-bus voice budget + priority, mobile polyphony ceiling. validate_mixer cross-checks buses against the sound bank. 9 mixer tests (24 audio total). Remaining AT-3 'critical cues audible + 3D-spatialized' and the mixer graph wiring are the Unity engine (gj-gameplay), which mirrors data/audio/mixer.json.",
+      "by": "claude-builder"
+    },
+    {
+      "date": "2026-10-05",
+      "event": "Built the audio-source generation recipe (services/audio/sources.py + data/audio/source_manifest.json; 11 tests, 36 audio total). build_manifest turns the bank into a vendor-agnostic plan: one spec per event (62), material-varying events expanded over the 10 concrete scene_graph materials, each with a text prompt, clip count (= round_robin), loop/one-shot flag, duration, and the ffmpeg post-process (ffmpeg_filters: one-shots trimmed + loudness-normalised; loops left raw for a seamless boundary). validate_manifest enforces bank coverage; a drift test pins source_manifest.json to the bank. The generator is an AudioProvider port -- DryRunProvider runs the plan at $0; a real provider (ElevenLabs via FAL is the natural candidate) needs a spend/account AUTH and holds no key in-repo. Prompt shapes adapted from the MIT image-blaster project; ambience beds take their prompt from the vision-pass survey's ambient_sound. This closes the qa/audio-sources.md sourcing gap with a concrete plan -- no protected path, no new vendor/spend. The clip files themselves + any provider procurement remain gj-gameplay + AUTH-gated.",
       "by": "claude-builder"
     }
   ],

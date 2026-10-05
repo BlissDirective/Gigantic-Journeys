@@ -21,8 +21,16 @@ contract it mirrors — no audio is synthesized here.
   category buses (matching the bank), a scale-aware **reverb send** bus (fed by the diegetic buses),
   **sidechain ducking** so a critical cue always reads and footsteps never mask a landing warning, plus
   per-bus voice budget + priority. `validate_mixer` cross-checks the buses against the sound bank.
+- **`sources.py` + `../../data/audio/source_manifest.json`** — the **audio-source generation recipe**:
+  turns the bank into a vendor-agnostic plan (one spec per event, expanded over the scene_graph
+  materials for material-varying events) with a text prompt, clip `count`, loop/one-shot handling,
+  duration, and the ffmpeg post-process (`ffmpeg_filters`). `build_manifest` reproduces the committed
+  `source_manifest.json` (drift-guarded). The generator is a port (`AudioProvider`); `DryRunProvider`
+  runs at $0 and a real provider (ElevenLabs/FAL) needs a spend AUTH. Closes the `qa/audio-sources.md`
+  sourcing gap. Ambience beds take their prompt from the vision-pass survey's `ambient_sound`.
 - **`tests/`** — Sabine correctness, big-live-vs-small-dead reverb, scale pitch/gain monotonicity +
-  clamps, bank coverage/validity, and mixer consistency (buses↔bank, ducking, voice budget) — 24 tests.
+  clamps, bank coverage/validity, mixer consistency (buses↔bank, ducking, voice budget), and the
+  source recipe (bank coverage, drift guard, loop/one-shot post-process, prompt shapes) — 36 tests.
 
 ## The C# engine mirrors this
 `data/audio/acoustics.json` and `sound_bank.json` are the single source of truth, like
@@ -33,6 +41,8 @@ files self-consistent (bank↔mixer buses, verb coverage, material coverage), an
 `unity/Assets/StreamingAssets/audio/` each file must be **byte-identical** to `data/audio/`.
 
 ## Not here (gj-gameplay / provenance)
-The audio engine, AudioMixer buses + sidechain ducking, 3D spatialization, contact-frame wiring, and
-the actual **CC0/royalty-free clip files** are gj-gameplay. Clip provenance is recorded in
-`qa/audio-sources.md` (AT-4). The music identity is **restrained adaptive stings** (AUTH #022).
+The audio engine, AudioMixer buses + sidechain ducking, 3D spatialization, and contact-frame wiring
+are gj-gameplay. The **generation recipe + the `source_manifest.json` plan** live here, but the
+actual **clip files** — CC0/royalty-free foley or provider-generated — are sourced by gj-gameplay,
+and wiring up a generation provider (ElevenLabs/FAL) needs a spend AUTH. Clip provenance is recorded
+in `qa/audio-sources.md` (AT-4). The music identity is **restrained adaptive stings** (AUTH #022).
