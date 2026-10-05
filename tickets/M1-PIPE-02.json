@@ -66,22 +66,19 @@
     "M1-UNITY-01",
     "M1-CAPT-03"
   ],
-  "blocked_by": [
-    "GPU phases 2-4 wait for AUTH REQUEST #045 ($150 GPU, Owner approved in chat 2026-10-04 17:25 CT; issue #15) to be logged by the Coordinator in governance/AUTHORIZATION_LOG.md. No GPU spend before then.",
-    "Owner own-room test capture (room-01) waits for AUTH REQUEST #046 (policy note, Owner approved in chat 2026-10-04 17:34 CT; issue #16) to be logged. Faces in the framed photos must be blurred or masked before any image leaves the box."
-  ],
+  "blocked_by": [],
   "auth_required": [
     {
       "type": "spend",
-      "what": "Generative-repair research GPU compute, $150 total across phases 1-4 (Modal; Runpod Secure Cloud fallback). Owner approved in chat 2026-10-04 17:25 CT; awaiting Coordinator logging (issue #15)",
+      "what": "Generative-repair research GPU compute, $150 total across phases 1-4 (Modal; Runpod Secure Cloud fallback). Owner approved in chat 2026-10-04 17:25 CT; logged by the Coordinator 2026-10-05 as AUTH #045 (issue #15). $50/day pipeline halt applies; phases 3-4 need a Modal monthly-limit raise or RunPod.",
       "auth_id": "AUTH #045",
-      "status": "pending"
+      "status": "approved"
     },
     {
       "type": "design-change",
-      "what": "Data-policy note: the Owner's own-room capture (room-01) as an internal test capture, processed only on project infrastructure, never committed, deleted on request, faces blurred before any image leaves the box. Owner approved in chat 2026-10-04 17:34 CT; awaiting Coordinator logging (issue #16)",
+      "what": "Data-policy note: the Owner's own-room capture (room-01) as an internal test capture, processed only on project infrastructure, never committed, deleted on request, faces blurred before any image leaves the box. Owner approved in chat 2026-10-04 17:34 CT; logged by the Coordinator 2026-10-05 as AUTH #046 (issue #16).",
       "auth_id": "AUTH #046",
-      "status": "pending"
+      "status": "approved"
     }
   ],
   "references": [
@@ -99,7 +96,7 @@
   "branch": "ticket/M1-PIPE-02-generative-repair",
   "pr": null,
   "created": "2026-10-04",
-  "updated": "2026-10-04",
+  "updated": "2026-10-05",
   "history": [
     {
       "date": "2026-10-04",
@@ -110,6 +107,11 @@
       "date": "2026-10-04",
       "by": "gj-operator",
       "event": "AUTH REQUEST #045 ($150 GPU, issue #15) and #046 (own-room policy note, issue #16) filed with the Owner's chat approvals quoted (17:25 and 17:34 CT); both await Coordinator logging, and no GPU spend starts before that. Status -> in-progress, phase 1 (CPU only, $0). Ran services/reconstruction/tools/weak_regions.py on Winchester (the 828,710-splat quality-30k training output, with the shipped 400K prune and the 19 held-out eval views). Results: walk area 58 cells, median 15.3 training views, 1 weak cell (2%); camera box 95 cells, 23% weak, worst in the -x/-z corner behind the spawn toward the entrance (5-7 views, held-out error 0.10-0.23 vs a 0.035 walk-area median); the ring visible from the camera box (within 4 m) is 83% weak (median 2.7 views; 251K splats, 47% of them removed by the display prune). Floor band (<0.4 m) has twice the giant-splat share of the rest (1.05% vs 0.49%) and more needles (3.3% vs 2.5%). Coverage, not trainer settings, is the main cause, so phase 2 should target the visible ring (proxy or occluder plus re-capture) rather than retraining. Summary: qa/evidence/M1-PIPE-02/winchester-weak-regions-phase1.json; map kept on the box (not committed)."
+    },
+    {
+      "date": "2026-10-05",
+      "by": "coordinator",
+      "event": "Secondary review of the M1-UNITY-01 + M1-PIPE-02 work (AUTH #007): clean -- no secrets, no protected-path changes, and the repair-model licence diligence is sound (Difix3D+/GSFix3D are non-commercial, so eval-only with outputs that never ship; the shippable path is MIT/Apache + SD-Turbo under its community licence). Logged AUTH #045 ($150 one-time GPU spike) and #046 (Owner own-room test capture) in governance/AUTHORIZATION_LOG.md from the Owner-authored issues #15/#16 and the verbatim chat approval relayed 2026-10-04 18:50 CT. auth_required #045/#046 -> approved; the Coordinator-logging blocker is cleared. Residual operational conditions carried forward: phases 2-4 may spend up to the $150 one-time cap (phases 3-4 still need a Modal monthly-limit raise or RunPod; the $50/day halt applies); the own-room capture room-01 is allowed only under #046's binding conditions -- project infrastructure only, never committed to the repo, faces masked before any image leaves the box, deletable on request. Generated repair content is added only to rooms whose source licence permits adaptation and is recorded per room so it can be flagged or removed."
     }
   ]
 }
