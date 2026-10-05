@@ -49,7 +49,8 @@
     "services/reactivity/",
     "data/reactivity/",
     "design/proposals/vision-pass-v1.md",
-    "services/scenegraph/scenegraph/vision_survey.py"
+    "services/scenegraph/scenegraph/vision_survey.py",
+    "services/scenegraph/scenegraph/vision_runner.py"
   ],
   "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
@@ -69,6 +70,11 @@
     {
       "date": "2026-10-05",
       "event": "Wired the object-segmentation input: the self-hosted vision pass now has a contract (design/proposals/vision-pass-v1.md; services/scenegraph/scenegraph/vision_survey.py). segmented_objects(survey) is the dynamic-object set, chosen by the 'could a human lift or push it?' heuristic (adapted from the MIT image-blaster project), each carrying a primary_material normalised onto the same scene_graph material enum the reactivity matrix and audio bank use -- so Tier-1 object reactions key off one shared material vocabulary. The Unity segmentation + shader-displacement runtime and AT-3 device 30 fps remain gj-gameplay. No schema or protected-path change.",
+      "by": "claude-builder"
+    },
+    {
+      "date": "2026-10-05",
+      "event": "Runnable vision-pass layer built (services/scenegraph/scenegraph/vision_runner.py): run_vision_pass + MockVisionModel + labeler_from_model turn a self-hosted model's survey into the labelled scene; segmented_objects(survey) is the M3-GAME-01 dynamic-object set, each with a primary_material on the shared scene_graph enum. 6 tests (48 scenegraph total). The real model is Operator/GPU (SPEC §3.3); the Unity reactivity runtime remains gj-gameplay. No schema or protected-path change.",
       "by": "claude-builder"
     }
   ],

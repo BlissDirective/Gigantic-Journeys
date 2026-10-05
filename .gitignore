@@ -151,3 +151,10 @@ unity/Assets/Generated.meta
 # ---------------------------------------------------------------------------
 unity/Assets/GiganticJourneys/DeviceTest/Downloaded/
 unity/Assets/GiganticJourneys/DeviceTest/Downloaded.meta
+
+# ---------------------------------------------------------------------------
+# M1-GAME-04 audio-source generation output (services/audio/generate_audio.py).
+# Generated clips are never committed; provenance is in qa/audio-sources.md and
+# the files are wired into Unity StreamingAssets by gj-gameplay.
+# ---------------------------------------------------------------------------
+services/audio/_generated/

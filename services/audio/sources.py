@@ -34,7 +34,7 @@ LOOP_EVENTS = frozenset({"ambience-bed", "music-ambient-bed", "music-shrink-them
 # ElevenLabs text-to-SFX (via FAL) would map a request as text=prompt,
 # duration_seconds=duration_s (clamped to this range), loop=loop, with `count` calls for
 # round-robin variants. Adding that provider needs an account + key + a spend AUTH.
-ELEVENLABS_DURATION_RANGE = (0.5, 22.0)
+ELEVENLABS_DURATION_RANGE = (0.5, 30.0)
 
 _WEIGHT_SECONDS = {"light": 0.6, "medium": 1.0, "heavy": 1.5}
 _BUS_LUFS = {"ui": -14.0, "music": -18.0}  # others default below

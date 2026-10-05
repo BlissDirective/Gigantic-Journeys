@@ -34,6 +34,13 @@ from .cleanup import (
 from .mesh import Mesh, MeshError, read_obj, write_obj
 from .scene import CaptureMeta, build_scene_graph
 from .segment import Patch, segment_planar
+from .vision_runner import (
+    MockVisionModel,
+    VisionModel,
+    VisionSurveyError,
+    labeler_from_model,
+    run_vision_pass,
+)
 from .vision_survey import (
     SceneSurvey,
     SurveyObject,
@@ -82,4 +89,10 @@ __all__ = [
     "segmented_objects",
     "validate_survey",
     "parse_survey",
+    # vision-pass runner (M1-SCEN-02 + M3-GAME-01)
+    "VisionModel",
+    "MockVisionModel",
+    "VisionSurveyError",
+    "run_vision_pass",
+    "labeler_from_model",
 ]

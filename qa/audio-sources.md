@@ -23,11 +23,14 @@ event it serves.
 **Two ways to fill a clip, both land in the table below:**
 
 1. **CC0 / royalty-free foley**, found or self-recorded (the default; policy above). Preferred.
-2. **Provider-generated SFX** from the prompt. The recipe is **vendor-agnostic** — a provider plugs
-   into the `AudioProvider` port in `sources.py`. ElevenLabs text-to-SFX via FAL is the natural
-   candidate (`text=prompt`, `duration_seconds=duration_s`, `loop=loop`, `count` variants). **A
-   generation provider needs an ElevenLabs/FAL account + key + a spend AUTH (CLAUDE.md);** none
-   ships in-repo and `sources.py` makes no network call. `DryRunProvider` runs the plan at $0.
+2. **Provider-generated SFX** from the prompt. The recipe is **vendor-agnostic** (the `AudioProvider`
+   port in `sources.py`); the **ElevenLabs provider is built** — `services/audio/elevenlabs_provider.py`
+   (`POST /v1/sound-generation`, model `eleven_text_to_sound_v2`) on the **Owner's own account**,
+   approved as **AUTH #048**. The key is read from `ELEVENLABS_API_KEY` (env / CI secret, **never
+   committed**); nothing in the repo holds a key. Generate with `services/audio/generate_audio.py`,
+   which **defaults to a dry run** ($0, no key) and caps real runs with `--limit` — the full manifest
+   is ~1,841 calls / 422 families, so **run it capped + incrementally, not in one shot**. Clips land
+   in the git-ignored `services/audio/_generated/`.
 
 **Post-process (every non-loop clip), from `sources.ffmpeg_filters(post_process)`:** trim
 leading/trailing near-silence from both ends, then loudness-normalise to the entry's target LUFS
@@ -40,7 +43,7 @@ vision pass saw in the room.
 
 | Clip file | Event(s) | Source | License | Notes |
 |---|---|---|---|---|
-| _(per `source_manifest.json`)_ | all 62 bank events | CC0 foley **or** AUTH-gated provider | CC0 / royalty-free only | gj-gameplay fills each row as clips land; the manifest is the checklist |
+| _(per `source_manifest.json`)_ | all 62 bank events | CC0 foley **or** ElevenLabs (AUTH #048) | CC0 / royalty-free, or Owner-account generated | gj-gameplay fills each row as clips land; the manifest is the checklist |
 
 ## Checklist before a clip ships
 - [ ] License is CC0 or equivalent (link to the source + license page archived).

@@ -53,7 +53,8 @@
     "SPEC §3.3",
     "kit §3.2",
     "design/proposals/vision-pass-v1.md",
-    "services/scenegraph/scenegraph/vision_survey.py"
+    "services/scenegraph/scenegraph/vision_survey.py",
+    "services/scenegraph/scenegraph/vision_runner.py"
   ],
   "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
@@ -73,6 +74,11 @@
     {
       "date": "2026-10-05",
       "event": "Built the vision-pass survey contract + reference (design/proposals/vision-pass-v1.md; services/scenegraph/scenegraph/vision_survey.py; 14 tests). SurveyVisionLabeler implements the classify.VisionLabeler port, so a self-hosted scene survey adds each patch's material (normalised onto the 11-value scene_graph.material enum via whole-word matching, never a wrong guess -> 'unknown' on a miss) and a coarse semantic (coerced to ^[a-z][a-z-]{1,31}$, never free text) plus an optional Bible §4 class override; validate_survey rejects off-enum/contradictory labels before they reach scene_graph.json. The 'literal survey + per-object material/evidence + liftable/pushable separability + never a compound asset' prompt design is adapted from the MIT image-blaster project; the model stays ours and self-hosted (SPEC §3.3, corpus-only AUTH #031), so AT-1/AT-3 (labelled corpus renders) still ride the Operator/GPU model. The closed material enum + the never-free-text semantic directly serve AT-2 ('no PII/no location, generated labels only'). segmented_objects() exposes the dynamic-object set to M3-GAME-01. No new frozen schema and no protected-path change, so no AUTH. Status stays in-progress.",
+      "by": "claude-builder"
+    },
+    {
+      "date": "2026-10-05",
+      "event": "Built the runnable vision-pass layer: services/scenegraph/scenegraph/vision_runner.py (a VisionModel port for the self-hosted model, a deterministic MockVisionModel, run_vision_pass -> a validated SceneSurvey, and labeler_from_model -> a VisionLabeler for scene.build_scene_graph). An end-to-end test proves a model's survey flows through SurveyVisionLabeler into scene_graph materials (replacing the GeometricStub 'unknown'), with a graceful 'unknown' fallback when no survey surface is near a patch. 6 tests (48 scenegraph total). The real self-hosted model (SPEC §3.3, GPU, corpus-trained) plugs into the port -- Operator/GPU; no schema or protected-path change. Status stays in-progress.",
       "by": "claude-builder"
     }
   ]

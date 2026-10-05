@@ -66,7 +66,9 @@
     "data/audio/",
     "qa/audio-sources.md",
     "services/audio/sources.py",
-    "data/audio/source_manifest.json"
+    "data/audio/source_manifest.json",
+    "services/audio/elevenlabs_provider.py",
+    "services/audio/generate_audio.py"
   ],
   "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
@@ -91,6 +93,11 @@
     {
       "date": "2026-10-05",
       "event": "Built the audio-source generation recipe (services/audio/sources.py + data/audio/source_manifest.json; 11 tests, 36 audio total). build_manifest turns the bank into a vendor-agnostic plan: one spec per event (62), material-varying events expanded over the 10 concrete scene_graph materials, each with a text prompt, clip count (= round_robin), loop/one-shot flag, duration, and the ffmpeg post-process (ffmpeg_filters: one-shots trimmed + loudness-normalised; loops left raw for a seamless boundary). validate_manifest enforces bank coverage; a drift test pins source_manifest.json to the bank. The generator is an AudioProvider port -- DryRunProvider runs the plan at $0; a real provider (ElevenLabs via FAL is the natural candidate) needs a spend/account AUTH and holds no key in-repo. Prompt shapes adapted from the MIT image-blaster project; ambience beds take their prompt from the vision-pass survey's ambient_sound. This closes the qa/audio-sources.md sourcing gap with a concrete plan -- no protected path, no new vendor/spend. The clip files themselves + any provider procurement remain gj-gameplay + AUTH-gated.",
+      "by": "claude-builder"
+    },
+    {
+      "date": "2026-10-05",
+      "event": "Built the ElevenLabs generation provider + batch runner (AUTH #048). services/audio/elevenlabs_provider.py implements the sources.AudioProvider port against ElevenLabs text-to-sound-effects (POST /v1/sound-generation, model eleven_text_to_sound_v2): the API key is read from ELEVENLABS_API_KEY (env/CI secret, never committed) and the HTTP call is injectable so tests run with no network/spend; each request maps to {text=prompt, duration_seconds, loop, prompt_influence, output_format}. services/audio/generate_audio.py walks the manifest, generates, saves, and applies the ffmpeg post-process; it DEFAULTS TO A DRY RUN ($0, no key) and caps real runs with --limit (the full manifest is ~1,841 calls / 422 families -> run capped + incrementally). Generated clips are git-ignored (services/audio/_generated/); provenance in qa/audio-sources.md. 9 new tests (45 audio total; mock provider, no network/spend). The Owner authorized ElevenLabs on their own account (AUTH #048); running the real batch is the Owner/Operator's step once ELEVENLABS_API_KEY is set, and the Unity audio engine + StreamingAssets wiring remain gj-gameplay.",
       "by": "claude-builder"
     }
   ],
