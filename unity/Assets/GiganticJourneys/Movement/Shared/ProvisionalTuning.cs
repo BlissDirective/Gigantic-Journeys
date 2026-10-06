@@ -100,6 +100,9 @@ namespace GiganticJourneys.Movement
             /// <summary>Lowest the eye may get above the ground under the character (m), looking up.</summary>
             public const float EyeAboveGroundM = 0.02f;
 
+            /// <summary>How far the lowered camera box floor sits under the ground (m), so the ground clamp, not the box, limits a low eye.</summary>
+            public const float BoxFloorBelowGroundM = 1e-4f;
+
             /// <summary>View-yaw half range meaning "no yaw limit" (a full turn either way).</summary>
             public const float FreeYawHalfRangeDeg = 180f;
 

@@ -442,7 +442,7 @@ namespace GiganticJourneys.Movement.Controller
                             box.min.x,
                             Mathf.Min(
                                 lookAt.y - ProvisionalTuning.CameraOrbit.EyeAboveGroundM,
-                                floorY - 1e-4f
+                                floorY - ProvisionalTuning.CameraOrbit.BoxFloorBelowGroundM
                             ),
                             box.min.z
                         ),
