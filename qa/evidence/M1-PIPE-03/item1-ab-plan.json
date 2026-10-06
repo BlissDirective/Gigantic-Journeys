@@ -1,0 +1,94 @@
+{
+  "ticket": "M1-PIPE-03",
+  "item": "capture-render-quality-v1 \u00a71 \u2014 gsplat antialiased + MCMC (corpus A/B, then flip defaults)",
+  "date": "2026-10-06",
+  "by": "gj-operator",
+  "privacy": "Metrics and text only. Corpus splats/renders stay on gj-corpus:/open-video-recon/<slug>/retrain-ab-*/; the Owner bedroom (AUTH #046) stays on the box (chmod 700), the private Modal volume and the private bucket. Nothing media-derived is committed.",
+  "flag_confirmation_nerfstudio_1_1_5": {
+    "source": "nerfstudio v1.1.5 nerfstudio/models/splatfacto.py (SplatfactoModelConfig), checked against the tagged source and the box copy /tmp/nsx",
+    "rasterize_mode": "--pipeline.model.rasterize-mode {classic|antialiased} \u2014 real field, default classic. Emitted by render_quality.splatfacto_quality_args on the ns-train half.",
+    "strategy": "--pipeline.model.strategy does NOT exist in 1.1.5 (Splatfacto always builds DefaultStrategy; strategy/max_gs_num arrived after 1.1.5 via nerfstudio PR #3548). MCMC on this pin = gsplat 1.4.0 MCMCStrategy swapped in by ns_train_capped.install_mcmc via --mcmc-cap N on the own-args half (render_quality.ns_train_capped_own_args).",
+    "behaviour_preserved": "quality-30k / -camopt / -mcmc recipes stay antialiased: Modal callers build the config with trainer.recipe_rasterize_mode(profile); the default scaled-10k-dense path now emits rasterize-mode classic explicitly (same as nerfstudio's default)."
+  },
+  "arms": {
+    "classic-default": {
+      "rasterize_mode": "classic",
+      "densify_strategy": "default"
+    },
+    "antialiased-mcmc": {
+      "rasterize_mode": "antialiased",
+      "densify_strategy": "mcmc"
+    },
+    "optional_single_factor": [
+      "antialiased-default",
+      "classic-mcmc"
+    ]
+  },
+  "base_recipe": "quality-30k (30k schedule + bilateral grid + scale regularisation), splat_budget 400,000 (device display budget; train at budget, never prune after), L40S, reusing each room's saved frames + SfM so held-out views (every 8th image) are identical across arms",
+  "corpus_rooms": [
+    {
+      "clip": "rooms/medieval-great-hall-winchester",
+      "why": "shipped room (v3), large hall"
+    },
+    {
+      "clip": "rooms/historic-house-eldon-house",
+      "why": "domestic interior closest to a bedroom"
+    },
+    {
+      "clip": "rooms/mosque-prayer-hall-umayyad",
+      "why": "100% registered room, repeated structure"
+    },
+    {
+      "clip": "tabletop/lego-paranal-observatory",
+      "why": "100% registered tabletop (scale contrast)"
+    }
+  ],
+  "bedroom_owner_room_01_auth_046": {
+    "already_measured_2026_10_05_same_29_held_out_views_400k": {
+      "antialiased-default (quality-30k)": {
+        "psnr": 24.85,
+        "ssim": 0.942,
+        "lpips": 0.124
+      },
+      "antialiased-mcmc (quality-30k-mcmc)": {
+        "psnr": 24.1,
+        "ssim": 0.93,
+        "lpips": 0.171
+      }
+    },
+    "to_run": "classic-default only (1 run) via owner_retrain --profiles quality-30k --rasterize-mode classic --tag-suffix ab-classic-400k",
+    "note": "Bedroom result is one input, not the decision: phase 2a already shows MCMC losing there; judge on the corpus."
+  },
+  "metrics": [
+    "held-out PSNR / SSIM / LPIPS (ns_finish, same renderer, same views)",
+    "floater proxy: isolated + giant + needle splat shares from tools/weak_regions.py splat statistics (CPU, $0)",
+    "train wall time + cost.json per run"
+  ],
+  "decision_rule": "Flip ReconstructionConfig defaults (rasterize_mode, densify_strategy) per knob only if the arm wins held-out LPIPS on >= 3 of 4 corpus rooms without a mean PSNR loss > 0.3 dB and without raising the floater proxy. Expected outcome: antialiased likely flips (the shipped recipes already use it); MCMC may not (bedroom 24.10 vs 24.85). If the 2-arm result is mixed, run the single-factor arms before flipping.",
+  "cost_estimate_usd": {
+    "basis": "measured 2026-10-05 bedroom 30k L40S runs at 400K: $0.504 (default) and $0.537 (mcmc) per run, cost.json GPU+CPU+memory; Modal per-app bill for that 2-run app $1.08 (~$0.54/run). Corpus clips have comparable frame counts; 30k iterations dominate.",
+    "per_run": 0.55,
+    "corpus_2_arms_x_4_rooms": 4.4,
+    "bedroom_classic_default_1_run": 0.55,
+    "planned_total": 4.95,
+    "with_40pct_contingency": 6.95,
+    "optional_single_factor_arms_4_rooms_x_2": 4.4
+  },
+  "budget_check": {
+    "modal_billing_summary_this_month_2026_10_06_18_40_CT": {
+      "metered_usd": 6.9,
+      "credits_usd": -6.75,
+      "billed_usd": 0.0
+    },
+    "modal_monthly_limit_usd": 20.0,
+    "headroom_usd": 13.1,
+    "after_planned_with_contingency_usd": 6.15,
+    "auth_lines": "Corpus: reconstruction research compute (#031 spike / #039 RunPod primary, Modal fallback / #040 Tier-2). Bedroom run: AUTH #045 ($150; ~$2.03 spent) under #046 conditions. $50/day halt not approached.",
+    "optional_arms": "Not inside the contingency together with the plan (would leave ~$1.75 of the $20). Run only after checking the live summary again."
+  },
+  "how_to_run": [
+    "cd services/reconstruction && modal run modal_app.py::render_ab --clips rooms/medieval-great-hall-winchester,rooms/historic-house-eldon-house,rooms/mosque-prayer-hall-umayyad,tabletop/lego-paranal-observatory --arms classic-default,antialiased-mcmc --max-runs 8",
+    "modal run modal_app.py::owner_retrain --capture room-01 --profiles quality-30k --rasterize-mode classic --tag-suffix ab-classic-400k"
+  ],
+  "status": "planned"
+}

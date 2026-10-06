@@ -1,0 +1,96 @@
+{
+  "id": "M1-PIPE-03",
+  "title": "Wire capture\u2192render Brain-B cores into the live GPU/iOS pipeline (item 1 first)",
+  "milestone": "M1",
+  "area": "PIPE",
+  "owner": "gj-operator",
+  "qa": "gj-data",
+  "status": "in-progress",
+  "priority": "P1",
+  "size": "L",
+  "summary": "Operator wiring for the capture\u2192render Brain-B cores already on main (AUTH #049/#050; design/proposals/capture-render-quality-v1.md + external-synthesis-builds.md batch 2). Item 1 only in this first slice: pass render_quality.splatfacto_quality_args(config) into ns_train_capped, confirm Splatfacto flag strings against pinned nerfstudio 1.1.5, prepare the antialiased+mcmc vs classic+default corpus A/B with a cost estimate before any GPU spend, then flip ReconstructionConfig defaults only after the A/B. Items 2\u201310 stay out of scope until item 1 lands. Non-commercial weights never ship (#049). VGGT/Metric3D wait on counsel (#050).",
+  "scope_out": [
+    "Items 2\u201310 of capture-render-quality-v1 (DN-Splatter, Depth Anything, BAD-Gaussians, Splatfacto-W, MapAnything, delivery, VGGT, Metric3D, FisherRF coaching)",
+    "Shipping non-commercial weights (Depth Anything non-Small, UniDepth, DUSt3R/MASt3R/Fast3R, academic Inria 3DGS forks)",
+    "Shipping VGGT / Metric3D weights before counsel confirms (#050)",
+    "Flipping ReconstructionConfig defaults before the corpus A/B completes"
+  ],
+  "deliverables": [
+    "services/reconstruction/reconstruction/render_quality.py (nerfstudio 1.1.5-confirmed flag strings; MCMC via ns_train_capped --mcmc-cap)",
+    "services/reconstruction/reconstruction/trainer.py (pass splatfacto_quality_args into ns_train_capped)",
+    "qa/evidence/M1-PIPE-03/item1-ab-plan.json (A/B plan + cost estimate; no GPU until headroom confirmed)"
+  ],
+  "acceptance_tests": [
+    {
+      "id": "AT-1",
+      "test": "GsplatTrainer passes render_quality.splatfacto_quality_args(config) into the ns-train half of ns_train_capped, and densify_strategy=mcmc (or the quality-30k-mcmc profile) passes --mcmc-cap into the own-args half.",
+      "evidence": "unit tests in test_trainer.py / test_render_quality.py + code reference",
+      "automated": true,
+      "level": "required"
+    },
+    {
+      "id": "AT-2",
+      "test": "render_quality.py documents the exact Splatfacto flag strings confirmed against pinned nerfstudio 1.1.5 (rasterize-mode classic|antialiased is a real CLI flag; --pipeline.model.strategy is NOT in 1.1.5 \u2014 MCMC stays on install_mcmc via --mcmc-cap).",
+      "evidence": "render_quality.py comments + tests",
+      "automated": true,
+      "level": "required"
+    },
+    {
+      "id": "AT-3",
+      "test": "A/B plan for antialiased+mcmc vs classic+default on the corpus is written with a Modal cost estimate before any GPU spend; the run stays inside existing caps (Modal $20/mo, #031/#039/#040/#045, $50/day halt) or an AUTH REQUEST is filed first.",
+      "evidence": "qa/evidence/M1-PIPE-03/item1-ab-plan.json",
+      "automated": false,
+      "level": "required"
+    },
+    {
+      "id": "AT-4",
+      "test": "ReconstructionConfig defaults are flipped to the A/B winner only after the corpus A/B metrics are recorded; bedroom private data used only under AUTH #046 (metrics/text in git).",
+      "evidence": "qa metrics + config diff",
+      "automated": false,
+      "level": "suggested"
+    }
+  ],
+  "security": [
+    "SECURITY_CHECKLIST \u00a71 secret hygiene",
+    "SECURITY_CHECKLIST \u00a77 dependency pinning",
+    "AUTH #046 bedroom private-data conditions",
+    "AUTH #049 non-commercial-weights boundary"
+  ],
+  "depends_on": [
+    "M1-CAPT-03",
+    "M1-PIPE-02"
+  ],
+  "blocked_by": [],
+  "auth_required": [
+    {
+      "type": "account",
+      "what": "Commercial-safe capture\u2192render stack (gsplat antialiased + MCMC densification among others). Logged AUTH #049.",
+      "auth_id": "AUTH #049",
+      "status": "approved"
+    }
+  ],
+  "references": [
+    "design/proposals/capture-render-quality-v1.md \u00a71",
+    "design/proposals/external-synthesis-builds.md batch 2",
+    "AUTH #049",
+    "AUTH #050",
+    "AUTH #006",
+    "AUTH #007"
+  ],
+  "branch": "ticket/M1-PIPE-03-capture-render-wiring",
+  "pr": null,
+  "created": "2026-10-06",
+  "updated": "2026-10-06",
+  "history": [
+    {
+      "date": "2026-10-06",
+      "event": "Created by gj-operator. Owner directed capture\u2192render Brain-B wiring before the bedroom reshoot; item 1 first (branch \u2192 self-review \u2192 merge on green CI).",
+      "by": "gj-operator"
+    },
+    {
+      "date": "2026-10-06",
+      "event": "Item 1 wiring: splatfacto_quality_args \u2192 ns_train_capped; flags confirmed vs nerfstudio 1.1.5; A/B plan+cost in qa/evidence/M1-PIPE-03/item1-ab-plan.json; Modal Oct $6.90/$20; GPU A/B not started.",
+      "by": "gj-operator"
+    }
+  ]
+}

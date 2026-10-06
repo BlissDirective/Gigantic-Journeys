@@ -190,6 +190,7 @@ def reconstruct(
         ReconstructionConfig,
         ScanInput,
         SplatTransformCompressor,
+        recipe_rasterize_mode,
         require_offsite_source,
         run_pipeline,
         select_sfm,
@@ -213,7 +214,9 @@ def reconstruct(
     )
     run = run_pipeline(
         scan,
-        ReconstructionConfig(sfm=sfm, splat_budget=splat_budget),
+        ReconstructionConfig(
+            sfm=sfm, splat_budget=splat_budget, rasterize_mode=recipe_rasterize_mode(profile)
+        ),
         sfm=sfm_adapter,
         trainer=GsplatTrainer(profile=profile or None),
         compressor=SplatTransformCompressor(),
@@ -314,6 +317,7 @@ def train_bench(
         Open3DMesher,
         ReconstructionConfig,
         SplatTransformCompressor,
+        recipe_rasterize_mode,
         require_offsite_source,
     )
     from reconstruction.cost import ResourceMeter
@@ -326,7 +330,9 @@ def train_bench(
     with tarfile.open(fileobj=io.BytesIO(sparse_tar)) as tar:
         tar.extractall(work / "out", filter="data")  # noqa: S202 - produced by sfm_export
     poses = CameraPoses("bench", work / "out" / "sparse", count, image_dir=work / "images")
-    config = ReconstructionConfig(splat_budget=splat_budget)
+    config = ReconstructionConfig(
+        splat_budget=splat_budget, rasterize_mode=recipe_rasterize_mode(profile)
+    )
     t0 = time.monotonic()
     trainer = GsplatTrainer(profile=profile, growth_limit=growth_limit)
     model = trainer.train(poses, work / "out", config)
@@ -585,6 +591,7 @@ def reconstruct_clip(
         ReconstructionConfig,
         ScanInput,
         SplatTransformCompressor,
+        recipe_rasterize_mode,
         require_offsite_source,
         run_pipeline,
         select_sfm,
@@ -626,7 +633,11 @@ def reconstruct_clip(
         use_gpu = os.environ.get("GJ_COLMAP_CUDA") == "1"
         run = run_pipeline(
             ScanInput(slug, work / "images", count, scan_source),
-            ReconstructionConfig(splat_budget=splat_budget, sfm=sfm),
+            ReconstructionConfig(
+                splat_budget=splat_budget,
+                sfm=sfm,
+                rasterize_mode=recipe_rasterize_mode(profile),
+            ),
             sfm=select_sfm(sfm, use_gpu=use_gpu, matcher=matcher, max_features=max_features),
             trainer=GsplatTrainer(profile=profile or None),
             compressor=SplatTransformCompressor(),
@@ -695,6 +706,8 @@ def retrain_clip(
     rate_per_hour_usd: float,
     gpu: str = GPU,
     splat_budget: int = 1_500_000,
+    rasterize_mode: str = "",
+    densify_strategy: str = "default",
 ) -> dict:
     """Retrain one reconstructed corpus clip from its saved frames + SfM model.
 
@@ -702,6 +715,8 @@ def retrain_clip(
     frame match the first run) and trains with ``profile`` (``trainer.PROFILES``).
     Writes ``splat.ply``, ``renders/`` and ``run.json`` under
     ``<recon>/<slug>/retrain-<tag>/``; the first run's outputs are untouched.
+    ``rasterize_mode`` ("" = the profile's measured recipe) and ``densify_strategy`` set
+    the render-quality knobs (``render_quality``; the M1-PIPE-03 item-1 A/B arms).
     """
     import re
     import shutil
@@ -712,6 +727,7 @@ def retrain_clip(
         CameraPoses,
         GsplatTrainer,
         ReconstructionConfig,
+        recipe_rasterize_mode,
         require_offsite_source,
     )
     from reconstruction.cost import ResourceMeter
@@ -729,9 +745,12 @@ def retrain_clip(
     shutil.copytree(src / "sparse", work / "out" / "sparse")
     count = sum(1 for p in (work / "images").iterdir() if p.is_file())
     poses = CameraPoses(slug, work / "out" / "sparse", count, image_dir=work / "images")
-    model = GsplatTrainer(profile=profile).train(
-        poses, work / "out", ReconstructionConfig(splat_budget=splat_budget)
+    config = ReconstructionConfig(
+        splat_budget=splat_budget,
+        rasterize_mode=rasterize_mode or recipe_rasterize_mode(profile),
+        densify_strategy=densify_strategy,
     )
+    model = GsplatTrainer(profile=profile).train(poses, work / "out", config)
     dest = src / f"retrain-{tag}"
     if dest.exists():
         shutil.rmtree(dest)
@@ -747,6 +766,8 @@ def retrain_clip(
         "clip_id": clip_id,
         "tag": tag,
         "profile": profile,
+        "rasterize_mode": config.rasterize_mode,
+        "densify_strategy": config.densify_strategy,
         "gpu": gpu,
         "splat_budget": splat_budget,
         "splat_count": model.splat_count,
@@ -820,6 +841,7 @@ def reconstruct_owner_capture(
         ReconstructionConfig,
         ScanInput,
         SplatTransformCompressor,
+        recipe_rasterize_mode,
         require_offsite_source,
         run_pipeline,
         select_sfm,
@@ -855,7 +877,11 @@ def reconstruct_owner_capture(
         use_gpu = os.environ.get("GJ_COLMAP_CUDA") == "1"
         run = run_pipeline(
             ScanInput(cid, work / "images", count, scan_source),
-            ReconstructionConfig(splat_budget=splat_budget, sfm=sfm),
+            ReconstructionConfig(
+                splat_budget=splat_budget,
+                sfm=sfm,
+                rasterize_mode=recipe_rasterize_mode(profile),
+            ),
             sfm=select_sfm(sfm, use_gpu=use_gpu, matcher=matcher, max_features=max_features),
             trainer=GsplatTrainer(profile=profile),
             compressor=SplatTransformCompressor(),
@@ -916,6 +942,8 @@ def retrain_owner_capture(
     gpu: str = GPU,
     splat_budget: int = 400_000,
     score: tuple[str, ...] = (),
+    rasterize_mode: str = "",
+    densify_strategy: str = "default",
 ) -> dict:
     """Retrain one Owner capture from its saved (blurred) frames + SfM model (AUTH #046).
 
@@ -936,6 +964,7 @@ def retrain_owner_capture(
         CameraPoses,
         GsplatTrainer,
         ReconstructionConfig,
+        recipe_rasterize_mode,
         require_offsite_source,
     )
     from reconstruction.cost import ResourceMeter
@@ -958,8 +987,13 @@ def retrain_owner_capture(
     shutil.copytree(src / "sparse", work / "out" / "sparse")
     count = sum(1 for p in (work / "images").iterdir() if p.is_file())
     poses = CameraPoses(cid, work / "out" / "sparse", count, image_dir=work / "images")
+    config = ReconstructionConfig(
+        splat_budget=splat_budget,
+        rasterize_mode=rasterize_mode or recipe_rasterize_mode(profile),
+        densify_strategy=densify_strategy,
+    )
     model = GsplatTrainer(profile=profile, score_plys=tuple(scored)).train(
-        poses, work / "out", ReconstructionConfig(splat_budget=splat_budget)
+        poses, work / "out", config
     )
     dest = src / f"retrain-{tag}"
     if dest.exists():
@@ -981,6 +1015,8 @@ def retrain_owner_capture(
         "capture_id": cid,
         "tag": tag,
         "profile": profile,
+        "rasterize_mode": config.rasterize_mode,
+        "densify_strategy": config.densify_strategy,
         "gpu": gpu,
         "splat_budget": splat_budget,
         "splat_count": model.splat_count,
@@ -1007,11 +1043,14 @@ def owner_retrain(
     splat_budget: int = 400_000,
     score: str = "",
     tag_suffix: str = "400k",
+    rasterize_mode: str = "",
+    densify_strategy: str = "default",
 ) -> None:
     """Retrain an Owner capture once per comma-separated profile, in parallel.
 
     ``--score a.ply,b.ply`` (paths relative to the capture folder) are scored on the first
-    profile's container only. Tag = ``<profile>-<tag_suffix>``.
+    profile's container only. Tag = ``<profile>-<tag_suffix>``. ``--rasterize-mode`` /
+    ``--densify-strategy`` set the render-quality knobs ("" = the profile's recipe).
     """
     if gpu not in GPU_RATES:
         raise SystemExit(f"--gpu must be one of {sorted(GPU_RATES)}, got {gpu!r}")
@@ -1027,6 +1066,8 @@ def owner_retrain(
             gpu,
             splat_budget,
             extra if i == 0 else (),
+            rasterize_mode,
+            densify_strategy,
         )
         for i, p in enumerate(names)
     ]
@@ -1053,6 +1094,65 @@ def retrain(clip: str, profiles: str, gpu: str = "L40S", splat_budget: int = 1_5
         raise SystemExit(f"--gpu must be one of {sorted(GPU_RATES)}, got {gpu!r}")
     names = [p for p in profiles.split(",") if p]
     jobs = [(clip, p, p, GPU_RATES[gpu], gpu, splat_budget) for p in names]
+    fn = retrain_clip.with_options(gpu=gpu)
+    for record in fn.starmap(jobs, return_exceptions=True):
+        print(json.dumps(record, indent=2, default=str))
+
+
+# M1-PIPE-03 item 1 (capture-render-quality-v1 §1): render-quality A/B arms. Same base
+# recipe (``quality-30k``: 30k schedule + bilateral grid + scale regularisation), same
+# frames / SfM / held-out views; only the two ``ReconstructionConfig`` knobs differ.
+RENDER_AB_ARMS: dict[str, tuple[str, str]] = {
+    "classic-default": ("classic", "default"),
+    "antialiased-mcmc": ("antialiased", "mcmc"),
+    # Single-factor arms (optional; isolate which knob moves the score).
+    "antialiased-default": ("antialiased", "default"),
+    "classic-mcmc": ("classic", "mcmc"),
+}
+
+
+@app.local_entrypoint()
+def render_ab(
+    clips: str,
+    arms: str = "classic-default,antialiased-mcmc",
+    profile: str = "quality-30k",
+    gpu: str = "L40S",
+    splat_budget: int = 400_000,
+    max_runs: int = 10,
+) -> None:
+    """Corpus A/B of the render-quality knobs: one retrain per (clip, arm), in parallel.
+
+    Corpus clips only (``open-video-recon/<slug>``); the Owner bedroom uses
+    ``owner_retrain``-style runs under AUTH #046. ``--max-runs`` is a spend guard: the run
+    count is checked before anything is dispatched (~$0.55 per 30k L40S run at 400K).
+    Tag = ``ab-<arm>-<budget//1000>k``.
+    """
+    if gpu not in GPU_RATES:
+        raise SystemExit(f"--gpu must be one of {sorted(GPU_RATES)}, got {gpu!r}")
+    arm_names = [a for a in arms.split(",") if a]
+    unknown = [a for a in arm_names if a not in RENDER_AB_ARMS]
+    if unknown:
+        raise SystemExit(f"unknown arms {unknown}; one of {sorted(RENDER_AB_ARMS)}")
+    slugs = [c for c in clips.split(",") if c]
+    for c in slugs:
+        _check_clip_id(c)
+    if len(slugs) * len(arm_names) > max_runs:
+        raise SystemExit(
+            f"{len(slugs) * len(arm_names)} runs exceeds --max-runs {max_runs} (spend guard)"
+        )
+    jobs = [
+        (
+            c,
+            profile,
+            f"ab-{a}-{splat_budget // 1000}k",
+            GPU_RATES[gpu],
+            gpu,
+            splat_budget,
+            *RENDER_AB_ARMS[a],
+        )
+        for c in slugs
+        for a in arm_names
+    ]
     fn = retrain_clip.with_options(gpu=gpu)
     for record in fn.starmap(jobs, return_exceptions=True):
         print(json.dumps(record, indent=2, default=str))

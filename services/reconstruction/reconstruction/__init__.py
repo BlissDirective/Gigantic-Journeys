@@ -68,11 +68,17 @@ from .models import (
 )
 from .pipeline import ReconstructionRun, run_pipeline
 from .positional_index import PositionalIndexScheme
-from .render_quality import splatfacto_quality_args
+from .render_quality import ns_train_capped_own_args, splatfacto_quality_args
 from .sfm import SFM_CHOICES, SFM_SELECTABLE, ColmapSfM, GlomapSfM, SfM, select_sfm
 from .submap import loop_closure_candidates, submap_windows
 from .tools import ToolNotFoundError, require
-from .trainer import BrushTrainer, GsplatTrainer, Trainer, TrainerError
+from .trainer import (
+    BrushTrainer,
+    GsplatTrainer,
+    Trainer,
+    TrainerError,
+    recipe_rasterize_mode,
+)
 
 __all__ = [
     "ARKIT_POSES_FILENAME",
@@ -104,6 +110,8 @@ __all__ = [
     "sample_cubic_bspline",
     "sample_linear",
     "slerp",
+    "ns_train_capped_own_args",
+    "recipe_rasterize_mode",
     "splatfacto_quality_args",
     "submap_windows",
     "to_metric",

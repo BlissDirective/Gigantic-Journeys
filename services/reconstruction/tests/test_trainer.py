@@ -138,7 +138,8 @@ def test_without_growth_limit_only_the_post_train_cap_applies(tmp_path, monkeypa
 def test_mcmc_profile_trains_at_the_budget(tmp_path, monkeypatch):
     calls: list[list[str]] = []
     monkeypatch.setattr(subprocess, "run", _fake_run(tmp_path, calls))
-    config = ReconstructionConfig(splat_budget=7)
+    # Quality recipes pass antialiased on the config (no longer baked into QUALITY_ARGS).
+    config = ReconstructionConfig(splat_budget=7, rasterize_mode="antialiased")
     model = GsplatTrainer(profile="quality-30k-mcmc").train(_poses(tmp_path), tmp_path, config)
     train, finish = calls
     own = train[: train.index("--")]
@@ -157,6 +158,25 @@ def test_mcmc_profile_trains_at_the_budget(tmp_path, monkeypatch):
     assert "--mcmc-cap" not in calls[0]
 
 
+def test_config_quality_args_and_densify_strategy_wire_into_ns_train_capped(tmp_path, monkeypatch):
+    """Item 1: splatfacto_quality_args + densify_strategy=mcmc → ns_train_capped."""
+    calls: list[list[str]] = []
+    monkeypatch.setattr(subprocess, "run", _fake_run(tmp_path, calls))
+    config = ReconstructionConfig(
+        splat_budget=7, rasterize_mode="antialiased", densify_strategy="mcmc"
+    )
+    model = GsplatTrainer(profile="quality-30k").train(_poses(tmp_path), tmp_path, config)
+    train = calls[0]
+    own = train[: train.index("--")]
+    assert own[own.index("--mcmc-cap") + 1] == "7"
+    ns = train[train.index("--") + 1 :]
+    assert ns[ns.index("--pipeline.model.rasterize-mode") + 1] == "antialiased"
+    assert "--pipeline.model.strategy" not in ns  # not a nerfstudio 1.1.5 flag
+    assert model.metrics["strategy"] == "mcmc"
+    assert model.metrics["rasterize_mode"] == "antialiased"
+    assert model.metrics["densify_strategy"] == "mcmc"
+
+
 def test_score_plys_are_passed_to_finish_and_reported(tmp_path, monkeypatch):
     calls: list[list[str]] = []
     scored = {"shipped-v1-400k": {"splats": 4, "psnr": 22.0}}
@@ -167,3 +187,26 @@ def test_score_plys_are_passed_to_finish_and_reported(tmp_path, monkeypatch):
     finish = calls[1]
     assert finish[finish.index("--score-ply") + 1] == f"shipped-v1-400k={tmp_path / 'old.ply'}"
     assert model.metrics["scored_plys"] == scored
+
+
+def test_measured_quality_recipes_keep_antialiased_via_config():
+    """QUALITY_ARGS no longer pins rasterize-mode; callers use recipe_rasterize_mode."""
+    from reconstruction.trainer import QUALITY_ARGS, recipe_rasterize_mode
+
+    assert "--pipeline.model.rasterize-mode" not in QUALITY_ARGS
+    for name in ("quality-30k", "quality-30k-camopt", "quality-30k-mcmc"):
+        assert recipe_rasterize_mode(name) == "antialiased"
+        assert recipe_rasterize_mode(PROFILES[name]) == "antialiased"
+    for name in (DEFAULT_PROFILE, "upstream-15k", "", None):
+        assert recipe_rasterize_mode(name) == "classic"
+
+
+def test_rasterize_flag_is_emitted_once_from_the_config(tmp_path, monkeypatch):
+    calls: list[list[str]] = []
+    monkeypatch.setattr(subprocess, "run", _fake_run(tmp_path, calls))
+    config = ReconstructionConfig(splat_budget=7)
+    GsplatTrainer(profile="quality-30k").train(_poses(tmp_path), tmp_path, config)
+    ns = calls[0][calls[0].index("--") + 1 :]
+    assert ns.count("--pipeline.model.rasterize-mode") == 1
+    assert ns[ns.index("--pipeline.model.rasterize-mode") + 1] == "classic"
+    assert "--mcmc-cap" not in calls[0]

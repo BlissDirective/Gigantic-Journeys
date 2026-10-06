@@ -23,6 +23,7 @@ from .models import (
     SplatModel,
     read_ply_vertex_count,
 )
+from .render_quality import ns_train_capped_own_args, splatfacto_quality_args
 from .splat_ops import STATS_ENV
 from .tools import require
 
@@ -145,9 +146,11 @@ DEFAULT_PROFILE = "scaled-10k-dense"
 # baked into the splat colours as bright and dark patches; scale regularisation
 # (caps the max/min axis ratio, fewer needles). ``-camopt`` also refines the
 # camera poses (SO3xR3), which sharpens a video SfM with small pose errors.
+# rasterize-mode is NOT here: it comes from ReconstructionConfig via
+# render_quality.splatfacto_quality_args (centralised; nerfstudio 1.1.5-confirmed).
+# Quality Modal entrypoints pass rasterize_mode="antialiased" so the measured recipe
+# is unchanged; the corpus A/B (M1-PIPE-03) sets classic|antialiased explicitly.
 QUALITY_ARGS = (
-    "--pipeline.model.rasterize-mode",
-    "antialiased",
     "--pipeline.model.use-bilateral-grid",
     "True",
     "--pipeline.model.use-scale-regularization",
@@ -187,6 +190,18 @@ BUDGET_PROFILES: dict[str, TrainProfile] = {
     )
 }
 PROFILES.update(BUDGET_PROFILES)
+
+# The display-quality recipes above were measured with gsplat's antialiased rasterizer.
+# Since rasterize-mode now comes from ``ReconstructionConfig`` (render_quality, M1-PIPE-03
+# item 1), callers that pick one of these profiles build their config with
+# ``rasterize_mode=recipe_rasterize_mode(profile)`` so the measured recipe is unchanged.
+ANTIALIASED_RECIPES = frozenset(QUALITY_PROFILES) | frozenset(BUDGET_PROFILES)
+
+
+def recipe_rasterize_mode(profile: TrainProfile | str | None) -> str:
+    """``"antialiased"`` for the measured display-quality recipes, else ``"classic"``."""
+    name = profile.name if isinstance(profile, TrainProfile) else (profile or "")
+    return "antialiased" if name in ANTIALIASED_RECIPES else "classic"
 
 
 _NO_GROWTH_LIMIT = 2**62
@@ -250,14 +265,23 @@ class GsplatTrainer:
         profile = self.profile_for(config)
         growth = out / "growth.json"
         started = time.monotonic()
+        # Item 1 wiring (M1-PIPE-03): config knobs → ns_train_capped.
+        # MCMC: profile.strategy (quality-30k-mcmc) OR config.densify_strategy, via
+        # --mcmc-cap (nerfstudio 1.1.5 has no --pipeline.model.strategy).
+        # Rasterize: splatfacto_quality_args → ns-train half (after profile args so the
+        # config is the single source of truth for rasterize-mode).
+        budget = config.splat_budget if self.growth_limit else _NO_GROWTH_LIMIT
+        own_mcmc = ns_train_capped_own_args(config, config.splat_budget)
+        if profile.strategy == "mcmc" and not own_mcmc:
+            own_mcmc = ["--mcmc-cap", str(config.splat_budget)]
         subprocess.run(
             [
                 python,
                 "-m",
                 "reconstruction.ns_train_capped",
                 "--budget",
-                str(config.splat_budget if self.growth_limit else _NO_GROWTH_LIMIT),
-                *(["--mcmc-cap", str(config.splat_budget)] if profile.strategy == "mcmc" else []),
+                str(budget),
+                *own_mcmc,
                 "--",
                 "splatfacto",
                 "--data",
@@ -269,6 +293,7 @@ class GsplatTrainer:
                 "--timestamp",
                 "run",
                 *profile.ns_train_args(),
+                *splatfacto_quality_args(config),
                 "--vis",
                 "tensorboard",
                 "colmap",
@@ -284,7 +309,11 @@ class GsplatTrainer:
         )
         metrics: dict = {
             "profile": profile.name,
-            "strategy": profile.strategy,
+            "strategy": "mcmc"
+            if (profile.strategy == "mcmc" or config.densify_strategy == "mcmc")
+            else profile.strategy,
+            "rasterize_mode": config.rasterize_mode,
+            "densify_strategy": config.densify_strategy,
             "iterations": profile.iterations,
             "train_s": round(time.monotonic() - started, 2),
         }

@@ -2,19 +2,28 @@
 
 import pytest
 from reconstruction import ReconstructionConfig, ReconstructionError
-from reconstruction.render_quality import RASTERIZE_FLAG, STRATEGY_FLAG, splatfacto_quality_args
+from reconstruction.render_quality import (
+    MCMC_CAP_FLAG,
+    RASTERIZE_FLAG,
+    STRATEGY_FLAG,
+    ns_train_capped_own_args,
+    splatfacto_quality_args,
+)
 
 
 def test_defaults_preserve_classic_behaviour():
     args = splatfacto_quality_args(ReconstructionConfig())
     assert args == [RASTERIZE_FLAG, "classic"]
+    assert ns_train_capped_own_args(ReconstructionConfig(), 400_000) == []
 
 
-def test_antialiased_and_mcmc_emit_both_flags():
+def test_antialiased_emits_rasterize_flag_and_mcmc_uses_cap():
     cfg = ReconstructionConfig(rasterize_mode="antialiased", densify_strategy="mcmc")
     args = splatfacto_quality_args(cfg)
-    assert RASTERIZE_FLAG in args and "antialiased" in args
-    assert STRATEGY_FLAG in args and "mcmc" in args
+    assert args == [RASTERIZE_FLAG, "antialiased"]
+    # nerfstudio 1.1.5 has no --pipeline.model.strategy; MCMC is --mcmc-cap.
+    assert STRATEGY_FLAG not in args
+    assert ns_train_capped_own_args(cfg, 400_000) == [MCMC_CAP_FLAG, "400000"]
 
 
 def test_config_rejects_unknown_values():
