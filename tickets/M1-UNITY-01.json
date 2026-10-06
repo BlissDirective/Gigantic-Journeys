@@ -147,6 +147,11 @@
       "date": "2026-10-06",
       "by": "gj-operator",
       "event": "CI: unity-tests on 399c73c failed one EditMode check (MovementArchitectureTests: the 1e-4 camera box floor margin was a literal in FollowCamera); moved to ProvisionalTuning.CameraOrbit.BoxFloorBelowGroundM (6d88c9a), all push CI green on 6d88c9a (lint, governance, secret-scan, unity-tests). The first internal-debug dispatch (ios-build run 68) queued behind the push ios-build (run 67) and was cancelled before it started so its 15-min signed URLs would not expire unused; re-dispatch with freshly minted URLs follows once run 67 finishes."
+    },
+    {
+      "date": "2026-10-06",
+      "by": "gj-operator",
+      "event": "Internal-debug TestFlight build 69 (ios-build run 37478205242, c23e714, dispatched 09:21 CT, uploaded 09:49 CT): Winchester v3 + bedroom owner-room-01 v2 from fresh 15-min signed URLs (both sha256 verified in the build), with the Unity-path shader fixes and the camera fix. AUTH #047: the run deleted ios-xcode-project-burst (id 11420653255); the artifacts API lists 0 artifacts for the run. Run 68 (37473755395) was cancelled while still queued (no jobs ran, 0 artifacts): it waited behind the push ios-build run 67 and its signed URLs would have expired first. Owner to check on device: bedroom colours/brightness, no landscape top/bottom streaks, turning/looking up never jams the camera into the character, Winchester unchanged, fps."
     }
   ]
 }
