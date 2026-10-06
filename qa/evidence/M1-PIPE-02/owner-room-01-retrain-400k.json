@@ -1,0 +1,31 @@
+{
+  "room": "owner-room-01 (Owner's own bedroom, AUTH #046 internal test capture)",
+  "date": "2026-10-05",
+  "phase": "2a: train at the device budget (AUTH #045; Owner approval 2026-10-05 20:22 CT)",
+  "privacy": "Metrics and text only. Frames, poses, splats, renders and packages stay on the box (chmod 700), the private Modal volume and the private staging bucket; nothing media-derived is in git. Deletable on request.",
+  "inputs": {
+    "frames": "the same 274 face-masked frames on gj-corpus:/owner-capture/room-01/frames",
+    "sfm": "the same GLOMAP model (229 registered), so the world frame and the 29 held-out views (every 8th image) are identical to the first run",
+    "gpu": "L40S"
+  },
+  "scoring": "ns_finish --score-ply: every PLY loaded into the same Splatfacto model and rendered on the same 29 held-out views by the same renderer (bilateral grid is training-only, so no per-image exposure correction in any score). The first run's full model re-scored exactly to its original numbers, which validates the loader.",
+  "results": {
+    "first_run_full_1461k": {"splats": 1457029, "psnr": 24.7325, "ssim": 0.9448, "lpips": 0.1104},
+    "shipped_build58_pruned_400k": {"splats": 400000, "psnr": 12.9165, "ssim": 0.6128, "lpips": 0.5001, "note": "display prune of the full model: 822,425 splats dropped for the budget (most-opaque), 151,988 faint, 19,576 giant; no fine-tune. Large semi-transparent wall/door splats were removed, so held-out views show the background through walls and doors."},
+    "quality_30k_growth_capped_400k": {"splats": 399165, "psnr": 24.8509, "ssim": 0.9417, "lpips": 0.1244, "train_wall_s": 787, "cost_usd": 0.504, "verdict": "winner; shipped in the sharpness A/B build as splat-room-unity-v2-400k"},
+    "quality_30k_mcmc_400k": {"splats": 384052, "psnr": 24.103, "ssim": 0.9296, "lpips": 0.1708, "cost_usd": 0.537, "verdict": "worse than the growth-capped default strategy; kept as profile quality-30k-mcmc for other rooms"}
+  },
+  "package": {
+    "object": "environments/_devtest/owner-room-01/splat-room-unity-v2-400k.tar.gz (private staging bucket)",
+    "bytes": 14375423,
+    "sha256": "3ecc3feddb8965eb68538d68626d5a00853d87e4e2366145ebcf6d58c448e942",
+    "splats": 399165,
+    "display_prune": "none: the trained 400K model ships as scored (2.5% of splats lie outside the old prune's robust box, 127 have a largest axis above 1 m; watch for far floaters in free look)"
+  },
+  "cost_usd": {
+    "pipeline_estimate": 1.04,
+    "modal_metered_delta": 1.22,
+    "auth_045_total_so_far": 2.17
+  },
+  "renders": "29 held-out renders (ground truth | render) per model on the box under the private owner-capture staging folder; a face-free door/carpet crop for the Owner sits outside the repo"
+}

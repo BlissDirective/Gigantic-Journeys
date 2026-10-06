@@ -434,6 +434,11 @@ namespace GiganticJourneys.Tests
             StringAssert.Contains("AUTH #046", d.credit);
             Assert.IsTrue(d.IsFreeLook, "free-look camera");
             Assert.IsTrue(d.HasCameraBox, "camera box from room_limits");
+            // Sharpness A/B (M1-PIPE-02 phase 2a): the small bedroom renders the splat pass
+            // at 0.85 with SH order 2; Winchester keeps the A15 profile (0.7, SH 1).
+            Assert.AreEqual(0.85f, d.renderScale, 1e-4f, "bedroom sharpness A/B render scale");
+            Assert.AreEqual(2, d.shOrder, "bedroom sharpness A/B SH order");
+            Assert.That(d.splatCount, Is.InRange(300_000, 400_000), "display budget splat");
             var size = d.WalkMax - d.WalkMin;
             Assert.Greater(Mathf.Min(size.x, size.y), 2.5f, "the walk bounds span the bedroom");
 

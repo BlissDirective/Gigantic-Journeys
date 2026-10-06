@@ -57,6 +57,11 @@ class TrainProfile:
     iterations: int
     extra_args: tuple[str, ...] = ()
     in_training_eval: bool = False
+    # "default": Splatfacto's DefaultStrategy (split/clone/prune, growth-limited at the
+    # budget by ns_train_capped, then hard-capped by ns_finish). "mcmc": gsplat's
+    # MCMCStrategy (3DGS as MCMC) capped at ``config.splat_budget`` for the whole run,
+    # i.e. the model is optimised *at* the device budget instead of pruned down to it.
+    strategy: str = "default"
 
     @classmethod
     def upstream(cls, iterations: int, name: str = "") -> TrainProfile:
@@ -158,6 +163,31 @@ QUALITY_PROFILES: dict[str, TrainProfile] = {
 }
 PROFILES.update(QUALITY_PROFILES)
 
+# Train-at-budget (M1-PIPE-02 phase 2a, AUTH #045): the quality recipe with gsplat's
+# MCMC strategy capped at ``ReconstructionConfig.splat_budget`` (400K for the A15
+# display path) for the whole run. The owner-room-01 shipped package kept 400K of a
+# 1.46M-splat model by a post-train prune with no fine-tuning (822K splats dropped for
+# the budget alone); here the optimiser places the 400K splats itself. nerfstudio 1.1.5
+# Splatfacto has no MCMC option, so ns_train_capped swaps the strategy in
+# (``install_mcmc``), with the MCMC opacity / scale regularisers of the paper.
+# Measured on owner-room-01 (2026-10-05, same 29 held-out views): this profile scored
+# PSNR 24.10 / SSIM 0.930 / LPIPS 0.171, below ``quality-30k`` with
+# ``splat_budget=400_000`` (DefaultStrategy growth-limited at the budget by
+# ns_train_capped: 24.85 / 0.942 / 0.124), which is the train-at-budget recipe in use;
+# the post-train-pruned package that shipped in build 58 scored 12.92 / 0.613 / 0.500.
+BUDGET_PROFILES: dict[str, TrainProfile] = {
+    p.name: p
+    for p in (
+        TrainProfile(
+            "quality-30k-mcmc",
+            30_000,
+            TrainProfile.scaled(30_000, "", *QUALITY_ARGS).extra_args,
+            strategy="mcmc",
+        ),
+    )
+}
+PROFILES.update(BUDGET_PROFILES)
+
 
 _NO_GROWTH_LIMIT = 2**62
 
@@ -185,8 +215,12 @@ class GsplatTrainer:
         evaluate: bool = True,
         profile: TrainProfile | str | None = None,
         growth_limit: bool = True,
+        score_plys: tuple[tuple[str, Path], ...] = (),
     ) -> None:
         self.evaluate = evaluate
+        # Extra PLYs (name, path) scored on the same held-out views after training,
+        # e.g. the currently shipped package's splat, for a like-for-like before/after.
+        self.score_plys = tuple(score_plys)
         # False only to exercise the post-train hard cap alone (stress bench).
         self.growth_limit = growth_limit
         if isinstance(profile, str):
@@ -223,6 +257,7 @@ class GsplatTrainer:
                 "reconstruction.ns_train_capped",
                 "--budget",
                 str(config.splat_budget if self.growth_limit else _NO_GROWTH_LIMIT),
+                *(["--mcmc-cap", str(config.splat_budget)] if profile.strategy == "mcmc" else []),
                 "--",
                 "splatfacto",
                 "--data",
@@ -249,6 +284,7 @@ class GsplatTrainer:
         )
         metrics: dict = {
             "profile": profile.name,
+            "strategy": profile.strategy,
             "iterations": profile.iterations,
             "train_s": round(time.monotonic() - started, 2),
         }
@@ -257,7 +293,9 @@ class GsplatTrainer:
         configs = sorted(out.rglob("config.yml"))
         if not configs:
             raise TrainerError(f"ns-train produced no config.yml under {out}")
-        preview = _finish(python, configs[-1], out, config.splat_budget, self.evaluate, metrics)
+        preview = _finish(
+            python, configs[-1], out, config.splat_budget, self.evaluate, metrics, self.score_plys
+        )
         ply = out / "splat.ply"
         if not ply.exists():
             raise TrainerError(f"expected splat PLY not produced: {ply}")
@@ -284,10 +322,19 @@ def parse_eval_json(path: Path) -> dict[str, float]:
 
 
 def _finish(
-    python: str, config: Path, out: Path, budget: int, evaluate: bool, metrics: dict
+    python: str,
+    config: Path,
+    out: Path,
+    budget: int,
+    evaluate: bool,
+    metrics: dict,
+    score_plys: tuple[tuple[str, Path], ...] = (),
 ) -> Path | None:
     """Run ``ns_finish`` (cap + eval + export); on an eval failure, export only."""
     renders = out / "eval_renders"
+    scoring: list[str] = []
+    for name, path in score_plys:
+        scoring += ["--score-ply", f"{name}={path}"]
     cmd = [
         python,
         "-m",
@@ -303,7 +350,7 @@ def _finish(
     try:
         if not evaluate:
             raise _SkipEval
-        subprocess.run([*cmd, "--eval", "--renders", str(renders)], check=True)
+        subprocess.run([*cmd, "--eval", "--renders", str(renders), *scoring], check=True)
     except (_SkipEval, subprocess.CalledProcessError, OSError) as exc:
         if not isinstance(exc, _SkipEval):
             metrics["eval_error"] = str(exc)[:300]
@@ -320,6 +367,9 @@ def _finish(
         if key in report:
             metrics[key] = report[key]
     metrics.update(parse_eval_json(report_path))
+    scored = report.get("scored_plys")
+    if scored:
+        metrics["scored_plys"] = scored
     if "eval_views" not in report:
         return None
     metrics["eval_views"] = report["eval_views"]

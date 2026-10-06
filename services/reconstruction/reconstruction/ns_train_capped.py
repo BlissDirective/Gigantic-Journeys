@@ -66,6 +66,78 @@ def install_growth_limit(budget: int) -> dict:
     return stats
 
 
+# MCMC regularisers (Kheradmand et al., "3D Gaussian Splatting as Markov Chain Monte
+# Carlo", and gsplat's simple_trainer / later nerfstudio defaults): an L1 pull on the
+# opacities and scales so relocation finds "dead" splats to move to under-fitted areas.
+MCMC_OPACITY_REG = 0.01
+MCMC_SCALE_REG = 0.01
+MCMC_MIN_OPACITY = 0.005
+MCMC_REFINE_STOP_FRACTION = 25_000 / 30_000
+
+
+def install_mcmc(cap: int, stats: dict, iterations: int = 30_000) -> None:
+    """Swap Splatfacto's DefaultStrategy for gsplat's MCMCStrategy capped at ``cap``.
+
+    nerfstudio 1.1.5 Splatfacto only builds a DefaultStrategy; gsplat 1.4.0 ships
+    MCMCStrategy (Apache-2.0). Differences bridged here: MCMC's ``step_post_backward``
+    needs the means learning rate (read from the means optimizer, which the scheduler
+    updates), it has no ``absgrad`` attribute and its ``initialize_state`` takes no
+    scene scale. The two MCMC regularisers are added to Splatfacto's training loss.
+    The growth limit (``install_growth_limit``) only patches DefaultStrategy, so it is
+    inert here; MCMC never exceeds ``cap`` by construction.
+    """
+    import torch
+    from gsplat.strategy import MCMCStrategy
+    from nerfstudio.models.splatfacto import SplatfactoModel
+
+    class _SplatfactoMCMC(MCMCStrategy):
+        absgrad = False
+
+        def initialize_state(self, scene_scale: float = 1.0):  # noqa: ARG002
+            return super().initialize_state()
+
+        def step_post_backward(self, params, optimizers, state, step, info, packed=False, lr=None):
+            if lr is None:
+                lr = optimizers["means"].param_groups[0]["lr"]
+            super().step_post_backward(params, optimizers, state, step, info, lr=lr)
+            stats["max_count"] = max(stats["max_count"], len(params["means"]))
+
+    populate = SplatfactoModel.populate_modules
+
+    def populate_mcmc(self):
+        populate(self)
+        self.strategy = _SplatfactoMCMC(
+            cap_max=cap,
+            refine_start_iter=self.config.warmup_length,
+            refine_stop_iter=int(iterations * MCMC_REFINE_STOP_FRACTION),
+            refine_every=self.config.refine_every,
+            min_opacity=MCMC_MIN_OPACITY,
+        )
+        self.strategy_state = self.strategy.initialize_state()
+        stats["strategy"] = "mcmc"
+        stats["mcmc_cap"] = cap
+
+    loss_dict = SplatfactoModel.get_loss_dict
+
+    def get_loss_dict_mcmc(self, outputs, batch, metrics_dict=None):
+        loss = loss_dict(self, outputs, batch, metrics_dict)
+        if self.training:
+            loss["mcmc_opacity_reg"] = (
+                MCMC_OPACITY_REG * torch.sigmoid(self.gauss_params["opacities"]).mean()
+            )
+            loss["mcmc_scale_reg"] = MCMC_SCALE_REG * torch.exp(self.gauss_params["scales"]).mean()
+        return loss
+
+    SplatfactoModel.populate_modules = populate_mcmc
+    SplatfactoModel.get_loss_dict = get_loss_dict_mcmc
+
+
+def _max_iterations(rest: list[str]) -> int:
+    if "--max-num-iterations" in rest:
+        return int(rest[rest.index("--max-num-iterations") + 1])
+    return 30_000
+
+
 def main(argv: list[str] | None = None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
     if "--" in argv:
@@ -75,8 +147,11 @@ def main(argv: list[str] | None = None) -> int:
         own, rest = argv, []
     parser = argparse.ArgumentParser(prog="reconstruction.ns_train_capped")
     parser.add_argument("--budget", type=int, required=True)
+    parser.add_argument("--mcmc-cap", type=int, default=0)
     args = parser.parse_args(own)
     stats = install_growth_limit(args.budget)
+    if args.mcmc_cap > 0:
+        install_mcmc(args.mcmc_cap, stats, _max_iterations(rest))
 
     from nerfstudio.scripts.train import entrypoint
 

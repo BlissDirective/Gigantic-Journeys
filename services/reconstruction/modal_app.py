@@ -901,6 +901,140 @@ def reconstruct_owner_capture(
     return record
 
 
+@app.function(
+    gpu=GPU,
+    cpu=(CPU_CORES, CPU_CORES),
+    memory=MEMORY_MIB,
+    timeout=3600,
+    volumes={CORPUS_MOUNT: corpus_volume},
+)
+def retrain_owner_capture(
+    capture_id: str,
+    profile: str,
+    tag: str,
+    rate_per_hour_usd: float,
+    gpu: str = GPU,
+    splat_budget: int = 400_000,
+    score: tuple[str, ...] = (),
+) -> dict:
+    """Retrain one Owner capture from its saved (blurred) frames + SfM model (AUTH #046).
+
+    Like :func:`retrain_clip` but under ``owner-capture/<id>/``: reuses ``frames/`` and
+    ``sparse/`` so the poses, world frame and held-out views match the first run, and
+    writes ``splat.ply``, ``renders/`` and ``run.json`` under ``retrain-<tag>/``. Each
+    ``score`` entry is a PLY path relative to the capture folder (e.g. ``splat.ply``, the
+    first full model, or ``shipped-v1-400k.ply``, the package that shipped); it is scored on
+    the same held-out views by the same renderer (``ns_finish --score-ply``) and its renders
+    land in ``retrain-<tag>/renders-<name>/``.
+    """
+    import re
+    import shutil
+    import tempfile
+    import time
+
+    from reconstruction import (
+        CameraPoses,
+        GsplatTrainer,
+        ReconstructionConfig,
+        require_offsite_source,
+    )
+    from reconstruction.cost import ResourceMeter
+
+    cid = _check_capture_id(capture_id)
+    if not re.fullmatch(r"[a-z0-9-]{1,40}", tag):
+        raise ValueError(f"bad tag {tag!r}")
+    require_offsite_source("corpus")
+    started = time.monotonic()
+    meter = ResourceMeter(cores=CPU_CORES, memory_gib=MEMORY_MIB / 1024).start()
+    corpus_volume.reload()
+    src = Path(CORPUS_MOUNT) / OWNER_CAPTURE_ROOT / cid
+    scored: list[tuple[str, Path]] = []
+    for rel in score:
+        if not re.fullmatch(r"[A-Za-z0-9._-]{1,80}\.ply", rel):
+            raise ValueError(f"bad score path {rel!r}")
+        scored.append((re.sub(r"[^a-z0-9-]", "-", rel[:-4].lower())[:40], src / rel))
+    work = Path(tempfile.mkdtemp())
+    shutil.copytree(src / "frames", work / "images")
+    shutil.copytree(src / "sparse", work / "out" / "sparse")
+    count = sum(1 for p in (work / "images").iterdir() if p.is_file())
+    poses = CameraPoses(cid, work / "out" / "sparse", count, image_dir=work / "images")
+    model = GsplatTrainer(profile=profile, score_plys=tuple(scored)).train(
+        poses, work / "out", ReconstructionConfig(splat_budget=splat_budget)
+    )
+    dest = src / f"retrain-{tag}"
+    if dest.exists():
+        shutil.rmtree(dest)
+    (dest / "renders").mkdir(parents=True)
+    shutil.copyfile(model.ply_path, dest / "splat.ply")
+    gs_dir = model.ply_path.parent
+    for sub, target in [("eval_renders", "renders")] + [
+        (f"eval_renders-{name}", f"renders-{name}") for name, _ in scored
+    ]:
+        if (gs_dir / sub).is_dir():
+            (dest / target).mkdir(exist_ok=True)
+            for p in sorted((gs_dir / sub).glob("*.png")):
+                shutil.copyfile(p, dest / target / p.name)
+    usage = meter.stop()
+    wall = time.monotonic() - started
+    gpu_usd = wall / 3600 * rate_per_hour_usd
+    record = {
+        "capture_id": cid,
+        "tag": tag,
+        "profile": profile,
+        "gpu": gpu,
+        "splat_budget": splat_budget,
+        "splat_count": model.splat_count,
+        "quality": model.metrics,
+        "wall_s": round(wall, 1),
+        "cost_usd": {
+            "gpu": round(gpu_usd, 4),
+            "cpu": round(usage.cpu_usd(), 4),
+            "memory": round(usage.memory_usd(), 4),
+            "total": round(gpu_usd + usage.cpu_usd() + usage.memory_usd(), 4),
+        },
+        "outputs": f"gj-corpus:/{OWNER_CAPTURE_ROOT}/{cid}/retrain-{tag}/",
+    }
+    (dest / "run.json").write_text(json.dumps(record, indent=2) + "\n")
+    corpus_volume.commit()
+    return record
+
+
+@app.local_entrypoint()
+def owner_retrain(
+    capture: str,
+    profiles: str,
+    gpu: str = "L40S",
+    splat_budget: int = 400_000,
+    score: str = "",
+    tag_suffix: str = "400k",
+) -> None:
+    """Retrain an Owner capture once per comma-separated profile, in parallel.
+
+    ``--score a.ply,b.ply`` (paths relative to the capture folder) are scored on the first
+    profile's container only. Tag = ``<profile>-<tag_suffix>``.
+    """
+    if gpu not in GPU_RATES:
+        raise SystemExit(f"--gpu must be one of {sorted(GPU_RATES)}, got {gpu!r}")
+    _check_capture_id(capture)
+    names = [p for p in profiles.split(",") if p]
+    extra = tuple(p for p in score.split(",") if p)
+    jobs = [
+        (
+            capture,
+            p,
+            f"{p}-{tag_suffix}",
+            GPU_RATES[gpu],
+            gpu,
+            splat_budget,
+            extra if i == 0 else (),
+        )
+        for i, p in enumerate(names)
+    ]
+    fn = retrain_owner_capture.with_options(gpu=gpu)
+    for record in fn.starmap(jobs, return_exceptions=True):
+        print(json.dumps(record, indent=2, default=str))
+
+
 @app.local_entrypoint()
 def owner_capture(capture: str, gpu: str = "L40S", profile: str = "quality-30k") -> None:
     """Reconstruct one Owner capture already uploaded (blurred) to the volume."""

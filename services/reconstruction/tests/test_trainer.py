@@ -133,3 +133,37 @@ def test_without_growth_limit_only_the_post_train_cap_applies(tmp_path, monkeypa
     train, finish = calls
     assert int(train[train.index("--budget") + 1]) > 10**12
     assert finish[finish.index("--budget") + 1] == "7"
+
+
+def test_mcmc_profile_trains_at_the_budget(tmp_path, monkeypatch):
+    calls: list[list[str]] = []
+    monkeypatch.setattr(subprocess, "run", _fake_run(tmp_path, calls))
+    config = ReconstructionConfig(splat_budget=7)
+    model = GsplatTrainer(profile="quality-30k-mcmc").train(_poses(tmp_path), tmp_path, config)
+    train, finish = calls
+    own = train[: train.index("--")]
+    assert own[own.index("--mcmc-cap") + 1] == "7"
+    ns = train[train.index("--") + 1 :]
+    assert ns[ns.index("--max-num-iterations") + 1] == "30000"
+    assert ns[ns.index("--pipeline.model.rasterize-mode") + 1] == "antialiased"
+    assert model.metrics["strategy"] == "mcmc"
+    # The default-strategy profiles never ask for MCMC.
+    calls.clear()
+    out = tmp_path / "gsplat"
+    import shutil
+
+    shutil.rmtree(out)
+    GsplatTrainer(profile="quality-30k").train(_poses(tmp_path), tmp_path, config)
+    assert "--mcmc-cap" not in calls[0]
+
+
+def test_score_plys_are_passed_to_finish_and_reported(tmp_path, monkeypatch):
+    calls: list[list[str]] = []
+    scored = {"shipped-v1-400k": {"splats": 4, "psnr": 22.0}}
+    fake = _fake_run(tmp_path, calls, finish_extra={"scored_plys": scored})
+    monkeypatch.setattr(subprocess, "run", fake)
+    trainer = GsplatTrainer(score_plys=(("shipped-v1-400k", tmp_path / "old.ply"),))
+    model = trainer.train(_poses(tmp_path), tmp_path, ReconstructionConfig())
+    finish = calls[1]
+    assert finish[finish.index("--score-ply") + 1] == f"shipped-v1-400k={tmp_path / 'old.ply'}"
+    assert model.metrics["scored_plys"] == scored

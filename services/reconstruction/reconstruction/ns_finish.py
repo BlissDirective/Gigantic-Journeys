@@ -19,6 +19,12 @@ for ~0.5 M splats). One ``eval_setup`` load, then:
 3. **Export**: nerfstudio's ``ExportGaussianSplat`` PLY layout (same fields,
    order, NaN/Inf filter and 1/255-opacity filter), written vectorized.
 
+4. **Score other PLYs** (``--score-ply name=path``, with ``--eval``): each PLY in the
+   same export layout (e.g. the currently shipped display-pruned package) is loaded
+   into the model in place of the trained splats and scored on the *same* held-out
+   views with the same renderer, so before/after numbers are like for like; renders
+   go to ``<renders>-<name>``. Runs after the export, so the trained PLY is unaffected.
+
 Writes ``finish.json`` (counts, metrics, timings) next to the PLY. torch /
 numpy / nerfstudio are imported only in ``main`` (CI imports the package
 without them).
@@ -82,6 +88,69 @@ def contribution_scores(model, cameras):
     return total / (alpha * (1 - alpha)).clamp_min(1e-12) * alpha
 
 
+def parse_score_ply(value: str) -> tuple[str, Path]:
+    """``name=path`` -> (name, path); the name becomes a renders-folder suffix."""
+    import re
+
+    name, sep, path = value.partition("=")
+    if not sep or not path or not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,40}", name):
+        raise argparse.ArgumentTypeError(f"--score-ply wants name=path, got {value!r}")
+    return name, Path(path)
+
+
+def read_export_ply(path: Path):
+    """A PLY in :func:`ply_fields` layout -> (field names, float32 array [N, F])."""
+    import numpy as np
+
+    raw = path.read_bytes()
+    end = raw.index(b"end_header\n") + len(b"end_header\n")
+    header = raw[:end].decode("ascii").splitlines()
+    if "format binary_little_endian 1.0" not in header:
+        raise ValueError(f"{path}: only binary_little_endian PLY is supported")
+    count, fields = 0, []
+    for line in header:
+        parts = line.split()
+        if parts[:2] == ["element", "vertex"]:
+            count = int(parts[2])
+        elif parts[:2] == ["property", "float"]:
+            fields.append(parts[2])
+        elif parts[:1] == ["property"]:
+            raise ValueError(f"{path}: non-float property {line!r}")
+    data = np.frombuffer(raw, dtype="<f4", count=count * len(fields), offset=end)
+    return fields, data.reshape(count, len(fields))
+
+
+def load_export_ply(model, path: Path) -> int:
+    """Replace ``model``'s Gaussians with a PLY written in the export layout."""
+    import torch
+
+    fields, data = read_export_ply(path)
+    rest = sorted((f for f in fields if f.startswith("f_rest_")), key=lambda f: int(f[7:]))
+    expected = ply_fields(len(rest))
+    if sorted(fields) != sorted(expected):
+        raise ValueError(f"{path}: fields differ from the export layout")
+    device = model.means.device
+    col = {name: i for i, name in enumerate(fields)}
+
+    def take(names):
+        return torch.from_numpy(data[:, [col[n] for n in names]].copy()).to(device)
+
+    n = data.shape[0]
+    coeffs = len(rest) // 3
+    values = {
+        "means": take(["x", "y", "z"]),
+        "features_dc": take(["f_dc_0", "f_dc_1", "f_dc_2"]),
+        # Export writes shs_rest transposed to [N, 3, K] then flattened.
+        "features_rest": take(rest).reshape(n, 3, coeffs).transpose(1, 2).contiguous(),
+        "opacities": take(["opacity"]),
+        "scales": take(["scale_0", "scale_1", "scale_2"]),
+        "quats": take(["rot_0", "rot_1", "rot_2", "rot_3"]),
+    }
+    for name, value in values.items():
+        model.gauss_params[name] = torch.nn.Parameter(value)
+    return n
+
+
 def static_scores(model):
     """``splat_ops.importance`` vectorized: alpha x area of the two largest axes."""
     import torch
@@ -97,6 +166,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--budget", type=int, required=True)
     parser.add_argument("--eval", action="store_true")
     parser.add_argument("--renders", type=Path, default=None)
+    parser.add_argument("--score-ply", type=parse_score_ply, action="append", default=[])
     args = parser.parse_args(argv)
 
     from importlib.metadata import version
@@ -167,6 +237,25 @@ def main(argv: list[str] | None = None) -> int:
         fh.write(ply_header(data.shape[0], fields, version("nerfstudio")))
         fh.write(data.tobytes())
     report["export_s"] = round(time.monotonic() - started, 2)
+
+    # 4. Like-for-like scores of other PLYs on the same held-out views.
+    if args.eval and args.score_ply:
+        scored: dict = {}
+        for name, path in args.score_ply:
+            started = time.monotonic()
+            try:
+                with torch.no_grad():
+                    splats = load_export_ply(model, path)
+                renders = Path(f"{args.renders}-{name}") if args.renders else None
+                metrics = pipeline.get_average_eval_image_metrics(output_path=renders, get_std=True)
+                scored[name] = {
+                    "splats": splats,
+                    **{k: round(float(v), 4) for k, v in metrics.items()},
+                    "eval_s": round(time.monotonic() - started, 2),
+                }
+            except Exception as exc:  # noqa: BLE001 - scoring is best-effort
+                scored[name] = {"error": f"{type(exc).__name__}: {exc}"[:300]}
+        report["scored_plys"] = scored
     (args.output_dir / "finish.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
     print(json.dumps({k: v for k, v in report.items() if k != "results"}))
     return 0

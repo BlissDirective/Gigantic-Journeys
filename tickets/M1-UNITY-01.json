@@ -122,6 +122,11 @@
       "date": "2026-10-05",
       "by": "gj-operator",
       "event": "AUTH REQUEST #047 filed as https://github.com/BlissDirective/Gigantic-Journeys/issues/17 (Owner proceed 2026-10-05 16:50 CT after widget 05:57 CT chose file-AUTH-then-change). ios-build: when internal-debug fetched splat_url/splat_url_2, retention-days of ios-xcode-project-burst is 1 and the TestFlight job deletes that artifact when done (actions: write). Stops a repeat of build 58 / artifact 11323035373 (AUTH #046). Coordinator still needs to log Decision #047 and close #17."
+    },
+    {
+      "date": "2026-10-05",
+      "by": "gj-operator",
+      "event": "Bedroom sharpness A/B (Owner approval 2026-10-05 20:22 CT): splat-room-owner-room-01.json renderScale 0.7 -> 0.85 and shOrder 1 -> 2 (Winchester keeps 0.7 / SH 1), plus the new train-at-budget bedroom splat (M1-PIPE-02 phase 2a: held-out PSNR 24.85 vs 12.92 for the build-58 package; 399,165 splats, package v2 sha256 3ecc3fed...). EditMode test pins the bedroom A/B profile. Internal-debug TestFlight dispatch with splat_url (Winchester v3) + splat_url_2 (bedroom v2) follows; Owner checks fps (debug overlay perf report) and sharpness on the iPhone."
     }
   ]
 }

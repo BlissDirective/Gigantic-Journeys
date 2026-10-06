@@ -462,6 +462,6 @@
  ],
  "notes": [
   "Held-out error has no depth test (median over views damps occlusion); it covers only cells the 19 eval views see.",
-  "Free look (Winchester cameraMode "free") exposes the 'visible_from_box' ring: 83% of its occupied cells score weak (median 2.7 training views)."
+  "Free look (Winchester cameraMode 'free') exposes the 'visible_from_box' ring: 83% of its occupied cells score weak (median 2.7 training views)."
  ]
 }
