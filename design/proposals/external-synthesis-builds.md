@@ -153,13 +153,21 @@ iOS-Metal / model-serving half is the **Operator** wiring noted with it.
 9. **VGGT + VGGT-SLAM** &mdash; `submap.py` (windowing + loop-closure candidates) is the GPU-free
    scheduling core; VGGT is another `FeedForwardReconstructor`. _Counsel/AUTH:_ VGGT commercial licence.
 
-Tests: ~38 new (reconstruction suite 241 passing); ruff + governance validators green; no protected
-path touched; no new AUTH (Brain-B code from open knowledge / permissive licences).
+**Clean-room (non-commercial origin, reimplemented on GJ's stack):**
+10. **FisherRF capture guidance** &mdash; `capture_guidance.py`: coverage-uncertainty information-gain
+    for next-best-view ("you missed this wall") coaching + informative-frame selection to keep the
+    capture under 4 minutes. No FisherRF / Inria code, weights, or outputs. _Operator:_ compute
+    per-view visible-cell sets from scene geometry; optionally refine the uncertainty with the
+    renderer's Fisher diagonal.
 
-**Remaining (not built this pass):** FisherRF capture-guidance (non-commercial &rarr; needs a
-clean-room reimplementation on gsplat, separate authorisation); all Operator GPU/Unity/model-serving
-wiring above; the counsel/AUTH licence checks (MapAnything-apache data, VGGT licence, Metric3D /
-non-Small depth weights).
+Tests: ~44 new (reconstruction suite 247 passing); ruff + governance validators green; no protected
+path touched. Licence adoptions logged as **AUTH #049** (permissive stack) + **#050** (caveated
+commercial models); the Brain-B cores + FisherRF are open-knowledge / permissive.
+
+**Remaining (not built this pass):** all Operator GPU / Unity / model-serving wiring above
+(training-loop integration, iOS Metal viewer, cloud model serving). FisherRF capture-guidance is now
+**built clean-room** (`capture_guidance.py`). Licence checks are resolved by AUTH #049/#050 — the
+non-commercial-weights boundary and the VGGT / Metric3D counsel conditions are recorded there.
 
 _These are candidates and references, not shipping commitments. Each remains subject to the
 clean-IP posture above._

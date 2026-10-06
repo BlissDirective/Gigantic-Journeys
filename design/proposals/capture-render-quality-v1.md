@@ -127,15 +127,30 @@ handoff items. This mirrors how GJ already ships Brain-B references ahead of the
 
 ---
 
+## Clean-room build (non-commercial origin)
+
+### 10. FisherRF capture guidance
+- **Concept.** FisherRF scores how much a view would *teach* the field (Fisher information) for
+  next-best-view selection + an uncertainty map. Its code is non-commercial (Inria 3DGS), so we
+  reimplement the **published idea** clean-room — no FisherRF/Inria code, weights, or outputs.
+- **Built now.** `capture_guidance.py`: `CoverageModel` (per-cell observation counts → uncertainty),
+  `information_gain`, `next_best_view` ("you missed this wall"), `select_informative_frames`
+  (submodular greedy, to keep the capture short), `coverage_gaps`. Tests: `test_capture_guidance.py`.
+  The exact Fisher/Hessian needs the differentiable renderer (Operator); observation-count
+  uncertainty is the GPU-free proxy it later refines.
+- **Operator.** Compute each view's visible-cell set from scene geometry; drive capture coaching from
+  `coverage_gaps` and frame selection from `select_informative_frames`.
+
+---
+
 ## Not built (out of this pass) — remaining
 
-- **FisherRF capture guidance** ("you missed this wall" + informative-frame selection). High value
-  for keeping capture ≤4 min, but FisherRF is **non-commercial** (built on Inria 3DGS), so it needs
-  a **clean-room reimplementation on gsplat** — a separate build, not authorised in this pass.
 - All **Operator GPU/Unity/model-serving wiring** listed above (training-loop integration, the iOS
   Metal viewer, cloud model serving).
-- **Counsel/AUTH** items: MapAnything-apache training data; VGGT commercial licence; Metric3D v2 /
-  Depth Anything (non-Small) / any depth-normal weights.
+- **Counsel/AUTH** items — now logged as **AUTH #049** (permissive stack) + **#050** (VGGT commercial
+  licence + Metric3D v2 weights conditions); in-house counsel confirms the VGGT / Metric3D weight
+  terms before those ship. Genuinely non-commercial weights (Depth Anything non-Small, etc.) stay
+  method-only.
 
 ## Suggested prototype order
 1 (config A/B) → 2 (depth/normal, biggest lever) + 3 (depth prior) → 6 (MapAnything front-end spike)

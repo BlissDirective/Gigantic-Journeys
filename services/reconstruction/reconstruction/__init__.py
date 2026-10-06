@@ -20,6 +20,14 @@ from .arkit_poses import (
     parse_arkit_capture,
     write_colmap_model,
 )
+from .capture_guidance import (
+    CoverageModel,
+    cell_uncertainty,
+    coverage_from_views,
+    information_gain,
+    next_best_view,
+    select_informative_frames,
+)
 from .compress import CompressError, Compressor, SplatTransformCompressor
 from .cost import (
     DAILY_CAP_USD,
@@ -71,6 +79,12 @@ __all__ = [
     "AffineColor",
     "AppearanceModel",
     "CompressionPlan",
+    "CoverageModel",
+    "cell_uncertainty",
+    "coverage_from_views",
+    "information_gain",
+    "next_best_view",
+    "select_informative_frames",
     "DepthPrior",
     "FeedForwardReconstructor",
     "FeedForwardResult",
