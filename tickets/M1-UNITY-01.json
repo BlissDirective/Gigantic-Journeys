@@ -167,6 +167,11 @@
       "date": "2026-10-06",
       "by": "gj-operator",
       "event": "Dispatched internal-debug ios-build run 37534431745 (#71) on 3fc097f with fresh 15-min signed URLs for Winchester v3 + bedroom v2 (sha256 verified). Awaiting TestFlight upload + AUTH #047 artifact delete."
+    },
+    {
+      "date": "2026-10-06",
+      "by": "gj-operator",
+      "event": "Internal-debug TestFlight build 71 (ios-build run 37534431745, SHA 3fc097f): Winchester v3 + bedroom v2 with bedroom QA standing viewer (qaStandingLookAtHeightM=1.4). Uploaded 16:58 CT. AUTH #047: deleted ios-xcode-project-burst id=11446058552; artifacts API lists 0. Owner: open SplatRoom → Bedroom; look for on-screen 'QA standing viewer · look-at 1.4 m'; miniature stays on floor; bedroom should look like a room (not mist); Winchester unchanged; camera look-up still safe."
     }
   ]
 }
