@@ -18,6 +18,7 @@ from dataclasses import dataclass
 
 from . import geometry as g
 from .classify import GeometricStub, SceneConfig, VisionLabeler, classify_patch, measure_patch
+from .confidence import gate_surface
 from .mesh import Mesh, Vec3
 from .segment import Patch, segment_planar
 
@@ -156,6 +157,12 @@ def build_scene_graph(
         label = labeler.label(patch, cls, conf)
         final_class = label.class_override or cls
         final_conf = label.confidence if label.confidence is not None else conf
+        # Gate low-confidence geometry to void/unknown (confidence.py) before measuring,
+        # so an untrusted surface never carries walkable measurements or a material.
+        gate = gate_surface(
+            final_class, final_conf, label.material, label.semantic, floor=cfg.confidence_floor
+        )
+        final_class = gate.cls
         measurements = measure_patch(patch, 0.0, final_class, cfg)
         if final_class in ("walkable-hard", "walkable-narrow", "walkable-soft", "ledge", "stud"):
             measurements["headroom_A"] = _headroom(patch, local_patches, cfg)
@@ -168,7 +175,7 @@ def build_scene_graph(
             "id": f"surface-{i}",
             "class": final_class,
             "confidence": round(max(0.0, min(1.0, final_conf)), 4),
-            "material": label.material,
+            "material": gate.material,
             "centroid": _vec(patch.centroid),
             "normal": _unit(patch.normal),
             "bounds": {"min": [_r(mnx), _r(mny), _r(mnz)], "max": [_r(mxx), _r(mxy), _r(mxz)]},
@@ -180,8 +187,8 @@ def build_scene_graph(
                 "triangle_count": patch.triangle_count,
             },
         }
-        if label.semantic is not None:
-            surface["semantic"] = label.semantic
+        if gate.semantic is not None:
+            surface["semantic"] = gate.semantic
         surfaces.append(surface)
 
     collision = Mesh(list(local.vertices), reordered_tris)

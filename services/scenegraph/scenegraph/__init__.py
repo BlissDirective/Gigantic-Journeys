@@ -31,6 +31,7 @@ from .cleanup import (
     fill_holes,
     remove_floaters,
 )
+from .confidence import GateResult, gate_surface
 from .mesh import Mesh, MeshError, read_obj, write_obj
 from .scene import CaptureMeta, build_scene_graph
 from .segment import Patch, segment_planar
@@ -78,6 +79,9 @@ __all__ = [
     "measure_patch",
     "CaptureMeta",
     "build_scene_graph",
+    # confidence gating (M1-SCEN-02)
+    "gate_surface",
+    "GateResult",
     # vision-pass survey (M1-SCEN-02 labels + M3-GAME-01 objects)
     "SceneSurvey",
     "SurveySurface",

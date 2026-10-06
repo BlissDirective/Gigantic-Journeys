@@ -149,7 +149,9 @@ class ReconstructionConfig:
     splat_budget: int = 2_000_000
     train_iters: int = 10_000
     compress_format: Format = Format.SPZ
-    sfm: str = "colmap"  # incremental; "glomap" = global mapper (spike report)
+    # "colmap" incremental; "glomap" global mapper (spike report); "arkit" = SfM-free,
+    # build the model straight from ARKit metric poses (arkit_poses.ArkitSfM).
+    sfm: str = "colmap"
     max_package_bytes: int = 150 * MiB
 
     def __post_init__(self) -> None:
@@ -157,7 +159,7 @@ class ReconstructionConfig:
             raise ReconstructionError("splat_budget must be positive")
         if self.train_iters <= 0:
             raise ReconstructionError("train_iters must be positive")
-        if self.sfm not in ("glomap", "colmap"):
+        if self.sfm not in ("glomap", "colmap", "arkit"):
             raise ReconstructionError(f"unknown sfm backend: {self.sfm!r}")
         if self.max_package_bytes <= 0:
             raise ReconstructionError("max_package_bytes must be positive")

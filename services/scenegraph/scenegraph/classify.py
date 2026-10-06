@@ -44,10 +44,16 @@ class SceneConfig:
     open_headroom_A: float = 50.0
     # Default classifier confidence for a geometry-decided class.
     geom_confidence: float = 0.7
+    # Surfaces the vision/reconstruction pass trusts less than this are demoted to
+    # void/unknown (confidence.gate_surface). 0.0 disables the gate (default); the
+    # self-hosted vision pass, which emits per-surface confidence, sets it.
+    confidence_floor: float = 0.0
 
     def __post_init__(self) -> None:
         if not 0.0 <= self.walkable_max_slope_deg < self.wall_min_slope_deg <= 90.0:
             raise ValueError("need 0 <= walkable_max_slope < wall_min_slope <= 90")
+        if not 0.0 <= self.confidence_floor <= 1.0:
+            raise ValueError("confidence_floor must be in [0, 1]")
 
 
 @dataclass(frozen=True)

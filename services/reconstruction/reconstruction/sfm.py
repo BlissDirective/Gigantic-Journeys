@@ -32,6 +32,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Protocol
 
+from .arkit_poses import ArkitSfM
 from .models import CameraPoses, ReconstructionError, ScanInput
 from .tools import require
 
@@ -300,7 +301,10 @@ class ColmapSfM(_ColmapFrontEnd):
 # Default (spike report 2026-09-26, Mip-NeRF 360 room): incremental COLMAP on
 # GPU SIFT + GPU matching ("auto" matcher) beat the GLOMAP global mapper on SfM
 # time, cost and splat quality; GLOMAP stays selectable.
+# COLMAP-family mappers (what benchmark_sfm sweeps). "arkit" is SfM-free and sits
+# outside the sweep; SFM_SELECTABLE is the full set select_sfm / the config accept.
 SFM_CHOICES = ("colmap", "glomap")
+SFM_SELECTABLE = ("colmap", "glomap", "arkit")
 DEFAULT_SFM = "colmap"
 DEFAULT_MATCHER = "auto"
 
@@ -312,12 +316,20 @@ def select_sfm(
     matcher: str = DEFAULT_MATCHER,
     max_features: int = 0,
 ) -> SfM:
-    """Return the SfM adapter for ``name`` ("colmap" or "glomap")."""
+    """Return the SfM adapter for ``name`` ("colmap", "glomap", or "arkit").
+
+    "arkit" is SfM-free: it writes the COLMAP model straight from the capture's ARKit
+    metric poses (arkit_poses.ArkitSfM) and ignores the COLMAP-only knobs below. The
+    factory builds it with no explicit capture, so its ``run`` loads ``arkit_poses.json``
+    from beside the scan's image dir.
+    """
     if name == "glomap":
         return GlomapSfM(use_gpu=use_gpu, matcher=matcher, max_features=max_features)
     if name == "colmap":
         return ColmapSfM(use_gpu=use_gpu, matcher=matcher, max_features=max_features)
-    raise ReconstructionError(f"unknown sfm {name!r}; expected one of {SFM_CHOICES}")
+    if name == "arkit":
+        return ArkitSfM()
+    raise ReconstructionError(f"unknown sfm {name!r}; expected one of {SFM_SELECTABLE}")
 
 
 def benchmark_sfm(

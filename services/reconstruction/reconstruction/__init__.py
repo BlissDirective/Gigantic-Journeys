@@ -8,6 +8,17 @@ pluggable adapters; heavy tools live in the CUDA container (see Dockerfile).
 
 from __future__ import annotations
 
+from .arkit_poses import (
+    ARKIT_POSES_FILENAME,
+    ArkitCapture,
+    ArkitFrame,
+    ArkitIntrinsics,
+    ArkitSeedPoint,
+    ArkitSfM,
+    colmap_pose,
+    parse_arkit_capture,
+    write_colmap_model,
+)
 from .compress import CompressError, Compressor, SplatTransformCompressor
 from .cost import (
     DAILY_CAP_USD,
@@ -36,16 +47,24 @@ from .models import (
     require_offsite_source,
 )
 from .pipeline import ReconstructionRun, run_pipeline
-from .sfm import SFM_CHOICES, ColmapSfM, GlomapSfM, SfM, select_sfm
+from .positional_index import PositionalIndexScheme
+from .sfm import SFM_CHOICES, SFM_SELECTABLE, ColmapSfM, GlomapSfM, SfM, select_sfm
 from .tools import ToolNotFoundError, require
 from .trainer import BrushTrainer, GsplatTrainer, Trainer, TrainerError
 
 __all__ = [
+    "ARKIT_POSES_FILENAME",
     "DAILY_CAP_USD",
     "MANIFEST",
     "OFFSITE_SOURCES",
     "SFM_CHOICES",
+    "SFM_SELECTABLE",
     "SPIKE_CAP_USD",
+    "ArkitCapture",
+    "ArkitFrame",
+    "ArkitIntrinsics",
+    "ArkitSeedPoint",
+    "ArkitSfM",
     "BrushTrainer",
     "CameraPoses",
     "CollisionMesh",
@@ -67,6 +86,7 @@ __all__ = [
     "MeshError",
     "Mesher",
     "Open3DMesher",
+    "PositionalIndexScheme",
     "ReconstructionConfig",
     "ReconstructionError",
     "ReconstructionRun",
@@ -81,10 +101,13 @@ __all__ = [
     "Trainer",
     "TrainerError",
     "assert_commercial_safe",
+    "colmap_pose",
     "estimate_usd",
+    "parse_arkit_capture",
     "read_ply_vertex_count",
     "require",
     "require_offsite_source",
     "run_pipeline",
     "select_sfm",
+    "write_colmap_model",
 ]
