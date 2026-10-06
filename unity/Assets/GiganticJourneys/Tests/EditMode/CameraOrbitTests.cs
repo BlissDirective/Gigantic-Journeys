@@ -209,6 +209,48 @@ namespace GiganticJourneys.Tests
         }
 
         [Test]
+        public void EyeRadius_PullsInAtOnce_AndSpringsBackSmoothly()
+        {
+            var v = 0f;
+            Assert.AreEqual(1.2f, FollowCamera.NextEyeRadius(-1f, 1.2f, ref v, 0.35f, 1f / 60f));
+            // An obstacle: straight in, no easing (never clip through it).
+            Assert.AreEqual(0.1f, FollowCamera.NextEyeRadius(1.2f, 0.1f, ref v, 0.35f, 1f / 60f));
+            Assert.AreEqual(0f, v);
+            // Clear again: eases out, monotonically, never past the allowed distance.
+            var r = 0.1f;
+            var prev = r;
+            for (var i = 0; i < 6; i++)
+            {
+                r = FollowCamera.NextEyeRadius(r, 1.2f, ref v, 0.35f, 1f / 60f);
+                Assert.That(r, Is.GreaterThan(prev).And.LessThanOrEqualTo(1.2f));
+                prev = r;
+            }
+            Assert.That(r, Is.LessThan(0.6f), "a tenth of a second in it is still on its way out");
+            for (var i = 0; i < 120; i++)
+                r = FollowCamera.NextEyeRadius(r, 1.2f, ref v, 0.35f, 1f / 60f);
+            Assert.That(r, Is.EqualTo(1.2f).Within(0.01f), "back out within two seconds");
+            Assert.AreEqual(0.5f, FollowCamera.NextEyeRadius(0.1f, 0.5f, ref v, 0f, 1f / 60f));
+        }
+
+        [Test]
+        public void Character_IsHiddenOnlyWithTheEyeInsideTheFadeDistance()
+        {
+            Assert.IsTrue(FollowCamera.HidesTarget(0.1f, 0.22f));
+            Assert.IsFalse(FollowCamera.HidesTarget(0.22f, 0.22f));
+            Assert.IsFalse(FollowCamera.HidesTarget(0.6f, 0.22f));
+        }
+
+        [Test]
+        public void RoomCamera_IgnoresFurnitureBlockersAndBoundaryWalls_ButNotTheFloor()
+        {
+            Assert.IsTrue(
+                GiganticJourneys.DeviceTest.SplatRoomLoader.IsCharacterOnly("Blocker bed")
+            );
+            Assert.IsTrue(GiganticJourneys.DeviceTest.SplatRoomLoader.IsCharacterOnly("Wall +X"));
+            Assert.IsFalse(GiganticJourneys.DeviceTest.SplatRoomLoader.IsCharacterOnly("Floor"));
+        }
+
+        [Test]
         public void CameraBox_PullsTheEyeInAlongTheRay()
         {
             var box = new Bounds(Vector3.zero, new Vector3(4f, 2f, 10f));

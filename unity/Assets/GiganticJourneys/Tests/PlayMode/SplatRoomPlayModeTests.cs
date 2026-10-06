@@ -135,6 +135,54 @@ namespace GiganticJourneys.Tests
             );
         }
 
+        // Build 61 (bedroom): turning the view swept the eye's collision cast into the furniture
+        // blockers and the camera jammed into the character. A full turn at the spawn must keep
+        // the eye out at its follow distance (no blocker pulls it in; the walls are far enough
+        // away at both spawns) and never hide the character, in the bedroom and in Winchester.
+        [UnityTest]
+        public IEnumerator Orbit_FullTurn_NeverJamsTheEyeIntoTheCharacter(
+            [Values("", "owner-room-01")] string room
+        )
+        {
+            DebugOverlay.RequestedSceneVariant = room;
+            try
+            {
+                yield return EditorSceneManager.LoadSceneAsyncInPlayMode(
+                    ScenePath,
+                    new LoadSceneParameters(LoadSceneMode.Additive)
+                );
+                for (var i = 0; i < 60; i++)
+                    yield return null;
+                var loader = Object.FindFirstObjectByType<SplatRoomLoader>();
+                Assert.IsNotNull(loader.Descriptor, loader.Error);
+                var follow = loader.Follow;
+                Assert.IsNotNull(follow);
+                follow.Orbit(0f, -follow.OrbitPitchDeg); // default elevation
+                for (var i = 0; i < 30; i++)
+                    yield return null;
+                var start = follow.EyeDistance;
+                Assert.That(start, Is.GreaterThan(0.2f), "eye starts out at a follow distance");
+                var least = start;
+                for (var step = 0; step < 24; step++)
+                {
+                    follow.Orbit(15f, 0f);
+                    yield return null;
+                    yield return null;
+                    least = Mathf.Min(least, follow.EyeDistance);
+                    Assert.IsFalse(follow.TargetHidden, $"character hidden at step {step}");
+                }
+                Assert.That(
+                    least,
+                    Is.GreaterThan(0.8f * start),
+                    $"{loader.Descriptor.slug}: eye pulled in to {least:0.00} of {start:0.00} while turning"
+                );
+            }
+            finally
+            {
+                DebugOverlay.RequestedSceneVariant = null;
+            }
+        }
+
         [UnityTest]
         public IEnumerator SplatRoom_UnloadsCleanly_LeavingNoCharacterOrReportHook()
         {

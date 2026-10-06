@@ -105,6 +105,12 @@ namespace GiganticJourneys.Movement
 
             /// <summary>Radius of the sphere cast that pulls the camera in front of colliders (m).</summary>
             public const float CollisionRadiusM = 0.15f;
+
+            /// <summary>
+            /// How long the eye takes to ease back out after something pulled it in (SmoothDamp
+            /// time, s). Pulling in is immediate.
+            /// </summary>
+            public const float SpringBackSec = 0.35f;
         }
     }
 }

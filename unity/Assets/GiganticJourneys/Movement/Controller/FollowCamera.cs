@@ -23,6 +23,11 @@ namespace GiganticJourneys.Movement.Controller
     /// <see cref="cameraCollision"/>, pull the eye in front of colliders on the ray from the
     /// look-at point. The splat room sets all three from the training camera coverage so the
     /// view stays where the capture looked (M1-UNITY-01).
+    /// Whatever pulls the eye in does so at once (it never clips through a wall) but the eye
+    /// eases back out (<see cref="NextEyeRadius"/>), so turning past an obstacle no longer
+    /// snaps the view into the character and out again; and when the eye does end up within
+    /// movement.json <c>occluderFadeA</c> of the character (a tight corner), the character's
+    /// renderers are hidden instead of filling the screen (build 61 device test).
     /// </summary>
     [RequireComponent(typeof(Camera))]
     public sealed class FollowCamera : MonoBehaviour
@@ -88,6 +93,9 @@ namespace GiganticJourneys.Movement.Controller
         Vector3 _lookAhead;
         Vector3 _lookAheadVelocity;
         bool _initialized;
+        float _eyeRadius = -1f;
+        float _eyeRadiusVelocity;
+        readonly List<Renderer> _hiddenRenderers = new List<Renderer>();
 
         public TraversalController Target
         {
@@ -143,6 +151,48 @@ namespace GiganticJourneys.Movement.Controller
 
         public bool HasCameraBounds => _hasBounds;
         public Bounds CameraBounds => _bounds;
+
+        /// <summary>Distance from the look-at point to the eye this frame (world units).</summary>
+        public float EyeDistance => Mathf.Max(0f, _eyeRadius);
+
+        /// <summary>The character's renderers are hidden because the eye is too close to it.</summary>
+        public bool TargetHidden => _hiddenRenderers.Count > 0;
+
+        /// <summary>
+        /// The eye distance for this frame: straight to <paramref name="allowed"/> when that is
+        /// closer (an obstacle or the box must never be clipped through), otherwise eased back
+        /// out over about <paramref name="springBackSec"/>. A negative <paramref name="current"/>
+        /// (first frame) jumps to <paramref name="allowed"/>.
+        /// </summary>
+        public static float NextEyeRadius(
+            float current,
+            float allowed,
+            ref float velocity,
+            float springBackSec,
+            float deltaTime
+        )
+        {
+            if (current < 0f || allowed <= current || springBackSec <= 0f)
+            {
+                velocity = 0f;
+                return allowed;
+            }
+            return Mathf.Min(
+                allowed,
+                Mathf.SmoothDamp(
+                    current,
+                    allowed,
+                    ref velocity,
+                    springBackSec,
+                    float.PositiveInfinity,
+                    deltaTime
+                )
+            );
+        }
+
+        /// <summary>Whether the character should be hidden with the eye this close to its look-at point.</summary>
+        public static bool HidesTarget(float eyeDistance, float hideWithin) =>
+            eyeDistance < hideWithin;
 
         /// <summary>Turns the camera around the character (pitch is clamped in <see cref="LateUpdate"/>).</summary>
         public void Orbit(float yawDeg, float pitchDeg)
@@ -315,8 +365,43 @@ namespace GiganticJourneys.Movement.Controller
             var e = elevation * Mathf.Deg2Rad;
             var toEye = -forward * Mathf.Cos(e) + Vector3.up * Mathf.Sin(e);
             var floorY = _trackedY + ProvisionalTuning.CameraOrbit.EyeAboveGroundM;
-            transform.position = lookAt + toEye * PulledInRadius(lookAt, toEye, radius, floorY);
+            _eyeRadius = NextEyeRadius(
+                _eyeRadius,
+                PulledInRadius(lookAt, toEye, radius, floorY),
+                ref _eyeRadiusVelocity,
+                ProvisionalTuning.CameraOrbit.SpringBackSec,
+                Time.deltaTime
+            );
+            transform.position = lookAt + toEye * _eyeRadius;
             transform.rotation = Quaternion.LookRotation(-toEye, Vector3.up);
+            SetTargetHidden(HidesTarget(_eyeRadius, scale.ToWorld(cam.OccluderFadeA)));
+        }
+
+        void OnDisable() => SetTargetHidden(false);
+
+        void SetTargetHidden(bool hide)
+        {
+            if (hide == TargetHidden)
+                return;
+            if (!hide)
+            {
+                foreach (var r in _hiddenRenderers)
+                {
+                    if (r != null)
+                        r.enabled = true;
+                }
+                _hiddenRenderers.Clear();
+                return;
+            }
+            if (target == null)
+                return;
+            foreach (var r in target.GetComponentsInChildren<Renderer>())
+            {
+                if (!r.enabled)
+                    continue;
+                r.enabled = false;
+                _hiddenRenderers.Add(r);
+            }
         }
 
         // The eye distance after the camera box, the ground and (optionally) colliders on the way.

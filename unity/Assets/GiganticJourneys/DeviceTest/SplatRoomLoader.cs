@@ -399,11 +399,18 @@ namespace GiganticJourneys.DeviceTest
             go.transform.SetParent(Colliders, false);
             go.transform.localPosition = center;
             go.AddComponent<BoxCollider>().size = size;
-            // The boundary walls only stop the character; the camera may look past them (its
-            // own box and the occluders limit it), so keep them out of the camera's sphere cast.
-            if (name.StartsWith("Wall", StringComparison.Ordinal))
+            // The boundary walls and the furniture blockers only stop the character; the
+            // camera may look past them (its own box, the room's walls, limits it), so keep them
+            // out of the camera's sphere cast. With the blockers in it, turning the view past the
+            // bed or a dresser snapped the eye into the character (build 61, bedroom).
+            if (IsCharacterOnly(name))
                 go.layer = LayerMask.NameToLayer("Ignore Raycast");
         }
+
+        /// <summary>Room colliders the follow camera ignores (everything but the floor).</summary>
+        public static bool IsCharacterOnly(string colliderName) =>
+            colliderName.StartsWith("Wall", StringComparison.Ordinal)
+            || colliderName.StartsWith("Blocker", StringComparison.Ordinal);
 
         void BuildOccluders(SplatRoomDescriptor d)
         {
