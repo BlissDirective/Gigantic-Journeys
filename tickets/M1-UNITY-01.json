@@ -162,6 +162,11 @@
       "date": "2026-10-06",
       "by": "gj-operator",
       "event": "Bedroom QA standing viewer (Owner choice after build-69 fragmentation): owner-room-01 descriptor qaStandingLookAtHeightM=1.4 raises the follow look-at to capture height while the 1:12 miniature stays on the floor; Winchester unchanged (field absent / off). On-screen label and Save-report line qa_standing_viewer make the mode obvious. Camera collision / looking-up pull-in fix preserved (EyeDirection + Ignore Raycast blockers). Tests: FollowCamera.LookAtHeightAndRise, bedroom/Winchester descriptor guards. No private media. Dispatch internal-debug next."
+    },
+    {
+      "date": "2026-10-06",
+      "by": "gj-operator",
+      "event": "Dispatched internal-debug ios-build run 37534431745 (#71) on 3fc097f with fresh 15-min signed URLs for Winchester v3 + bedroom v2 (sha256 verified). Awaiting TestFlight upload + AUTH #047 artifact delete."
     }
   ]
 }
