@@ -5,7 +5,7 @@
   "area": "PIPE",
   "owner": "gj-operator",
   "qa": "gj-data",
-  "status": "merged",
+  "status": "in-progress",
   "priority": "P1",
   "size": "L",
   "summary": "Operator wiring for the capture\u2192render Brain-B cores already on main (AUTH #049/#050; design/proposals/capture-render-quality-v1.md + external-synthesis-builds.md batch 2). Item 1 only in this first slice: pass render_quality.splatfacto_quality_args(config) into ns_train_capped, confirm Splatfacto flag strings against pinned nerfstudio 1.1.5, prepare the antialiased+mcmc vs classic+default corpus A/B with a cost estimate before any GPU spend, then flip ReconstructionConfig defaults only after the A/B. Items 2\u201310 stay out of scope until item 1 lands. Non-commercial weights never ship (#049). VGGT/Metric3D wait on counsel (#050).",
@@ -95,6 +95,11 @@
     {
       "date": "2026-10-06",
       "event": "Self-reviewed and FF-merged to main on green branch CI (lint/governance/secret-scan). unity-tests runs on main push only.",
+      "by": "gj-operator"
+    },
+    {
+      "date": "2026-10-06",
+      "event": "Item-1 wiring FF-pushed to main at 0a36a16 (lint/governance/secret-scan green on the branch; unity-tests runs on main). Status stays in-progress: corpus A/B + default flip remain. (Reverted a mistaken 'merged' status \u2014 schema requires a PR link for merged.)",
       "by": "gj-operator"
     }
   ]
