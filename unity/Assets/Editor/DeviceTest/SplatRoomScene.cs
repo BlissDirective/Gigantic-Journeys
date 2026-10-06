@@ -536,6 +536,26 @@ namespace GiganticJourneys.EditorTools.DeviceTest
                 )
             );
 
+        /// <summary>
+        /// Converts any PLY with the shipped formats into -gjOutDir (an Assets/ folder), e.g. the
+        /// synthetic fixture of services/reconstruction/tests/test_unity_splat_path.py.
+        /// </summary>
+        public static void RunConvertPly() =>
+            Batch(() =>
+            {
+                var ply =
+                    Arg("-gjSplatPly")
+                    ?? throw new ArgumentException("-gjSplatPly <path> required");
+                var dir =
+                    Arg("-gjOutDir")
+                    ?? throw new ArgumentException("-gjOutDir <Assets/...> required");
+                EnsureFolder(dir);
+                var asset =
+                    SampleSplat.ConvertPly(ply, dir)
+                    ?? throw new InvalidOperationException("conversion produced no asset");
+                Debug.Log($"[SplatRoomScene] converted {asset.splatCount} splats into {dir}");
+            });
+
         public static void RunScreenshot() =>
             Batch(() =>
             {
