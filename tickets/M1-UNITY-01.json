@@ -152,6 +152,11 @@
       "date": "2026-10-06",
       "by": "gj-operator",
       "event": "Internal-debug TestFlight build 69 (ios-build run 37478205242, c23e714, dispatched 09:21 CT, uploaded 09:49 CT): Winchester v3 + bedroom owner-room-01 v2 from fresh 15-min signed URLs (both sha256 verified in the build), with the Unity-path shader fixes and the camera fix. AUTH #047: the run deleted ios-xcode-project-burst (id 11420653255); the artifacts API lists 0 artifacts for the run. Run 68 (37473755395) was cancelled while still queued (no jobs ran, 0 artifacts): it waited behind the push ios-build run 67 and its signed URLs would have expired first. Owner to check on device: bedroom colours/brightness, no landscape top/bottom streaks, turning/looking up never jams the camera into the character, Winchester unchanged, fps."
+    },
+    {
+      "date": "2026-10-06",
+      "by": "gj-operator",
+      "event": "Build 69 Owner device report (iPhone 14, fps_p50 60): camera viewing fixed, but bedroom still very fragmented (lavender/white mist, red/black blotches; screenshots on private box). Investigation: Unity-path at an exact held-out training pose is a sharp recognizable bedroom; the same XZ at the doll eye (0.25 m) is already shredded; spawn walk poses match the Owner mist. Root cause is scale/view mismatch, not a remaining shader bug — bedroom placed at real metres (ceiling 2.44 m, scale 1.5245) while the player is 1:12 (eye 0.25 m); every training camera is at 1.27–1.84 m (median 1.42 m, median pitch −59°). Phone landscape HFOV ~103° vs capture ~34°. Residual ~3 dB and 127 giant splats are secondary. Tried 1:12 and capture-matched rescales: not sufficient for horizontal walk yaws. No dispatch. Ranked next: (C) reshoot / accept viewer-height for this capture; (B) bedroom-only eye-height override ≈1.4 m for QA; (A) more shader work — low value; (D) SH0/renderScale isolation only. Evidence qa/evidence/M1-UNITY-01/bedroom-build69-fragmentation.json; safe images under /workspace/gj-owner-share/bedroom-height-mismatch.jpg and bedroom-spawn-vs-training.jpg."
     }
   ]
 }

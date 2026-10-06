@@ -1,0 +1,52 @@
+{
+  "ticket": "M1-UNITY-01",
+  "date": "2026-10-06",
+  "subject": "build-69 Owner report: still very fragmented; camera viewing fixed",
+  "device": "iPhone 14, v0.0.241 (c23e714), 399165 splats, SH2, render 0.85x, free camera, fps_p50 60 / p99 30.1",
+  "diagnosis": "Not a remaining Unity shader bug for in-distribution views. The bedroom package is placed at real-world metres (assumed 2.44 m ceiling, scale 1.5245) while the player is the 1:12 miniature (eye \u2248 0.25 m). Every training / held-out camera sits at 1.27\u20131.84 m (median 1.42 m, median pitch \u221259\u00b0 looking down). Unity-path at an exact held-out pose is a sharp recognizable bedroom; the same XZ at doll eye height is already shredded (feathery carpet, red/black door smears); spawn walk poses are lavender/white mist matching the Owner screenshots. Phone landscape HFOV ~103\u00b0 vs capture portrait ~34\u00b0 widens the out-of-coverage edges. Giant splats (127 with axis >1 m in PLY) and the residual ~3 dB soft gap are secondary.",
+  "evidence": {
+    "hold16_exact_training_height": "sharp door/dresser/carpet (Unity SH2, shipped package)",
+    "hold16_same_xz_doll_height_0.25m": "fragmented, red/black smears \u2014 same renderer",
+    "spawn_doll_yaw0": "lavender mist matching Owner build-69 screenshots",
+    "unity_path_heldout_psnr_sh2": 21.71,
+    "gsplat_heldout_psnr": 24.85,
+    "capture_eye_y_m_p50": 1.417,
+    "doll_eye_y_m": 0.248,
+    "phone_landscape_hfov_deg": 102.7,
+    "capture_portrait_hfov_deg": 34.1,
+    "giants_axis_gt_1m_in_ply": 127
+  },
+  "tried_not_sufficient": [
+    "Rescale room by 1/12: doll eye above the 0.20 m dollhouse ceiling \u2014 worse",
+    "Rescale so median capture height maps to doll eye (f\u22480.175): some angles show furniture, most walk yaws still mist (capture was looking down \u221259\u00b0, not horizontal)"
+  ],
+  "ranked_next": [
+    {
+      "id": "C",
+      "action": "Wait for reshoot with low horizontal coverage if the product stays ant-in-real-room; or accept viewer-height-only for this capture",
+      "confidence": "high"
+    },
+    {
+      "id": "B",
+      "action": "Cheap no-retrain: bedroom-only viewer camera / eye-height override \u2248 1.4 m (match training) for reconstruction QA; optional giant-splat opacity cull",
+      "confidence": "high for QA viewing, product-weird with miniature still on the floor"
+    },
+    {
+      "id": "A",
+      "action": "Further Unity shader work",
+      "confidence": "low \u2014 hold16_exact already sharp; will not fix Owner mist"
+    },
+    {
+      "id": "D",
+      "action": "Force SH0 / lower renderScale",
+      "confidence": "low \u2014 isolation only"
+    }
+  ],
+  "dispatch_now": false,
+  "reason": "No high-confidence cheap fix that makes spawn walk poses look like a bedroom without changing the viewing height or the capture. Shader path is already good at training poses.",
+  "safe_images": [
+    "/workspace/gj-owner-share/bedroom-height-mismatch.jpg",
+    "/workspace/gj-owner-share/bedroom-spawn-vs-training.jpg"
+  ],
+  "owner_screenshots_private": "/workspace/owner-capture/work/upath/owner-shots-build69/ (chmod 700, not committed)"
+}
