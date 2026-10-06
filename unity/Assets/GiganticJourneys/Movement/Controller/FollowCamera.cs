@@ -190,6 +190,26 @@ namespace GiganticJourneys.Movement.Controller
             );
         }
 
+        /// <summary>
+        /// Unit direction from the look-at point to the eye for an orbit <paramref name="elevationDeg"/>.
+        /// Below the look-at point (looking up) the eye would sink into the ground, and pulling it
+        /// in along the ray put it inside the character (build 61: 2 cm away at -60 degrees). It
+        /// stays at <paramref name="radius"/> instead, as low as the ground allows
+        /// (<paramref name="dropToFloor"/> under the look-at point), and only the view tilts up.
+        /// </summary>
+        public static Vector3 EyeDirection(
+            Vector3 forward,
+            float elevationDeg,
+            float radius,
+            float dropToFloor
+        )
+        {
+            var e = elevationDeg * Mathf.Deg2Rad;
+            if (e < 0f && radius > 0f)
+                e = Mathf.Max(e, -Mathf.Asin(Mathf.Clamp01(dropToFloor / radius)));
+            return -forward * Mathf.Cos(e) + Vector3.up * Mathf.Sin(e);
+        }
+
         /// <summary>Whether the character should be hidden with the eye this close to its look-at point.</summary>
         public static bool HidesTarget(float eyeDistance, float hideWithin) =>
             eyeDistance < hideWithin;
@@ -363,8 +383,9 @@ namespace GiganticJourneys.Movement.Controller
             }
             var radius = Mathf.Sqrt(distance * distance + rise * rise) * _zoom;
             var e = elevation * Mathf.Deg2Rad;
-            var toEye = -forward * Mathf.Cos(e) + Vector3.up * Mathf.Sin(e);
+            var view = -(-forward * Mathf.Cos(e) + Vector3.up * Mathf.Sin(e));
             var floorY = _trackedY + ProvisionalTuning.CameraOrbit.EyeAboveGroundM;
+            var toEye = EyeDirection(forward, elevation, radius, Mathf.Max(0f, lookAt.y - floorY));
             _eyeRadius = NextEyeRadius(
                 _eyeRadius,
                 PulledInRadius(lookAt, toEye, radius, floorY),
@@ -373,7 +394,8 @@ namespace GiganticJourneys.Movement.Controller
                 Time.deltaTime
             );
             transform.position = lookAt + toEye * _eyeRadius;
-            transform.rotation = Quaternion.LookRotation(-toEye, Vector3.up);
+            // The view keeps the asked-for elevation even where the eye could not go there.
+            transform.rotation = Quaternion.LookRotation(view, Vector3.up);
             SetTargetHidden(HidesTarget(_eyeRadius, scale.ToWorld(cam.OccluderFadeA)));
         }
 
@@ -411,12 +433,17 @@ namespace GiganticJourneys.Movement.Controller
             {
                 // A miniature character's look-at point can sit below the box floor; the box then
                 // still bounds x, z and the top (the ground clamp below handles low eyes).
+                // Its floor then drops to the eye's own ground limit (it used to stop 2 cm under
+                // the look-at point, which pulled a looking-up eye in to a third of its distance).
                 var box = _bounds;
                 if (lookAt.y <= box.min.y)
                     box.SetMinMax(
                         new Vector3(
                             box.min.x,
-                            lookAt.y - ProvisionalTuning.CameraOrbit.EyeAboveGroundM,
+                            Mathf.Min(
+                                lookAt.y - ProvisionalTuning.CameraOrbit.EyeAboveGroundM,
+                                floorY - 1e-4f
+                            ),
                             box.min.z
                         ),
                         box.max

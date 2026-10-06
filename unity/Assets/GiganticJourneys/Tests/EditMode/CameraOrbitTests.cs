@@ -241,13 +241,21 @@ namespace GiganticJourneys.Tests
         }
 
         [Test]
-        public void RoomCamera_IgnoresFurnitureBlockersAndBoundaryWalls_ButNotTheFloor()
+        public void LookingUp_KeepsTheEyeOut_AtTheGroundInsteadOfInsideTheCharacter()
         {
-            Assert.IsTrue(
-                GiganticJourneys.DeviceTest.SplatRoomLoader.IsCharacterOnly("Blocker bed")
-            );
-            Assert.IsTrue(GiganticJourneys.DeviceTest.SplatRoomLoader.IsCharacterOnly("Wall +X"));
-            Assert.IsFalse(GiganticJourneys.DeviceTest.SplatRoomLoader.IsCharacterOnly("Floor"));
+            var fwd = Vector3.forward;
+            // Level or above: the plain orbit direction.
+            var level = FollowCamera.EyeDirection(fwd, 20f, 0.6f, 0.05f);
+            Assert.That(level.y, Is.EqualTo(Mathf.Sin(20f * Mathf.Deg2Rad)).Within(1e-5f));
+            // Looking up from -60 degrees with the look-at point 5 cm above the floor: the eye
+            // stays at the full radius, exactly at the floor, not 2 cm from the character.
+            var up = FollowCamera.EyeDirection(fwd, -60f, 0.6f, 0.05f);
+            Assert.That(up.magnitude, Is.EqualTo(1f).Within(1e-5f));
+            Assert.That(up.y * 0.6f, Is.EqualTo(-0.05f).Within(1e-4f));
+            Assert.That(up.z, Is.LessThan(-0.99f), "still behind the character");
+            // Plenty of room under the look-at point: the asked-for angle.
+            var high = FollowCamera.EyeDirection(fwd, -30f, 0.6f, 2f);
+            Assert.That(high.y, Is.EqualTo(-0.5f).Within(1e-4f));
         }
 
         [Test]

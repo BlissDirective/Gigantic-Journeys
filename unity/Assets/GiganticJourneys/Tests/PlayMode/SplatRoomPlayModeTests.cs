@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using GiganticJourneys.DebugTools;
 using GiganticJourneys.DeviceTest;
 using NUnit.Framework;
@@ -160,16 +161,33 @@ namespace GiganticJourneys.Tests
                 follow.Orbit(0f, -follow.OrbitPitchDeg); // default elevation
                 for (var i = 0; i < 30; i++)
                     yield return null;
+                Assert.IsTrue(
+                    loader
+                        .Colliders.GetComponentsInChildren<Collider>()
+                        .All(c => c.gameObject.layer == LayerMask.NameToLayer("Ignore Raycast")),
+                    "room colliders stay out of the camera cast"
+                );
                 var start = follow.EyeDistance;
                 Assert.That(start, Is.GreaterThan(0.2f), "eye starts out at a follow distance");
                 var least = start;
-                for (var step = 0; step < 24; step++)
+                // Level, then looking up from low down (the eye below the look-at point), then
+                // from high up: a full turn at each.
+                foreach (var pitch in new[] { 0f, -200f, 400f })
                 {
-                    follow.Orbit(15f, 0f);
-                    yield return null;
-                    yield return null;
-                    least = Mathf.Min(least, follow.EyeDistance);
-                    Assert.IsFalse(follow.TargetHidden, $"character hidden at step {step}");
+                    follow.Orbit(0f, pitch);
+                    for (var i = 0; i < 60; i++)
+                        yield return null; // a pitch change may spring the eye back out first
+                    for (var step = 0; step < 24; step++)
+                    {
+                        follow.Orbit(15f, 0f);
+                        yield return null;
+                        yield return null;
+                        least = Mathf.Min(least, follow.EyeDistance);
+                        Assert.IsFalse(
+                            follow.TargetHidden,
+                            $"character hidden (pitch {pitch}, step {step})"
+                        );
+                    }
                 }
                 Assert.That(
                     least,
