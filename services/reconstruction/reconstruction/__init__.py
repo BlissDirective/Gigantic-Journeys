@@ -8,6 +8,7 @@ pluggable adapters; heavy tools live in the CUDA container (see Dockerfile).
 
 from __future__ import annotations
 
+from .appearance import AffineColor, AppearanceModel, apply_affine_color
 from .arkit_poses import (
     ARKIT_POSES_FILENAME,
     ArkitCapture,
@@ -28,7 +29,18 @@ from .cost import (
     SpendCapError,
     estimate_usd,
 )
+from .delivery import CompressionPlan, estimate_bytes, plan_compression
+from .depth_normal import edge_aware_log_l1, normal_consistency, normal_tv, pearson_depth_loss
+from .depth_prior import DepthPrior, MockDepthPrior, align_scale_shift, apply_scale_shift, to_metric
+from .exposure_trajectory import sample_cubic_bspline, sample_linear, slerp
 from .fakes import FakeCompressor, FakeMesher, FakeSfM, FakeTrainer
+from .feedforward_frontend import (
+    FeedForwardReconstructor,
+    FeedForwardResult,
+    MockFeedForward,
+    result_to_capture,
+    write_frontend_model,
+)
 from .licenses import MANIFEST, Component, LicenseError, assert_commercial_safe
 from .mesh import Mesher, MeshError, Open3DMesher
 from .models import (
@@ -48,12 +60,40 @@ from .models import (
 )
 from .pipeline import ReconstructionRun, run_pipeline
 from .positional_index import PositionalIndexScheme
+from .render_quality import splatfacto_quality_args
 from .sfm import SFM_CHOICES, SFM_SELECTABLE, ColmapSfM, GlomapSfM, SfM, select_sfm
+from .submap import loop_closure_candidates, submap_windows
 from .tools import ToolNotFoundError, require
 from .trainer import BrushTrainer, GsplatTrainer, Trainer, TrainerError
 
 __all__ = [
     "ARKIT_POSES_FILENAME",
+    "AffineColor",
+    "AppearanceModel",
+    "CompressionPlan",
+    "DepthPrior",
+    "FeedForwardReconstructor",
+    "FeedForwardResult",
+    "MockDepthPrior",
+    "MockFeedForward",
+    "align_scale_shift",
+    "apply_affine_color",
+    "apply_scale_shift",
+    "edge_aware_log_l1",
+    "estimate_bytes",
+    "loop_closure_candidates",
+    "normal_consistency",
+    "normal_tv",
+    "pearson_depth_loss",
+    "plan_compression",
+    "result_to_capture",
+    "sample_cubic_bspline",
+    "sample_linear",
+    "slerp",
+    "splatfacto_quality_args",
+    "submap_windows",
+    "to_metric",
+    "write_frontend_model",
     "DAILY_CAP_USD",
     "MANIFEST",
     "OFFSITE_SOURCES",

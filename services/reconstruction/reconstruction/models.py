@@ -153,6 +153,12 @@ class ReconstructionConfig:
     # build the model straight from ARKit metric poses (arkit_poses.ArkitSfM).
     sfm: str = "colmap"
     max_package_bytes: int = 150 * MiB
+    # Render-quality knobs, both commercial-safe in gsplat (capture-render-quality-v1):
+    # "antialiased" = Mip-Splatting opacity compensation (alias-free at any zoom);
+    # "mcmc" densification relocates dead Gaussians (fewer floaters at a fixed budget).
+    # Defaults preserve current behaviour; flip after the corpus A/B (render_quality.py).
+    rasterize_mode: str = "classic"  # "classic" | "antialiased"
+    densify_strategy: str = "default"  # "default" | "mcmc"
 
     def __post_init__(self) -> None:
         if self.splat_budget <= 0:
@@ -161,6 +167,10 @@ class ReconstructionConfig:
             raise ReconstructionError("train_iters must be positive")
         if self.sfm not in ("glomap", "colmap", "arkit"):
             raise ReconstructionError(f"unknown sfm backend: {self.sfm!r}")
+        if self.rasterize_mode not in ("classic", "antialiased"):
+            raise ReconstructionError(f"unknown rasterize_mode: {self.rasterize_mode!r}")
+        if self.densify_strategy not in ("default", "mcmc"):
+            raise ReconstructionError(f"unknown densify_strategy: {self.densify_strategy!r}")
         if self.max_package_bytes <= 0:
             raise ReconstructionError("max_package_bytes must be positive")
 

@@ -18,6 +18,11 @@ not.
 | Source repo | Licence | What we took | Builds |
 |---|---|---|---|
 | [facebookresearch/fast3r](https://github.com/facebookresearch/fast3r) (CVPR 2025) | FAIR **Noncommercial** Research License → artifacts discarded | Open-knowledge *ideas* only | #1 splat-init, #2 train-short/test-long, #3 confidence gating |
+| [nerfstudio/gsplat](https://github.com/nerfstudio-project/gsplat) + DN-Splatter / BAD-Gaussians / Splatfacto-W | Apache-2.0 | antialiased+MCMC, depth+normal, deblur, appearance (code + method) | batch 2 #1–#5 |
+| [facebookresearch/map-anything](https://github.com/facebookresearch/map-anything) (apache weights) | Apache-2.0 | feed-forward metric front-end, ARKit-conditioned | batch 2 #6 |
+| Depth Anything V2 Small / Metric3D v2 | Apache / BSD (weights verify) | monocular depth + normal prior | batch 2 #3, #8 |
+| PlayCanvas splat-transform / Niantic SPZ / MetalSplatter | MIT | SOG compression + native iOS render | batch 2 #7 |
+| [facebookresearch/vggt](https://github.com/facebookresearch/vggt) + VGGT-SLAM | VGGT commercial (gated) / BSD-2 | full-video submaps + loop closure | batch 2 #9 |
 
 ---
 
@@ -113,3 +118,48 @@ trust threshold. Feed reconstruction/pointmap confidence through so weak regions
 
 _These are candidates and references, not shipping commitments. Each remains subject to
 the clean-IP posture above._
+
+---
+
+## Source batch 2 — video&rarr;3D capture & render quality (2026-10-06)
+
+Synthesised from the external video&rarr;3D survey (PDF `GiganticJourneys-Video-to-3D-Synthesis`);
+full design in `design/proposals/capture-render-quality-v1.md`. Every item is built from a
+permissively-licensed project or a published method &mdash; no non-commercial code, weights, or
+outputs ship. Each entry is a **deterministic Brain-B core + tests built now**; the GPU-training /
+iOS-Metal / model-serving half is the **Operator** wiring noted with it.
+
+**Commercial-safe (built now, priority order):**
+1. **gsplat anti-aliased + MCMC** &mdash; `ReconstructionConfig.rasterize_mode`/`densify_strategy` +
+   `render_quality.splatfacto_quality_args`. _Operator:_ pass the flags in `ns_train_capped`, A/B on
+   the corpus, flip defaults.
+2. **DN-Splatter depth+normal + mesh** &mdash; `depth_normal.py` (edge-aware log-L1, Pearson,
+   normal consistency/TV). _Operator:_ mirror on rendered depth/normals; mesh &rarr; Open3D collision.
+3. **Mono-depth prior alignment** &mdash; `depth_prior.py` (`DepthPrior` port, scale/shift align to
+   ARKit metric). _Operator:_ run Depth Anything V2 **Small** (Apache) &rarr; Pearson loss.
+4. **BAD-Gaussians in-exposure trajectory** &mdash; `exposure_trajectory.py` (SE3 slerp/lerp, linear +
+   cubic B-spline, weights). _Operator:_ render+average sub-frames, bundle-adjust the trajectory.
+5. **Splatfacto-W appearance** &mdash; `appearance.py` (per-image affine colour; novel view &rarr;
+   identity). _Operator:_ wire the embedding + colour MLP in Splatfacto.
+6. **MapAnything feed-forward front-end** &mdash; `feedforward_frontend.py` (`FeedForwardReconstructor`
+   port + `write_frontend_model` bridge to the COLMAP init, ARKit-conditioned, confidence-gated seed).
+   _Operator:_ serve `facebook/map-anything-apache` (Apache), A/B vs COLMAP+GLOMAP. _Counsel:_
+   apache-weights training-data basis.
+7. **Delivery compression planner** &mdash; `delivery.py` (`plan_compression` to hit the 150 MB budget).
+   _Operator:_ add a splat-transform SOG stage (MIT) + a MetalSplatter (MIT) viewer.
+
+**Safe with caveat (built now; counsel before shipping the model/weights):**
+8. **Metric3D v2** &mdash; plugs into the `DepthPrior` port (no new code); _counsel:_ its weights' terms.
+9. **VGGT + VGGT-SLAM** &mdash; `submap.py` (windowing + loop-closure candidates) is the GPU-free
+   scheduling core; VGGT is another `FeedForwardReconstructor`. _Counsel/AUTH:_ VGGT commercial licence.
+
+Tests: ~38 new (reconstruction suite 241 passing); ruff + governance validators green; no protected
+path touched; no new AUTH (Brain-B code from open knowledge / permissive licences).
+
+**Remaining (not built this pass):** FisherRF capture-guidance (non-commercial &rarr; needs a
+clean-room reimplementation on gsplat, separate authorisation); all Operator GPU/Unity/model-serving
+wiring above; the counsel/AUTH licence checks (MapAnything-apache data, VGGT licence, Metric3D /
+non-Small depth weights).
+
+_These are candidates and references, not shipping commitments. Each remains subject to the
+clean-IP posture above._
