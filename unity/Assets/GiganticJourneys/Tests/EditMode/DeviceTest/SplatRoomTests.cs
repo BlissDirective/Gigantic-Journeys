@@ -27,6 +27,63 @@ namespace GiganticJourneys.Tests
         static string Committed => File.ReadAllText(SplatRoomScene.DescriptorPath);
 
         [Test]
+        public void Composite_KeepsGammaSpaceSplatColours_InThisGammaProject()
+        {
+            // Build 61: the package's unconditional GammaToLinearSpace in a Gamma project
+            // rendered every splat pixel as rgb^2.2 (dark, purple walls, black shadows).
+            Assert.AreEqual(
+                ColorSpace.Gamma,
+                PlayerSettings.colorSpace,
+                "switching to Linear: re-check the composite and the Unity-path PSNR"
+            );
+            var src = File.ReadAllText(SampleSplat.AlphaSafeCompositePath);
+            StringAssert.Contains("#if !defined(UNITY_COLORSPACE_GAMMA)", src);
+            var guard = src.IndexOf(
+                "#if !defined(UNITY_COLORSPACE_GAMMA)",
+                StringComparison.Ordinal
+            );
+            var convert = src.IndexOf("GammaToLinearSpace(", StringComparison.Ordinal);
+            Assert.Greater(
+                convert,
+                guard,
+                "the gamma-to-linear conversion only runs in Linear projects"
+            );
+        }
+
+        [Test]
+        public void SplatCompute_AppliesTheAntialiasedOpacityCompensation()
+        {
+            var src = File.ReadAllText(SplatRoomScene.SplatUtilitiesPath);
+            StringAssert.Contains(
+                "splat.opacity * opacityScale * GJAntialiasCompensation(cov2d)",
+                src,
+                "CSCalcViewData scales opacity like gsplat's antialiased rasterizer"
+            );
+            StringAssert.Contains("(cov2d.x - 0.3) * (cov2d.z - 0.3) - cov2d.y * cov2d.y", src);
+            // Vertical frustum clamp from the vertical FOV (the package uses the horizontal one).
+            StringAssert.Contains("float3 cov2d = GJCalcCovariance2D(", src);
+            StringAssert.Contains("float tanFovY = rcp(abs(matrixP._m11));", src);
+            StringAssert.Contains("float limY = 1.3 * tanFovY;", src);
+            // Same kernels as the package (the renderer finds them by name).
+            var package = File.ReadAllText(
+                "Packages/org.nesnausk.gaussian-splatting/Shaders/SplatUtilities.compute"
+            );
+            string[] Kernels(string s) =>
+                s.Split('\n')
+                    .Where(l => l.StartsWith("#pragma kernel ", StringComparison.Ordinal))
+                    .Select(l => l.Trim())
+                    .ToArray();
+            CollectionAssert.AreEqual(Kernels(package), Kernels(src));
+            // The 0.3 px^2 filter the compensation undoes is still the package's.
+            StringAssert.Contains(
+                "cov._m00 += 0.3;",
+                File.ReadAllText(
+                    "Packages/org.nesnausk.gaussian-splatting/Shaders/GaussianSplatting.hlsl"
+                )
+            );
+        }
+
+        [Test]
         public void CommittedDescriptor_IsValid_Attributed_AndUnmirrors()
         {
             var d = SplatRoomDescriptor.Parse(Committed);
@@ -243,7 +300,11 @@ namespace GiganticJourneys.Tests
                     AssetDatabase.GetAssetPath(r.m_ShaderComposite),
                     "GJ alpha-safe composite (the package's turns opaque objects black on Metal)"
                 );
-                Assert.IsNotNull(r.m_CSSplatUtilities);
+                Assert.AreEqual(
+                    SplatRoomScene.SplatUtilitiesPath,
+                    AssetDatabase.GetAssetPath(r.m_CSSplatUtilities),
+                    "GJ compute with gsplat's antialiased opacity compensation (rooms train antialiased)"
+                );
                 var applier = r.GetComponent<SplatRenderSettingsApplier>();
                 Assert.IsNotNull(
                     applier != null ? applier.settings : null,

@@ -36,6 +36,8 @@ namespace GiganticJourneys.EditorTools.DeviceTest
     public static class SplatRoomScene
     {
         public const string ScenePath = "Assets/Scenes/DeviceTest/SplatRoom.unity";
+        public const string SplatUtilitiesPath =
+            "Assets/GiganticJourneys/Splats/Shaders/GJSplatUtilities.compute";
         public const string DeviceTestFolder = "Assets/GiganticJourneys/DeviceTest";
         public const string DescriptorPath = DeviceTestFolder + "/splat-room.json";
 
@@ -90,6 +92,10 @@ namespace GiganticJourneys.EditorTools.DeviceTest
             var splatGo = new GameObject("Splat room");
             var renderer = splatGo.AddComponent<GaussianSplatRenderer>();
             SampleSplat.AssignRendererResources(renderer);
+            // GJ fork with gsplat's antialiased opacity compensation (rooms are trained antialiased).
+            renderer.m_CSSplatUtilities =
+                AssetDatabase.LoadAssetAtPath<ComputeShader>(SplatUtilitiesPath)
+                ?? throw new InvalidOperationException($"missing {SplatUtilitiesPath}");
             var applier = splatGo.AddComponent<SplatRenderSettingsApplier>();
             applier.settings = SampleSplat.EnsureSettings();
             splatGo.SetActive(false);
@@ -415,9 +421,16 @@ namespace GiganticJourneys.EditorTools.DeviceTest
             loader.player.gameObject.SetActive(false);
             var cam = Camera.main;
             cam.clearFlags = CameraClearFlags.SolidColor;
-            cam.backgroundColor = Color.black;
+            cam.backgroundColor = Arg("-gjWhiteBg") == "1" ? Color.white : Color.black;
             cam.fieldOfView = set.fov_y_deg;
             var height = Mathf.RoundToInt(width * (float)set.height / set.width);
+            if (Arg("-gjLandscape") == "1")
+            {
+                // The phone's view (19.5:9 landscape, 60 deg vertical) from the same poses: no
+                // ground truth, for artefacts that only show at that aspect.
+                cam.fieldOfView = 60f;
+                height = Mathf.RoundToInt(width * 9f / 19.5f);
+            }
             Directory.CreateDirectory(outDir);
             foreach (var v in set.views)
             {
