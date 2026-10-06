@@ -71,7 +71,7 @@
   "branch": "ticket/M1-UNITY-01-metal-splat-sort",
   "pr": null,
   "created": "2026-09-24",
-  "updated": "2026-10-05",
+  "updated": "2026-10-06",
   "history": [
     {
       "date": "2026-09-24",
@@ -137,6 +137,11 @@
       "date": "2026-10-05",
       "by": "gj-operator",
       "event": "Internal-debug TestFlight build 61 (run 37404355735 on 1f3ea8a, uploaded 2026-10-05 21:54 CT, all jobs green): Bedroom = train-at-budget splat v2 (399,165 splats, sha256 verified in CI) with renderScale 0.85 / SH 2; Winchester unchanged (v3, 0.7 / SH 1). AUTH #047: the TestFlight job deleted ios-xcode-project-burst (artifact id 11387211446); the run lists no artifacts. Awaiting the Owner's device check: Bedroom fps via the debug overlay perf report (A/B against Winchester, which is still 0.7 / SH 1) and sharpness; walls and doors should now be solid."
+    },
+    {
+      "date": "2026-10-06",
+      "by": "gj-operator",
+      "event": "Build-61 device test (Owner, iPhone 14): bedroom distorted (purple/black streaks, see-through areas, blobs) and turning the camera jammed it into the character. Unity-path evaluation (shipped package + shipped shaders, 29 held-out views, SplatRoomScene.RunPoseRenders + tools/unity_path_eval.py): 11.30 dB vs GT (gsplat 24.85). Fixed: composite gamma-to-linear conversion in a Gamma project (-> 21.67), gsplat antialiased opacity compensation and the vertical frustum-clamp bug in the GJ compute fork GJSplatUtilities.compute (-> 21.71; SH0 21.52 / SH1 21.59 / SH2 21.71). Camera: an orbit below the look-at point was pulled in along the ray to the floor and by the camera box floor (2 cm from the character); now the eye keeps its distance at floor level and the view tilts, room colliders are out of the camera cast, instant pull-in with 0.35 s spring-back, character hidden within 1.5A. Regression tests: services/reconstruction/tests/test_unity_splat_path.py, EditMode + PlayMode (both rooms). Evidence: qa/evidence/M1-UNITY-01/bedroom-unity-path-fix.json. Commits 0015b3e, c006bbd, 0901223, 44dde86, 886411c."
     }
   ]
 }

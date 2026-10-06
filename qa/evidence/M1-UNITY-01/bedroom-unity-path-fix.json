@@ -1,0 +1,54 @@
+{
+  "ticket": "M1-UNITY-01",
+  "date": "2026-10-06",
+  "subject": "owner-room-01 bedroom (package v2, 399,165 splats) rendered through the Unity path vs held-out ground truth; build-61 device distortion root causes",
+  "method": "SplatRoomScene.RunPoseRenders renders the shipped package with the shipped shaders (Unity 6000.0.84f1, Vulkan, batch) from the 29 held-out COLMAP views (every 8th frame, tools/unity_path_eval.py poses: descriptor transform, fov_y 57.14 deg, 899x1599, character hidden, black background); tools/unity_path_eval.py score compares with the undistorted GT halves and the gsplat render of the same splat (nerfstudio eval). Media stay on the box (AUTH #046); metrics only here.",
+  "gsplat_reference_psnr": 24.849,
+  "unity_path_psnr_vs_gt": {
+    "build61_shaders": {
+      "sh0": 11.387,
+      "sh1": 11.339,
+      "sh2": 11.299
+    },
+    "composite_gamma_fix_only": {
+      "sh0": 21.474,
+      "sh1": 21.546,
+      "sh2": 21.67
+    },
+    "all_fixes": {
+      "sh0": 21.522,
+      "sh1": 21.591,
+      "sh2": 21.712
+    },
+    "all_fixes_lossless_package_sh2_before_clamp_fix": 21.684
+  },
+  "unity_path_psnr_vs_gsplat_render": {
+    "build61_shaders_sh2": 12.03,
+    "all_fixes_sh2": 25.622
+  },
+  "view16_psnr_vs_gt_sh2": {
+    "build61": 10.917,
+    "all_fixes": 23.803
+  },
+  "root_causes": [
+    "GJSplatCompositeSafe (copied from the package composite) applied GammaToLinearSpace unconditionally; the project is Gamma colour space, so every splat pixel was displayed as rgb^2.2: dark, contrasty, the lavender walls purple, shadows black. Unity-path PSNR 11.30 -> 21.67 (SH2) from this fix alone; the readback after the fix matches the gsplat render's mean brightness.",
+    "The package's CSCalcViewData adds gsplat's 0.3 px^2 antialiasing filter but not its opacity compensation sqrt(det/det_blur); the rooms are trained with rasterize_mode antialiased, so sub-pixel to pixel-wide splats render up to ~2x too opaque and wide. Fixed in GJSplatUtilities.compute (+0.02..0.2 dB per view at eval resolution; more at small/far splats).",
+    "The package's CalcCovariance2D derives the vertical frustum clamp from the horizontal FOV (tanFovY = rcp(_m11*aspect) = tanFovX). On the landscape phone (19.5:9, 60 deg vertical) the vertical limit is ~2.8x the half-FOV instead of 1.3x, so splats far above/below the view keep huge projected footprints and streak in from the screen edges. Fixed in the fork (limY = 1.3*tanFovY).",
+    "Not a shader bug: the phone's landscape 60 deg view is far wider (about 103 deg horizontal) than any capture frame (portrait, 34 deg horizontal) and the follow camera sits low (eye 0.1-0.4 m above the floor) where the capture never looked; those regions are reconstruction gaps (blobs/smears) in gsplat too."
+  ],
+  "ruled_out": {
+    "sh_order": "SH0 / SH1 / SH2 differ by <= 0.25 dB on the held-out views after the fixes (SH2 best); band order, constants and view direction match gsplat exactly (tests/test_unity_splat_path.py).",
+    "quantization": "a lossless (float32) import of the same PLY scores within 0.02 dB of the shipped Norm11/Norm11/Norm8x4/Norm6 package; decoding 400 sampled splats of the shipped package against the PLY: position p95 0.36 mm, opacity p95 0.004, colour p95 0.003, scale p95 0.5 %, SH p95 0.017.",
+    "packager_conversion": "sigmoid opacity, exp scale, wxyz->xyzw normalised quaternion and SH0->colour verified by the synthetic round-trip fixture.",
+    "handedness": "the mirrored room transform (scale z negative) keeps the view unmirrored and the splat footprints oriented as in gsplat (parity test, anisotropic offsets).",
+    "sorting": "Tier B (Metal) and package radix sort use the same view-z keys; held-out renders are fully opaque (transmittance ~0) with the package radix sort."
+  },
+  "residual_gap": "Unity path 21.71 vs gsplat 24.85 dB on the same views (25.6 dB Unity vs gsplat render). Not quantization or SH; per-view it concentrates on close views (9, 18, 19, 28) with dark splats in front of the dresser. Candidates left: the package's 2.83-sigma quad cut vs gsplat's 3-sigma, per-splat global sort vs gsplat per-tile sort for large overlapping splats, nerfstudio's eval background colour.",
+  "camera_root_cause": "Free look let the orbit go below the look-at point; the eye was then pulled in along the ray to the floor (2 cm from the character at -60 deg) and the camera box's lowered floor (2 cm under the look-at point) pulled it to a third of its distance at small angles. Both rooms are affected (the PlayMode repro failed with 0.02 m in Winchester and the bedroom).",
+  "regression_tests": [
+    "services/reconstruction/tests/test_unity_splat_path.py (package round trip + shader parity vs gsplat; unpatched package must fail)",
+    "unity EditMode SplatRoomTests.Composite_KeepsGammaSpaceSplatColours_InThisGammaProject, SplatCompute_AppliesTheAntialiasedOpacityCompensation, CameraOrbitTests.EyeRadius_*/LookingUp_*/Character_*",
+    "unity PlayMode SplatRoomPlayModeTests.Orbit_FullTurn_NeverJamsTheEyeIntoTheCharacter (Winchester + bedroom)"
+  ],
+  "safe_image": "/workspace/gj-owner-share/bedroom-unity-path-fix.jpg (box only; view 16, door/carpet, no faces (YuNet) or personal items)"
+}
