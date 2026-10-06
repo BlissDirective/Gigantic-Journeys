@@ -142,6 +142,11 @@
       "date": "2026-10-06",
       "by": "gj-operator",
       "event": "Build-61 device test (Owner, iPhone 14): bedroom distorted (purple/black streaks, see-through areas, blobs) and turning the camera jammed it into the character. Unity-path evaluation (shipped package + shipped shaders, 29 held-out views, SplatRoomScene.RunPoseRenders + tools/unity_path_eval.py): 11.30 dB vs GT (gsplat 24.85). Fixed: composite gamma-to-linear conversion in a Gamma project (-> 21.67), gsplat antialiased opacity compensation and the vertical frustum-clamp bug in the GJ compute fork GJSplatUtilities.compute (-> 21.71; SH0 21.52 / SH1 21.59 / SH2 21.71). Camera: an orbit below the look-at point was pulled in along the ray to the floor and by the camera box floor (2 cm from the character); now the eye keeps its distance at floor level and the view tilts, room colliders are out of the camera cast, instant pull-in with 0.35 s spring-back, character hidden within 1.5A. Regression tests: services/reconstruction/tests/test_unity_splat_path.py, EditMode + PlayMode (both rooms). Evidence: qa/evidence/M1-UNITY-01/bedroom-unity-path-fix.json. Commits 0015b3e, c006bbd, 0901223, 44dde86, 886411c."
+    },
+    {
+      "date": "2026-10-06",
+      "by": "gj-operator",
+      "event": "CI: unity-tests on 399c73c failed one EditMode check (MovementArchitectureTests: the 1e-4 camera box floor margin was a literal in FollowCamera); moved to ProvisionalTuning.CameraOrbit.BoxFloorBelowGroundM (6d88c9a), all push CI green on 6d88c9a (lint, governance, secret-scan, unity-tests). The first internal-debug dispatch (ios-build run 68) queued behind the push ios-build (run 67) and was cancelled before it started so its 15-min signed URLs would not expire unused; re-dispatch with freshly minted URLs follows once run 67 finishes."
     }
   ]
 }
