@@ -37,6 +37,16 @@ event it serves.
    **70,800 credits ≈ $12–17 one-time** (~38 credits / ~$0.007 per clip; a one-time library cost, not
    per-play). Owner spend cap: **$25** (AUTH #048 addendum, 2026-10-06).
 
+**Generated v1 run — 2026-10-06 (AUTH #048).** The full manifest ran once on the Owner's ElevenLabs
+account via the `audio-generate` workflow (run `37401926240`, `event: all`): **1,841 / 1,841 clips, 0
+failures** (`provider_calls=1841`, `failed_families=0`), artifact **`gj-audio-all`** (18.7 MB, 7-day
+retention), ~46 min. Actual ≈ 1,841 calls / ~70,800 credits ≈ **$12–17**, within the $25 cap. These
+are ElevenLabs-generated SFX candidates (table source "ElevenLabs (AUTH #048)"); CC0/royalty-free
+foley may still replace any clip before ship. gj-gameplay pulls the artifact and wires
+StreamingAssets; the generated clips stay git-ignored. (Two earlier "full" dispatches silently ran
+only the `ui-publish` default — GitHub swaps a blank `event` for the field default — fixed by the
+non-empty `all` sentinel in `generate_audio.py`.)
+
 **Post-process (every non-loop clip), from `sources.ffmpeg_filters(post_process)`:** trim
 leading/trailing near-silence from both ends, then loudness-normalise to the entry's target LUFS
 (−16 movement/world/tools, −14 UI, −18 music). **Loops are left raw** to preserve the seamless

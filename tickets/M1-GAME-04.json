@@ -73,7 +73,7 @@
   "branch": "claude/gigantic-journeys-governance-f0wgak",
   "pr": null,
   "created": "2026-09-19",
-  "updated": "2026-10-05",
+  "updated": "2026-10-06",
   "history": [
     {
       "date": "2026-09-19",
@@ -103,6 +103,11 @@
     {
       "date": "2026-10-05",
       "event": "Wired the CI run path: the Owner added ELEVENLABS_API_KEY to GitHub Actions secrets, so generation runs in a job, not from a session shell (Actions secrets are not exposed to the agent's shell). Added .github/workflows/audio-generate.yml (workflow_dispatch; inputs event/material/limit; maps ELEVENLABS_API_KEY from secrets; runs generate_audio.py --execute capped by --limit; uploads clips as a 7-day artifact, never committed) and coerced empty CI inputs to 'all' in generate_audio.main. A ~1-call smoke (event=ui-publish, limit=1) is dispatched to prove the end-to-end path before any wider, capped batch (full manifest ~1,841 calls).",
+      "by": "claude-builder"
+    },
+    {
+      "date": "2026-10-06",
+      "event": "Full manifest generated on the Owner's ElevenLabs account (AUTH #048, $25 cap). Root-caused two silent misfires first: GitHub workflow_dispatch swaps an empty-string input for the field's default, so a blank `event` ran only the ui-publish default (1 clip) instead of the manifest. Fix (commit 1f3ea8a, green CI, FF main): a non-empty `all` sentinel -- generate_audio._resolve_filter maps 'all'/blank -> every event/material; non-empty inputs transmit unchanged -- plus a test and workflow docs. Then dispatched event=all/material=all/limit=2000 (run 37401926240): written_files=1841/1841, failed_families=0, provider_calls=1841, ~46 min, artifact gj-audio-all (18,695,647 bytes, 7-day retention). Spend ~1,841 calls / ~70,800 credits (+ ~72 walk-chunk + 2 smoke clips from the misfires) ~= $12-17, within the $25 cap. Clips stay git-ignored; gj-gameplay pulls the artifact and wires StreamingAssets. Gives AT-4 real generated candidates; CC0/royalty-free foley may still replace any clip.",
       "by": "claude-builder"
     }
   ],
