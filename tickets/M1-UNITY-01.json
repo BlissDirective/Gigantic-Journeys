@@ -127,6 +127,11 @@
       "date": "2026-10-05",
       "by": "gj-operator",
       "event": "Bedroom sharpness A/B (Owner approval 2026-10-05 20:22 CT): splat-room-owner-room-01.json renderScale 0.7 -> 0.85 and shOrder 1 -> 2 (Winchester keeps 0.7 / SH 1), plus the new train-at-budget bedroom splat (M1-PIPE-02 phase 2a: held-out PSNR 24.85 vs 12.92 for the build-58 package; 399,165 splats, package v2 sha256 3ecc3fed...). EditMode test pins the bedroom A/B profile. Internal-debug TestFlight dispatch with splat_url (Winchester v3) + splat_url_2 (bedroom v2) follows; Owner checks fps (debug overlay perf report) and sharpness on the iPhone."
+    },
+    {
+      "date": "2026-10-05",
+      "by": "gj-operator",
+      "event": "Internal-debug ios-build dispatched 2026-10-05 21:29 CT: run 37404355735 (#61) on main 1f3ea8a (contains fe2016c), splat_url = Winchester v3, splat_url_2 = bedroom v2 (fresh 15-minute signed URLs; the bedroom download re-verified as sha256 3ecc3fed... before dispatch). Push CI on fe2016c green (unity-tests #255, ios-build #60 release, lint, governance, secret-scan). Pending: TestFlight upload, the AUTH #047 artifact-delete step, and the Owner's device check."
     }
   ]
 }
