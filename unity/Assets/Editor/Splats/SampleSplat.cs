@@ -85,7 +85,13 @@ namespace GiganticJourneys.EditorTools.Splats
         }
 
         /// <summary>Runs the renderer's own PLY/SPZ converter (its Editor window) headlessly.</summary>
-        public static GaussianSplatAsset ConvertPly(string plyPath, string outputFolder)
+        /// <paramref name="lossless"/> stores everything as float32 (diagnostics only: isolates
+        /// the package quantization from the shader when scoring the Unity path).
+        public static GaussianSplatAsset ConvertPly(
+            string plyPath,
+            string outputFolder,
+            bool lossless = false
+        )
         {
             var creator = ScriptableObject.CreateInstance<GaussianSplatAssetCreator>();
             try
@@ -102,10 +108,30 @@ namespace GiganticJourneys.EditorTools.Splats
                 Set("m_OutputFolder", outputFolder);
                 // "Medium" quality without SH clustering (clustering is randomized; this keeps
                 // the output deterministic and the sample has no view-dependent colour anyway).
-                Set("m_FormatPos", GaussianSplatAsset.VectorFormat.Norm11);
-                Set("m_FormatScale", GaussianSplatAsset.VectorFormat.Norm11);
-                Set("m_FormatColor", GaussianSplatAsset.ColorFormat.Norm8x4);
-                Set("m_FormatSH", GaussianSplatAsset.SHFormat.Norm6);
+                Set(
+                    "m_FormatPos",
+                    lossless
+                        ? GaussianSplatAsset.VectorFormat.Float32
+                        : GaussianSplatAsset.VectorFormat.Norm11
+                );
+                Set(
+                    "m_FormatScale",
+                    lossless
+                        ? GaussianSplatAsset.VectorFormat.Float32
+                        : GaussianSplatAsset.VectorFormat.Norm11
+                );
+                Set(
+                    "m_FormatColor",
+                    lossless
+                        ? GaussianSplatAsset.ColorFormat.Float32x4
+                        : GaussianSplatAsset.ColorFormat.Norm8x4
+                );
+                Set(
+                    "m_FormatSH",
+                    lossless
+                        ? GaussianSplatAsset.SHFormat.Float32
+                        : GaussianSplatAsset.SHFormat.Norm6
+                );
                 (
                     type.GetMethod("CreateAsset", flags)
                     ?? throw new MissingMethodException(type.Name, "CreateAsset")

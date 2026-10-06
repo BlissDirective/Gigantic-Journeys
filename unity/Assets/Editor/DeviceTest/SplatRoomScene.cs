@@ -230,7 +230,7 @@ namespace GiganticJourneys.EditorTools.DeviceTest
         }
 
         /// <summary>Converts a 3DGS PLY (named &lt;slug&gt;.ply) into <see cref="ResourcesFolder"/>.</summary>
-        public static GaussianSplatAsset Import(string plyPath)
+        public static GaussianSplatAsset Import(string plyPath, bool lossless = false)
         {
             var stem = Path.GetFileNameWithoutExtension(plyPath);
             var descriptor =
@@ -241,7 +241,7 @@ namespace GiganticJourneys.EditorTools.DeviceTest
                     $"PLY must be named after a room descriptor's resource (<resource>.ply), got {stem}.ply"
                 );
             EnsureFolder(ResourcesFolder);
-            var asset = SampleSplat.ConvertPly(plyPath, ResourcesFolder);
+            var asset = SampleSplat.ConvertPly(plyPath, ResourcesFolder, lossless);
             if (asset == null)
                 throw new InvalidOperationException("conversion produced no asset");
             if (asset.splatCount != descriptor.splatCount)
@@ -362,6 +362,92 @@ namespace GiganticJourneys.EditorTools.DeviceTest
             return coverage;
         }
 
+        [Serializable]
+        class PoseView
+        {
+            public string name;
+            public float[] pos;
+            public float[] fwd;
+            public float[] up;
+        }
+
+        [Serializable]
+        class PoseSet
+        {
+            public float fov_y_deg;
+            public int width;
+            public int height;
+            public PoseView[] views;
+        }
+
+        /// <summary>
+        /// Renders the room's splat (the shipped package, through the shipped shaders) from
+        /// held-out camera poses in the room world (<c>tools/unity_path_eval.py poses</c>) into
+        /// <paramref name="outDir"/>/&lt;view&gt;.png, character hidden, black background, so
+        /// the Unity path can be scored against the source frames (M1-PIPE-02 / M1-UNITY-01).
+        /// <paramref name="shOrder"/> &lt; 0 keeps the descriptor's SH order.
+        /// </summary>
+        public static int RenderPoses(
+            string posesJson,
+            string outDir,
+            string slug,
+            int shOrder = -1,
+            int width = 450
+        )
+        {
+            if (SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null)
+                throw new InvalidOperationException("no graphics device; run with -force-vulkan");
+            var set = JsonUtility.FromJson<PoseSet>(File.ReadAllText(posesJson));
+            EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+            var descriptor = LoadDescriptor(slug);
+            var asset =
+                AssetDatabase.LoadAssetAtPath<GaussianSplatAsset>(
+                    $"{ResourcesFolder}/{Path.GetFileName(descriptor.resource)}.asset"
+                ) ?? throw new InvalidOperationException($"no splat asset under {ResourcesFolder}");
+            var loader = UnityEngine.Object.FindFirstObjectByType<SplatRoomLoader>();
+            var r = loader.splatRenderer;
+            r.transform.SetLocalPositionAndRotation(descriptor.Position, descriptor.Rotation);
+            r.transform.localScale = descriptor.Scale;
+            r.m_Asset = asset;
+            r.m_SHOrder = shOrder >= 0 ? shOrder : Math.Max(0, descriptor.shOrder);
+            // GJ_APPLY_RENDER_FLAGS
+            r.gameObject.SetActive(true);
+            loader.player.gameObject.SetActive(false);
+            var cam = Camera.main;
+            cam.clearFlags = CameraClearFlags.SolidColor;
+            cam.backgroundColor = Color.black;
+            cam.fieldOfView = set.fov_y_deg;
+            var height = Mathf.RoundToInt(width * (float)set.height / set.width);
+            Directory.CreateDirectory(outDir);
+            foreach (var v in set.views)
+            {
+                cam.transform.position = new Vector3(v.pos[0], v.pos[1], v.pos[2]);
+                cam.transform.rotation = Quaternion.LookRotation(
+                    new Vector3(v.fwd[0], v.fwd[1], v.fwd[2]),
+                    new Vector3(v.up[0], v.up[1], v.up[2])
+                );
+                Render(cam, width, height); // primes the sort for this pose
+                var tex = Render(cam, width, height);
+                File.WriteAllBytes(Path.Combine(outDir, v.name + ".png"), tex.EncodeToPNG());
+                UnityEngine.Object.DestroyImmediate(tex);
+            }
+            Debug.Log(
+                $"[SplatRoomScene] rendered {set.views.Length} poses (SH {r.m_SHOrder}) into {outDir}"
+            );
+            return set.views.Length;
+        }
+
+        public static void RunPoseRenders() =>
+            Batch(() =>
+                RenderPoses(
+                    Arg("-gjPoses") ?? throw new ArgumentException("-gjPoses <json> required"),
+                    Arg("-gjOutDir") ?? throw new ArgumentException("-gjOutDir <dir> required"),
+                    Arg("-gjRoom"),
+                    int.TryParse(Arg("-gjSH"), out var sh) ? sh : -1,
+                    int.TryParse(Arg("-gjWidth"), out var w) ? w : 450
+                )
+            );
+
         static float Coverage(Texture2D a, Texture2D b)
         {
             var pa = a.GetPixels32();
@@ -431,7 +517,9 @@ namespace GiganticJourneys.EditorTools.DeviceTest
         public static void RunImport() =>
             Batch(() =>
                 Import(
-                    Arg("-gjSplatPly") ?? throw new ArgumentException("-gjSplatPly <path> required")
+                    Arg("-gjSplatPly")
+                        ?? throw new ArgumentException("-gjSplatPly <path> required"),
+                    Arg("-gjLossless") == "1"
                 )
             );
 

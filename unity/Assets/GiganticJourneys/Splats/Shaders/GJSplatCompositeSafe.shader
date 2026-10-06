@@ -45,7 +45,14 @@ float4 frag (v2f i) : SV_Target
     if (!(col.a >= 1.0 / 255.0))
         discard;
     float3 rgb = saturate(col.rgb / col.a);
-    return float4(GammaToLinearSpace(rgb), saturate(col.a));
+    // Splats are shaded and blended in gamma (sRGB) space, like the training renders. Only a
+    // Linear colour-space project needs them converted; this project is Gamma, where the
+    // package's unconditional GammaToLinearSpace darkened every splat pixel (rgb^2.2: the
+    // room rendered dark and contrasty, near-black in shadow, on build 61).
+#if !defined(UNITY_COLORSPACE_GAMMA)
+    rgb = GammaToLinearSpace(rgb);
+#endif
+    return float4(rgb, saturate(col.a));
 }
 ENDCG
         }
