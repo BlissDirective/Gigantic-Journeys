@@ -53,6 +53,7 @@ jobs:
             --material "${{ inputs.material }}" \
             --limit "${{ inputs.limit }}"
       - name: Upload generated clips
+        if: always() # keep partial output even if the generate step fails partway
         uses: actions/upload-artifact@v4
         with:
           name: gj-audio-${{ inputs.event || 'all' }}

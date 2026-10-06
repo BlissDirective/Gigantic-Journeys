@@ -54,3 +54,37 @@ def test_execute_filters_to_one_event_and_material(tmp_path):
     # ambience-bed is a loop (count 1), one material selected -> exactly one clip
     assert res["written_files"] == 1
     assert list((tmp_path / "ambience-bed").glob("*.mp3"))
+
+
+class _FlakyProvider:
+    """Raises for any request whose id starts with ``fail_prefix``; others succeed."""
+
+    name = "flaky"
+    output_format = "mp3_44100_128"
+
+    def __init__(self, fail_prefix):
+        self.fail_prefix = fail_prefix
+
+    def generate(self, request):
+        if request.id.startswith(self.fail_prefix):
+            raise RuntimeError("boom")
+        return [b"MP3"] * request.count
+
+
+def test_a_failing_family_is_recorded_not_fatal(tmp_path):
+    res = ga.run(
+        _FlakyProvider("ui-publish"), tmp_path, dry_run=False, postprocess=False, event="ui-publish"
+    )
+    assert res["written_files"] == 0
+    assert res["failed_families"] == 1
+    assert res["failures"][0]["id"] == "ui-publish"
+
+
+def test_batch_continues_past_a_failure(tmp_path):
+    # In the walk event, fail only walk__glass; the other 9 materials still generate.
+    res = ga.run(
+        _FlakyProvider("walk__glass"), tmp_path, dry_run=False, postprocess=False, event="walk"
+    )
+    assert res["failed_families"] == 1
+    assert res["failures"][0]["id"] == "walk__glass"
+    assert res["written_files"] == 72  # 9 materials x 8 variants still produced

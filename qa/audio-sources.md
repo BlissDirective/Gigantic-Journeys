@@ -32,7 +32,10 @@ event it serves.
    is ~1,841 calls / 422 families, so **run it capped + incrementally, not in one shot**. Clips land
    in the git-ignored `services/audio/_generated/`. On CI (the key lives in **Actions secrets**, not
    the repo) dispatch the **`audio-generate`** workflow (`workflow_dispatch`: `event` / `material` /
-   `limit`); it runs the capped generator and uploads the clips as a 7-day artifact.
+   `limit`); it runs the capped generator and uploads the clips as a 7-day artifact. **Cost** (ElevenLabs Sound
+   Effects, 40 credits/s on the specified duration): the full manifest ≈ 1,841 clips / ~1,770 s ≈
+   **70,800 credits ≈ $12–17 one-time** (~38 credits / ~$0.007 per clip; a one-time library cost, not
+   per-play). Owner spend cap: **$25** (AUTH #048 addendum, 2026-10-06).
 
 **Post-process (every non-loop clip), from `sources.ffmpeg_filters(post_process)`:** trim
 leading/trailing near-silence from both ends, then loudness-normalise to the entry's target LUFS

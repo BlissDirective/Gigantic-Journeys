@@ -80,6 +80,7 @@ def run(
     ext = _ext(getattr(provider, "output_format", "mp3"))
     planned: list[str] = []
     written: list[str] = []
+    failed: list[dict] = []
     calls = 0
 
     for spec in specs:
@@ -92,8 +93,17 @@ def run(
             if dry_run:
                 continue
             if limit is not None and calls >= limit:
-                return _summary(planned, written, calls, dry_run, stopped=True)
-            clips = provider.generate(req)  # spends on the provider's account
+                return _summary(planned, written, failed, calls, dry_run, stopped=True)
+            clips = None
+            for attempt in (1, 2):  # one retry so a transient blip doesn't lose the whole batch
+                try:
+                    clips = provider.generate(req)  # spends on the provider's account
+                    break
+                except Exception as exc:  # record + continue; a single family never aborts the run
+                    if attempt == 2:
+                        failed.append({"id": req.id, "error": str(exc)[:200]})
+            if clips is None:
+                continue
             calls += req.count
             dest_dir = out / req.event
             dest_dir.mkdir(parents=True, exist_ok=True)
@@ -106,14 +116,16 @@ def run(
                 else:
                     raw.replace(final)
                 written.append(str(final))
-    return _summary(planned, written, calls, dry_run, stopped=False)
+    return _summary(planned, written, failed, calls, dry_run, stopped=False)
 
 
-def _summary(planned, written, calls, dry_run, *, stopped) -> dict:
+def _summary(planned, written, failed, calls, dry_run, *, stopped) -> dict:
     return {
         "dry_run": dry_run,
         "planned_families": len(planned),
         "written_files": len(written),
+        "failed_families": len(failed),
+        "failures": failed[:20],
         "provider_calls": calls,
         "stopped_at_limit": stopped,
     }
@@ -166,6 +178,11 @@ def main() -> int:
         material=material,
     )
     print(f"generated: {res}")
+    if res["failed_families"]:
+        print(f"::warning::{res['failed_families']} families failed: {res['failures']}")
+    if res["written_files"] == 0 and res["planned_families"] > 0:
+        print("::error::nothing was generated (check ELEVENLABS_API_KEY and the provider)")
+        return 1
     return 0
 
 
