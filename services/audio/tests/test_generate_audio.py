@@ -14,6 +14,17 @@ class _FakeProvider:
         return [b"MP3"] * request.count
 
 
+def test_resolve_filter_treats_all_and_blank_as_no_filter():
+    # Dispatch can't send a blank event (GitHub swaps it to the default), so 'all' is the sentinel.
+    assert ga._resolve_filter(None) is None
+    assert ga._resolve_filter("") is None
+    assert ga._resolve_filter("   ") is None
+    assert ga._resolve_filter("all") is None
+    assert ga._resolve_filter("ALL") is None
+    assert ga._resolve_filter("walk") == "walk"
+    assert ga._resolve_filter("  walk  ") == "walk"
+
+
 def test_estimate_counts_the_whole_manifest():
     est = ga.estimate()
     assert est["events"] == 62

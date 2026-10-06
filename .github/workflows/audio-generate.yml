@@ -2,14 +2,14 @@
 # ElevenLabs provider on the Owner's account (ELEVENLABS_API_KEY secret). It SPENDS per run, so
 # `limit` caps the number of provider calls; the default dispatch (ui-publish, limit 1) is a ~1-call
 # smoke. Clips are uploaded as a short-retention artifact and never committed (generic SFX;
-# provenance in qa/audio-sources.md). The full manifest is ~1,841 calls -- raise `limit` deliberately.
+# provenance in qa/audio-sources.md). The full manifest (event: all) is ~1,841 calls -- raise `limit`.
 name: audio-generate
 
 on:
   workflow_dispatch:
     inputs:
       event:
-        description: "Only this bank event (blank = all events; always pair with a limit)"
+        description: "Bank event, or 'all' for every event (blank falls back to this default). Pair 'all' with a limit."
         type: string
         default: "ui-publish"
       material:

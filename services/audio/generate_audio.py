@@ -131,6 +131,22 @@ def _summary(planned, written, failed, calls, dry_run, *, stopped) -> dict:
     }
 
 
+def _resolve_filter(raw: str | None) -> str | None:
+    """Map a CLI/CI event or material filter to a name, or None meaning "no filter = everything".
+
+    GitHub ``workflow_dispatch`` silently replaces an empty-string input with the field's declared
+    default, so a blank value can never reach us as "all events". We therefore also accept the
+    explicit, non-empty sentinel ``all`` (case-insensitive) -- dispatch transmits it unchanged --
+    and no bank event or material is literally named "all", so it is unambiguous.
+    """
+    if raw is None:
+        return None
+    raw = raw.strip()
+    if not raw or raw.lower() == "all":
+        return None
+    return raw
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Generate GJ audio clips from the sound-bank recipe.")
     ap.add_argument("--out", default=str(DEFAULT_OUT))
@@ -138,13 +154,13 @@ def main() -> int:
         "--execute", action="store_true", help="actually generate (spends); default is a dry run"
     )
     ap.add_argument("--limit", type=int, default=None, help="max provider calls (cost guard)")
-    ap.add_argument("--event", default=None, help="only this bank event")
-    ap.add_argument("--material", default=None, help="only this material")
+    ap.add_argument("--event", default=None, help="bank event; 'all'/blank = every event")
+    ap.add_argument("--material", default=None, help="material; 'all'/blank = all")
     ap.add_argument("--no-postprocess", action="store_true")
     ap.add_argument("--provider", choices=["dry-run", "elevenlabs"], default="elevenlabs")
     args = ap.parse_args()
-    event = args.event or None  # a CI input of "" means "all events", not an impossible filter
-    material = args.material or None
+    event = _resolve_filter(args.event)  # 'all' or blank -> None (every event); see _resolve_filter
+    material = _resolve_filter(args.material)
 
     est = estimate()
     print(
