@@ -132,6 +132,11 @@
       "date": "2026-10-05",
       "by": "gj-operator",
       "event": "Internal-debug ios-build dispatched 2026-10-05 21:29 CT: run 37404355735 (#61) on main 1f3ea8a (contains fe2016c), splat_url = Winchester v3, splat_url_2 = bedroom v2 (fresh 15-minute signed URLs; the bedroom download re-verified as sha256 3ecc3fed... before dispatch). Push CI on fe2016c green (unity-tests #255, ios-build #60 release, lint, governance, secret-scan). Pending: TestFlight upload, the AUTH #047 artifact-delete step, and the Owner's device check."
+    },
+    {
+      "date": "2026-10-05",
+      "by": "gj-operator",
+      "event": "Internal-debug TestFlight build 61 (run 37404355735 on 1f3ea8a, uploaded 2026-10-05 21:54 CT, all jobs green): Bedroom = train-at-budget splat v2 (399,165 splats, sha256 verified in CI) with renderScale 0.85 / SH 2; Winchester unchanged (v3, 0.7 / SH 1). AUTH #047: the TestFlight job deleted ios-xcode-project-burst (artifact id 11387211446); the run lists no artifacts. Awaiting the Owner's device check: Bedroom fps via the debug overlay perf report (A/B against Winchester, which is still 0.7 / SH 1) and sharpness; walls and doors should now be solid."
     }
   ]
 }

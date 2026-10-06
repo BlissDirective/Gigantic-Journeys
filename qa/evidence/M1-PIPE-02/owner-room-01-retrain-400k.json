@@ -10,10 +10,36 @@
   },
   "scoring": "ns_finish --score-ply: every PLY loaded into the same Splatfacto model and rendered on the same 29 held-out views by the same renderer (bilateral grid is training-only, so no per-image exposure correction in any score). The first run's full model re-scored exactly to its original numbers, which validates the loader.",
   "results": {
-    "first_run_full_1461k": {"splats": 1457029, "psnr": 24.7325, "ssim": 0.9448, "lpips": 0.1104},
-    "shipped_build58_pruned_400k": {"splats": 400000, "psnr": 12.9165, "ssim": 0.6128, "lpips": 0.5001, "note": "display prune of the full model: 822,425 splats dropped for the budget (most-opaque), 151,988 faint, 19,576 giant; no fine-tune. Large semi-transparent wall/door splats were removed, so held-out views show the background through walls and doors."},
-    "quality_30k_growth_capped_400k": {"splats": 399165, "psnr": 24.8509, "ssim": 0.9417, "lpips": 0.1244, "train_wall_s": 787, "cost_usd": 0.504, "verdict": "winner; shipped in the sharpness A/B build as splat-room-unity-v2-400k"},
-    "quality_30k_mcmc_400k": {"splats": 384052, "psnr": 24.103, "ssim": 0.9296, "lpips": 0.1708, "cost_usd": 0.537, "verdict": "worse than the growth-capped default strategy; kept as profile quality-30k-mcmc for other rooms"}
+    "first_run_full_1461k": {
+      "splats": 1457029,
+      "psnr": 24.7325,
+      "ssim": 0.9448,
+      "lpips": 0.1104
+    },
+    "shipped_build58_pruned_400k": {
+      "splats": 400000,
+      "psnr": 12.9165,
+      "ssim": 0.6128,
+      "lpips": 0.5001,
+      "note": "display prune of the full model: 822,425 splats dropped for the budget (most-opaque), 151,988 faint, 19,576 giant; no fine-tune. Large semi-transparent wall/door splats were removed, so held-out views show the background through walls and doors."
+    },
+    "quality_30k_growth_capped_400k": {
+      "splats": 399165,
+      "psnr": 24.8509,
+      "ssim": 0.9417,
+      "lpips": 0.1244,
+      "train_wall_s": 787,
+      "cost_usd": 0.504,
+      "verdict": "winner; shipped in the sharpness A/B build as splat-room-unity-v2-400k"
+    },
+    "quality_30k_mcmc_400k": {
+      "splats": 384052,
+      "psnr": 24.103,
+      "ssim": 0.9296,
+      "lpips": 0.1708,
+      "cost_usd": 0.537,
+      "verdict": "worse than the growth-capped default strategy; kept as profile quality-30k-mcmc for other rooms"
+    }
   },
   "package": {
     "object": "environments/_devtest/owner-room-01/splat-room-unity-v2-400k.tar.gz (private staging bucket)",
@@ -24,8 +50,16 @@
   },
   "cost_usd": {
     "pipeline_estimate": 1.04,
-    "modal_metered_delta": 1.22,
-    "auth_045_total_so_far": 2.17
+    "modal_app_bill": 1.08,
+    "note": "Modal per-app billing for ap-b2EYg... (both training containers + scoring); the 1.22 recorded earlier was a lagging workspace metered delta",
+    "auth_045_total_so_far": 2.03
   },
-  "renders": "29 held-out renders (ground truth | render) per model on the box under the private owner-capture staging folder; a face-free door/carpet crop for the Owner sits outside the repo"
+  "renders": "29 held-out renders (ground truth | render) per model on the box under the private owner-capture staging folder; a face-free door/carpet crop for the Owner sits outside the repo",
+  "build": {
+    "internal_debug_testflight_build": 61,
+    "run": "37404355735 (workflow_dispatch on main 1f3ea8a, contains fe2016c)",
+    "uploaded": "2026-10-05 21:54 CT",
+    "splats_fetched": "Winchester v3 400,000 + bedroom v2 399,165, both sha256 verified in CI",
+    "auth_047_artifact_delete": "ios-xcode-project-burst id 11387211446 deleted by the TestFlight job; the run lists no artifacts"
+  }
 }

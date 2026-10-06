@@ -137,6 +137,11 @@
       "date": "2026-10-05",
       "by": "gj-operator",
       "event": "Phase 2a, train at the device budget (AUTH #045 spend; Owner approval 2026-10-05 20:22 CT 'Start with both 400K retrain, the sharpness A/B build'; #046 conditions held: frames/renders/splats on the box chmod 700, the private Modal volume and the private bucket only). New Modal entry owner_retrain / retrain_owner_capture (reuses the masked frames + GLOMAP model, so the 29 held-out views are identical), trainer profile quality-30k-mcmc (gsplat MCMCStrategy swapped into nerfstudio 1.1.5 Splatfacto by ns_train_capped.install_mcmc, cap = splat budget) and ns_finish --score-ply (score any export-layout PLY on the same held-out views). Held-out PSNR / SSIM / LPIPS: first-run full 1.46M 24.73 / 0.945 / 0.110 (re-scored exactly); build-58 shipped 400K display prune 12.92 / 0.613 / 0.500 (the most-opaque budget cut and the giant/faint rules removed the large semi-transparent wall and door splats: held-out views see the background through walls); quality-30k growth-capped at 400K 24.85 / 0.942 / 0.124 (399,165 splats, winner); quality-30k-mcmc at 400K 24.10 / 0.930 / 0.171. Cost: $1.04 pipeline estimate, $1.22 Modal metered delta (#045 total about $2.17; Modal October metered $7.01, credits). The winner ships unpruned as splat-room-unity-v2-400k (private bucket, sha256 3ecc3fed..., 14,375,423 bytes). Lesson for every room: train at the display budget rather than prune a large model after training. Metrics: qa/evidence/M1-PIPE-02/owner-room-01-retrain-400k.json. Also fixed the invalid JSON in winchester-weak-regions-phase1.json (unescaped quotes on line 465)."
+    },
+    {
+      "date": "2026-10-05",
+      "by": "gj-operator",
+      "event": "Bedroom v2 (train-at-budget) shipped in internal-debug build 61 (run 37404355735; AUTH #047 artifact delete confirmed). Modal per-app bill for the phase-2a run: $1.08 (#045 total about $2.03 of $150)."
     }
   ]
 }
