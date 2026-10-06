@@ -124,6 +124,14 @@ RUN mkdir -p /root/.cache/colmap \
     && echo "96ca8ec8ea60b1f73465aaf2c401fd3b3ca75cdba2d3c50d6a2f6f760f275ddc  96ca8ec8ea60b1f73465aaf2c401fd3b3ca75cdba2d3c50d6a2f6f760f275ddc-vocab_tree_faiss_flickr100K_words256K.bin" \
         | sha256sum -c -
 
+# modal-layer: depth-prior
+# Monocular depth prior for the DN-Splatter-style losses (capture-render-quality-v1
+# items 2+3): transformers (Apache-2.0) + Depth Anything V2 **Small** only
+# (Apache-2.0, revision-pinned, baked so runs never hit the Hub). Base/Large/Giant
+# are CC-BY-NC -> method-only (AUTH #049) and refused by depth_prior_cache.model_repo.
+RUN python -m pip install transformers==4.46.3 \
+    && python -c "from huggingface_hub import snapshot_download; snapshot_download('depth-anything/Depth-Anything-V2-Small-hf', revision='5426e4f0f36572d16453bbda7a8389317b1bef99')"
+
 # modal-skip
 WORKDIR /work
 COPY reconstruction ./reconstruction

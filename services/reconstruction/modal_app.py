@@ -708,6 +708,7 @@ def retrain_clip(
     splat_budget: int = 1_500_000,
     rasterize_mode: str = "",
     densify_strategy: str = "default",
+    depth_prior: str = "none",
 ) -> dict:
     """Retrain one reconstructed corpus clip from its saved frames + SfM model.
 
@@ -717,6 +718,8 @@ def retrain_clip(
     ``<recon>/<slug>/retrain-<tag>/``; the first run's outputs are untouched.
     ``rasterize_mode`` ("" = the profile's measured recipe) and ``densify_strategy`` set
     the render-quality knobs (``render_quality``; the M1-PIPE-03 item-1 A/B arms).
+    ``depth_prior`` ("none" | "depth-anything-v2-small") turns on the DN-Splatter-style
+    depth/normal losses (items 2+3): the prior cache is built in-container first.
     """
     import re
     import shutil
@@ -749,7 +752,18 @@ def retrain_clip(
         splat_budget=splat_budget,
         rasterize_mode=rasterize_mode or recipe_rasterize_mode(profile),
         densify_strategy=densify_strategy,
+        depth_prior=depth_prior,
     )
+    if config.depth_prior != "none":
+        from reconstruction.depth_prior_cache import DepthAnythingV2Small, build_cache, load_pil
+
+        build_cache(
+            [p for p in (work / "images").iterdir() if p.is_file()],
+            work / "out" / "depth_prior",
+            DepthAnythingV2Small(),
+            load_pil,
+            model=config.depth_prior,
+        )
     model = GsplatTrainer(profile=profile).train(poses, work / "out", config)
     dest = src / f"retrain-{tag}"
     if dest.exists():
@@ -768,6 +782,7 @@ def retrain_clip(
         "profile": profile,
         "rasterize_mode": config.rasterize_mode,
         "densify_strategy": config.densify_strategy,
+        "depth_prior": config.depth_prior,
         "gpu": gpu,
         "splat_budget": splat_budget,
         "splat_count": model.splat_count,

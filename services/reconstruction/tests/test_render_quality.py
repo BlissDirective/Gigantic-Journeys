@@ -31,3 +31,35 @@ def test_config_rejects_unknown_values():
         ReconstructionConfig(rasterize_mode="nope")
     with pytest.raises(ReconstructionError):
         ReconstructionConfig(densify_strategy="nope")
+
+
+def test_depth_prior_is_off_by_default_and_validated(tmp_path):
+    from reconstruction.render_quality import depth_normal_own_args
+
+    assert ReconstructionConfig().depth_prior == "none"
+    assert depth_normal_own_args(ReconstructionConfig(), tmp_path) == []
+    with pytest.raises(ReconstructionError):
+        ReconstructionConfig(depth_prior="depth-anything-v2-large")  # CC-BY-NC (AUTH #049)
+
+
+def test_depth_prior_requires_its_cache_and_adds_sensor_depth_when_present(tmp_path):
+    from reconstruction.render_quality import (
+        DEPTH_PRIOR_DIR_FLAG,
+        SENSOR_DEPTH_DIR_FLAG,
+        depth_normal_own_args,
+    )
+
+    cfg = ReconstructionConfig(depth_prior="depth-anything-v2-small")
+    with pytest.raises(ReconstructionError):
+        depth_normal_own_args(cfg, tmp_path)  # never train silently without the prior
+    (tmp_path / "depth_prior").mkdir()
+    (tmp_path / "depth_prior" / "prior.json").write_text("{}")
+    assert depth_normal_own_args(cfg, tmp_path) == [
+        DEPTH_PRIOR_DIR_FLAG,
+        str(tmp_path / "depth_prior"),
+    ]
+    (tmp_path / "sensor_depth").mkdir()
+    assert depth_normal_own_args(cfg, tmp_path)[2:] == [
+        SENSOR_DEPTH_DIR_FLAG,
+        str(tmp_path / "sensor_depth"),
+    ]

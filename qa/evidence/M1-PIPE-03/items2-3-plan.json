@@ -1,0 +1,29 @@
+{
+  "ticket": "M1-PIPE-03",
+  "items": "capture-render-quality-v1 items 2+3: DN-Splatter-style depth/normal losses + Depth Anything V2 Small prior",
+  "date": "2026-10-06",
+  "status": "code+tests landed (default OFF: ReconstructionConfig.depth_prior='none'); no GPU spent",
+  "licence": {
+    "model": "depth-anything/Depth-Anything-V2-Small-hf @ 5426e4f0f36572d16453bbda7a8389317b1bef99 (Apache-2.0, verified on the Hub card 2026-10-06)",
+    "runtime": "transformers==4.46.3 (Apache-2.0)",
+    "refused": "Base/Large/Giant (CC-BY-NC-4.0) raise LicenseError in depth_prior_cache.model_repo and are not valid config values (AUTH #049, method-only)",
+    "losses": "DN-Splatter method only, re-implemented in dn_torch.py (torch mirrors of depth_normal.py / depth_prior.py with parity tests); no DN-Splatter code or weights vendored. No monocular-normal network: prior normals are derived from the aligned prior depth."
+  },
+  "wiring": {
+    "config": "ReconstructionConfig.depth_prior: 'none' | 'depth-anything-v2-small'",
+    "cache": "depth_prior_cache.build_cache -> <work>/out/depth_prior/<stem>.depth.f32 + prior.json (relative disparity)",
+    "trainer": "render_quality.depth_normal_own_args -> ns_train_capped --depth-prior-dir (+ --sensor-depth-dir when an ARKit depth cache exists); errors if the prior is configured but missing",
+    "losses": "ns_train_capped.install_depth_normal (from step 500): pearson(rendered inverse depth, prior disparity) x0.2; normal_consistency(rendered-depth normals, aligned-prior normals) x0.1; edge-aware log-L1 vs ARKit depth x0.2 when present; normal TV x0.05; alpha > 0.5 mask",
+    "modal": "retrain_clip(depth_prior=...) builds the cache in-container then trains; image gains a cached 'depth-prior' layer (weights baked, no Hub at run time)"
+  },
+  "cost_estimate_usd": {
+    "image_layer_build": "~0.05 (CPU pip + 100 MB weight download, one time)",
+    "prior_inference_per_room": "~0.05 (ViT-S, ~300 frames, <1 min on L40S inside the training container)",
+    "training_overhead": "+5-10% wall (depth rendered every step: RGB+ED)",
+    "ab_4_rooms_x_2_arms": "~4.8-5.3 (8 runs x ~$0.60-0.66 at 400K / quality-30k, same as item-1 arms)",
+    "ab_new_arm_only_reusing_item1_baseline": "~2.6 (4 runs: winner-config + depth_prior on the 4 corpus rooms; baseline = item-1 winner arm already on the volume)",
+    "bedroom_arm": "~0.55 (owner-room-01, #046 private; metrics only in the repo)"
+  },
+  "next": "After the item-1 default flip: 4 corpus runs (winner config + depth_prior) vs the item-1 winner, same 400K budget / held-out every-8th views, plus floater proxy (tools/weak_regions.py). Needs a fresh live Modal usage check; within Modal $20/mo only if item-1 spend leaves >= $3.5 headroom this month.",
+  "gpu_started": false
+}

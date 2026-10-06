@@ -23,7 +23,11 @@ from .models import (
     SplatModel,
     read_ply_vertex_count,
 )
-from .render_quality import ns_train_capped_own_args, splatfacto_quality_args
+from .render_quality import (
+    depth_normal_own_args,
+    ns_train_capped_own_args,
+    splatfacto_quality_args,
+)
 from .splat_ops import STATS_ENV
 from .tools import require
 
@@ -282,6 +286,7 @@ class GsplatTrainer:
                 "--budget",
                 str(budget),
                 *own_mcmc,
+                *depth_normal_own_args(config, work_dir),
                 "--",
                 "splatfacto",
                 "--data",
@@ -314,6 +319,7 @@ class GsplatTrainer:
             else profile.strategy,
             "rasterize_mode": config.rasterize_mode,
             "densify_strategy": config.densify_strategy,
+            "depth_prior": config.depth_prior,
             "iterations": profile.iterations,
             "train_s": round(time.monotonic() - started, 2),
         }

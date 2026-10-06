@@ -135,6 +135,11 @@ class EnvironmentPackage:
         return self.splat.size_bytes + self.mesh.size_bytes
 
 
+# Allowed ReconstructionConfig.depth_prior values; keep in sync with
+# depth_prior_cache.DEPTH_MODELS (asserted by tests/test_depth_prior_cache.py).
+DEPTH_PRIORS = ("none", "depth-anything-v2-small")
+
+
 @dataclass(frozen=True)
 class ReconstructionConfig:
     """Tunables for one reconstruction run.
@@ -159,6 +164,9 @@ class ReconstructionConfig:
     # Defaults preserve current behaviour; flip after the corpus A/B (render_quality.py).
     rasterize_mode: str = "classic"  # "classic" | "antialiased"
     densify_strategy: str = "default"  # "default" | "mcmc"
+    # Monocular depth prior for the DN-Splatter-style depth/normal losses (items 2+3).
+    # "none" = off. Only commercial-safe checkpoints (AUTH #049; see depth_prior_cache).
+    depth_prior: str = "none"  # "none" | "depth-anything-v2-small"
 
     def __post_init__(self) -> None:
         if self.splat_budget <= 0:
@@ -171,6 +179,8 @@ class ReconstructionConfig:
             raise ReconstructionError(f"unknown rasterize_mode: {self.rasterize_mode!r}")
         if self.densify_strategy not in ("default", "mcmc"):
             raise ReconstructionError(f"unknown densify_strategy: {self.densify_strategy!r}")
+        if self.depth_prior not in DEPTH_PRIORS:
+            raise ReconstructionError(f"unknown depth_prior: {self.depth_prior!r}")
         if self.max_package_bytes <= 0:
             raise ReconstructionError("max_package_bytes must be positive")
 

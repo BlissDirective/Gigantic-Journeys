@@ -156,6 +156,7 @@ def test_mcmc_profile_trains_at_the_budget(tmp_path, monkeypatch):
     shutil.rmtree(out)
     GsplatTrainer(profile="quality-30k").train(_poses(tmp_path), tmp_path, config)
     assert "--mcmc-cap" not in calls[0]
+    assert "--depth-prior-dir" not in calls[0]  # depth/normal losses off by default
 
 
 def test_config_quality_args_and_densify_strategy_wire_into_ns_train_capped(tmp_path, monkeypatch):
@@ -210,3 +211,16 @@ def test_rasterize_flag_is_emitted_once_from_the_config(tmp_path, monkeypatch):
     assert ns.count("--pipeline.model.rasterize-mode") == 1
     assert ns[ns.index("--pipeline.model.rasterize-mode") + 1] == "classic"
     assert "--mcmc-cap" not in calls[0]
+
+
+def test_depth_prior_wires_the_dn_losses_into_ns_train_capped(tmp_path, monkeypatch):
+    """Items 2+3: depth_prior → --depth-prior-dir on the own-args half (before ``--``)."""
+    calls: list[list[str]] = []
+    monkeypatch.setattr(subprocess, "run", _fake_run(tmp_path, calls))
+    (tmp_path / "depth_prior").mkdir()
+    (tmp_path / "depth_prior" / "prior.json").write_text("{}")
+    config = ReconstructionConfig(splat_budget=7, depth_prior="depth-anything-v2-small")
+    model = GsplatTrainer(profile="quality-30k").train(_poses(tmp_path), tmp_path, config)
+    own = calls[0][: calls[0].index("--")]
+    assert own[own.index("--depth-prior-dir") + 1] == str(tmp_path / "depth_prior")
+    assert model.metrics["depth_prior"] == "depth-anything-v2-small"

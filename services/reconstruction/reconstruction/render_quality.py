@@ -21,7 +21,9 @@ Standard library only.
 
 from __future__ import annotations
 
-from .models import ReconstructionConfig
+from pathlib import Path
+
+from .models import ReconstructionConfig, ReconstructionError
 
 # Confirmed against nerfstudio==1.1.5 SplatfactoModelConfig.rasterize_mode.
 RASTERIZE_FLAG = "--pipeline.model.rasterize-mode"
@@ -29,6 +31,13 @@ RASTERIZE_FLAG = "--pipeline.model.rasterize-mode"
 MCMC_CAP_FLAG = "--mcmc-cap"
 # Draft Brain-B name kept for grep/docs. Not emitted on the 1.1.5 pin — see module doc.
 STRATEGY_FLAG = "--pipeline.model.strategy"
+# Own-args flags for the DN-Splatter-style depth/normal losses (items 2+3).
+DEPTH_PRIOR_DIR_FLAG = "--depth-prior-dir"
+SENSOR_DEPTH_DIR_FLAG = "--sensor-depth-dir"
+# Fixed locations inside the trainer's work_dir (written by depth_prior_cache.build_cache
+# / the ARKit depth exporter before training).
+DEPTH_PRIOR_SUBDIR = "depth_prior"
+SENSOR_DEPTH_SUBDIR = "sensor_depth"
 
 
 def splatfacto_quality_args(config: ReconstructionConfig) -> list[str]:
@@ -41,3 +50,24 @@ def ns_train_capped_own_args(config: ReconstructionConfig, budget: int) -> list[
     if config.densify_strategy == "mcmc":
         return [MCMC_CAP_FLAG, str(budget)]
     return []
+
+
+def depth_normal_own_args(config: ReconstructionConfig, work_dir: Path) -> list[str]:
+    """Own-side ``ns_train_capped`` args for the depth/normal losses (items 2+3).
+
+    Off (``[]``) unless ``config.depth_prior`` is set. When set, the prior cache must
+    already exist (``<work_dir>/depth_prior/prior.json``) -- training silently without it
+    would mis-attribute an A/B. ARKit sensor depth is added when its cache exists.
+    """
+    if config.depth_prior == "none":
+        return []
+    prior_dir = work_dir / DEPTH_PRIOR_SUBDIR
+    if not (prior_dir / "prior.json").exists():
+        raise ReconstructionError(
+            f"depth_prior={config.depth_prior!r} but no prior cache at {prior_dir}"
+        )
+    args = [DEPTH_PRIOR_DIR_FLAG, str(prior_dir)]
+    sensor_dir = work_dir / SENSOR_DEPTH_SUBDIR
+    if sensor_dir.is_dir():
+        args += [SENSOR_DEPTH_DIR_FLAG, str(sensor_dir)]
+    return args

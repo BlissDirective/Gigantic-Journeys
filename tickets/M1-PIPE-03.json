@@ -10,7 +10,7 @@
   "size": "L",
   "summary": "Operator wiring for the capture\u2192render Brain-B cores already on main (AUTH #049/#050; design/proposals/capture-render-quality-v1.md + external-synthesis-builds.md batch 2). Item 1 only in this first slice: pass render_quality.splatfacto_quality_args(config) into ns_train_capped, confirm Splatfacto flag strings against pinned nerfstudio 1.1.5, prepare the antialiased+mcmc vs classic+default corpus A/B with a cost estimate before any GPU spend, then flip ReconstructionConfig defaults only after the A/B. Items 2\u201310 stay out of scope until item 1 lands. Non-commercial weights never ship (#049). VGGT/Metric3D wait on counsel (#050).",
   "scope_out": [
-    "Items 2\u201310 of capture-render-quality-v1 (DN-Splatter, Depth Anything, BAD-Gaussians, Splatfacto-W, MapAnything, delivery, VGGT, Metric3D, FisherRF coaching)",
+    "Items 4\u201310 of capture-render-quality-v1 (BAD-Gaussians, Splatfacto-W, MapAnything, delivery, VGGT, Metric3D, FisherRF coaching); items 2+3 (DN-Splatter losses, Depth Anything V2 Small prior) entered scope 2026-10-06 per the Owner assignment relayed by the parent, code+tests first, default off",
     "Shipping non-commercial weights (Depth Anything non-Small, UniDepth, DUSt3R/MASt3R/Fast3R, academic Inria 3DGS forks)",
     "Shipping VGGT / Metric3D weights before counsel confirms (#050)",
     "Flipping ReconstructionConfig defaults before the corpus A/B completes"
@@ -100,6 +100,11 @@
     {
       "date": "2026-10-06",
       "event": "Item-1 wiring FF-pushed to main at 0a36a16 (lint/governance/secret-scan green on the branch; unity-tests runs on main). Status stays in-progress: corpus A/B + default flip remain. (Reverted a mistaken 'merged' status \u2014 schema requires a PR link for merged.)",
+      "by": "gj-operator"
+    },
+    {
+      "date": "2026-10-06",
+      "event": "Items 2+3 code+tests (default off): Depth Anything V2 Small prior cache (Apache-2.0, revision-pinned; Base/Large/Giant refused per AUTH #049), dn_torch loss mirrors with parity tests, ns_train_capped --depth-prior-dir, ReconstructionConfig.depth_prior, Modal retrain_clip knob. No GPU; cost estimate in qa/evidence/M1-PIPE-03/items2-3-plan.json.",
       "by": "gj-operator"
     }
   ]

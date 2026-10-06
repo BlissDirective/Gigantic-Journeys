@@ -46,6 +46,13 @@ MANIFEST: tuple[Component, ...] = (
     Component("Open3D", "MIT", "collision-mesh derivation"),
     Component("splat-transform", "MIT", "PLY -> SPZ/SOG compression"),
     Component("spz", "MIT", "compressed splat container (Niantic)"),
+    Component("transformers", "Apache-2.0", "depth-prior inference runtime (Hugging Face)"),
+    Component(
+        "Depth Anything V2 Small",
+        "Apache-2.0",
+        "monocular depth prior for depth/normal losses (Small only; Base/Large/Giant are "
+        "CC-BY-NC, method-only, AUTH #049)",
+    ),
 )
 
 
