@@ -259,6 +259,33 @@ namespace GiganticJourneys.Tests
         }
 
         [Test]
+        public void QaStandingLookAt_RaisesTheLookAt_AndZerosTheRise()
+        {
+            // Product miniature: half avatar + camera rise from movement.json.
+            FollowCamera.LookAtHeightAndRise(
+                trackedFloorY: 0.02f,
+                halfAvatarWorld: 0.073f,
+                cameraRiseWorld: 0.160f,
+                qaStandingLookAtHeightM: 0f,
+                out var lookY,
+                out var rise
+            );
+            Assert.That(lookY, Is.EqualTo(0.093f).Within(1e-5f));
+            Assert.That(rise, Is.EqualTo(0.160f).Within(1e-5f));
+            // Bedroom QA: look-at at capture height; eye orbits there with no extra rise.
+            FollowCamera.LookAtHeightAndRise(
+                0.02f,
+                0.073f,
+                0.160f,
+                qaStandingLookAtHeightM: 1.4f,
+                out lookY,
+                out rise
+            );
+            Assert.That(lookY, Is.EqualTo(1.42f).Within(1e-5f));
+            Assert.That(rise, Is.EqualTo(0f));
+        }
+
+        [Test]
         public void CameraBox_PullsTheEyeInAlongTheRay()
         {
             var box = new Bounds(Vector3.zero, new Vector3(4f, 2f, 10f));

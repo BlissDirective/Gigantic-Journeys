@@ -161,6 +161,7 @@ namespace GiganticJourneys.Tests
                 d.IsFreeLook,
                 "Owner asked for every direction and angle (build 54 check)"
             );
+            Assert.IsFalse(d.HasQaStandingViewer, "Winchester keeps the product miniature POV");
             var l = SplatRoomLoader.OrbitLimitsFor(d);
             Assert.AreEqual(180f, l.YawHalfRangeDeg, "full 360 degree yaw");
             Assert.AreEqual(-60f, l.MinElevationDeg);
@@ -193,6 +194,7 @@ namespace GiganticJourneys.Tests
         [TestCase("cameraMode")]
         [TestCase("freeElevation")]
         [TestCase("freeZoom")]
+        [TestCase("qaStandingLookAtHeightM")]
         public void Descriptor_RejectsBadCameraLimits(string field)
         {
             var d = JsonUtility.FromJson<SplatRoomDescriptor>(Committed);
@@ -222,6 +224,9 @@ namespace GiganticJourneys.Tests
                     break;
                 case "freeZoom":
                     d.freeOrbit.maxZoom = 0.8f;
+                    break;
+                case "qaStandingLookAtHeightM":
+                    d.qaStandingLookAtHeightM = 4f;
                     break;
                 case "occluder":
                     d.occluders = new[]
@@ -495,6 +500,11 @@ namespace GiganticJourneys.Tests
             StringAssert.Contains("AUTH #046", d.credit);
             Assert.IsTrue(d.IsFreeLook, "free-look camera");
             Assert.IsTrue(d.HasCameraBox, "camera box from room_limits");
+            Assert.IsTrue(
+                d.HasQaStandingViewer,
+                "bedroom QA standing viewer (build 69 fragmentation)"
+            );
+            Assert.That(d.qaStandingLookAtHeightM, Is.EqualTo(1.4f).Within(1e-4f));
             // Sharpness A/B (M1-PIPE-02 phase 2a): the small bedroom renders the splat pass
             // at 0.85 with SH order 2; Winchester keeps the A15 profile (0.7, SH 1).
             Assert.AreEqual(0.85f, d.renderScale, 1e-4f, "bedroom sharpness A/B render scale");

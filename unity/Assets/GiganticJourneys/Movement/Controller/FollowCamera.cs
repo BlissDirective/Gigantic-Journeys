@@ -28,6 +28,9 @@ namespace GiganticJourneys.Movement.Controller
     /// snaps the view into the character and out again; and when the eye does end up within
     /// movement.json <c>occluderFadeA</c> of the character (a tight corner), the character's
     /// renderers are hidden instead of filling the screen (build 61 device test).
+    /// A splat room can raise the look-at point to a standing height for QA
+    /// (<see cref="QaStandingLookAtHeightM"/>) so the eye matches the capture while the
+    /// miniature character stays on the floor (build 69 bedroom fragmentation).
     /// </summary>
     [RequireComponent(typeof(Camera))]
     public sealed class FollowCamera : MonoBehaviour
@@ -96,6 +99,14 @@ namespace GiganticJourneys.Movement.Controller
         float _eyeRadius = -1f;
         float _eyeRadiusVelocity;
         readonly List<Renderer> _hiddenRenderers = new List<Renderer>();
+
+        /// <summary>
+        /// When &gt; 0, the look-at point sits this many metres above the character's tracked
+        /// floor height (instead of half the avatar), and the default follow rise is zero so the
+        /// eye orbits at that standing height. 0 = product miniature POV. Set by the splat room
+        /// for bedroom QA only.
+        /// </summary>
+        public float QaStandingLookAtHeightM { get; set; }
 
         public TraversalController Target
         {
@@ -213,6 +224,31 @@ namespace GiganticJourneys.Movement.Controller
         /// <summary>Whether the character should be hidden with the eye this close to its look-at point.</summary>
         public static bool HidesTarget(float eyeDistance, float hideWithin) =>
             eyeDistance < hideWithin;
+
+        /// <summary>
+        /// World Y of the look-at point and the follow rise above it. With a QA standing height
+        /// the look-at is that many metres above the tracked floor and the rise is zero (eye at
+        /// standing height when pitch is 0); otherwise the product miniature POV (half avatar +
+        /// movement.json camera height).
+        /// </summary>
+        public static void LookAtHeightAndRise(
+            float trackedFloorY,
+            float halfAvatarWorld,
+            float cameraRiseWorld,
+            float qaStandingLookAtHeightM,
+            out float lookAtY,
+            out float rise
+        )
+        {
+            if (qaStandingLookAtHeightM > 0f)
+            {
+                lookAtY = trackedFloorY + qaStandingLookAtHeightM;
+                rise = 0f;
+                return;
+            }
+            lookAtY = trackedFloorY + halfAvatarWorld;
+            rise = cameraRiseWorld;
+        }
 
         /// <summary>Turns the camera around the character (pitch is clamped in <see cref="LateUpdate"/>).</summary>
         public void Orbit(float yawDeg, float pitchDeg)
@@ -366,10 +402,17 @@ namespace GiganticJourneys.Movement.Controller
             _lookAhead = Vector3.SmoothDamp(_lookAhead, wantAhead, ref _lookAheadVelocity, blend);
 
             var focus = new Vector3(pos.x, _trackedY, pos.z) + _lookAhead;
-            var lookAt = focus + Vector3.up * scale.ToWorld(motor.Config.AvatarHeightA * 0.5f);
             // With no orbit this is exactly focus - yawForward * distance + up * height.
             var distance = scale.ToWorld(_distanceA);
-            var rise = scale.ToWorld(cam.HeightA - motor.Config.AvatarHeightA * 0.5f);
+            LookAtHeightAndRise(
+                focus.y,
+                scale.ToWorld(motor.Config.AvatarHeightA * 0.5f),
+                scale.ToWorld(cam.HeightA - motor.Config.AvatarHeightA * 0.5f),
+                QaStandingLookAtHeightM,
+                out var lookAtY,
+                out var rise
+            );
+            var lookAt = new Vector3(focus.x, lookAtY, focus.z);
             var baseElevation = Mathf.Atan2(rise, distance) * Mathf.Rad2Deg;
             var elevation = ElevationDeg(rise, distance, _orbitPitchDeg, _limits);
             _orbitPitchDeg = elevation - baseElevation;

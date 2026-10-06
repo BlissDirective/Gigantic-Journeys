@@ -66,6 +66,7 @@
     "minZoom": 0.5,
     "maxZoom": 2.5
   },
+  "qaStandingLookAtHeightM": 1.4,
   "occluders": [],
   "blockers": [
     {

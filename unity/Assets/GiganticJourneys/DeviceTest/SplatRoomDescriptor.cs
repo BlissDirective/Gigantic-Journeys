@@ -108,6 +108,16 @@ namespace GiganticJourneys.DeviceTest
         public string cameraMode = CameraModeCoverage;
         public FreeOrbit freeOrbit = new FreeOrbit();
 
+        /// <summary>
+        /// Internal-debug QA only: metres above the character's floor for the follow look-at
+        /// (and eye at pitch 0). Used when a room is placed at real-world scale but the player is
+        /// 1:12 miniature, so a doll-height POV is far below every training camera (bedroom build
+        /// 69). 0 = off (product miniature POV). Winchester stays 0.
+        /// </summary>
+        public float qaStandingLookAtHeightM;
+
+        public bool HasQaStandingViewer => qaStandingLookAtHeightM > 0f;
+
         public const string CameraModeCoverage = "coverage";
         public const string CameraModeFree = "free";
 
@@ -213,6 +223,10 @@ namespace GiganticJourneys.DeviceTest
                 throw new FormatException("renderScale must be 0 (untouched) or in [0.5, 1]");
             if (shOrder > 3)
                 throw new FormatException("shOrder must be at most 3 (-1 = tier)");
+            if (qaStandingLookAtHeightM < 0f || qaStandingLookAtHeightM > 3f)
+                throw new FormatException(
+                    "qaStandingLookAtHeightM must be 0 (off) or in (0, 3] metres above the floor"
+                );
             if (resortMoveMeters < 0f || resortAngleDeg < 0f || sortEveryNthFrame < 0)
                 throw new FormatException(
                     "sort cadence and resort thresholds must not be negative"

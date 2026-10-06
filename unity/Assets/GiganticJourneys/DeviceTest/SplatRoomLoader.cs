@@ -213,6 +213,8 @@ namespace GiganticJourneys.DeviceTest
         void OnDestroy()
         {
             RestoreRenderScale();
+            if (Follow != null)
+                Follow.QaStandingLookAtHeightM = 0f;
             if (_panel != null)
             {
                 Destroy(_panel.themeStyleSheet);
@@ -260,6 +262,9 @@ namespace GiganticJourneys.DeviceTest
             var head = Loaded
                 ? $"{Descriptor.displayName}  ·  {SplatRoomDescriptor.FormatCount(SplatCount)} splats  ·  sort: {SortTier}  ·  render {RenderScale.ToString("0.##", CultureInfo.InvariantCulture)}x"
                 : $"{Descriptor.displayName}: {Error}";
+            if (Descriptor.HasQaStandingViewer)
+                head +=
+                    $"\nQA standing viewer · look-at {Descriptor.qaStandingLookAtHeightM.ToString("0.##", CultureInfo.InvariantCulture)} m (capture height; miniature stays on the floor)";
             return head + "\n" + Descriptor.credit;
         }
 
@@ -308,6 +313,12 @@ namespace GiganticJourneys.DeviceTest
                         + $"yaw {l.YawCenterDeg.ToString("0.#", ci)} +- {l.YawHalfRangeDeg.ToString("0.#", ci)} deg, "
                         + $"box {(Follow.HasCameraBounds ? "on" : "off")}, collision {(Follow.CameraCollision ? "on" : "off")}, "
                         + $"occluders {(Occluders != null ? Occluders.childCount : 0).ToString(ci)}"
+                );
+                line(
+                    "qa_standing_viewer",
+                    Descriptor != null && Descriptor.HasQaStandingViewer
+                        ? $"look-at {Descriptor.qaStandingLookAtHeightM.ToString("0.##", ci)} m"
+                        : "off"
                 );
             }
             // The sort runs on the GPU inside the frame; this build has no GPU timer for it,
@@ -437,6 +448,9 @@ namespace GiganticJourneys.DeviceTest
             if (d.HasCameraBox)
                 Follow.SetCameraBounds(d.CameraBox);
             Follow.CameraCollision = true;
+            // Bedroom QA: raise the look-at to standing / capture height so free look matches
+            // the training views; the 1:12 character stays on the floor (build 69).
+            Follow.QaStandingLookAtHeightM = d.qaStandingLookAtHeightM;
         }
 
         public static FollowCamera.OrbitLimits OrbitLimitsFor(SplatRoomDescriptor d)
