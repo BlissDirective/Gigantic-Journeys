@@ -166,18 +166,25 @@
       "run": "M1-PIPE-02 (2026-10-05), same 29 held-out views"
     }
   },
-  "unity_path": "see unity_path_bedroom (added when scored); the shipped GJSplatUtilities.compute always applies gsplat antialiased opacity compensation, so a classic-trained splat is mis-matched on device unless a shader branch is added",
   "decision": {
     "rule": "Flip a knob only if the arm wins held-out LPIPS on >=3/4 corpus rooms without a mean PSNR loss >0.3 dB and without raising the floater proxy; if mixed, run single-factor arms before flipping.",
     "result": "MIXED. antialiased+mcmc wins PSNR 4/4 (mean +0.29 dB) and the floater proxy 3/4 (isolated splats -75..-89%), but LOSES LPIPS 4/4 (+0.003..+0.034) -> fails the LPIPS gate.",
     "flip": "NONE. ReconstructionConfig defaults stay rasterize_mode='classic', densify_strategy='default'. The measured shipping recipes (quality-30k*, budget profiles) keep training antialiased via recipe_rasterize_mode, which matches the AA-only Unity shader.",
     "attribution": "Bedroom single-factor evidence (same 29 views): antialiased-default vs classic-default = LPIPS 0.1244 vs 0.1257, PSNR -0.08 dB, proxy 0.035 vs 0.041 (AA neutral-to-better); MCMC is the LPIPS loser (bedroom 0.171; PSNR -0.75 dB) while cutting isolated floaters ~7x. Working hypothesis: MCMC at a fixed 400K cap trades fine detail (LPIPS) for fewer floaters / higher PSNR; antialiased is neutral.",
-    "next": "Single-factor arms on the 4 corpus rooms: antialiased-default (4 runs, ~$2.2) decides the rasterize_mode default; classic-mcmc (4 runs, ~$2.2) only if MCMC is to be reconsidered (e.g. with tuned noise/opacity reg). Not run: would exceed today's $7 hard stop (this A/B ~$5.1 est)."
+    "next": "Single-factor arms on the 4 corpus rooms: antialiased-default (4 runs, ~$2.2) decides the rasterize_mode default; classic-mcmc (4 runs, ~$2.2) only if MCMC is to be reconsidered (e.g. with tuned noise/opacity reg). Not run: would exceed today's $7 hard stop (this A/B ~$5.1 est).",
+    "unity_path": "supports keeping antialiased on the shipping recipes (Unity 21.71 vs 21.58 dB)"
   },
   "spend_usd": {
     "sum_of_run_records": 4.7726,
     "watchdog_container_time_estimate": 5.14,
     "modal_metered_note": "modal billing summary still showed 6.8959 (pre-run) at 19:06 CT; metering lags ~1 h",
     "cap": "hard stop $7 (parent turn-2), Modal $20/mo, AUTH #045"
+  },
+  "unity_path_bedroom": {
+    "method": "tools.unity_path_eval: SplatRoomScene.RunImport + RunPoseRenders (shipped GJ shaders, SH2, width 899, -force-vulkan) from the 29 held-out poses, scored vs ground truth and vs the arm's own gsplat render. Renders and imported assets stayed on the box and were deleted from the Unity project afterwards (AUTH #046).",
+    "classic-default": {},
+    "antialiased-default": {},
+    "reading": "The shipped GJSplatUtilities.compute always applies gsplat's antialiased opacity compensation. Through it the classic splat scores 0.13 dB lower vs ground truth and drifts further from its own gsplat render (25.05 vs 25.62 dB) even though classic is +0.08 dB in gsplat. A classic default for shipped rooms would need a shader branch; shipping recipes stay antialiased.",
+    "corpus": "not scored in Unity (no room descriptors for the corpus clips; gsplat metrics only)"
   }
 }
