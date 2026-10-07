@@ -385,7 +385,8 @@ def _finish(
     try:
         if not evaluate:
             raise _SkipEval
-        subprocess.run([*cmd, "--eval", "--renders", str(renders), *scoring], check=True)
+        geometry = ["--geometry-renders", str(out / "geometry_renders")]
+        subprocess.run([*cmd, "--eval", "--renders", str(renders), *geometry, *scoring], check=True)
     except (_SkipEval, subprocess.CalledProcessError, OSError) as exc:
         if not isinstance(exc, _SkipEval):
             metrics["eval_error"] = str(exc)[:300]
@@ -396,6 +397,9 @@ def _finish(
         return None
     report = json.loads(report_path.read_text(encoding="utf-8"))
     for key in ("trained_splats", "capped_splats", "cap_applied", "exported_splats"):
+        if key in report:
+            metrics[key] = report[key]
+    for key in ("geometry_renders", "geometry_renders_error"):
         if key in report:
             metrics[key] = report[key]
     for key in ("load_s", "cap_s", "eval_s", "export_s"):

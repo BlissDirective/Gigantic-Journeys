@@ -224,3 +224,11 @@ def test_depth_prior_wires_the_dn_losses_into_ns_train_capped(tmp_path, monkeypa
     own = calls[0][: calls[0].index("--")]
     assert own[own.index("--depth-prior-dir") + 1] == str(tmp_path / "depth_prior")
     assert model.metrics["depth_prior"] == "depth-anything-v2-small"
+
+
+def test_pick_views_spreads_geometry_panels():
+    from reconstruction.ns_finish import pick_views
+
+    assert pick_views(29, 3) == [0, 14, 28]
+    assert pick_views(29, 1) == [14]
+    assert pick_views(0, 3) == [] and pick_views(2, 5) == [0, 1]

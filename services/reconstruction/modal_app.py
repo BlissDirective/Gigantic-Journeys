@@ -692,6 +692,23 @@ def reconstruct_clip(
     return {**record, "_preview": preview, "_tile": tile}
 
 
+def _build_depth_prior(config, work: Path) -> None:
+    """Items 2+3: write the Depth Anything V2 Small disparity cache the trainer expects
+    (``<work>/out/depth_prior``) when ``config.depth_prior`` is set. In-container only;
+    the maps live in the run's temp dir and are never persisted."""
+    if config.depth_prior == "none":
+        return
+    from reconstruction.depth_prior_cache import DepthAnythingV2Small, build_cache, load_pil
+
+    build_cache(
+        [p for p in (work / "images").iterdir() if p.is_file()],
+        work / "out" / "depth_prior",
+        DepthAnythingV2Small(),
+        load_pil,
+        model=config.depth_prior,
+    )
+
+
 @app.function(
     gpu=GPU,
     cpu=(CPU_CORES, CPU_CORES),
@@ -754,16 +771,7 @@ def retrain_clip(
         densify_strategy=densify_strategy,
         depth_prior=depth_prior,
     )
-    if config.depth_prior != "none":
-        from reconstruction.depth_prior_cache import DepthAnythingV2Small, build_cache, load_pil
-
-        build_cache(
-            [p for p in (work / "images").iterdir() if p.is_file()],
-            work / "out" / "depth_prior",
-            DepthAnythingV2Small(),
-            load_pil,
-            model=config.depth_prior,
-        )
+    _build_depth_prior(config, work)
     model = GsplatTrainer(profile=profile).train(poses, work / "out", config)
     dest = src / f"retrain-{tag}"
     if dest.exists():
@@ -773,6 +781,12 @@ def retrain_clip(
     render_dir = model.ply_path.parent / "eval_renders"
     for p in sorted(render_dir.glob("*.png")) if render_dir.is_dir() else []:
         shutil.copyfile(p, dest / "renders" / p.name)
+    # Corpus only: RGB | inverse depth | depth normals sanity panels (ns_finish).
+    geo_dir = model.ply_path.parent / "geometry_renders"
+    if geo_dir.is_dir():
+        (dest / "geometry").mkdir()
+        for p in sorted(geo_dir.glob("*.png")):
+            shutil.copyfile(p, dest / "geometry" / p.name)
     usage = meter.stop()
     wall = time.monotonic() - started
     gpu_usd = wall / 3600 * rate_per_hour_usd
@@ -959,6 +973,7 @@ def retrain_owner_capture(
     score: tuple[str, ...] = (),
     rasterize_mode: str = "",
     densify_strategy: str = "default",
+    depth_prior: str = "none",
 ) -> dict:
     """Retrain one Owner capture from its saved (blurred) frames + SfM model (AUTH #046).
 
@@ -1006,7 +1021,9 @@ def retrain_owner_capture(
         splat_budget=splat_budget,
         rasterize_mode=rasterize_mode or recipe_rasterize_mode(profile),
         densify_strategy=densify_strategy,
+        depth_prior=depth_prior,
     )
+    _build_depth_prior(config, work)
     model = GsplatTrainer(profile=profile, score_plys=tuple(scored)).train(
         poses, work / "out", config
     )
@@ -1032,6 +1049,7 @@ def retrain_owner_capture(
         "profile": profile,
         "rasterize_mode": config.rasterize_mode,
         "densify_strategy": config.densify_strategy,
+        "depth_prior": config.depth_prior,
         "gpu": gpu,
         "splat_budget": splat_budget,
         "splat_count": model.splat_count,
@@ -1060,12 +1078,14 @@ def owner_retrain(
     tag_suffix: str = "400k",
     rasterize_mode: str = "",
     densify_strategy: str = "default",
+    depth_prior: str = "none",
 ) -> None:
     """Retrain an Owner capture once per comma-separated profile, in parallel.
 
     ``--score a.ply,b.ply`` (paths relative to the capture folder) are scored on the first
     profile's container only. Tag = ``<profile>-<tag_suffix>``. ``--rasterize-mode`` /
-    ``--densify-strategy`` set the render-quality knobs ("" = the profile's recipe).
+    ``--densify-strategy`` set the render-quality knobs ("" = the profile's recipe);
+    ``--depth-prior depth-anything-v2-small`` adds the items 2+3 depth/normal losses.
     """
     if gpu not in GPU_RATES:
         raise SystemExit(f"--gpu must be one of {sorted(GPU_RATES)}, got {gpu!r}")
@@ -1083,6 +1103,7 @@ def owner_retrain(
             extra if i == 0 else (),
             rasterize_mode,
             densify_strategy,
+            depth_prior,
         )
         for i, p in enumerate(names)
     ]
@@ -1117,12 +1138,14 @@ def retrain(clip: str, profiles: str, gpu: str = "L40S", splat_budget: int = 1_5
 # M1-PIPE-03 item 1 (capture-render-quality-v1 §1): render-quality A/B arms. Same base
 # recipe (``quality-30k``: 30k schedule + bilateral grid + scale regularisation), same
 # frames / SfM / held-out views; only the two ``ReconstructionConfig`` knobs differ.
-RENDER_AB_ARMS: dict[str, tuple[str, str]] = {
-    "classic-default": ("classic", "default"),
-    "antialiased-mcmc": ("antialiased", "mcmc"),
+RENDER_AB_ARMS: dict[str, tuple[str, str, str]] = {
+    "classic-default": ("classic", "default", "none"),
+    "antialiased-mcmc": ("antialiased", "mcmc", "none"),
     # Single-factor arms (optional; isolate which knob moves the score).
-    "antialiased-default": ("antialiased", "default"),
-    "classic-mcmc": ("classic", "mcmc"),
+    "antialiased-default": ("antialiased", "default", "none"),
+    "classic-mcmc": ("classic", "mcmc", "none"),
+    # Items 2+3: the shipping recipe + Depth Anything V2 Small prior + depth/normal losses.
+    "antialiased-default-dn": ("antialiased", "default", "depth-anything-v2-small"),
 }
 
 

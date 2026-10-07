@@ -1,0 +1,36 @@
+{
+  "ticket": "M1-PIPE-03",
+  "items": "capture-render-quality-v1 items 2+3 A/B: Depth Anything V2 Small prior + DN-Splatter-style depth/normal losses",
+  "date": "2026-10-06",
+  "by": "gj-operator",
+  "authorised_by": "parent turn 3 (run the depth-prior A/B now; defer antialiased+default single-factor arm; keep ~$4 of October Modal free; hard stop if October passes $16.50)",
+  "arms": {
+    "baseline": "antialiased-default: the shipping recipe (quality-30k, antialiased, default densification) at the 400K display budget",
+    "dn": "antialiased-default-dn: same + depth_prior=depth-anything-v2-small (Pearson inverse-depth x0.2, depth-normal consistency x0.1, normal TV x0.05, from step 500)"
+  },
+  "rooms": {
+    "corpus": ["medieval-great-hall-winchester", "historic-house-eldon-house"],
+    "corpus_not_run": ["mosque-prayer-hall-umayyad", "lego-paranal-observatory"],
+    "why_two": "No antialiased-default 400K corpus baseline exists on the volume, so each room needs 2 runs. 4 rooms x 2 = 8 runs (~$5.0) would end October near $17.2 > $16.50. Picked the two indoor rooms closest to a bedroom.",
+    "bedroom_owner_room_01": "dn arm only (AUTH #046, private; metrics only in the repo); baseline = M1-PIPE-02 quality-30k-400k antialiased-default on the same 29 held-out views (24.85 / 0.942 / 0.124, Unity path 21.71 dB)"
+  },
+  "metrics": "held-out PSNR/SSIM/LPIPS (every 8th frame), floater proxy (isolated/giant/needle share, extent-scaled thresholds, see item1-ab-results.json), bedroom also through tools.unity_path_eval; RGB | inverse depth | depth-normal panels for 3 held-out views per corpus run (ns_finish --geometry-renders)",
+  "decision_rule": "Pre-registered (floaters/geometry first, per parent): flip ReconstructionConfig.depth_prior default to 'depth-anything-v2-small' only if, on EVERY evaluated room (2 corpus + bedroom), the dn arm lowers the floater proxy AND does not worsen LPIPS by more than +0.005, AND the mean PSNR change is >= -0.3 dB. Geometry panels are a sanity check, not a gate. With 2 of 4 corpus rooms the flip would be provisional pending Umayyad/Paranal.",
+  "cost_estimate_usd": {
+    "per_baseline_run": 0.6,
+    "per_dn_run": 0.68,
+    "basis": "item-1 actual: $5.28 metered for 9 runs = $0.59/run; dn adds ~1 min prior inference + 5-10% training",
+    "corpus_4_runs": 2.56,
+    "bedroom_dn_run": 0.68,
+    "image_layer_build": 0.05,
+    "total": 3.29
+  },
+  "budget_check": {
+    "modal_metered_before": "12.17639009 (19:17 CT, steady across two reads)",
+    "expected_after": 15.47,
+    "free_after_vs_20": 4.53,
+    "hard_stop": "watchdog stops both apps at metered >= $16.50 or container-time estimate >= $3.90",
+    "daily_halt": "$50/day not approached (today ~ $9.4 incl. this run)"
+  },
+  "status": "planned"
+}

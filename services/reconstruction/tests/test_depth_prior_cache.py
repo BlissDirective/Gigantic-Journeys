@@ -63,3 +63,15 @@ def test_config_values_and_licence_manifest_stay_in_sync():
     names = {c.name for c in assert_commercial_safe()}
     assert {"transformers", "Depth Anything V2 Small"} <= names
     assert len(MANIFEST) == len(names)
+
+
+def test_numpy_maps_use_the_fast_path(tmp_path):
+    np = pytest.importorskip("numpy")
+    from reconstruction.depth_prior_cache import read_map
+
+    grid = np.arange(12, dtype=np.float64).reshape(3, 4) / 4
+    write_map(tmp_path, "f", grid)
+    assert read_map_grid(tmp_path, "f") == grid.tolist()
+    assert read_map(tmp_path, "f").shape == (3, 4)
+    with pytest.raises(ValueError):
+        write_map(tmp_path, "g", np.zeros((2, 2, 2)))

@@ -159,6 +159,51 @@ def static_scores(model):
     return torch.sigmoid(model.opacities.reshape(-1)) * torch.exp(top2)
 
 
+def pick_views(n: int, views: int) -> list[int]:
+    """``views`` evenly spaced indices over ``n`` held-out cameras (first and last kept)."""
+    if n <= 0 or views <= 0:
+        return []
+    if views == 1:
+        return [n // 2]
+    return sorted({round(i * (n - 1) / (views - 1)) for i in range(views)})
+
+
+def geometry_renders(pipeline, out_dir: Path, views: int = 3) -> int:
+    """Held-out geometry sanity panels: RGB | inverse depth (turbo) | depth normals.
+
+    Normals come from the rendered depth (``dn_torch.normals_from_depth``), so the panel
+    shows the surface the splat actually encodes: flat walls read as flat colour,
+    floaters and fog as speckle. Corpus/debug use; callers decide where the PNGs go.
+    """
+    import numpy as np
+    import torch
+    from nerfstudio.utils import colormaps
+    from PIL import Image
+
+    from . import dn_torch as dt
+
+    cameras = pipeline.datamanager.eval_dataset.cameras
+    out_dir.mkdir(parents=True, exist_ok=True)
+    written = 0
+    for i in pick_views(len(cameras), views):
+        cam = cameras[i : i + 1].to(pipeline.device)
+        with torch.no_grad():
+            o = pipeline.model.get_outputs_for_camera(cam)
+        depth, acc = o["depth"], o["accumulation"]
+        rgb = o["rgb"].clamp(0, 1)
+        inv = colormaps.apply_depth_colormap(1.0 / depth.clamp_min(1e-3), accumulation=acc)
+        c = cam[0]
+        normals = dt.normals_from_depth(
+            depth[..., 0], float(c.fx), float(c.fy), float(c.cx), float(c.cy)
+        )
+        nimg = (normals * 0.5 + 0.5) * (acc > 0.5).float()
+        panel = torch.cat([rgb, inv.to(rgb), nimg.to(rgb)], dim=1)
+        img = (panel.cpu().numpy() * 255).round().astype(np.uint8)
+        Image.fromarray(img).save(out_dir / f"geometry_{i:04d}.png")
+        written += 1
+    return written
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="reconstruction.ns_finish")
     parser.add_argument("--load-config", type=Path, required=True)
@@ -167,6 +212,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--eval", action="store_true")
     parser.add_argument("--renders", type=Path, default=None)
     parser.add_argument("--score-ply", type=parse_score_ply, action="append", default=[])
+    parser.add_argument("--geometry-renders", type=Path, default=None)
+    parser.add_argument("--geometry-views", type=int, default=3)
     args = parser.parse_args(argv)
 
     from importlib.metadata import version
@@ -208,6 +255,13 @@ def main(argv: list[str] | None = None) -> int:
         report["eval_s"] = round(time.monotonic() - started, 2)
         report["results"] = {k: float(v) for k, v in metrics.items()}
         report["eval_views"] = len(pipeline.datamanager.fixed_indices_eval_dataloader)
+        if args.geometry_renders is not None:
+            try:  # best-effort sanity panels; never fails the run
+                report["geometry_renders"] = geometry_renders(
+                    pipeline, args.geometry_renders, args.geometry_views
+                )
+            except Exception as exc:  # noqa: BLE001
+                report["geometry_renders_error"] = f"{type(exc).__name__}: {exc}"[:300]
 
     # 3. PLY export (nerfstudio ExportGaussianSplat layout, vectorized).
     started = time.monotonic()

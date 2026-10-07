@@ -55,7 +55,17 @@ def model_repo(name: str) -> str:
     return DEPTH_MODELS[name][0]
 
 
-def write_map(out_dir: Path, stem: str, grid: Sequence[Sequence[float]]) -> Path:
+def write_map(out_dir: Path, stem: str, grid) -> Path:
+    """Write one map. ``grid`` = rows of floats (stdlib) or a 2-D numpy array (fast path)."""
+    path = out_dir / f"{stem}{SUFFIX}"
+    if hasattr(grid, "shape") and hasattr(grid, "astype"):  # numpy, no per-pixel Python
+        if len(grid.shape) != 2:
+            raise ValueError("map must be 2-D")
+        h, w = (int(v) for v in grid.shape)
+        with path.open("wb") as fh:
+            fh.write(struct.pack("<II", h, w))
+            fh.write(grid.astype("<f4").tobytes())
+        return path
     h = len(grid)
     w = len(grid[0]) if h else 0
     data = array("f", (float(v) for row in grid for v in row))
@@ -63,7 +73,6 @@ def write_map(out_dir: Path, stem: str, grid: Sequence[Sequence[float]]) -> Path
         raise ValueError("grid must be rectangular")
     if data.itemsize != 4:
         raise RuntimeError("float32 array expected")
-    path = out_dir / f"{stem}{SUFFIX}"
     with path.open("wb") as fh:
         fh.write(struct.pack("<II", h, w))
         if struct.pack("=I", 1) != struct.pack("<I", 1):
@@ -128,7 +137,7 @@ class DepthAnythingV2Small:
     """``DepthPrior`` adapter for Depth Anything V2 Small (Apache-2.0) via transformers.
 
     GPU container only. ``predict`` takes a PIL image (``load_pil``) and returns relative
-    disparity at the image's resolution.
+    disparity (numpy, model resolution).
     """
 
     name = "depth-anything-v2-small"
@@ -144,12 +153,10 @@ class DepthAnythingV2Small:
         )
 
     def predict(self, image):
+        """Relative disparity at the model's native resolution (~518 px short side) as a
+        float32 numpy array; the trainer resizes it to each render (bilinear)."""
         out = self._pipe(image)["predicted_depth"]
-        import torch
-
-        size = (image.height, image.width)
-        out = torch.nn.functional.interpolate(out[None], size=size, mode="bilinear")[0, 0]
-        return out.float().cpu().numpy().tolist()
+        return out.squeeze().float().cpu().numpy()
 
 
 def load_pil(path: Path):

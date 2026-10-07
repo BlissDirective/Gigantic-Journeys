@@ -256,6 +256,11 @@ def install_depth_normal(
         if applied:
             loss["dn_normal_tv"] = w_tv * dt.normal_tv(normals, valid)
             stats["depth_normal"]["applied_steps"] += 1
+            if stats["depth_normal"]["applied_steps"] == 1:
+                terms = {k: round(float(v), 5) for k, v in loss.items() if k.startswith("dn_")}
+                print(
+                    f"[gj-dn] depth/normal losses active at step {self.step}: {terms}", flush=True
+                )
         return loss
 
     FullImageDatamanager.next_train = next_train_dn
