@@ -50,6 +50,8 @@ REFUSED_MODEL_IDS = frozenset({"facebook/map-anything", "facebook/map-anything-v
 SHIP_STATUS = "blocked-pending-counsel"
 MAPPER_NAME = "mapanything"
 DEFAULT_MAX_SEED_POINTS = 300_000
+# Below this camera-centre spread (metres) the centre-based Sim(3) fit is ill-posed.
+MIN_ALIGN_SPREAD_M = 0.05
 
 
 def check_model_id(model_id: str, revision: str = MAPANYTHING_REVISION) -> str:
@@ -142,7 +144,15 @@ def assemble_result(
             raise ValueError("one prior pose per frame expected")
         pred_c = [camera_center(m) for m in pred_arkit]
         prior_c = [camera_center(m) for m in prior_poses]
-        if len(frame_names) >= 3 and keep_prior_poses:
+        spread = max(
+            (max(c[i] for c in prior_c) - min(c[i] for c in prior_c) for i in range(3)),
+            default=0.0,
+        )
+        if keep_prior_poses and (len(frame_names) < 3 or spread < MIN_ALIGN_SPREAD_M):
+            # Rotate-in-place / tiny captures: Sim(3) on centres is ill-posed; the
+            # pose-conditioned output is already expressed in the prior (ARKit) world.
+            diag["align_skipped"] = f"camera spread {spread:.3f} m / {len(frame_names)} frames"
+        elif keep_prior_poses:
             sim = sim3_align(pred_c, prior_c)
             xyz = [apply_sim3(sim, p) for p in xyz]
             moved = [apply_sim3(sim, c) for c in pred_c]

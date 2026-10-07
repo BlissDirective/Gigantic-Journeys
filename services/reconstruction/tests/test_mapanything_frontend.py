@@ -181,6 +181,17 @@ def test_assemble_moves_points_into_the_arkit_world():
     assert result.metric and result.conditioned_on_arkit
 
 
+def test_assemble_skips_alignment_for_rotate_in_place():
+    prior = [_c2w(_rot((0, 1, 0), a), (1.0, 1.5, 2.0)) for a in (0.0, 0.5, 1.0, 1.5)]
+    pred_cv = [flip_camera_axes(m) for m in prior]
+    result, diag = assemble_result(
+        ["a", "b", "c", "d"], K, pred_cv, [((0.5, 0.5, 0.5), (1, 1, 1), 1.0)], prior_poses=prior
+    )
+    assert not diag["aligned_to_prior"] and "align_skipped" in diag
+    assert result.points[0].xyz == (0.5, 0.5, 0.5)
+    assert result.frames[3].cam_to_world == pytest.approx(prior[3])
+
+
 def test_assemble_without_prior_uses_model_poses():
     poses = _orbit(3)
     result, diag = assemble_result(
