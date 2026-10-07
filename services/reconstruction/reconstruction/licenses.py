@@ -46,6 +46,7 @@ MANIFEST: tuple[Component, ...] = (
     Component("Open3D", "MIT", "collision-mesh derivation"),
     Component("splat-transform", "MIT", "PLY -> SPZ/SOG compression"),
     Component("spz", "MIT", "compressed splat container (Niantic)"),
+    Component("OpenCV", "Apache-2.0", "prior-map undistortion (already a nerfstudio dependency)"),
     Component("transformers", "Apache-2.0", "depth-prior inference runtime (Hugging Face)"),
     Component(
         "Depth Anything V2 Small",

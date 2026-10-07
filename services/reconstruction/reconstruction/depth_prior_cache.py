@@ -113,13 +113,20 @@ def build_cache(
     load_image: Callable[[Path], Sequence[Sequence[float]]],
     *,
     model: str = "depth-anything-v2-small",
+    align: Callable | None = None,
+    aligned_to: str = "",
 ) -> dict:
-    """Predict + write one map per image; return (and write) the ``prior.json`` manifest."""
+    """Predict + write one map per image; return (and write) the ``prior.json`` manifest.
+
+    ``align`` (e.g. ``prior_alignment.align_map_to_nerfstudio`` bound to the COLMAP camera)
+    maps each raw-frame prediction onto the image the trainer actually renders.
+    """
     model_repo(model)  # licence gate before any inference
     out_dir.mkdir(parents=True, exist_ok=True)
     frames = []
     for path in sorted(images):
-        write_map(out_dir, path.stem, prior.predict(load_image(path)))
+        pred = prior.predict(load_image(path))
+        write_map(out_dir, path.stem, align(pred) if align else pred)
         frames.append(path.stem)
     manifest = {
         "model": model,
@@ -127,6 +134,7 @@ def build_cache(
         "license": DEPTH_MODELS[model][1],
         "prior": prior.name,
         "kind": "disparity",
+        "aligned_to": aligned_to or ("custom" if align else "raw frame (no undistortion)"),
         "frames": frames,
     }
     (out_dir / "prior.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")

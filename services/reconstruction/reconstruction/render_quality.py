@@ -34,6 +34,8 @@ STRATEGY_FLAG = "--pipeline.model.strategy"
 # Own-args flags for the DN-Splatter-style depth/normal losses (items 2+3).
 DEPTH_PRIOR_DIR_FLAG = "--depth-prior-dir"
 SENSOR_DEPTH_DIR_FLAG = "--sensor-depth-dir"
+DN_WEIGHT_SCALE_FLAG = "--dn-weight-scale"
+DN_START_STEP_FLAG = "--dn-start-step"
 # Fixed locations inside the trainer's work_dir (written by depth_prior_cache.build_cache
 # / the ARKit depth exporter before training).
 DEPTH_PRIOR_SUBDIR = "depth_prior"
@@ -66,7 +68,14 @@ def depth_normal_own_args(config: ReconstructionConfig, work_dir: Path) -> list[
         raise ReconstructionError(
             f"depth_prior={config.depth_prior!r} but no prior cache at {prior_dir}"
         )
-    args = [DEPTH_PRIOR_DIR_FLAG, str(prior_dir)]
+    args = [
+        DEPTH_PRIOR_DIR_FLAG,
+        str(prior_dir),
+        DN_WEIGHT_SCALE_FLAG,
+        f"{config.depth_prior_weight_scale:g}",
+        DN_START_STEP_FLAG,
+        str(config.depth_prior_start_step),
+    ]
     sensor_dir = work_dir / SENSOR_DEPTH_SUBDIR
     if sensor_dir.is_dir():
         args += [SENSOR_DEPTH_DIR_FLAG, str(sensor_dir)]

@@ -75,3 +75,19 @@ def test_numpy_maps_use_the_fast_path(tmp_path):
     assert read_map(tmp_path, "f").shape == (3, 4)
     with pytest.raises(ValueError):
         write_map(tmp_path, "g", np.zeros((2, 2, 2)))
+
+
+def test_build_cache_applies_the_alignment_and_records_it(tmp_path):
+    out = tmp_path / "prior"
+    manifest = build_cache(
+        [tmp_path / "a.jpg"],
+        out,
+        MockDepthPrior(),
+        lambda p: [[1.0, 2.0], [3.0, 4.0]],
+        align=lambda m: [row[:1] for row in m],  # stand-in for align_map_to_nerfstudio
+        aligned_to="nerfstudio-1.1.5 undistort+crop (SIMPLE_RADIAL)",
+    )
+    assert manifest["aligned_to"].startswith("nerfstudio-1.1.5")
+    assert len(read_map_grid(out, "a")[0]) == 1
+    plain = build_cache([tmp_path / "a.jpg"], tmp_path / "p2", MockDepthPrior(), lambda p: [[1.0]])
+    assert plain["aligned_to"] == "raw frame (no undistortion)"

@@ -698,14 +698,32 @@ def _build_depth_prior(config, work: Path) -> None:
     the maps live in the run's temp dir and are never persisted."""
     if config.depth_prior == "none":
         return
-    from reconstruction.depth_prior_cache import DepthAnythingV2Small, build_cache, load_pil
+    from functools import partial
 
+    from reconstruction.depth_prior_cache import DepthAnythingV2Small, build_cache, load_pil
+    from reconstruction.prior_alignment import (
+        align_map_to_nerfstudio,
+        find_model_dir,
+        opencv_intrinsics,
+        read_colmap_cameras,
+    )
+
+    # Undistort + crop each map like nerfstudio does to the training frame (single-camera
+    # captures; ARKit PINHOLE models need nothing).
+    align, aligned_to = None, ""
+    model_dir = find_model_dir(work / "out" / "sparse")
+    cams = list(read_colmap_cameras(model_dir).values()) if model_dir else []
+    if len(cams) == 1 and opencv_intrinsics(cams[0]) is not None:
+        align = partial(align_map_to_nerfstudio, camera=cams[0])
+        aligned_to = f"nerfstudio-1.1.5 undistort+crop ({cams[0]['model']})"
     build_cache(
         [p for p in (work / "images").iterdir() if p.is_file()],
         work / "out" / "depth_prior",
         DepthAnythingV2Small(),
         load_pil,
         model=config.depth_prior,
+        align=align,
+        aligned_to=aligned_to,
     )
 
 
@@ -726,6 +744,8 @@ def retrain_clip(
     rasterize_mode: str = "",
     densify_strategy: str = "default",
     depth_prior: str = "none",
+    dn_weight_scale: float = 1.0,
+    dn_start_step: int = 500,
 ) -> dict:
     """Retrain one reconstructed corpus clip from its saved frames + SfM model.
 
@@ -770,6 +790,8 @@ def retrain_clip(
         rasterize_mode=rasterize_mode or recipe_rasterize_mode(profile),
         densify_strategy=densify_strategy,
         depth_prior=depth_prior,
+        depth_prior_weight_scale=dn_weight_scale,
+        depth_prior_start_step=dn_start_step,
     )
     _build_depth_prior(config, work)
     model = GsplatTrainer(profile=profile).train(poses, work / "out", config)
@@ -797,6 +819,8 @@ def retrain_clip(
         "rasterize_mode": config.rasterize_mode,
         "densify_strategy": config.densify_strategy,
         "depth_prior": config.depth_prior,
+        "dn_weight_scale": config.depth_prior_weight_scale,
+        "dn_start_step": config.depth_prior_start_step,
         "gpu": gpu,
         "splat_budget": splat_budget,
         "splat_count": model.splat_count,
@@ -974,6 +998,8 @@ def retrain_owner_capture(
     rasterize_mode: str = "",
     densify_strategy: str = "default",
     depth_prior: str = "none",
+    dn_weight_scale: float = 1.0,
+    dn_start_step: int = 500,
 ) -> dict:
     """Retrain one Owner capture from its saved (blurred) frames + SfM model (AUTH #046).
 
@@ -1022,6 +1048,8 @@ def retrain_owner_capture(
         rasterize_mode=rasterize_mode or recipe_rasterize_mode(profile),
         densify_strategy=densify_strategy,
         depth_prior=depth_prior,
+        depth_prior_weight_scale=dn_weight_scale,
+        depth_prior_start_step=dn_start_step,
     )
     _build_depth_prior(config, work)
     model = GsplatTrainer(profile=profile, score_plys=tuple(scored)).train(
@@ -1050,6 +1078,8 @@ def retrain_owner_capture(
         "rasterize_mode": config.rasterize_mode,
         "densify_strategy": config.densify_strategy,
         "depth_prior": config.depth_prior,
+        "dn_weight_scale": config.depth_prior_weight_scale,
+        "dn_start_step": config.depth_prior_start_step,
         "gpu": gpu,
         "splat_budget": splat_budget,
         "splat_count": model.splat_count,
@@ -1079,6 +1109,8 @@ def owner_retrain(
     rasterize_mode: str = "",
     densify_strategy: str = "default",
     depth_prior: str = "none",
+    dn_weight_scale: float = 1.0,
+    dn_start_step: int = 500,
 ) -> None:
     """Retrain an Owner capture once per comma-separated profile, in parallel.
 
@@ -1104,6 +1136,8 @@ def owner_retrain(
             rasterize_mode,
             densify_strategy,
             depth_prior,
+            dn_weight_scale,
+            dn_start_step,
         )
         for i, p in enumerate(names)
     ]
@@ -1138,14 +1172,24 @@ def retrain(clip: str, profiles: str, gpu: str = "L40S", splat_budget: int = 1_5
 # M1-PIPE-03 item 1 (capture-render-quality-v1 §1): render-quality A/B arms. Same base
 # recipe (``quality-30k``: 30k schedule + bilateral grid + scale regularisation), same
 # frames / SfM / held-out views; only the two ``ReconstructionConfig`` knobs differ.
-RENDER_AB_ARMS: dict[str, tuple[str, str, str]] = {
-    "classic-default": ("classic", "default", "none"),
-    "antialiased-mcmc": ("antialiased", "mcmc", "none"),
+RENDER_AB_ARMS: dict[str, tuple[str, str, str, float, int]] = {
+    # (rasterize_mode, densify_strategy, depth_prior, dn_weight_scale, dn_start_step)
+    "classic-default": ("classic", "default", "none", 1.0, 500),
+    "antialiased-mcmc": ("antialiased", "mcmc", "none", 1.0, 500),
     # Single-factor arms (optional; isolate which knob moves the score).
-    "antialiased-default": ("antialiased", "default", "none"),
-    "classic-mcmc": ("classic", "mcmc", "none"),
+    "antialiased-default": ("antialiased", "default", "none", 1.0, 500),
+    "classic-mcmc": ("classic", "mcmc", "none", 1.0, 500),
     # Items 2+3: the shipping recipe + Depth Anything V2 Small prior + depth/normal losses.
-    "antialiased-default-dn": ("antialiased", "default", "depth-anything-v2-small"),
+    "antialiased-default-dn": ("antialiased", "default", "depth-anything-v2-small", 1.0, 500),
+    # Proposed retry (depth CPU check 2026-10-06): weights / 4, start at step 4000, maps
+    # aligned to nerfstudio's undistort + crop. Not run; needs a GPU go-ahead.
+    "antialiased-default-dn-soft": (
+        "antialiased",
+        "default",
+        "depth-anything-v2-small",
+        0.25,
+        4000,
+    ),
 }
 
 

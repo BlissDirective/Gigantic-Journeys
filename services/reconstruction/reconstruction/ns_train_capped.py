@@ -287,13 +287,27 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--mcmc-cap", type=int, default=0)
     parser.add_argument("--depth-prior-dir", default="")
     parser.add_argument("--sensor-depth-dir", default="")
+    parser.add_argument("--dn-weight-scale", type=float, default=1.0)
+    parser.add_argument("--dn-start-step", type=int, default=500)
     args = parser.parse_args(own)
     stats = install_growth_limit(args.budget)
     if args.mcmc_cap > 0:
         install_mcmc(args.mcmc_cap, stats, _max_iterations(rest))
     if args.depth_prior_dir or args.sensor_depth_dir:
         # After install_mcmc: both wrap get_loss_dict, so the losses add up.
-        install_depth_normal(args.depth_prior_dir or None, stats, args.sensor_depth_dir or None)
+        k = args.dn_weight_scale
+        install_depth_normal(
+            args.depth_prior_dir or None,
+            stats,
+            args.sensor_depth_dir or None,
+            start_step=args.dn_start_step,
+            weights=(
+                DEPTH_PRIOR_WEIGHT * k,
+                SENSOR_DEPTH_WEIGHT * k,
+                NORMAL_WEIGHT * k,
+                NORMAL_TV_WEIGHT * k,
+            ),
+        )
 
     from nerfstudio.scripts.train import entrypoint
 

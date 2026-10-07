@@ -1,0 +1,357 @@
+{
+  "ticket": "M1-PIPE-03",
+  "what": "Free CPU check of the Depth Anything V2 Small prior (items 2+3 follow-up)",
+  "date": "2026-10-06",
+  "by": "gj-operator",
+  "authorised_by": "parent turn 4 (CPU only; no Modal GPU in October without a new go-ahead)",
+  "method": {
+    "model": "depth-anything/Depth-Anything-V2-Small-hf @ 5426e4f0 via transformers 4.46.3 on the box CPU (same pipeline call as the container)",
+    "ground_truth": "COLMAP keypoints of 8 evenly spaced registered frames per room: observed pixel + camera-space depth z of its 3D point (the SfM model the trainer uses)",
+    "direction": "Spearman rank correlation of the prior (sampled at each keypoint) with 1/z and with z",
+    "scale_shift": "least-squares prior ~ s*(1/z) + t per frame (the depth_prior / dn_torch align_scale_shift contract), R^2; also prior ~ s*z + t for comparison",
+    "alignment": "nerfstudio 1.1.5 FullImageDatamanager._undistort_image (PERSPECTIVE: K shifted -0.5, getOptimalNewCameraMatrix alpha=0, cv2.undistort, ROI crop) vs the trainer's resize-only lookup of the raw-frame map: pixel error over a grid, and the R^2 change when keypoints are looked up the way training did",
+    "script": "/workspace/gj-pipe03/depth_check.py (box)",
+    "privacy": "bedroom frames read on the box only (chmod 700); numbers only here, no image names (AUTH #046)"
+  },
+  "winchester": {
+    "camera": {
+      "model": "SIMPLE_RADIAL",
+      "width": 1600,
+      "height": 900,
+      "f": 1241.610468097705,
+      "k1": 0.004898218688502423
+    },
+    "nerfstudio_undistort_crop": {
+      "newK_f": [
+        1244.91,
+        1244.91
+      ],
+      "roi_xywh": [
+        0,
+        0,
+        1599,
+        899
+      ],
+      "lookup_error_px_raw": {
+        "mean": 1.25,
+        "p95": 2.01,
+        "max": 2.16
+      },
+      "lookup_error_pct_of_width": 0.126
+    },
+    "views": [
+      {
+        "image": "f00000.jpg",
+        "points": 1129,
+        "map_hw": [
+          900,
+          1600
+        ],
+        "spearman_vs_inverse_depth": 0.9225,
+        "spearman_vs_depth": -0.9225,
+        "r2_affine_vs_inverse_depth": 0.8578,
+        "r2_affine_vs_depth": 0.8672,
+        "r2_inverse_depth_with_current_resize_only_lookup": 0.8581,
+        "fit_scale": 21.15771,
+        "fit_shift": -3.08228,
+        "scale_x_median_z": 7.4727
+      },
+      {
+        "image": "f00021.jpg",
+        "points": 2552,
+        "map_hw": [
+          900,
+          1600
+        ],
+        "spearman_vs_inverse_depth": 0.3516,
+        "spearman_vs_depth": -0.3516,
+        "r2_affine_vs_inverse_depth": 0.1383,
+        "r2_affine_vs_depth": 0.138,
+        "r2_inverse_depth_with_current_resize_only_lookup": 0.1381,
+        "fit_scale": 53.22514,
+        "fit_shift": -37.55767,
+        "scale_x_median_z": 41.4176
+      },
+      {
+        "image": "f00043.jpg",
+        "points": 1544,
+        "map_hw": [
+          900,
+          1600
+        ],
+        "spearman_vs_inverse_depth": -0.0816,
+        "spearman_vs_depth": 0.0816,
+        "r2_affine_vs_inverse_depth": 0.0013,
+        "r2_affine_vs_depth": 0.0011,
+        "r2_inverse_depth_with_current_resize_only_lookup": 0.0013,
+        "fit_scale": -6.49364,
+        "fit_shift": 7.10683,
+        "scale_x_median_z": -4.1249
+      },
+      {
+        "image": "f00081.jpg",
+        "points": 1209,
+        "map_hw": [
+          900,
+          1600
+        ],
+        "spearman_vs_inverse_depth": 0.8382,
+        "spearman_vs_depth": -0.8382,
+        "r2_affine_vs_inverse_depth": 0.9953,
+        "r2_affine_vs_depth": 0.9378,
+        "r2_inverse_depth_with_current_resize_only_lookup": 0.9947,
+        "fit_scale": 2.17279,
+        "fit_shift": -1.15131,
+        "scale_x_median_z": 1.5703
+      },
+      {
+        "image": "f00102.jpg",
+        "points": 2331,
+        "map_hw": [
+          900,
+          1600
+        ],
+        "spearman_vs_inverse_depth": 0.8596,
+        "spearman_vs_depth": -0.8596,
+        "r2_affine_vs_inverse_depth": 0.5999,
+        "r2_affine_vs_depth": 0.6134,
+        "r2_inverse_depth_with_current_resize_only_lookup": 0.5996,
+        "fit_scale": 9.70576,
+        "fit_shift": -8.3641,
+        "scale_x_median_z": 10.0089
+      },
+      {
+        "image": "f00123.jpg",
+        "points": 1677,
+        "map_hw": [
+          900,
+          1600
+        ],
+        "spearman_vs_inverse_depth": 0.3987,
+        "spearman_vs_depth": -0.3987,
+        "r2_affine_vs_inverse_depth": 0.2603,
+        "r2_affine_vs_depth": 0.2584,
+        "r2_inverse_depth_with_current_resize_only_lookup": 0.2625,
+        "fit_scale": 3.71791,
+        "fit_shift": -2.76508,
+        "scale_x_median_z": 4.4336
+      },
+      {
+        "image": "f00153.jpg",
+        "points": 155,
+        "map_hw": [
+          900,
+          1600
+        ],
+        "spearman_vs_inverse_depth": 0.2505,
+        "spearman_vs_depth": -0.2505,
+        "r2_affine_vs_inverse_depth": 0.0021,
+        "r2_affine_vs_depth": 0.0068,
+        "r2_inverse_depth_with_current_resize_only_lookup": 0.0017,
+        "fit_scale": -6.25344,
+        "fit_shift": 1.28641,
+        "scale_x_median_z": -0.5876
+      },
+      {
+        "image": "f00174.jpg",
+        "points": 1097,
+        "map_hw": [
+          900,
+          1600
+        ],
+        "spearman_vs_inverse_depth": 0.9033,
+        "spearman_vs_depth": -0.9033,
+        "r2_affine_vs_inverse_depth": 0.965,
+        "r2_affine_vs_depth": 0.881,
+        "r2_inverse_depth_with_current_resize_only_lookup": 0.9677,
+        "fit_scale": 14.88723,
+        "fit_shift": -1.13001,
+        "scale_x_median_z": 1.8114
+      }
+    ],
+    "mean": {
+      "spearman_vs_inverse_depth": 0.5554,
+      "spearman_vs_depth": -0.5554,
+      "r2_affine_vs_inverse_depth": 0.4775,
+      "r2_affine_vs_depth": 0.463,
+      "r2_inverse_depth_with_current_resize_only_lookup": 0.478,
+      "median_of_view_median_rel_depth_error_after_fit": 0.0215
+    }
+  },
+  "bedroom_owner_room_01": {
+    "camera": {
+      "model": "SIMPLE_RADIAL",
+      "width": 900,
+      "height": 1600,
+      "f": 1469.1764261193205,
+      "k1": 0.029824247366437996
+    },
+    "nerfstudio_undistort_crop": {
+      "newK_f": [
+        1485.87,
+        1485.87
+      ],
+      "roi_xywh": [
+        0,
+        0,
+        899,
+        1599
+      ],
+      "lookup_error_px_raw": {
+        "mean": 3.55,
+        "p95": 4.91,
+        "max": 5.18
+      },
+      "lookup_error_pct_of_width": 0.546
+    },
+    "views": [
+      {
+        "points": 160,
+        "map_hw": [
+          1600,
+          900
+        ],
+        "spearman_vs_inverse_depth": 0.7995,
+        "spearman_vs_depth": -0.7995,
+        "r2_affine_vs_inverse_depth": 0.6227,
+        "r2_affine_vs_depth": 0.6246,
+        "r2_inverse_depth_with_current_resize_only_lookup": 0.5858,
+        "fit_scale": 64.20039,
+        "fit_shift": -5.87044,
+        "scale_x_median_z": 7.2749
+      },
+      {
+        "points": 98,
+        "map_hw": [
+          1600,
+          900
+        ],
+        "spearman_vs_inverse_depth": 0.8468,
+        "spearman_vs_depth": -0.8468,
+        "r2_affine_vs_inverse_depth": 0.0035,
+        "r2_affine_vs_depth": 0.5656,
+        "r2_inverse_depth_with_current_resize_only_lookup": 0.0033,
+        "fit_scale": 0.43436,
+        "fit_shift": 2.14515,
+        "scale_x_median_z": 0.0646
+      },
+      {
+        "points": 208,
+        "map_hw": [
+          1600,
+          900
+        ],
+        "spearman_vs_inverse_depth": 0.9076,
+        "spearman_vs_depth": -0.9076,
+        "r2_affine_vs_inverse_depth": 0.911,
+        "r2_affine_vs_depth": 0.8762,
+        "r2_inverse_depth_with_current_resize_only_lookup": 0.9132,
+        "fit_scale": 41.42864,
+        "fit_shift": -7.21325,
+        "scale_x_median_z": 9.518
+      },
+      {
+        "points": 2293,
+        "map_hw": [
+          1600,
+          900
+        ],
+        "spearman_vs_inverse_depth": 0.9991,
+        "spearman_vs_depth": -0.9991,
+        "r2_affine_vs_inverse_depth": 0.9958,
+        "r2_affine_vs_depth": 0.9681,
+        "r2_inverse_depth_with_current_resize_only_lookup": 0.9956,
+        "fit_scale": 52.33801,
+        "fit_shift": -4.87627,
+        "scale_x_median_z": 12.2406
+      },
+      {
+        "points": 3463,
+        "map_hw": [
+          1600,
+          900
+        ],
+        "spearman_vs_inverse_depth": 0.9731,
+        "spearman_vs_depth": -0.9731,
+        "r2_affine_vs_inverse_depth": 0.951,
+        "r2_affine_vs_depth": 0.9202,
+        "r2_inverse_depth_with_current_resize_only_lookup": 0.9511,
+        "fit_scale": 37.90674,
+        "fit_shift": -4.12524,
+        "scale_x_median_z": 7.6143
+      },
+      {
+        "points": 4060,
+        "map_hw": [
+          1600,
+          900
+        ],
+        "spearman_vs_inverse_depth": 0.998,
+        "spearman_vs_depth": -0.998,
+        "r2_affine_vs_inverse_depth": 0.9938,
+        "r2_affine_vs_depth": 0.9639,
+        "r2_inverse_depth_with_current_resize_only_lookup": 0.9936,
+        "fit_scale": 30.85445,
+        "fit_shift": -3.37752,
+        "scale_x_median_z": 5.6065
+      },
+      {
+        "points": 2061,
+        "map_hw": [
+          1600,
+          900
+        ],
+        "spearman_vs_inverse_depth": 0.9491,
+        "spearman_vs_depth": -0.9491,
+        "r2_affine_vs_inverse_depth": 0.9801,
+        "r2_affine_vs_depth": 0.9675,
+        "r2_inverse_depth_with_current_resize_only_lookup": 0.981,
+        "fit_scale": 27.41869,
+        "fit_shift": -3.44294,
+        "scale_x_median_z": 10.1482
+      },
+      {
+        "points": 4678,
+        "map_hw": [
+          1600,
+          900
+        ],
+        "spearman_vs_inverse_depth": 0.9974,
+        "spearman_vs_depth": -0.9974,
+        "r2_affine_vs_inverse_depth": 0.9948,
+        "r2_affine_vs_depth": 0.9842,
+        "r2_inverse_depth_with_current_resize_only_lookup": 0.9947,
+        "fit_scale": 51.23595,
+        "fit_shift": -6.54809,
+        "scale_x_median_z": 9.9225
+      }
+    ],
+    "mean": {
+      "spearman_vs_inverse_depth": 0.9338,
+      "spearman_vs_depth": -0.9338,
+      "r2_affine_vs_inverse_depth": 0.8066,
+      "r2_affine_vs_depth": 0.8588,
+      "r2_inverse_depth_with_current_resize_only_lookup": 0.8023,
+      "median_of_view_median_rel_depth_error_after_fit": 0.0145
+    }
+  },
+  "findings": {
+    "direction": "Correct. The prior is inverse depth (disparity): mean Spearman +0.56 vs 1/z and -0.56 vs z on Winchester, +0.93 / -0.93 on the bedroom. The losses treat it as disparity (Pearson on rendered inverse depth), so no sign bug.",
+    "scale_shift": "Bedroom: an affine fit in inverse depth explains it well (R^2 0.91-0.996 on 6/8 frames; one sparse 98-point frame is monotonic but not affine, R^2 0.004). Winchester: inconsistent per frame. 4/8 frames fit (R^2 0.60-0.995), 4/8 barely or not at all (R^2 0.001-0.26; one frame anti-correlated, Spearman -0.08). A fixed-weight Pearson loss on those frames pulls the geometry towards a wrong surface, which matches the bowl-shaped depth in the Winchester sanity panel and the -3.6 dB collapse.",
+    "alignment": "A real but small bug. The prior was computed on the raw distorted frame and only resized, while nerfstudio trains on the undistorted ROI crop. Lookup error: Winchester (k1 0.0049) mean 1.3 px, p95 2.0 px of 1600 (0.13%); bedroom (k1 0.0298) mean 3.6 px, p95 4.9 px of 900 (0.55%). Fit change from the misalignment: R^2 0.478 -> 0.478 (Winchester), 0.807 -> 0.802 (bedroom). Not the cause of the collapse. Fixed anyway: prior_alignment.align_map_to_nerfstudio warps + crops each map exactly like nerfstudio (full-res parity test error 4e-4 vs 0.17 for resize-only), applied in modal _build_depth_prior; prior.json records aligned_to.",
+    "root_cause_ranking": [
+      "per-frame prior reliability (Winchester 4/8 frames unusable) with no gating",
+      "loss weights too strong / too early (Pearson 0.2 from step 500 at 30K/400K)",
+      "undistortion misalignment (minor, fixed)"
+    ]
+  },
+  "retry_recipe_not_run": {
+    "config": "depth_prior='depth-anything-v2-small', depth_prior_weight_scale=0.25 (Pearson 0.05, normal 0.025, TV 0.0125), depth_prior_start_step=4000 (after splatfacto's first resolution step at 3000, before full res at 6000); maps aligned to nerfstudio's undistort+crop",
+    "modal_arm": "render_ab --arms antialiased-default-dn-soft (wired, not run)",
+    "proposed_next_code": "per-frame gate: skip frames whose prior vs SfM keypoint Spearman < 0.6 (would drop ~4/8 sampled Winchester frames, 0/8 bedroom); computed at cache-build from the sparse model already in the container",
+    "runs": "Winchester + Eldon + bedroom dn-soft arms only (baselines exist) = 3 runs, ~$2.0",
+    "gate": "same pre-registered rule as items2-3-ab-plan.json",
+    "status": "NOT RUN: no Modal GPU in October without a new go-ahead; remaining ~$3.7 held for the bedroom reshoot"
+  },
+  "spend_usd": 0
+}

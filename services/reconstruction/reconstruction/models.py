@@ -169,6 +169,10 @@ class ReconstructionConfig:
     # Monocular depth prior for the DN-Splatter-style depth/normal losses (items 2+3).
     # "none" = off. Only commercial-safe checkpoints (AUTH #049; see depth_prior_cache).
     depth_prior: str = "none"  # "none" | "depth-anything-v2-small"
+    # Depth/normal loss strength (x the ns_train_capped defaults) and first step. The
+    # 2026-10-06 A/B used 1.0 / 500 and over-smoothed; the proposed retry is 0.25 / 4000.
+    depth_prior_weight_scale: float = 1.0
+    depth_prior_start_step: int = 500
 
     def __post_init__(self) -> None:
         if self.splat_budget <= 0:
@@ -183,6 +187,10 @@ class ReconstructionConfig:
             raise ReconstructionError(f"unknown densify_strategy: {self.densify_strategy!r}")
         if self.depth_prior not in DEPTH_PRIORS:
             raise ReconstructionError(f"unknown depth_prior: {self.depth_prior!r}")
+        if not 0 < self.depth_prior_weight_scale <= 4:
+            raise ReconstructionError("depth_prior_weight_scale must be in (0, 4]")
+        if self.depth_prior_start_step < 0:
+            raise ReconstructionError("depth_prior_start_step must be >= 0")
         if self.max_package_bytes <= 0:
             raise ReconstructionError("max_package_bytes must be positive")
 

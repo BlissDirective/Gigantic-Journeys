@@ -57,9 +57,31 @@ def test_depth_prior_requires_its_cache_and_adds_sensor_depth_when_present(tmp_p
     assert depth_normal_own_args(cfg, tmp_path) == [
         DEPTH_PRIOR_DIR_FLAG,
         str(tmp_path / "depth_prior"),
+        "--dn-weight-scale",
+        "1",
+        "--dn-start-step",
+        "500",
     ]
     (tmp_path / "sensor_depth").mkdir()
-    assert depth_normal_own_args(cfg, tmp_path)[2:] == [
+    assert depth_normal_own_args(cfg, tmp_path)[6:] == [
         SENSOR_DEPTH_DIR_FLAG,
         str(tmp_path / "sensor_depth"),
     ]
+
+
+def test_depth_retry_knobs_are_validated_and_emitted(tmp_path):
+    from reconstruction.render_quality import depth_normal_own_args
+
+    (tmp_path / "depth_prior").mkdir()
+    (tmp_path / "depth_prior" / "prior.json").write_text("{}")
+    cfg = ReconstructionConfig(
+        depth_prior="depth-anything-v2-small",
+        depth_prior_weight_scale=0.25,
+        depth_prior_start_step=4000,
+    )
+    args = depth_normal_own_args(cfg, tmp_path)
+    assert args[args.index("--dn-weight-scale") + 1] == "0.25"
+    assert args[args.index("--dn-start-step") + 1] == "4000"
+    for bad in ({"depth_prior_weight_scale": 0}, {"depth_prior_start_step": -1}):
+        with pytest.raises(ReconstructionError):
+            ReconstructionConfig(**bad)

@@ -116,6 +116,11 @@
       "date": "2026-10-06",
       "event": "Items 2+3 A/B (5 runs, 19:17-19:39 CT): shipping recipe vs + Depth Anything V2 Small prior + depth/normal losses on Winchester, Eldon House and the bedroom (#046). Fails the pre-registered rule on every room (LPIPS +0.225/+0.241/+0.042; PSNR -3.57/-5.39/-0.53 dB) -> depth_prior stays 'none'. Floater proxy -47%/+9%/-48%; bedroom Unity path improves 21.71 -> 22.10 dB. Two of four corpus rooms only (budget). Spend $3.11 run records; Modal October ~$15.8-16.3 (hard stop $16.50 not passed). Fixed ns_finish geometry renders (pipeline.eval()) and the empty Unity dicts in item1-ab-results.json.",
       "by": "gj-operator"
+    },
+    {
+      "date": "2026-10-06",
+      "event": "Depth prior CPU check (no GPU): prior is inverse depth (Spearman +0.56 Winchester / +0.93 bedroom); bedroom fits an affine inverse-depth model (R^2 0.91-0.996 on 6/8 frames), Winchester is unreliable on 4/8 frames (R^2 <= 0.26) -> main cause with weights/start. Undistortion misalignment real but small (p95 2.0 px / 4.9 px) -> fixed: prior_alignment.align_map_to_nerfstudio applied at cache build. Retry knobs (depth_prior_weight_scale, depth_prior_start_step) + render_ab arm antialiased-default-dn-soft (0.25 / 4000) wired, not run. Evidence: qa/evidence/M1-PIPE-03/depth-prior-cpu-check.json.",
+      "by": "gj-operator"
     }
   ]
 }
