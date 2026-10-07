@@ -1,6 +1,6 @@
 {
   "id": "M1-PIPE-03",
-  "title": "Wire capture\u2192render Brain-B cores into the live GPU/iOS pipeline (item 1 first)",
+  "title": "Wire capture→render Brain-B cores into the live GPU/iOS pipeline (item 1 first)",
   "milestone": "M1",
   "area": "PIPE",
   "owner": "gj-operator",
@@ -8,9 +8,9 @@
   "status": "in-progress",
   "priority": "P1",
   "size": "L",
-  "summary": "Operator wiring for the capture\u2192render Brain-B cores already on main (AUTH #049/#050; design/proposals/capture-render-quality-v1.md + external-synthesis-builds.md batch 2). Item 1 only in this first slice: pass render_quality.splatfacto_quality_args(config) into ns_train_capped, confirm Splatfacto flag strings against pinned nerfstudio 1.1.5, prepare the antialiased+mcmc vs classic+default corpus A/B with a cost estimate before any GPU spend, then flip ReconstructionConfig defaults only after the A/B. Items 2\u201310 stay out of scope until item 1 lands. Non-commercial weights never ship (#049). VGGT/Metric3D wait on counsel (#050).",
+  "summary": "Operator wiring for the capture→render Brain-B cores already on main (AUTH #049/#050; design/proposals/capture-render-quality-v1.md + external-synthesis-builds.md batch 2). Item 1 only in this first slice: pass render_quality.splatfacto_quality_args(config) into ns_train_capped, confirm Splatfacto flag strings against pinned nerfstudio 1.1.5, prepare the antialiased+mcmc vs classic+default corpus A/B with a cost estimate before any GPU spend, then flip ReconstructionConfig defaults only after the A/B. Items 2–10 stay out of scope until item 1 lands. Non-commercial weights never ship (#049). VGGT/Metric3D wait on counsel (#050).",
   "scope_out": [
-    "Items 4\u201310 of capture-render-quality-v1 (BAD-Gaussians, Splatfacto-W, MapAnything, delivery, VGGT, Metric3D, FisherRF coaching); items 2+3 (DN-Splatter losses, Depth Anything V2 Small prior) entered scope 2026-10-06 per the Owner assignment relayed by the parent, code+tests first, default off",
+    "Items 4–10 of capture-render-quality-v1 (BAD-Gaussians, Splatfacto-W, MapAnything, delivery, VGGT, Metric3D, FisherRF coaching); items 2+3 (DN-Splatter losses, Depth Anything V2 Small prior) entered scope 2026-10-06 per the Owner assignment relayed by the parent, code+tests first, default off",
     "Shipping non-commercial weights (Depth Anything non-Small, UniDepth, DUSt3R/MASt3R/Fast3R, academic Inria 3DGS forks)",
     "Shipping VGGT / Metric3D weights before counsel confirms (#050)",
     "Flipping ReconstructionConfig defaults before the corpus A/B completes"
@@ -30,7 +30,7 @@
     },
     {
       "id": "AT-2",
-      "test": "render_quality.py documents the exact Splatfacto flag strings confirmed against pinned nerfstudio 1.1.5 (rasterize-mode classic|antialiased is a real CLI flag; --pipeline.model.strategy is NOT in 1.1.5 \u2014 MCMC stays on install_mcmc via --mcmc-cap).",
+      "test": "render_quality.py documents the exact Splatfacto flag strings confirmed against pinned nerfstudio 1.1.5 (rasterize-mode classic|antialiased is a real CLI flag; --pipeline.model.strategy is NOT in 1.1.5 — MCMC stays on install_mcmc via --mcmc-cap).",
       "evidence": "render_quality.py comments + tests",
       "automated": true,
       "level": "required"
@@ -51,8 +51,8 @@
     }
   ],
   "security": [
-    "SECURITY_CHECKLIST \u00a71 secret hygiene",
-    "SECURITY_CHECKLIST \u00a77 dependency pinning",
+    "SECURITY_CHECKLIST §1 secret hygiene",
+    "SECURITY_CHECKLIST §7 dependency pinning",
     "AUTH #046 bedroom private-data conditions",
     "AUTH #049 non-commercial-weights boundary"
   ],
@@ -64,13 +64,13 @@
   "auth_required": [
     {
       "type": "account",
-      "what": "Commercial-safe capture\u2192render stack (gsplat antialiased + MCMC densification among others). Logged AUTH #049.",
+      "what": "Commercial-safe capture→render stack (gsplat antialiased + MCMC densification among others). Logged AUTH #049.",
       "auth_id": "AUTH #049",
       "status": "approved"
     }
   ],
   "references": [
-    "design/proposals/capture-render-quality-v1.md \u00a71",
+    "design/proposals/capture-render-quality-v1.md §1",
     "design/proposals/external-synthesis-builds.md batch 2",
     "AUTH #049",
     "AUTH #050",
@@ -84,12 +84,12 @@
   "history": [
     {
       "date": "2026-10-06",
-      "event": "Created by gj-operator. Owner directed capture\u2192render Brain-B wiring before the bedroom reshoot; item 1 first (branch \u2192 self-review \u2192 merge on green CI).",
+      "event": "Created by gj-operator. Owner directed capture→render Brain-B wiring before the bedroom reshoot; item 1 first (branch → self-review → merge on green CI).",
       "by": "gj-operator"
     },
     {
       "date": "2026-10-06",
-      "event": "Item 1 wiring: splatfacto_quality_args \u2192 ns_train_capped; flags confirmed vs nerfstudio 1.1.5; A/B plan+cost in qa/evidence/M1-PIPE-03/item1-ab-plan.json; Modal Oct $6.90/$20; GPU A/B not started.",
+      "event": "Item 1 wiring: splatfacto_quality_args → ns_train_capped; flags confirmed vs nerfstudio 1.1.5; A/B plan+cost in qa/evidence/M1-PIPE-03/item1-ab-plan.json; Modal Oct $6.90/$20; GPU A/B not started.",
       "by": "gj-operator"
     },
     {
@@ -99,7 +99,7 @@
     },
     {
       "date": "2026-10-06",
-      "event": "Item-1 wiring FF-pushed to main at 0a36a16 (lint/governance/secret-scan green on the branch; unity-tests runs on main). Status stays in-progress: corpus A/B + default flip remain. (Reverted a mistaken 'merged' status \u2014 schema requires a PR link for merged.)",
+      "event": "Item-1 wiring FF-pushed to main at 0a36a16 (lint/governance/secret-scan green on the branch; unity-tests runs on main). Status stays in-progress: corpus A/B + default flip remain. (Reverted a mistaken 'merged' status — schema requires a PR link for merged.)",
       "by": "gj-operator"
     },
     {
@@ -120,6 +120,11 @@
     {
       "date": "2026-10-06",
       "event": "Depth prior CPU check (no GPU): prior is inverse depth (Spearman +0.56 Winchester / +0.93 bedroom); bedroom fits an affine inverse-depth model (R^2 0.91-0.996 on 6/8 frames), Winchester is unreliable on 4/8 frames (R^2 <= 0.26) -> main cause with weights/start. Undistortion misalignment real but small (p95 2.0 px / 4.9 px) -> fixed: prior_alignment.align_map_to_nerfstudio applied at cache build. Retry knobs (depth_prior_weight_scale, depth_prior_start_step) + render_ab arm antialiased-default-dn-soft (0.25 / 4000) wired, not run. Evidence: qa/evidence/M1-PIPE-03/depth-prior-cpu-check.json.",
+      "by": "gj-operator"
+    },
+    {
+      "date": "2026-10-06",
+      "event": "Item 6 MapAnything (code, wiring, licence and cost only; no GPU). sfm='mapanything' (default stays colmap) -> FeedForwardSfM + MapAnythingReconstructor: ARKit intrinsics + metric poses as conditioning, point map moved into the ARKit world by Sim(3), confidence-gated seeds in sparse/0 for Splatfacto init. Only facebook/map-anything-apache @00f9c245 is accepted; CC-BY-NC variants are refused. Ship is BLOCKED pending counsel (AUTH #049): the Apache mix (6 datasets) includes ScanNet++ v2 (non-commercial terms) and MPSD (unverified). Separate Modal app gj-mapanything-ab (phase-1 front-end A/B, --gpu-go gated, not run). Cost: phase 1 Modal $1.79 / RunPod Secure ~$1.23; all phases Modal $5.74 / RunPod Secure ~$3.33. CPU smoke of the adapter glue on 8 Winchester frames (real preprocess_inputs, stub checkpoint) passed; real weights don't fit the box (4.9 GB vs 3.7 GB disk). Evidence: qa/evidence/M1-PIPE-03/item6-mapanything-licence.json, item6-mapanything-ab-plan.json.",
       "by": "gj-operator"
     }
   ]

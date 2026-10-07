@@ -1,0 +1,118 @@
+{
+  "ticket": "M1-PIPE-03",
+  "item": "capture-render-quality-v1 item 6 (feed-forward front-end)",
+  "date": "2026-10-06",
+  "author": "gj-operator",
+  "ship_status": "BLOCKED pending counsel confirmation (AUTH #049)",
+  "code_gate": "reconstruction.mapanything_frontend.SHIP_STATUS = 'blocked-pending-counsel'; FeedForwardSfM refuses unless internal_eval=True; internal-eval artifacts are deleted after scoring (AUTH #047); MapAnything listed in licenses.COUNSEL_PENDING, not in MANIFEST",
+  "model": {
+    "id": "facebook/map-anything-apache",
+    "hf_revision_pinned": "00f9c245bbcb60522d1ed7f9e9d88462c6e3f38a",
+    "hf_license_tag": "apache-2.0",
+    "hf_last_modified": "2026-02-04",
+    "gated": false,
+    "files": [
+      "config.json",
+      "model.safetensors"
+    ],
+    "weights_bytes": 4914062480,
+    "params": "~1B, F32",
+    "model_card": "States 'Apache 2.0 variant' and 'Latest release on Jan 20th 2026'. It gives NO training-data list and points to the GitHub repo and paper. The Hub viewer flags config.json as 'Invalid JSON' (cosmetic; from_pretrained is the supported loader).",
+    "encoder_init": "DINOv2 ViT-L via torch hub (facebookresearch/dinov2, Apache-2.0)"
+  },
+  "code": {
+    "repo": "facebookresearch/map-anything",
+    "license": "Apache-2.0",
+    "commit_pinned": "3d10cf7a3016fc0f9bb13a071ee66c47b10be0d9"
+  },
+  "refused_variants": [
+    {
+      "id": "facebook/map-anything",
+      "hf_revision_seen": "a1d87e9086706fb9974f3be5a3e3a0ca5401c5aa",
+      "license": "cc-by-nc-4.0",
+      "status": "never used (AUTH #049); refused by check_model_id; listed in licenses.EXCLUDED_COMPONENTS"
+    },
+    {
+      "id": "facebook/map-anything-v1",
+      "license": "CC-BY-NC",
+      "status": "never used (AUTH #049); refused by check_model_id"
+    }
+  ],
+  "not_selected": [
+    {
+      "id": "facebook/map-anything-apache-v1",
+      "license": "Apache-2.0",
+      "why": "older Apache release; adapter pins the current one only"
+    }
+  ],
+  "training_data_basis": {
+    "how_determined": "README: the two variants 'differ by training data composition'. Every Apache training script (bash_scripts/train/main/mapa_curri_4v_6d_36ipg_64g_apache.sh -> mapa_curri_24v_6d_36ipg_64g_apache.sh -> mapa_v1_1_apache.sh, each stage initialised from the previous one) uses dataset=megatrain_6d_518_many_ar_36ipg_64g. configs/dataset/megatrain_6d_518_many_ar_36ipg_64g.yaml lists 6 datasets. Caveat: we cannot verify from public files that the released weights came from exactly these scripts.",
+    "apache_variant_datasets": [
+      {
+        "dataset": "BlendedMVS",
+        "train_samples": "840,000",
+        "license": "CC BY 4.0",
+        "verified": "github.com/YoYo000/BlendedMVS README",
+        "commercial": "yes, with attribution"
+      },
+      {
+        "dataset": "Mapillary Planet-Scale Depth (MPSD)",
+        "train_samples": "840,000",
+        "license": "UNVERIFIED",
+        "verified": "The dataset page (mapillary.com/dataset/depth) could not be fetched. Mapillary ToS s.3: user content is CC BY-SA by default; research datasets 'may' be CC BY-NC-SA. Mapillary is Meta-owned (acquired 2020).",
+        "commercial": "unknown: counsel"
+      },
+      {
+        "dataset": "ScanNet++ v2",
+        "train_samples": "840,000",
+        "license": "ScanNet++ Terms of Use (TUM)",
+        "verified": "scannetpp.mlsg.cit.tum.de terms PDF, clause 1: 'only for non-commercial research and educational purposes. Commercial use is strictly prohibited.' Clause 7 binds a for-profit employer.",
+        "commercial": "NO per published terms (RED FLAG)"
+      },
+      {
+        "dataset": "Spring",
+        "train_samples": "33,000",
+        "license": "CC BY 4.0",
+        "verified": "Spring paper (arXiv 2303.01943): built from Blender open-movie assets released CC BY 4.0",
+        "commercial": "yes, with attribution"
+      },
+      {
+        "dataset": "TartanAir V2 (wide baseline)",
+        "train_samples": "840,000",
+        "license": "CC BY 4.0",
+        "verified": "TartanAir V2 licence notice, as reproduced in the COLMAP tartanair-v2 benchmark release",
+        "commercial": "yes, with attribution"
+      },
+      {
+        "dataset": "UnrealStereo4K",
+        "train_samples": "87,000",
+        "license": "MIT",
+        "verified": "github.com/fabiotosi92/SMD-Nets (MIT); HF dataset card 'license: mit'",
+        "commercial": "yes"
+      }
+    ],
+    "full_variant_only_datasets_excluded_from_apache": [
+      "Aria Synthetic Environments",
+      "DL3DV-10K",
+      "Dynamic Replica",
+      "MegaDepth (incl. Tanks & Temples)",
+      "MVS-Synth",
+      "Parallel Domain 4D",
+      "SAIL-VOS 3D"
+    ]
+  },
+  "findings": [
+    "The weights and code are Apache-2.0 on paper, and the Apache variant drops the 7 datasets of the CC-BY-NC mix.",
+    "The Apache mix still contains ScanNet++ v2, whose published terms forbid commercial use. Whether Meta trained under a separate licence is not public.",
+    "MPSD terms could not be verified. Mapillary research datasets are often CC BY-NC-SA, but Meta owns Mapillary.",
+    "BlendedMVS, Spring and TartanAir V2 are CC BY 4.0 (attribution); UnrealStereo4K is MIT."
+  ],
+  "counsel_questions": [
+    "Does training on ScanNet++ (non-commercial research terms) restrict commercial use of the Apache-2.0 weights, or of outputs computed by them (camera poses + seed point cloud that initialise our own splat training)? Is there a known Meta-TUM licence?",
+    "What are the MPSD dataset terms, and does Meta's ownership of Mapillary change the analysis?",
+    "Do the CC BY 4.0 datasets require attribution for a model used as an internal pipeline stage?",
+    "If cleared: may we set SHIP_STATUS='cleared' for internal pipeline use only (the weights are never distributed)?"
+  ],
+  "non_commercial_variant_policy": "facebook/map-anything and map-anything-v1 (CC-BY-NC-4.0) are never used, not even for evaluation (AUTH #049).",
+  "spend_usd": 0.0
+}

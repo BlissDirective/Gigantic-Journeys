@@ -1,0 +1,96 @@
+{
+  "ticket": "M1-PIPE-03",
+  "item": "capture-render-quality-v1 item 6: MapAnything (Apache) front-end vs COLMAP+GLOMAP",
+  "date": "2026-10-06",
+  "status": "PLAN ONLY. Not run: no Modal GPU in October without a new Owner go-ahead. Ship is blocked pending counsel (AUTH #049; see item6-mapanything-licence.json).",
+  "wiring": {
+    "config": "ReconstructionConfig.sfm='mapanything' (default stays 'colmap'); select_sfm('mapanything', internal_eval=True)",
+    "port": "feedforward_frontend.FeedForwardSfM -> MapAnythingReconstructor (mapanything_frontend). ARKit intrinsics + metric cam->world are fed as OpenCV camera_poses with is_metric_scale=True when the bundle has arkit_poses.json. The point map is moved into the ARKit world by Sim(3) on camera centres and keeps ARKit poses and per-frame intrinsics.",
+    "splat_init": "Seed points are rank-normalised confidence, gated at >= 0.1 (drops the lowest 10%) and capped at 300K by even stride. They are written to sparse/0/points3D.txt, which GsplatTrainer's nerfstudio colmap dataparser reads, so Splatfacto initialises from them (same path as sfm='arkit').",
+    "ab_app": "services/reconstruction/mapanything_ab_app.py: separate Modal app 'gj-mapanything-ab', so its image never touches modal_app.py runs. frontend_ab(clip, arm) records metrics only and deletes artifacts (AUTH #047). The entrypoint refuses without --gpu-go."
+  },
+  "phase1_frontend": {
+    "rooms": [
+      "rooms/medieval-great-hall-winchester",
+      "rooms/historic-house-eldon-house",
+      "rooms/mosque-prayer-hall-umayyad",
+      "rooms/lego-paranal-observatory"
+    ],
+    "reference": "Each room's existing GLOMAP model + run.json on gj-corpus (sequential matching, 4096 SIFT, L40S). Winchester GLOMAP registered 150/175 frames.",
+    "arms": {
+      "unconditioned": "images + GLOMAP intrinsics; model's own poses",
+      "pose-conditioned": "GLOMAP poses as the stand-in for ARKit metric poses (corpus video has no ARKit track)"
+    },
+    "metrics": {
+      "pose_error": "Sim(3)-aligned ATE RMSE/median vs GLOMAP cameras, absolute and / camera-extent E",
+      "registration": "frames posed vs GLOMAP registered",
+      "init_density": "seed points kept + occupied E/60 voxels (floater-proxy grid) vs GLOMAP sparse cloud",
+      "wall_clock": "front-end s (+ checkpoint load) vs GLOMAP sfm stage s",
+      "gpu_peak_gib": "torch.cuda.max_memory_allocated"
+    },
+    "pass_rule": "On >= 3/4 rooms: unconditioned ATE/E <= 0.02 AND seed occupied voxels >= GLOMAP AND front-end wall <= GLOMAP sfm stage time."
+  },
+  "phase2_training": {
+    "recipe": "quality-30k, antialiased + default densify, 400K budget (the shipping recipe; same as the items 2+3 baseline)",
+    "arms": "4 rooms x MapAnything init (better phase-1 arm) + 2 missing antialiased-default baselines (Umayyad, Paranal); Winchester and Eldon baselines already exist",
+    "metrics": "PSNR / SSIM / LPIPS on held-out frames (every 8th) + floater proxy; on an ARKit bedroom reshoot (if captured, #046 private, metrics only) also the Unity path",
+    "pass_rule": "PSNR >= baseline - 0.1 dB AND LPIPS <= baseline + 0.005 on >= 3/4 rooms AND floater proxy not worse on >= 3/4",
+    "followup_needed": "Training from a MapAnything init on Modal needs the mapanything layer in the main image, or retrain_clip reading an alternate internal-eval sparse dir. Small code follow-up, not done this commit."
+  },
+  "cost_estimate_usd": {
+    "assumptions": "~6 min L40S per room x arm for phase 1 (image pull, 4.9 GB checkpoint load, ~150-200 views at 518 px; MapAnything memory-efficient inference). Phase 2 ~12.5 min wall per training run (743 s Winchester baseline). Modal L40S $1.95/h GPU (+~15% CPU/mem). RunPod L40S $1.09/h Secure, $0.79/h Community (runpod.io pricing, Oct 2026). RunPod adds ~20 min pod setup (image + checkpoint) once per batch.",
+    "phase1_4rooms_2arms": {
+      "modal": 1.79,
+      "runpod_secure": 1.23,
+      "runpod_community": 0.9
+    },
+    "phase1_winchester_only_2arms": {
+      "modal": 0.45,
+      "runpod_secure": 0.58,
+      "runpod_community": 0.42
+    },
+    "phase2_6_training_runs": {
+      "modal": 3.2,
+      "runpod_secure": 1.7,
+      "runpod_community": 1.25
+    },
+    "bedroom_arkit_arm_if_available": {
+      "modal": 0.75,
+      "runpod_secure": 0.4
+    },
+    "total_all_phases": {
+      "modal": 5.74,
+      "runpod_secure": 3.33,
+      "runpod_community": 2.45
+    },
+    "budget_context": "Modal October is ~$16.4 of $20 and the remaining ~$3.7 is held for the bedroom reshoot, so nothing runs on Modal in October. Options: (a) RunPod Secure Cloud (AUTH #039 primary host; prepaid balance) for phase 1 at ~$1.2 once the Owner says go; (b) wait for the November Modal cycle. Corpus frames are open-video corpus, so copying them to RunPod is fine; the bedroom never leaves #046 storage."
+  },
+  "cpu_smoke_on_box": {
+    "real_weights": "NOT feasible: 4.9 GB checkpoint vs 3.7 GB free disk, and a ~10 GB load peak vs ~8 GB free RAM",
+    "adapter_glue": "RUN on 8 corpus Winchester frames (1600x900). Real mapanything code @3d10cf7 (preprocess_inputs) with a stub in place of the checkpoint; the stub answers in a Sim(3)-transformed world.",
+    "result": {
+      "preprocessed_img_shape": [
+        1,
+        3,
+        294,
+        518
+      ],
+      "preprocessed_view_keys": [
+        "camera_poses",
+        "data_norm_type",
+        "img",
+        "intrinsics",
+        "is_metric_scale"
+      ],
+      "model_id_requested": "facebook/map-anything-apache",
+      "revision_requested": "00f9c245bbcb60522d1ed7f9e9d88462c6e3f38a",
+      "seed_points_written": 270000,
+      "frac_points_3m_from_some_camera": 1.0,
+      "frac_points_reproject_inside_source_frame": 1.0,
+      "wall_s_cpu_stub": 2.81,
+      "blocked_without_internal_eval": true
+    },
+    "conclusion": "Intrinsics and pose handoff through MapAnything's resize/crop, the Sim(3) move back into the metric ARKit world, confidence gating and the COLMAP write are correct end to end (all seed points on the expected plane and inside their source frame). The licence gate blocks runs that lack internal_eval."
+  },
+  "spend_usd": 0.0
+}
