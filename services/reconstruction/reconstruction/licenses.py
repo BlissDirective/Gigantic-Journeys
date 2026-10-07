@@ -24,6 +24,7 @@ EXCLUDED_COMPONENTS = frozenset(
     {
         "INRIA 3DGS (graphdeco-inria/gaussian-splatting)",
         "SuGaR",
+        "MapAnything CC-BY-NC (facebook/map-anything, facebook/map-anything-v1)",
     }
 )
 
@@ -53,6 +54,21 @@ MANIFEST: tuple[Component, ...] = (
         "Apache-2.0",
         "monocular depth prior for depth/normal losses (Small only; Base/Large/Giant are "
         "CC-BY-NC, method-only, AUTH #049)",
+    ),
+)
+
+
+# Components with an allowed licence on paper but a training-data basis counsel must
+# confirm before anything they produce can ship (AUTH #049 / #050). Not in MANIFEST:
+# the pipeline may run them for internal evaluation only (artifacts deleted, #047).
+COUNSEL_PENDING: tuple[Component, ...] = (
+    Component(
+        "MapAnything (facebook/map-anything-apache)",
+        "Apache-2.0",
+        "feed-forward front-end, sfm='mapanything' (item 6). Weights Apache-2.0, but the "
+        "training mix includes ScanNet++ v2 (non-commercial terms) and Mapillary MPSD "
+        "(unverified): blocked pending counsel; qa/evidence/M1-PIPE-03/"
+        "item6-mapanything-licence.json",
     ),
 )
 

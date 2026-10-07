@@ -155,7 +155,8 @@ class ReconstructionConfig:
     train_iters: int = 10_000
     compress_format: Format = Format.SPZ
     # "colmap" incremental; "glomap" global mapper (spike report); "arkit" = SfM-free,
-    # build the model straight from ARKit metric poses (arkit_poses.ArkitSfM).
+    # build the model straight from ARKit metric poses (arkit_poses.ArkitSfM);
+    # "mapanything" = feed-forward front-end (item 6; counsel-pending, internal-eval only).
     sfm: str = "colmap"
     max_package_bytes: int = 150 * MiB
     # Render-quality knobs, both commercial-safe in gsplat (capture-render-quality-v1):
@@ -179,7 +180,7 @@ class ReconstructionConfig:
             raise ReconstructionError("splat_budget must be positive")
         if self.train_iters <= 0:
             raise ReconstructionError("train_iters must be positive")
-        if self.sfm not in ("glomap", "colmap", "arkit"):
+        if self.sfm not in ("glomap", "colmap", "arkit", "mapanything"):
             raise ReconstructionError(f"unknown sfm backend: {self.sfm!r}")
         if self.rasterize_mode not in ("classic", "antialiased"):
             raise ReconstructionError(f"unknown rasterize_mode: {self.rasterize_mode!r}")

@@ -45,6 +45,7 @@ from .fakes import FakeCompressor, FakeMesher, FakeSfM, FakeTrainer
 from .feedforward_frontend import (
     FeedForwardReconstructor,
     FeedForwardResult,
+    FeedForwardSfM,
     MockFeedForward,
     result_to_capture,
     write_frontend_model,
@@ -94,6 +95,7 @@ __all__ = [
     "DepthPrior",
     "FeedForwardReconstructor",
     "FeedForwardResult",
+    "FeedForwardSfM",
     "MockDepthPrior",
     "MockFeedForward",
     "align_scale_shift",

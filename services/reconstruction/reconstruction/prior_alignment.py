@@ -58,6 +58,33 @@ def read_colmap_cameras(model_dir: Path) -> dict[int, dict]:
     return out
 
 
+def read_colmap_images(model_dir: Path) -> dict[str, tuple[int, tuple, tuple]]:
+    """``{name: (camera_id, (qw, qx, qy, qz), (tx, ty, tz))}`` world->camera, bin or txt."""
+    out: dict[str, tuple[int, tuple, tuple]] = {}
+    binary, text = model_dir / "images.bin", model_dir / "images.txt"
+    if binary.exists():
+        with binary.open("rb") as fh:
+            (n,) = struct.unpack("<Q", fh.read(8))
+            for _ in range(n):
+                _iid, qw, qx, qy, qz, tx, ty, tz, cid = struct.unpack("<I7dI", fh.read(64))
+                name = bytearray()
+                while (ch := fh.read(1)) != b"\0":
+                    name += ch
+                (npts,) = struct.unpack("<Q", fh.read(8))
+                fh.seek(24 * npts, 1)
+                out[name.decode()] = (cid, (qw, qx, qy, qz), (tx, ty, tz))
+    elif text.exists():
+        lines = [ln for ln in text.read_text(encoding="utf-8").splitlines() if ln[:1] != "#"]
+        for line in lines[::2]:  # image line, then its POINTS2D line
+            if not line.strip():
+                continue
+            f = line.split()
+            q = tuple(float(x) for x in f[1:5])
+            t = tuple(float(x) for x in f[5:8])
+            out[f[9]] = (int(f[8]), q, t)
+    return out
+
+
 def find_model_dir(sparse: Path) -> Path | None:
     """``sparse`` itself or its largest numbered sub-model, whichever holds cameras."""
     for d in [sparse, *sorted(p for p in sparse.glob("*") if p.is_dir())]:

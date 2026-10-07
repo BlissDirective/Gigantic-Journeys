@@ -304,7 +304,8 @@ class ColmapSfM(_ColmapFrontEnd):
 # COLMAP-family mappers (what benchmark_sfm sweeps). "arkit" is SfM-free and sits
 # outside the sweep; SFM_SELECTABLE is the full set select_sfm / the config accept.
 SFM_CHOICES = ("colmap", "glomap")
-SFM_SELECTABLE = ("colmap", "glomap", "arkit")
+# "mapanything" = feed-forward front-end (item 6), default off, counsel-pending (AUTH #049).
+SFM_SELECTABLE = ("colmap", "glomap", "arkit", "mapanything")
 DEFAULT_SFM = "colmap"
 DEFAULT_MATCHER = "auto"
 
@@ -315,13 +316,18 @@ def select_sfm(
     use_gpu: bool = True,
     matcher: str = DEFAULT_MATCHER,
     max_features: int = 0,
+    internal_eval: bool = False,
 ) -> SfM:
-    """Return the SfM adapter for ``name`` ("colmap", "glomap", or "arkit").
+    """Return the SfM adapter for ``name`` ("colmap", "glomap", "arkit" or "mapanything").
 
     "arkit" is SfM-free: it writes the COLMAP model straight from the capture's ARKit
     metric poses (arkit_poses.ArkitSfM) and ignores the COLMAP-only knobs below. The
     factory builds it with no explicit capture, so its ``run`` loads ``arkit_poses.json``
     from beside the scan's image dir.
+
+    "mapanything" is the feed-forward front-end (mapanything_frontend): ARKit-conditioned
+    when the bundle has ``arkit_poses.json``. It is counsel-pending (AUTH #049), so its
+    ``run`` refuses unless ``internal_eval`` (artifacts deleted after scoring, #047).
     """
     if name == "glomap":
         return GlomapSfM(use_gpu=use_gpu, matcher=matcher, max_features=max_features)
@@ -329,6 +335,10 @@ def select_sfm(
         return ColmapSfM(use_gpu=use_gpu, matcher=matcher, max_features=max_features)
     if name == "arkit":
         return ArkitSfM()
+    if name == "mapanything":
+        from .mapanything_frontend import mapanything_sfm
+
+        return mapanything_sfm(internal_eval=internal_eval)
     raise ReconstructionError(f"unknown sfm {name!r}; expected one of {SFM_SELECTABLE}")
 
 
