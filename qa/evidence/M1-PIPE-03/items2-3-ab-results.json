@@ -113,5 +113,10 @@
     "sum_of_run_records": 3.108,
     "modal_metered": "12.18 before (19:17 CT); reads 15.80-16.34 during/after the run (19:36-19:42 CT) as late item-1 charges landed; 15.80 at 19:42 CT",
     "caps": "October hard stop $16.50 not passed; ~$3.7-3.9 of $20 left for the bedroom reshoot"
+  },
+  "owner_share_image": {
+    "path": "/workspace/gj-owner-share/winchester-depth-prior-geometry.png (box only; corpus room, no bedroom)",
+    "what": "Winchester held-out view (COLMAP image index 72), 480 px: rows = no prior / with prior; columns = splat RGB (SH DC) | inverse depth (turbo) | normals from rendered depth. Rendered on the box CPU from the downloaded 400K PLYs (gsplat 1.4.0 projection + tile intersection, CPU torch front-to-back compositing with antialiased compensation; script /workspace/gj-pipe03/geom_panel.py).",
+    "reading": "Without the prior the depth and normals are full of floater speckle but the structure is right (far wall, nearer pillars). With the prior the wall becomes a smooth plane and the speckle disappears, but the depth is flattened into a bowl (wall/pillar separation lost) and the RGB smears (doors and figures ghost). So the losses regularise geometry as intended, but the prior/weights override photometric detail."
   }
 }
