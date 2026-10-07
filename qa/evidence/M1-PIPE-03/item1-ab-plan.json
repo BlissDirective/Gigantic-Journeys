@@ -90,5 +90,5 @@
     "cd services/reconstruction && modal run modal_app.py::render_ab --clips rooms/medieval-great-hall-winchester,rooms/historic-house-eldon-house,rooms/mosque-prayer-hall-umayyad,tabletop/lego-paranal-observatory --arms classic-default,antialiased-mcmc --max-runs 8",
     "modal run modal_app.py::owner_retrain --capture room-01 --profiles quality-30k --rasterize-mode classic --tag-suffix ab-classic-400k"
   ],
-  "status": "planned"
+  "status": "run 2026-10-06 18:46-19:03 CT: 9 arms done; result MIXED -> no default flip; see item1-ab-results.json"
 }

@@ -161,7 +161,9 @@ class ReconstructionConfig:
     # Render-quality knobs, both commercial-safe in gsplat (capture-render-quality-v1):
     # "antialiased" = Mip-Splatting opacity compensation (alias-free at any zoom);
     # "mcmc" densification relocates dead Gaussians (fewer floaters at a fixed budget).
-    # Defaults preserve current behaviour; flip after the corpus A/B (render_quality.py).
+    # Corpus A/B 2026-10-06 (qa/evidence/M1-PIPE-03/item1-ab-results.json): antialiased+mcmc
+    # won PSNR 4/4 but lost LPIPS 4/4 -> mixed, no flip; single-factor arms decide next.
+    # Shipping recipes still train antialiased via trainer.recipe_rasterize_mode.
     rasterize_mode: str = "classic"  # "classic" | "antialiased"
     densify_strategy: str = "default"  # "default" | "mcmc"
     # Monocular depth prior for the DN-Splatter-style depth/normal losses (items 2+3).

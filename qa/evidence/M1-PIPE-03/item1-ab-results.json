@@ -1,0 +1,183 @@
+{
+  "ticket": "M1-PIPE-03",
+  "item": "capture-render-quality-v1 item 1 (gsplat antialiased + MCMC densification)",
+  "date": "2026-10-06",
+  "by": "gj-operator",
+  "privacy": "Metrics and text only. Bedroom (owner-room-01) splats/renders stay on the box (chmod 700) and the private gj-corpus:/owner-capture/room-01/ volume (AUTH #046).",
+  "setup": {
+    "recipe": "quality-30k (30K iters, bilateral grid, scale reg) at the 400K display budget (growth limit in training + hard cap in ns_finish, no post-prune)",
+    "gpu": "L40S",
+    "nerfstudio": "1.1.5",
+    "gsplat": "1.4.0",
+    "held_out": "every 8th frame, scored by ns_finish with the trained rasterize mode",
+    "launch": "modal_app.py::render_ab (corpus) + owner_retrain --rasterize-mode classic (bedroom) from c82b2de",
+    "floater_proxy": "share of splats that are isolated (<4 neighbours in 3x3x3 voxels), giant or needle (tools/weak_regions.py statistics); corpus PLYs are in nerfstudio's normalised frame, so thresholds scale with the room extent E (voxel E/60, giant E/25, needle ratio>9.5 & >E/120), identical for both arms of a room; lower is better"
+  },
+  "corpus": {
+    "medieval-great-hall-winchester": {
+      "classic-default": {
+        "psnr": 24.2045,
+        "ssim": 0.8411,
+        "lpips": 0.2461,
+        "splats": 395788,
+        "floater_proxy": 0.0286,
+        "isolated": 0.0206,
+        "giant": 0.0078,
+        "needle": 0.0092,
+        "wall_s": 684.3,
+        "cost_usd": 0.4669
+      },
+      "antialiased-mcmc": {
+        "psnr": 24.3851,
+        "ssim": 0.8532,
+        "lpips": 0.2672,
+        "splats": 378578,
+        "floater_proxy": 0.0191,
+        "isolated": 0.0022,
+        "giant": 0.0026,
+        "needle": 0.0167,
+        "wall_s": 785.0,
+        "cost_usd": 0.5356
+      }
+    },
+    "historic-house-eldon-house": {
+      "classic-default": {
+        "psnr": 23.9861,
+        "ssim": 0.8,
+        "lpips": 0.2175,
+        "splats": 393377,
+        "floater_proxy": 0.0193,
+        "isolated": 0.0082,
+        "giant": 0.0042,
+        "needle": 0.0103,
+        "wall_s": 743.7,
+        "cost_usd": 0.5075
+      },
+      "antialiased-mcmc": {
+        "psnr": 24.2977,
+        "ssim": 0.8428,
+        "lpips": 0.2201,
+        "splats": 381800,
+        "floater_proxy": 0.028,
+        "isolated": 0.0027,
+        "giant": 0.0061,
+        "needle": 0.023,
+        "wall_s": 776.8,
+        "cost_usd": 0.53
+      }
+    },
+    "mosque-prayer-hall-umayyad": {
+      "classic-default": {
+        "psnr": 22.6353,
+        "ssim": 0.8559,
+        "lpips": 0.1078,
+        "splats": 387707,
+        "floater_proxy": 0.0285,
+        "isolated": 0.0144,
+        "giant": 0.0049,
+        "needle": 0.0146,
+        "wall_s": 764.4,
+        "cost_usd": 0.5216
+      },
+      "antialiased-mcmc": {
+        "psnr": 22.8235,
+        "ssim": 0.8487,
+        "lpips": 0.142,
+        "splats": 361736,
+        "floater_proxy": 0.0257,
+        "isolated": 0.0029,
+        "giant": 0.0019,
+        "needle": 0.0228,
+        "wall_s": 884.9,
+        "cost_usd": 0.6038
+      }
+    },
+    "lego-paranal-observatory": {
+      "classic-default": {
+        "psnr": 25.814,
+        "ssim": 0.9408,
+        "lpips": 0.0601,
+        "splats": 319071,
+        "floater_proxy": 0.0264,
+        "isolated": 0.0157,
+        "giant": 0.003,
+        "needle": 0.011,
+        "wall_s": 757.1,
+        "cost_usd": 0.5166
+      },
+      "antialiased-mcmc": {
+        "psnr": 26.3015,
+        "ssim": 0.9406,
+        "lpips": 0.0783,
+        "splats": 380362,
+        "floater_proxy": 0.0165,
+        "isolated": 0.0018,
+        "giant": 0.005,
+        "needle": 0.0131,
+        "wall_s": 866.5,
+        "cost_usd": 0.5913
+      }
+    }
+  },
+  "corpus_summary": {
+    "antialiased_mcmc_wins_of_4": {
+      "psnr": 4,
+      "ssim": 2,
+      "lpips": 0,
+      "floater_proxy": 3
+    },
+    "mean_psnr_delta_db": 0.292,
+    "lpips_delta_per_room": {
+      "medieval-great-hall-winchester": 0.0211,
+      "historic-house-eldon-house": 0.0026,
+      "mosque-prayer-hall-umayyad": 0.0342,
+      "lego-paranal-observatory": 0.0182
+    }
+  },
+  "bedroom_owner_room_01": {
+    "classic-default": {
+      "psnr": 24.9343,
+      "ssim": 0.9392,
+      "lpips": 0.1257,
+      "splats": 398370,
+      "floater_proxy": 0.0414,
+      "isolated": 0.0333,
+      "cost_usd": 0.4993,
+      "run": "this A/B (2026-10-06)"
+    },
+    "antialiased-default": {
+      "psnr": 24.8509,
+      "ssim": 0.9417,
+      "lpips": 0.1244,
+      "splats": 399165,
+      "floater_proxy": 0.0347,
+      "isolated": 0.0272,
+      "cost_usd": 0.504,
+      "run": "M1-PIPE-02 (2026-10-05), same 29 held-out views"
+    },
+    "antialiased-mcmc": {
+      "psnr": 24.103,
+      "ssim": 0.9296,
+      "lpips": 0.1708,
+      "splats": 384052,
+      "floater_proxy": 0.0153,
+      "isolated": 0.004,
+      "cost_usd": 0.5371,
+      "run": "M1-PIPE-02 (2026-10-05), same 29 held-out views"
+    }
+  },
+  "unity_path": "see unity_path_bedroom (added when scored); the shipped GJSplatUtilities.compute always applies gsplat antialiased opacity compensation, so a classic-trained splat is mis-matched on device unless a shader branch is added",
+  "decision": {
+    "rule": "Flip a knob only if the arm wins held-out LPIPS on >=3/4 corpus rooms without a mean PSNR loss >0.3 dB and without raising the floater proxy; if mixed, run single-factor arms before flipping.",
+    "result": "MIXED. antialiased+mcmc wins PSNR 4/4 (mean +0.29 dB) and the floater proxy 3/4 (isolated splats -75..-89%), but LOSES LPIPS 4/4 (+0.003..+0.034) -> fails the LPIPS gate.",
+    "flip": "NONE. ReconstructionConfig defaults stay rasterize_mode='classic', densify_strategy='default'. The measured shipping recipes (quality-30k*, budget profiles) keep training antialiased via recipe_rasterize_mode, which matches the AA-only Unity shader.",
+    "attribution": "Bedroom single-factor evidence (same 29 views): antialiased-default vs classic-default = LPIPS 0.1244 vs 0.1257, PSNR -0.08 dB, proxy 0.035 vs 0.041 (AA neutral-to-better); MCMC is the LPIPS loser (bedroom 0.171; PSNR -0.75 dB) while cutting isolated floaters ~7x. Working hypothesis: MCMC at a fixed 400K cap trades fine detail (LPIPS) for fewer floaters / higher PSNR; antialiased is neutral.",
+    "next": "Single-factor arms on the 4 corpus rooms: antialiased-default (4 runs, ~$2.2) decides the rasterize_mode default; classic-mcmc (4 runs, ~$2.2) only if MCMC is to be reconsidered (e.g. with tuned noise/opacity reg). Not run: would exceed today's $7 hard stop (this A/B ~$5.1 est)."
+  },
+  "spend_usd": {
+    "sum_of_run_records": 4.7726,
+    "watchdog_container_time_estimate": 5.14,
+    "modal_metered_note": "modal billing summary still showed 6.8959 (pre-run) at 19:06 CT; metering lags ~1 h",
+    "cap": "hard stop $7 (parent turn-2), Modal $20/mo, AUTH #045"
+  }
+}
