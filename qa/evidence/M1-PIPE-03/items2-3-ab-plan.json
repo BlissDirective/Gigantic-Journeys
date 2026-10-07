@@ -9,8 +9,14 @@
     "dn": "antialiased-default-dn: same + depth_prior=depth-anything-v2-small (Pearson inverse-depth x0.2, depth-normal consistency x0.1, normal TV x0.05, from step 500)"
   },
   "rooms": {
-    "corpus": ["medieval-great-hall-winchester", "historic-house-eldon-house"],
-    "corpus_not_run": ["mosque-prayer-hall-umayyad", "lego-paranal-observatory"],
+    "corpus": [
+      "medieval-great-hall-winchester",
+      "historic-house-eldon-house"
+    ],
+    "corpus_not_run": [
+      "mosque-prayer-hall-umayyad",
+      "lego-paranal-observatory"
+    ],
     "why_two": "No antialiased-default 400K corpus baseline exists on the volume, so each room needs 2 runs. 4 rooms x 2 = 8 runs (~$5.0) would end October near $17.2 > $16.50. Picked the two indoor rooms closest to a bedroom.",
     "bedroom_owner_room_01": "dn arm only (AUTH #046, private; metrics only in the repo); baseline = M1-PIPE-02 quality-30k-400k antialiased-default on the same 29 held-out views (24.85 / 0.942 / 0.124, Unity path 21.71 dB)"
   },
@@ -32,5 +38,5 @@
     "hard_stop": "watchdog stops both apps at metered >= $16.50 or container-time estimate >= $3.90",
     "daily_halt": "$50/day not approached (today ~ $9.4 incl. this run)"
   },
-  "status": "planned"
+  "status": "run 2026-10-06 19:17-19:39 CT: 5 runs done; fails the rule on every room -> no flip; see items2-3-ab-results.json"
 }

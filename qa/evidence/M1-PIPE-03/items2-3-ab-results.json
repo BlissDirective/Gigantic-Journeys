@@ -1,0 +1,117 @@
+{
+  "ticket": "M1-PIPE-03",
+  "items": "capture-render-quality-v1 items 2+3 A/B (Depth Anything V2 Small prior + depth/normal losses)",
+  "date": "2026-10-06",
+  "by": "gj-operator",
+  "privacy": "Metrics and text only. Bedroom splats/renders stay on the box (chmod 700) and the private volume; the prior maps lived only in the run's temp dir; no bedroom geometry panels were written (AUTH #046).",
+  "setup": "quality-30k, antialiased, default densification, 400K budget, L40S, launched 19:17 CT from 8261c90. dn weights: Pearson(inverse depth vs DA-V2-Small disparity) 0.2, depth-normal consistency 0.1, normal TV 0.05, from step 500, alpha>0.5 mask. Pre-registered rule in items2-3-ab-plan.json.",
+  "corpus": {
+    "medieval-great-hall-winchester": {
+      "antialiased-default": {
+        "psnr": 24.1483,
+        "ssim": 0.8427,
+        "lpips": 0.2496,
+        "splats": 397208,
+        "floater_proxy": 0.0224,
+        "isolated": 0.0132,
+        "giant": 0.0052,
+        "needle": 0.0095,
+        "wall_s": 702.5,
+        "cost_usd": 0.4794
+      },
+      "antialiased-default-dn": {
+        "psnr": 20.5809,
+        "ssim": 0.7701,
+        "lpips": 0.4743,
+        "splats": 387250,
+        "floater_proxy": 0.0119,
+        "isolated": 0.0012,
+        "giant": 0.0009,
+        "needle": 0.0106,
+        "wall_s": 1026.3,
+        "cost_usd": 0.7003,
+        "dn_applied_steps": 29500,
+        "dn_frames_with_prior": 131
+      }
+    },
+    "historic-house-eldon-house": {
+      "antialiased-default": {
+        "psnr": 24.098,
+        "ssim": 0.7979,
+        "lpips": 0.217,
+        "splats": 396464,
+        "floater_proxy": 0.0138,
+        "isolated": 0.0025,
+        "giant": 0.0032,
+        "needle": 0.0099,
+        "wall_s": 773.3,
+        "cost_usd": 0.5277
+      },
+      "antialiased-default-dn": {
+        "psnr": 18.7043,
+        "ssim": 0.6017,
+        "lpips": 0.4584,
+        "splats": 379132,
+        "floater_proxy": 0.015,
+        "isolated": 0.0018,
+        "giant": 0.0013,
+        "needle": 0.0128,
+        "wall_s": 1072.5,
+        "cost_usd": 0.7318,
+        "dn_applied_steps": 29500,
+        "dn_frames_with_prior": 217
+      }
+    }
+  },
+  "bedroom_owner_room_01": {
+    "antialiased-default": {
+      "psnr": 24.8509,
+      "ssim": 0.9417,
+      "lpips": 0.1244,
+      "splats": 399165,
+      "floater_proxy": 0.0347,
+      "isolated": 0.0272,
+      "giant": 0.0129,
+      "needle": 0.0077,
+      "unity_path": {
+        "psnr_unity_vs_gt": 21.712,
+        "psnr_gsplat_vs_gt": 24.849,
+        "psnr_unity_vs_gsplat": 25.622
+      },
+      "run": "M1-PIPE-02 (2026-10-05), same 29 held-out views"
+    },
+    "antialiased-default-dn": {
+      "psnr": 24.3189,
+      "ssim": 0.9254,
+      "lpips": 0.1661,
+      "splats": 392285,
+      "floater_proxy": 0.018,
+      "isolated": 0.0014,
+      "giant": 0.0011,
+      "needle": 0.016,
+      "unity_path": {
+        "psnr_unity_vs_gt": 22.097,
+        "psnr_gsplat_vs_gt": 24.317,
+        "psnr_unity_vs_gsplat": 27.363
+      },
+      "dn_applied_steps": 29500,
+      "dn_frames_with_prior": 200,
+      "wall_s": 980.2,
+      "cost_usd": 0.6688,
+      "run": "this A/B"
+    }
+  },
+  "decision": {
+    "rule": "flip depth_prior on only if, on every evaluated room, the floater proxy drops AND LPIPS worsens by <= +0.005, AND mean PSNR change >= -0.3 dB",
+    "result": "FAILS on every room. LPIPS worsens +0.225 (Winchester), +0.241 (Eldon), +0.042 (bedroom); PSNR -3.57 / -5.39 / -0.53 dB. Floater proxy drops on Winchester (-47%) and the bedroom (-48%) but rises on Eldon (+9%).",
+    "flip": "NONE. ReconstructionConfig.depth_prior stays 'none'.",
+    "notable": "Bedroom through the Unity path improves: 22.10 vs 21.71 dB vs ground truth, and Unity-vs-gsplat agreement rises 25.62 -> 27.36 dB. The dn splat has ~95% fewer isolated and ~90% fewer giant splats, which the phone renderer handles badly. The geometry signal is real, but at these weights it costs too much appearance.",
+    "diagnosis_open": "The corpus collapse (-3.6/-5.4 dB) is far larger than DN-Splatter reports. Suspects to check on CPU before any more GPU: (1) prior weights too strong for 30K/400K (Pearson 0.2 from step 500; one corpus room started at raw Pearson loss ~0.95 = near-zero correlation); (2) prior/frame misalignment from nerfstudio's undistortion crop (the prior is computed on the raw distorted frame); (3) normal consistency against upsampled ~518-px prior normals over-smoothing detail. Next attempt: weights /4, start at 3-5K steps, sample-check DA-V2 disparity sign/alignment on box CPU."
+  },
+  "geometry_panels": "ns_finish --geometry-renders failed in-container (pipeline left in train mode after eval -> SplatfactoModel.optimizers missing); fixed in this branch (pipeline.eval()). The corpus sanity panel is rendered on the box CPU from the downloaded PLYs instead.",
+  "spend_usd": {
+    "sum_of_run_records": 3.108,
+    "modal_metered": "12.18 before (19:17 CT); reads 15.80-16.34 during/after the run (19:36-19:42 CT) as late item-1 charges landed; 15.80 at 19:42 CT",
+    "caps": "October hard stop $16.50 not passed; ~$3.7-3.9 of $20 left for the bedroom reshoot"
+  }
+}

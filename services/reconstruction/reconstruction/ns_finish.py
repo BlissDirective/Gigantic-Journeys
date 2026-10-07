@@ -184,6 +184,9 @@ def geometry_renders(pipeline, out_dir: Path, views: int = 3) -> int:
 
     cameras = pipeline.datamanager.eval_dataset.cameras
     out_dir.mkdir(parents=True, exist_ok=True)
+    # get_average_eval_image_metrics leaves the pipeline in train mode; Splatfacto's
+    # training-mode get_outputs touches optimizers that eval_setup never builds.
+    pipeline.eval()
     written = 0
     for i in pick_views(len(cameras), views):
         cam = cameras[i : i + 1].to(pipeline.device)

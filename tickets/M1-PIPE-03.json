@@ -111,6 +111,11 @@
       "date": "2026-10-06",
       "event": "Item-1 corpus A/B run (9 arms, 400K, quality-30k, L40S; 18:46-19:03 CT): antialiased+mcmc vs classic-default won PSNR 4/4 (mean +0.29 dB) and floater proxy 3/4 but lost LPIPS 4/4 -> MIXED per the decision rule -> no ReconstructionConfig default flip. Bedroom classic-default 24.93/0.939/0.126 vs antialiased-default 24.85/0.942/0.124 vs mcmc 24.10/0.930/0.171. Spend ~$4.77 run records / ~$5.14 container-time est (hard stop $7). Next: antialiased-default single-factor arms (~$2.2) need a fresh go. Evidence: qa/evidence/M1-PIPE-03/item1-ab-results.json.",
       "by": "gj-operator"
+    },
+    {
+      "date": "2026-10-06",
+      "event": "Items 2+3 A/B (5 runs, 19:17-19:39 CT): shipping recipe vs + Depth Anything V2 Small prior + depth/normal losses on Winchester, Eldon House and the bedroom (#046). Fails the pre-registered rule on every room (LPIPS +0.225/+0.241/+0.042; PSNR -3.57/-5.39/-0.53 dB) -> depth_prior stays 'none'. Floater proxy -47%/+9%/-48%; bedroom Unity path improves 21.71 -> 22.10 dB. Two of four corpus rooms only (budget). Spend $3.11 run records; Modal October ~$15.8-16.3 (hard stop $16.50 not passed). Fixed ns_finish geometry renders (pipeline.eval()) and the empty Unity dicts in item1-ab-results.json.",
+      "by": "gj-operator"
     }
   ]
 }

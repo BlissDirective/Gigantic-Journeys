@@ -182,8 +182,18 @@
   },
   "unity_path_bedroom": {
     "method": "tools.unity_path_eval: SplatRoomScene.RunImport + RunPoseRenders (shipped GJ shaders, SH2, width 899, -force-vulkan) from the 29 held-out poses, scored vs ground truth and vs the arm's own gsplat render. Renders and imported assets stayed on the box and were deleted from the Unity project afterwards (AUTH #046).",
-    "classic-default": {},
-    "antialiased-default": {},
+    "classic-default": {
+      "psnr_unity_vs_gt": 21.583,
+      "psnr_gsplat_vs_gt": 24.932,
+      "psnr_unity_vs_gsplat": 25.051,
+      "views": 29
+    },
+    "antialiased-default": {
+      "psnr_unity_vs_gt": 21.712,
+      "psnr_gsplat_vs_gt": 24.849,
+      "psnr_unity_vs_gsplat": 25.622,
+      "views": 29
+    },
     "reading": "The shipped GJSplatUtilities.compute always applies gsplat's antialiased opacity compensation. Through it the classic splat scores 0.13 dB lower vs ground truth and drifts further from its own gsplat render (25.05 vs 25.62 dB) even though classic is +0.08 dB in gsplat. A classic default for shipped rooms would need a shader branch; shipping recipes stay antialiased.",
     "corpus": "not scored in Unity (no room descriptors for the corpus clips; gsplat metrics only)"
   }
