@@ -18,7 +18,9 @@
   "deliverables": [
     "services/reconstruction/reconstruction/render_quality.py (nerfstudio 1.1.5-confirmed flag strings; MCMC via ns_train_capped --mcmc-cap)",
     "services/reconstruction/reconstruction/trainer.py (pass splatfacto_quality_args into ns_train_capped)",
-    "qa/evidence/M1-PIPE-03/item1-ab-plan.json (A/B plan + cost estimate; no GPU until headroom confirmed)"
+    "qa/evidence/M1-PIPE-03/item1-ab-plan.json (A/B plan + cost estimate; no GPU until headroom confirmed)",
+    "services/reconstruction/tools/runpod_mapanything.py + runpod_mapanything_job.py + runpod_mapanything_setup.sh (item 6 phase 1 on RunPod Secure, corpus only, metrics only)",
+    "qa/evidence/M1-PIPE-03/item6-mapanything-phase1-results.json"
   ],
   "acceptance_tests": [
     {
@@ -80,7 +82,7 @@
   "branch": "ticket/M1-PIPE-03-capture-render-wiring",
   "pr": null,
   "created": "2026-10-06",
-  "updated": "2026-10-06",
+  "updated": "2026-10-14",
   "history": [
     {
       "date": "2026-10-06",
@@ -125,6 +127,11 @@
     {
       "date": "2026-10-06",
       "event": "Item 6 MapAnything (code, wiring, licence and cost only; no GPU). sfm='mapanything' (default stays colmap) -> FeedForwardSfM + MapAnythingReconstructor: ARKit intrinsics + metric poses as conditioning, point map moved into the ARKit world by Sim(3), confidence-gated seeds in sparse/0 for Splatfacto init. Only facebook/map-anything-apache @00f9c245 is accepted; CC-BY-NC variants are refused. Ship is BLOCKED pending counsel (AUTH #049): the Apache mix (6 datasets) includes ScanNet++ v2 (non-commercial terms) and MPSD (unverified). Separate Modal app gj-mapanything-ab (phase-1 front-end A/B, --gpu-go gated, not run). Cost: phase 1 Modal $1.79 / RunPod Secure ~$1.23; all phases Modal $5.74 / RunPod Secure ~$3.33. CPU smoke of the adapter glue on 8 Winchester frames (real preprocess_inputs, stub checkpoint) passed; real weights don't fit the box (4.9 GB vs 3.7 GB disk). Evidence: qa/evidence/M1-PIPE-03/item6-mapanything-licence.json, item6-mapanything-ab-plan.json.",
+      "by": "gj-operator"
+    },
+    {
+      "date": "2026-10-14",
+      "event": "Item 6 phase 1 run on RunPod Secure L40S (US-TX-4), 4 corpus rooms x 2 arms, no training, internal eval (pod destroyed). Pass rule FAILS 0/4: unconditioned ATE/E 0.228/0.241/0.036/0.224 vs <=0.02. Pose-conditioned seed density > GLOMAP 4/4, front-end 62-111 s vs GLOMAP 372-847 s. Spend $0.27 RunPod, $0 Modal; no pods left.",
       "by": "gj-operator"
     }
   ]
