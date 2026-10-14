@@ -289,6 +289,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--sensor-depth-dir", default="")
     parser.add_argument("--dn-weight-scale", type=float, default=1.0)
     parser.add_argument("--dn-start-step", type=int, default=500)
+    parser.add_argument("--deblur-samples", type=int, default=1)
+    parser.add_argument("--appearance", default="none", choices=("none", "splatfacto-w"))
     args = parser.parse_args(own)
     stats = install_growth_limit(args.budget)
     if args.mcmc_cap > 0:
@@ -308,6 +310,12 @@ def main(argv: list[str] | None = None) -> int:
                 NORMAL_TV_WEIGHT * k,
             ),
         )
+    if args.deblur_samples > 1 or args.appearance != "none":
+        # Last: wraps get_outputs outside the depth/normal hook, so each sub-frame render
+        # still records its intrinsics and the averaged RGB feeds every loss.
+        from .deblur_appearance_torch import install_deblur_appearance
+
+        install_deblur_appearance(stats, args.deblur_samples, args.appearance != "none")
 
     from nerfstudio.scripts.train import entrypoint
 

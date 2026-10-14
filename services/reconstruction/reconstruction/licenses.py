@@ -55,6 +55,16 @@ MANIFEST: tuple[Component, ...] = (
         "monocular depth prior for depth/normal losses (Small only; Base/Large/Giant are "
         "CC-BY-NC, method-only, AUTH #049)",
     ),
+    Component(
+        "BAD-Gaussians (method reimplementation)",
+        "Apache-2.0",
+        "motion-blur-aware training, deblur_samples (item 4); no upstream code/weights copied",
+    ),
+    Component(
+        "Splatfacto-W (method reimplementation)",
+        "Apache-2.0",
+        "per-image appearance / exposure / white balance, appearance (item 5); method only",
+    ),
 )
 
 

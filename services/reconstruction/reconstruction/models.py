@@ -138,6 +138,7 @@ class EnvironmentPackage:
 # Allowed ReconstructionConfig.depth_prior values; keep in sync with
 # depth_prior_cache.DEPTH_MODELS (asserted by tests/test_depth_prior_cache.py).
 DEPTH_PRIORS = ("none", "depth-anything-v2-small")
+APPEARANCE_MODES = ("none", "splatfacto-w")
 
 
 @dataclass(frozen=True)
@@ -174,6 +175,12 @@ class ReconstructionConfig:
     # 2026-10-06 A/B used 1.0 / 500 and over-smoothed; the proposed retry is 0.25 / 4000.
     depth_prior_weight_scale: float = 1.0
     depth_prior_start_step: int = 500
+    # Items 4+5 (method-only reimplementations, AUTH #049; deblur_appearance_torch).
+    # deblur_samples: BAD-Gaussians in-exposure sub-frames per training view (1 = off;
+    # 5-10 for handheld phone video, ~N x train time). appearance: "splatfacto-w" =
+    # per-image embedding -> affine colour (exposure / white balance), canonical at eval.
+    deblur_samples: int = 1
+    appearance: str = "none"  # "none" | "splatfacto-w"
 
     def __post_init__(self) -> None:
         if self.splat_budget <= 0:
@@ -192,6 +199,10 @@ class ReconstructionConfig:
             raise ReconstructionError("depth_prior_weight_scale must be in (0, 4]")
         if self.depth_prior_start_step < 0:
             raise ReconstructionError("depth_prior_start_step must be >= 0")
+        if not 1 <= self.deblur_samples <= 16:
+            raise ReconstructionError("deblur_samples must be in [1, 16]")
+        if self.appearance not in APPEARANCE_MODES:
+            raise ReconstructionError(f"unknown appearance: {self.appearance!r}")
         if self.max_package_bytes <= 0:
             raise ReconstructionError("max_package_bytes must be positive")
 
