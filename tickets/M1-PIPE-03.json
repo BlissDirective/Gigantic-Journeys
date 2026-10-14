@@ -20,7 +20,9 @@
     "services/reconstruction/reconstruction/trainer.py (pass splatfacto_quality_args into ns_train_capped)",
     "qa/evidence/M1-PIPE-03/item1-ab-plan.json (A/B plan + cost estimate; no GPU until headroom confirmed)",
     "services/reconstruction/tools/runpod_mapanything.py + runpod_mapanything_job.py + runpod_mapanything_setup.sh (item 6 phase 1 on RunPod Secure, corpus only, metrics only)",
-    "qa/evidence/M1-PIPE-03/item6-mapanything-phase1-results.json"
+    "qa/evidence/M1-PIPE-03/item6-mapanything-phase1-results.json",
+    "services/reconstruction/reconstruction/deblur_appearance_torch.py (items 4+5, method-only BAD-Gaussians deblur + Splatfacto-W appearance; default off via ReconstructionConfig.deblur_samples / appearance)",
+    "qa/evidence/M1-PIPE-03/items4-5-plan.json (licence + pre-registered A/B + Modal vs RunPod cost)"
   ],
   "acceptance_tests": [
     {
@@ -132,6 +134,11 @@
     {
       "date": "2026-10-14",
       "event": "Item 6 phase 1 run on RunPod Secure L40S (US-TX-4), 4 corpus rooms x 2 arms, no training, internal eval (pod destroyed). Pass rule FAILS 0/4: unconditioned ATE/E 0.228/0.241/0.036/0.224 vs <=0.02. Pose-conditioned seed density > GLOMAP 4/4, front-end 62-111 s vs GLOMAP 372-847 s. Spend $0.27 RunPod, $0 Modal; no pods left.",
+      "by": "gj-operator"
+    },
+    {
+      "date": "2026-10-14",
+      "event": "Items 4+5 wired default-off (method-only reimplementations, Apache-2.0 upstreams, no weights): deblur_samples / appearance -> ns_train_capped --deblur-samples / --appearance -> deblur_appearance_torch. Tests + licence manifest + A/B plan (items4-5-plan.json). No GPU, $0.",
       "by": "gj-operator"
     }
   ]
