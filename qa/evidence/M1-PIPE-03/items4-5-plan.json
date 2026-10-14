@@ -1,0 +1,58 @@
+{
+  "ticket": "M1-PIPE-03",
+  "item": "capture-render-quality-v1 items 4+5: BAD-Gaussians deblur + Splatfacto-W appearance",
+  "date": "2026-10-14",
+  "status": "WIRED default-off, code + tests only. No GPU run; A/B needs an Owner go-ahead.",
+  "wiring": {
+    "config": "ReconstructionConfig.deblur_samples (1 = off; 2..16) and ReconstructionConfig.appearance ('none' | 'splatfacto-w'); both validated, defaults unchanged.",
+    "cli": "render_quality.deblur_appearance_own_args(config) -> ns_train_capped own args '--deblur-samples N' / '--appearance splatfacto-w'; GsplatTrainer passes them after the depth/normal args and records both in metrics.",
+    "torch": "reconstruction/deblur_appearance_torch.py, installed last in ns_train_capped (wraps SplatfactoModel.get_outputs outside the depth/normal hook, then get_loss_dict). Training views only; eval and novel views render the recorded pose with the canonical identity colour transform.",
+    "deblur": "Per training image learnable start/end se(3) offsets (zero init = sharp model). N sub-frame poses linear in the Lie algebra (the small-angle form of exposure_trajectory.sample_linear; test asserts equality with slerp/lerp to 1e-6) are rendered and averaged (uniform exposure_trajectory.exposure_weights). The mid-exposure render goes last so gsplat densify statistics come from the recorded pose.",
+    "appearance": "Per image 32-d embedding -> MLP(64) -> 3x3 matrix + bias (exposure, white balance, colour drift), last layer zero-init so it starts at identity, L2 pull to identity (1e-2). Matches appearance.AffineColor / AppearanceModel.transform_for(None) = identity for novel views.",
+    "optimiser": "Private Adam (deblur lr 5e-4, appearance lr 1e-3) stepped lazily at the start of the next training forward, so nerfstudio's optimizer config is untouched.",
+    "tests": "tests/test_deblur_appearance.py (CI, stdlib: defaults off, CLI args, validation, licence manifest, render order) + tests/test_deblur_appearance_torch.py (skipped without torch; run on the box CPU torch 2.x: 11 pass): so3 exp vs axis-angle, trajectory == exposure_trajectory.sample_linear, zero init sharp + canonical, learns a -30% exposure gain, deblur gradients reach the trajectory.",
+    "not_verified": "The nerfstudio 1.1.5 monkeypatch itself has not run on a GPU (no nerfstudio on the box). The first A/B run is the integration test; a 300-step smoke per arm is in the plan."
+  },
+  "licence": {
+    "BAD-Gaussians": {
+      "upstream": "github.com/WU-CVGL/BAD-Gaussians",
+      "spdx": "Apache-2.0 (GitHub licence API, checked 2026-10-14)",
+      "weights": "none; per-scene optimisation only",
+      "use": "method-only reimplementation from the paper; no upstream code copied; no academic Inria 3DGS fork code (AUTH #049 boundary)"
+    },
+    "Splatfacto-W": {
+      "upstream": "github.com/KevinXu02/splatfacto-w",
+      "spdx": "Apache-2.0 (GitHub licence API, checked 2026-10-14)",
+      "weights": "none; per-scene optimisation only",
+      "use": "method-only reimplementation (embedding -> affine colour); Splatfacto-W's background model and SH-colour MLP are not used"
+    },
+    "manifest": "licenses.MANIFEST gains 'BAD-Gaussians (method reimplementation)' and 'Splatfacto-W (method reimplementation)', both Apache-2.0; assert_commercial_safe passes.",
+    "conclusion": "Ship-safe under AUTH #049. No counsel question."
+  },
+  "ab_plan": {
+    "recipe": "Shipping recipe: quality-30k, antialiased + default densify, 400K budget; held-out every 8th frame. Same baselines as item 6 phase 2 (Winchester, Eldon exist; Umayyad, Paranal missing).",
+    "smoke": "300 steps per new arm on Winchester first: losses finite, appearance_reg > 0, deblur applied_steps > 0. Abort the batch if it fails.",
+    "rooms": ["rooms/medieval-great-hall-winchester", "rooms/historic-house-eldon-house", "rooms/mosque-prayer-hall-umayyad", "tabletop/lego-paranal-observatory"],
+    "arms": {
+      "item5": "appearance=splatfacto-w",
+      "item4": "deblur_samples=5, trained on frames re-extracted WITHOUT blur rejection (the corpus extractor drops blurry frames, which hides the effect); baseline is also retrained on that same frame set"
+    },
+    "pass_rules_preregistered": {
+      "item5": "Scored with the canonical (identity) transform, which is what ships. PASS if PSNR >= baseline - 0.1 dB AND LPIPS <= baseline + 0.005 on >= 3/4 rooms AND floater proxy not worse on >= 3/4 AND cross-view colour consistency (std over held-out views of the mean per-channel residual) improves >= 10% on >= 2/4. Secondary, not gating: Splatfacto-W-style test-time embedding fit on the left half of each held-out view, scored on the right half.",
+      "item4": "Gate on the sharpest quartile of held-out views (Laplacian variance), since a sharp render is scored against blurred ground truth elsewhere. PASS if PSNR >= baseline - 0.1 dB on >= 3/4 rooms AND LPIPS <= baseline - 0.005 (must improve) on >= 3/4 AND render Laplacian variance >= baseline on >= 3/4 AND train wall <= 5x baseline. Also report all-views metrics and frames kept vs blur-rejected.",
+      "flip": "Only a passing arm becomes a candidate default, and only for the phone-video path; a combined 4+5 arm runs on the bedroom reshoot (Unity path scored) before any flip."
+    }
+  },
+  "cost_estimate_usd": {
+    "assumptions": "Baseline 12.5 min wall per run (Winchester 743 s, Modal L40S). Appearance ~1.05x. Deblur N=5 ~3.5-4x train (5 renders + backward per step) -> ~45 min. Modal L40S $1.95/h + ~15% CPU/mem = $2.24/h. RunPod Secure L40S $1.09/h all-in (API price 2026-10-14) + ~20 min pod setup per pod.",
+    "item5_4rooms": {"modal": 1.94, "runpod_secure": 1.3},
+    "item4_4rooms_N5": {"modal": 7.62, "runpod_secure": 3.7, "note": "includes 4 baselines retrained on the no-blur-rejection frames"},
+    "item4_lite_2rooms_N5_15k": {"modal": 1.9, "runpod_secure": 1.15},
+    "missing_baselines_umayyad_paranal": {"modal": 0.93, "runpod_secure": 0.45, "note": "shared with item 6 phase 2"},
+    "bedroom_reshoot_combined_arm": {"modal": 2.0, "runpod_secure": "n/a: bedroom stays in #046 storage (Modal only)"},
+    "total_corpus": {"modal": 10.49, "runpod_secure": 5.45},
+    "recommendation": "RunPod Secure for the corpus arms (about half of Modal; corpus is open-licence). Modal October is ~$15.4 of $20, with the remainder held for the reshoot."
+  },
+  "bedroom_reshoot": "Phone video at 30 fps indoors runs ~1/60-1/120 s exposures, so pans blur. Today the extractor drops blurry frames (fewer views, worse coverage behind furniture). With deblur on, the blur-rejection threshold can be relaxed and those frames kept as supervision; the 1-2 px pose error that blur adds is also bundle-adjusted. If the reshoot records ARKit poses (60 Hz) and per-frame exposure duration, the start/end offsets can be initialised from neighbouring ARKit poses +/- half the exposure instead of zero. Auto-exposure / white-balance drift over a 3-4 min sweep is exactly what appearance absorbs. Ask for the reshoot: steady slow pans, lights on, and keep exposure locked if the capture app allows. Bedroom data stays #046 private, Modal only, metrics only.",
+  "spend_usd": 0.0
+}

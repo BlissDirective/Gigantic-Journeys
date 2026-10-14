@@ -24,6 +24,7 @@ from .models import (
     read_ply_vertex_count,
 )
 from .render_quality import (
+    deblur_appearance_own_args,
     depth_normal_own_args,
     ns_train_capped_own_args,
     splatfacto_quality_args,
@@ -287,6 +288,7 @@ class GsplatTrainer:
                 str(budget),
                 *own_mcmc,
                 *depth_normal_own_args(config, work_dir),
+                *deblur_appearance_own_args(config),
                 "--",
                 "splatfacto",
                 "--data",
@@ -320,6 +322,8 @@ class GsplatTrainer:
             "rasterize_mode": config.rasterize_mode,
             "densify_strategy": config.densify_strategy,
             "depth_prior": config.depth_prior,
+            "deblur_samples": config.deblur_samples,
+            "appearance": config.appearance,
             "iterations": profile.iterations,
             "train_s": round(time.monotonic() - started, 2),
         }

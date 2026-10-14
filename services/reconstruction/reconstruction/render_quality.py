@@ -38,6 +38,8 @@ DN_WEIGHT_SCALE_FLAG = "--dn-weight-scale"
 DN_START_STEP_FLAG = "--dn-start-step"
 # Fixed locations inside the trainer's work_dir (written by depth_prior_cache.build_cache
 # / the ARKit depth exporter before training).
+DEBLUR_SAMPLES_FLAG = "--deblur-samples"
+APPEARANCE_FLAG = "--appearance"
 DEPTH_PRIOR_SUBDIR = "depth_prior"
 SENSOR_DEPTH_SUBDIR = "sensor_depth"
 
@@ -79,4 +81,14 @@ def depth_normal_own_args(config: ReconstructionConfig, work_dir: Path) -> list[
     sensor_dir = work_dir / SENSOR_DEPTH_SUBDIR
     if sensor_dir.is_dir():
         args += [SENSOR_DEPTH_DIR_FLAG, str(sensor_dir)]
+    return args
+
+
+def deblur_appearance_own_args(config: ReconstructionConfig) -> list[str]:
+    """Own-side ``ns_train_capped`` args for items 4+5 (deblur / appearance); ``[]`` = off."""
+    args: list[str] = []
+    if config.deblur_samples > 1:
+        args += [DEBLUR_SAMPLES_FLAG, str(config.deblur_samples)]
+    if config.appearance != "none":
+        args += [APPEARANCE_FLAG, config.appearance]
     return args
