@@ -33,12 +33,13 @@ from .prior_alignment import find_model_dir, read_colmap_cameras
 
 @dataclass
 class Plane:
-    label: str  # floor | ceiling | wall
+    label: str  # floor | ceiling (above every camera) | wall
     normal: list[float]  # world, unit, pointing into the room (toward the cameras)
     offset: float  # n . x + d = 0
     corners: list[list[float]]  # 4 world corners, CCW seen from the room
     inliers: int
     images: list[int]  # image ids that observe its inliers, sharpest first
+    fill: float = 1.0  # share of the rectangle's 16x16 cells holding inliers
 
     def to_json(self) -> dict:
         return asdict(self)
@@ -74,12 +75,18 @@ def ransac_plane(pts, iters: int, tol: float, rng, axis=None, max_angle_deg: flo
     if n is not None and mask.sum() >= 3:  # least-squares refit on inliers
         q = pts[mask]
         c = q.mean(0)
-        _u, _s, vt = np.linalg.svd(q - c)
+        _u, _s, vt = np.linalg.svd(q - c, full_matrices=False)
         n2 = vt[-1]
         if n2 @ n < 0:
             n2 = -n2
-        n, d = n2, -float(n2 @ c)
-        mask = np.abs(pts @ n + d) < tol
+        ok = True
+        if axis is not None:
+            kind, a = axis
+            c2 = abs(float(n2 @ a))
+            ok = c2 >= cos_tol if kind == "par" else c2 <= sin_tol
+        if ok:  # the refit must still satisfy the orientation constraint
+            n, d = n2, -float(n2 @ c)
+            mask = np.abs(pts @ n + d) < tol
     return n, d, mask
 
 
@@ -98,6 +105,24 @@ def plane_rectangle(pts, n, up):
     a0, a1 = np.percentile(a, [2, 98])
     b0, b1 = np.percentile(b, [2, 98])
     return [(c + x * u + y * v).tolist() for x, y in ((a0, b0), (a1, b0), (a1, b1), (a0, b1))]
+
+
+def rectangle_fill(pts, corners, cells: int = 16) -> float:
+    """Share of the rectangle's ``cells`` x ``cells`` grid with at least one inlier: a real
+    wall/floor fills its rectangle; a RANSAC plane threaded through clutter does not."""
+    import numpy as np
+
+    c = np.asarray(corners)
+    o, eu, ev = c[0], c[1] - c[0], c[3] - c[0]
+    lu, lv = np.linalg.norm(eu), np.linalg.norm(ev)
+    if lu < 1e-9 or lv < 1e-9:
+        return 0.0
+    a = (pts - o) @ (eu / lu) / lu
+    b = (pts - o) @ (ev / lv) / lv
+    m = (a >= 0) & (a < 1) & (b >= 0) & (b < 1)
+    ia, ib = (a[m] * cells).astype(int).tolist(), (b[m] * cells).astype(int).tolist()
+    occ = set(zip(ia, ib, strict=True))
+    return len(occ) / (cells * cells)
 
 
 def detect_planes(
@@ -135,13 +160,14 @@ def detect_planes(
             for v in tracks[i]:
                 seen[v] = seen.get(v, 0) + 1
         ims = sorted(seen, key=lambda v: (-(sharpness or {}).get(v, 0.0), -seen[v]))
-        planes.append(
-            Plane(label, n.tolist(), d, plane_rectangle(xyz[sel], n, up), int(len(sel)), ims)
-        )
+        corners = plane_rectangle(xyz[sel], n, up)
+        fill = round(rectangle_fill(xyz[sel], corners), 3)
+        planes.append(Plane(label, n.tolist(), d, corners, int(len(sel)), ims, fill))
         return pool[~mask]
 
+    cam_h = float(np.max([(rot @ c)[1] for c in centres.values()]))
     for label, band in (("floor", heights < np.percentile(heights, 30)),
-                        ("ceiling", heights > np.percentile(heights, 85))):  # fmt: skip
+                        ("ceiling", heights > max(np.percentile(heights, 85), cam_h))):  # fmt: skip
         pool = idx[band]
         n, d, mask = ransac_plane(xyz[pool], iters, tol, rng, ("par", up))
         if n is not None and mask.sum() >= min_in:
@@ -181,50 +207,67 @@ def bake_texture(
     model_dir: Path,
     frames_dir: Path,
     size=(512, 512),
-    top_k=3,
+    top_k=5,
     max_incidence_deg: float = 60.0,
+    max_candidates: int = 40,
+    min_valid: int = 1,
 ):
-    """Median of the ``top_k`` sharpest frames that see the whole rectangle in front of
-    the camera within ``max_incidence_deg`` of its normal, each warped to a ``size``
-    texture. Returns a PIL image or None (no frame sees it well: leave the plane to the
-    splats or to generative repair, stage 4)."""
+    """Mosaic texture: per texel, median of up to ``top_k`` of the sharpest frontal frames
+    (within ``max_incidence_deg`` of the normal, all corners in front of the camera) in
+    which that texel lands inside the frame. Partial views are fine; texels no frame saw
+    stay transparent (alpha 0) for the splats / generative repair (stage 4) to cover.
+    Returns an RGBA PIL image, or None if no frame qualifies."""
     import numpy as np
     from PIL import Image
 
-    cams = read_colmap_cameras(model_dir)
-    imgs = read_images_with_ids(model_dir)
     from .prior_alignment import read_colmap_images
 
+    cams = read_colmap_cameras(model_dir)
+    imgs = read_images_with_ids(model_dir)
     cam_of = {name: cid for name, (cid, _q, _t) in read_colmap_images(model_dir).items()}
     w, h = size
-    layers = []
     centre = np.mean(np.asarray(plane.corners), axis=0)
     normal = np.asarray(plane.normal)
     cos_max = np.cos(np.radians(max_incidence_deg))
-    for iid in plane.images:
-        if len(layers) >= top_k or iid not in imgs:
-            continue
+    layers, masks = [], []
+    for iid in plane.images[:max_candidates]:
+        if len(layers) >= top_k * 3 or iid not in imgs:
+            break
         name, q, t = imgs[iid]
-        cam = cams[cam_of[name]]
         r = quat_to_rot(q)
         to_cam = -r.T @ np.asarray(t) - centre
         if to_cam @ normal < cos_max * np.linalg.norm(to_cam):
             continue  # grazing view: the texture would smear
+        cam = cams[cam_of[name]]
         uv, z = project(intrinsics(cam), r, np.asarray(t), plane.corners)
-        if (z <= 0).any():
+        if (z <= 0).any() or not (frames_dir / name).exists():
             continue
-        if (uv < 0).any() or (uv[:, 0] > cam["width"]).any() or (uv[:, 1] > cam["height"]).any():
-            continue
+        # corner 0 -> texture bottom-left: matches the Unity quad UVs (SplatRoomLoader)
         coeffs = perspective_coeffs([(0, h), (w, h), (w, 0), (0, 0)], uv.tolist())
         with Image.open(frames_dir / name) as im:
-            layers.append(
-                np.asarray(
-                    im.convert("RGB").transform(size, Image.PERSPECTIVE, coeffs, Image.BILINEAR)
-                )
-            )
+            rgb = im.convert("RGB")
+        ones = Image.new("L", rgb.size, 255)
+        warped = np.asarray(rgb.transform(size, Image.PERSPECTIVE, coeffs, Image.BILINEAR))
+        valid = np.asarray(ones.transform(size, Image.PERSPECTIVE, coeffs, Image.NEAREST)) > 0
+        if valid.mean() < 0.05:
+            continue
+        layers.append(warped.astype(np.float32))
+        masks.append(valid)
     if not layers:
         return None
-    return Image.fromarray(np.median(np.stack(layers), axis=0).astype("uint8"))
+    stack = np.stack(layers)
+    m = np.stack(masks)
+    m &= np.cumsum(m, axis=0) <= top_k  # first top_k valid (sharpest) frames per texel
+    stack[~m] = np.nan
+    with np.errstate(all="ignore"):
+        import warnings
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", RuntimeWarning)
+            rgb = np.nanmedian(stack, axis=0)
+    alpha = np.where(m.sum(0) >= min_valid, 255, 0).astype(np.uint8)
+    rgb = np.nan_to_num(rgb).clip(0, 255).astype(np.uint8)
+    return Image.fromarray(np.dstack([rgb, alpha]), "RGBA")
 
 
 def perspective_coeffs(dst, src):

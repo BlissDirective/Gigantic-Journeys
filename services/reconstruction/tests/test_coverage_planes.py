@@ -114,3 +114,57 @@ def test_perspective_coeffs_roundtrip():
         den = c[6] * x + c[7] * y + 1
         assert abs((c[0] * x + c[1] * y + c[2]) / den - u) < 1e-9
         assert abs((c[3] * x + c[4] * y + c[5]) / den - v) < 1e-9
+
+
+def test_planes_fill_and_ceiling_above_cameras(tmp_path):
+    planes = pp.detect_planes(_model(tmp_path), max_walls=4, iters=400)
+    for p in planes:
+        assert p.fill > 0.8, (p.label, p.fill)  # real surfaces fill their rectangle
+    ys = {p.label: np.mean([c[1] for c in p.corners]) for p in planes if p.label != "wall"}
+    # the up sign follows the synthetic camera convention; the ceiling must sit on the far
+    # side of the cameras (y = 1.4) from the floor, never between floor and cameras
+    assert (ys["ceiling"] - 1.4) * (ys["floor"] - 1.4) < 0
+
+
+def test_rectangle_fill_rejects_diagonal_strip():
+    rng = np.random.default_rng(0)
+    corners = [(0, 0, 0), (1, 0, 0), (1, 0, 1), (0, 0, 1)]
+    full = np.c_[rng.uniform(0, 1, 4000), np.zeros(4000), rng.uniform(0, 1, 4000)]
+    s = rng.uniform(0, 1, 4000)
+    strip = np.c_[s, np.zeros(4000), s + rng.uniform(-0.02, 0.02, 4000)]
+    assert pp.rectangle_fill(full, corners) > 0.95
+    assert pp.rectangle_fill(strip, corners) < 0.2
+    assert pp.rectangle_fill(full, [(0, 0, 0)] * 4) == 0.0
+
+
+def test_bake_texture_mosaic_rgba(tmp_path):
+    from PIL import Image
+
+    d = _model(tmp_path)
+    frames = tmp_path / "frames"
+    frames.mkdir()
+    for i in range(24):
+        Image.new("RGB", (640, 480), (200, 60, 40)).save(frames / f"f{i:03d}.jpg", quality=95)
+    planes = pp.detect_planes(d, max_walls=4, iters=400)
+    wall = next(p for p in planes if p.label == "wall")
+    tex = pp.bake_texture(wall, d, frames, size=(64, 64))
+    assert tex is not None and tex.mode == "RGBA"
+    a = np.asarray(tex)
+    seen = a[..., 3] > 0
+    assert seen.any()
+    assert np.allclose(a[..., :3][seen].mean(0), [200, 60, 40], atol=12)
+    assert pp.bake_texture(wall, d, tmp_path / "missing", size=(64, 64)) is None
+
+
+def test_cleanup_keep_reason():
+    from tools import cleanup_proxies as cp
+
+    wall = {"label": "wall", "corners": [0, 0, 0, 1, 0, 0, 1, 2, 0, 0, 2, 0]}
+    strip = {"label": "wall", "corners": [0, 0, 0, 1, 0, 0, 1, 0.1, 0, 0, 0.1, 0]}
+    assert cp.keep_reason({"fill": 0.9}, wall, 0.35, 0.3) == ""
+    assert cp.keep_reason({"fill": 0.2}, wall, 0.35, 0.3).startswith("fill")
+    assert cp.keep_reason({"fill": 0.9}, strip, 0.35, 0.3).startswith("height")
+    assert (
+        cp.keep_reason({"fill": 0.9}, {"label": "floor", "corners": strip["corners"]}, 0.35, 0.3)
+        == ""
+    )

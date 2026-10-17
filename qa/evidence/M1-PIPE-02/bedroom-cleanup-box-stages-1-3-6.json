@@ -1,0 +1,74 @@
+{
+  "ticket": "M1-PIPE-02",
+  "item": "Bedroom cleanup: box-only stages under AUTH #046 while AUTH #051 is pending (stage 1 coverage, stage 3 planar proxies + Unity composite, stage 6 camera bounds, stage 4 licence check)",
+  "date": "2026-10-17",
+  "privacy": "Metrics and text only. Bedroom frames, plane textures, coverage PNGs and the proxy proposal stay in chmod-700 /workspace/owner-capture/work/cleanup (box only; nothing uploaded). One geometry-only top-down coverage heatmap (colour bins + camera path, no imagery) is in /workspace/gj-owner-share/ for the Owner; it is not in git.",
+  "inputs": {
+    "sparse": "GLOMAP model from the private Modal volume gj-corpus:/owner-capture/room-01/sparse (274 frames, 229 registered), downloaded to the box (approved via the auto-review card; #046 infrastructure)",
+    "frames": "faces-blurred frames only (274)"
+  },
+  "stage1_coverage": {
+    "settings": {"grid": 40, "min_views": 5, "min_spread_deg": 6, "blur": "below the 25th percentile Laplacian variance of the observing frames"},
+    "occupied_voxels": 1286,
+    "weak_voxels": 280,
+    "weak_fraction": 0.218,
+    "weak_regions": 23,
+    "top_regions_room_m": [
+      {"id": "W01", "voxels": 36, "mean_views": 6.5, "why": ["parallax", "blur"], "centroid": [-0.76, 0.63, 1.64]},
+      {"id": "W02", "voxels": 36, "mean_views": 6.7, "why": ["parallax", "views"], "centroid": [-0.19, 0.15, -0.12]},
+      {"id": "W03", "voxels": 22, "mean_views": 6.1, "why": ["parallax", "views"], "centroid": [0.04, 0.83, 1.96]},
+      {"id": "W04", "voxels": 20, "mean_views": 3.7, "why": ["views", "parallax"], "centroid": [1.59, 0.11, 1.12]},
+      {"id": "W05", "voxels": 10, "mean_views": 4.5, "why": ["parallax", "views"], "centroid": [1.35, -0.14, 1.78]},
+      {"id": "W06", "voxels": 10, "mean_views": 4.4, "why": ["parallax", "views"], "centroid": [0.94, 0.19, 0.97]}
+    ],
+    "by_height_room_m": {
+      "below_0.3": {"voxels": 754, "weak_fraction": 0.19},
+      "0.3_to_1.0": {"voxels": 506, "weak_fraction": 0.25},
+      "1.0_to_1.8": {"voxels": 26, "weak_fraction": 0.42},
+      "above_1.8": {"voxels": 0}
+    },
+    "distributions": {"views_p5_p25_p50_p75": [3, 7, 13, 19], "spread_deg_p5_p25_p50_p75": [2.4, 10.75, 23.1, 39.3]},
+    "threshold_sensitivity_weak_fraction": {"range_grid30_40": [0.145, 0.264], "(5 views, 10 deg)": 0.264, "(5, 6) chosen": 0.218, "(4, 6)": 0.199, "(3, 5)": 0.163},
+    "threshold_choice": "5 views / 6 deg: 5 views is the 25th-percentile floor where splats stop being constrained; 6 deg sits between p5 and p25 parallax so it flags pan-only regions without labelling the whole pan-heavy video weak (10 deg flags 26%).",
+    "finding": "Almost nothing above 1 m reconstructs (26 of 1286 voxels; none above 1.8 m) because the capture pitched down about 59 deg. The weak regions are parallax-dominated (panning from one spot) and sit at floor/furniture height around the bed. A standing 1.4 m viewer therefore looks at upper walls the video never saw; a reshoot with level chest-height sweeps and a slow upward pass is the only real fix for the upper room."
+  },
+  "stage3_planar_proxies": {
+    "fit_fixes": ["SVD full_matrices=False (OOM on the bedroom)", "constrained refit keeps the floor/wall axis", "ceiling must sit above every camera (a bed top was labelled ceiling)", "rectangle fill metric (16x16 occupancy) rejects RANSAC planes threaded through clutter", "partial-view mosaic texture bake (median of the 5 sharpest frontal views per texel; alpha 0 where unseen)"],
+    "kept": [{"name": "P00", "label": "floor", "fill": 0.605, "textured": true, "texture_coverage": 0.417, "room_y_m": -0.04}],
+    "dropped": [
+      {"name": "P01", "why": "fill 0.156 < 0.35"},
+      {"name": "P02", "why": "height 0.13 m < 0.3 (strip)"},
+      {"name": "P03", "why": "fill 0.289 < 0.35"},
+      {"name": "P04", "why": "fill 0.27 < 0.35"},
+      {"name": "P05", "why": "fill 0.172 < 0.35"},
+      {"name": "P06", "why": "fill 0.199 < 0.35"}
+    ],
+    "ceiling": "none found (no points above the cameras)",
+    "unity": "SplatRoomDescriptor.planeProxiesEnabled (default false) + planeProxies[]; SplatRoomLoader.BuildPlaneProxies draws unlit alpha-cut quads (GJ/PlaneProxy, queue AlphaTest) before the ZTest-Always splat composite, so splats land on top. Textures load from Resources/<resource>-planes/ which only the private package carries. Committed descriptors keep it off; the bedroom proposal is not applied.",
+    "proposal_tool": "services/reconstruction/tools/cleanup_proxies.py (prints a proposal; never edits a descriptor)"
+  },
+  "stage6_camera_bounds": {
+    "proposal": {"cameraMin": [-1.9, 0.25, -1.83], "cameraMax": [1.56, 1.672, 2.15]},
+    "current": {"cameraMin": [-1.9, 0.25, -1.9], "cameraMax": [1.56, 2.17, 2.15]},
+    "note": "Lowers the camera ceiling from 2.17 to 1.67 m (the strong-coverage volume + 0.3 m and the 95th-percentile capture-camera height). Not applied; it goes into the descriptor only with the stage-6 Owner build after #051."
+  },
+  "stage4_licence_check": {
+    "checked": "2026-10-17 (web)",
+    "repair_model": "Our shippable fixer (#045 phase 4): img2img-turbo / pix2pix-turbo code (MIT, GitHub licence API) fine-tuned by us; its pix2pix_turbo.py loads the tokenizer, text encoder, VAE and UNet from stabilityai/sd-turbo.",
+    "base_model": "stabilityai/sd-turbo (distilled from Stable Diffusion 2.1). Hugging Face LICENSE.md = Stability AI Community License Agreement, last updated 2024-07-05 (repo last modified 2024-07-10); the model card says 'intended for both non-commercial and commercial usage'; SD Turbo is listed on stability.ai/core-models.",
+    "terms": [
+      "Commercial use allowed royalty-free while we and our affiliates have under USD 1M annual revenue; above that the licence terminates and an Enterprise licence is needed",
+      "Commercial use requires registering with Stability AI (an Owner action; not done)",
+      "Our fine-tuned fixer is a Derivative Work we own (subject to Stability's rights); outputs are ours to the extent the law allows (outputs are not Derivative Works)",
+      "If we distribute the model or a product that uses it: ship the licence, a Notice file with the Stability attribution line, and 'Powered by Stability AI' in docs/about",
+      "Comply with the Stability Acceptable Use Policy; do not use outputs to build or improve a foundation generative model"
+    ],
+    "result": "COMMERCIAL-OK WITH CONDITIONS for our own SD-Turbo fixer: under the USD 1M revenue cap, after the Owner registers with Stability AI, with attribution kept in the third-party notices. Not unconditional: before shipping repaired content, the Owner registers and counsel confirms the attribution reading.",
+    "not_shippable": "nvidia/difix weights and Difix3D+ code: NVIDIA License, model card 'research and development/non-commercial use only' (base also SD-Turbo). Eval-only under #045; its outputs never go into any build or package, including internal-debug builds of the bedroom.",
+    "baseline": "LaMa (advimman/lama) Apache-2.0: per-view inpainting baseline with no revenue cap."
+  },
+  "tests": "services/reconstruction: 315 passed, 11 skipped (adds fill, ceiling, mosaic bake and keep_reason tests); Unity EditMode PlaneProxyTests (default off, validation, mesh UV order, shader compiles).",
+  "gpu": "none",
+  "spend_usd": 0,
+  "blocked": "Stages 2, 4 (generation) and 5, plus the Owner builds for stages 3 and 6, wait for AUTH #051. AUTH #051 was not logged in governance/AUTHORIZATION_LOG.md at the time of writing."
+}

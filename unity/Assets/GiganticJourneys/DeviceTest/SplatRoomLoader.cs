@@ -108,6 +108,8 @@ namespace GiganticJourneys.DeviceTest
         public string Error { get; private set; }
         public Transform Colliders { get; private set; }
         public Transform Occluders { get; private set; }
+        public Transform PlaneProxies { get; private set; }
+        public const string PlaneProxyShader = "GJ/PlaneProxy";
         public FollowCamera Follow { get; private set; }
         public Label RoomLabel { get; private set; }
 
@@ -137,6 +139,7 @@ namespace GiganticJourneys.DeviceTest
             }
             BuildColliders(Descriptor);
             BuildOccluders(Descriptor);
+            BuildPlaneProxies(Descriptor);
             PlacePlayer(Descriptor);
             ApplyCameraLimits(Descriptor);
             Asset = Resources.Load<GaussianSplatAsset>(Descriptor.resource);
@@ -435,6 +438,68 @@ namespace GiganticJourneys.DeviceTest
                     r.sharedMaterial = occluderMaterial;
                 r.shadowCastingMode = ShadowCastingMode.Off;
             }
+        }
+
+        /// <summary>
+        /// Stage-3 planar proxies (descriptor <c>planeProxies</c>, default off): one unlit cut-out
+        /// quad per plane in the opaque queue, so the ZTest-Always splat composite lands on top.
+        /// No colliders (the walk area, blockers and occluders already bound the room).
+        /// </summary>
+        void BuildPlaneProxies(SplatRoomDescriptor d)
+        {
+            if (!d.HasPlaneProxies)
+                return;
+            var shader = Shader.Find(PlaneProxyShader);
+            if (shader == null)
+            {
+                Debug.LogWarning($"{LogTag} {PlaneProxyShader} missing; plane proxies skipped");
+                return;
+            }
+            PlaneProxies = new GameObject("Plane proxies").transform;
+            PlaneProxies.SetParent(transform, false);
+            var textured = 0;
+            foreach (var p in d.planeProxies)
+            {
+                var go = new GameObject($"Plane {p.name} ({p.label})");
+                go.transform.SetParent(PlaneProxies, false);
+                go.AddComponent<MeshFilter>().sharedMesh = PlaneProxyMesh(p.Corners);
+                var mat = new Material(shader) { name = "PlaneProxy " + p.name };
+                var tex = string.IsNullOrEmpty(p.texture)
+                    ? null
+                    : Resources.Load<Texture2D>(d.PlaneTextureFolder + "/" + p.texture);
+                if (tex != null)
+                {
+                    mat.mainTexture = tex;
+                    textured++;
+                }
+                else
+                    mat.color = p.Color;
+                var r = go.AddComponent<MeshRenderer>();
+                r.sharedMaterial = mat;
+                r.shadowCastingMode = ShadowCastingMode.Off;
+                r.receiveShadows = false;
+            }
+            Debug.Log($"{LogTag} plane proxies: {d.planeProxies.Length} ({textured} textured)");
+        }
+
+        /// <summary>Quad mesh over 4 world corners; uv (0,0) at corner 0, (1,1) at corner 2.</summary>
+        public static Mesh PlaneProxyMesh(Vector3[] corners)
+        {
+            if (corners == null || corners.Length != 4)
+                throw new ArgumentException("a plane proxy needs 4 corners");
+            var m = new Mesh { name = "PlaneProxy" };
+            m.vertices = corners;
+            m.uv = new[]
+            {
+                new Vector2(0f, 0f),
+                new Vector2(1f, 0f),
+                new Vector2(1f, 1f),
+                new Vector2(0f, 1f),
+            };
+            m.triangles = new[] { 0, 1, 2, 0, 2, 3 };
+            m.RecalculateNormals();
+            m.RecalculateBounds();
+            return m;
         }
 
         /// <summary>The room's orbit limits, camera box and camera collision (see the descriptor).</summary>

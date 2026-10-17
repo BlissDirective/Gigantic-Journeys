@@ -149,6 +149,11 @@
       "date": "2026-10-17",
       "event": "Owner approved the bedroom cleanup plan (stages 1-6) on RunPod. Gate: #046 does not cover RunPod -> filed AUTH REQUEST #051 (issue #24); no bedroom data moved. CPU prep: coverage_map.py (stage 1/6) + planar_proxies.py (stage 3) with tests, checked on corpus Winchester. Owner-capture staging re-set to chmod 700. $0.",
       "by": "gj-operator"
+    },
+    {
+      "date": "2026-10-17",
+      "event": "Box-only bedroom cleanup work under #046 while #051 is pending (no GPU, $0, nothing uploaded): stage 1 coverage map (5 views / 6 deg: 21.8% weak, 23 regions, parallax-dominated, almost nothing above 1 m because the capture pitched down); stage 3 planar-proxy fit fixes (constrained refit, ceiling above cameras, fill metric, mosaic texture) -> floor kept, 6 walls dropped; Unity plane-proxy composite behind the splats (default off); stage 6 coverage camera-box proposal via tools/cleanup_proxies.py (not applied); stage 4 licence: SD-Turbo base of our fixer is Stability AI Community License -> commercial OK under USD 1M revenue after registration with attribution; Difix stays eval-only. Evidence: qa/evidence/M1-PIPE-02/bedroom-cleanup-box-stages-1-3-6.json.",
+      "by": "gj-operator"
     }
   ]
 }
