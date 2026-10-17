@@ -1,0 +1,123 @@
+{
+  "ticket": "M1-PIPE-02",
+  "item": "Bedroom cleanup plan (stages 1-6): gate check + no-data CPU prep for stages 1 and 3",
+  "date": "2026-10-17",
+  "gate": {
+    "question": "May the Owner's bedroom (AUTH #046) be processed on RunPod Secure Cloud?",
+    "answer": "Not covered. #046 limits processing to 'operator box + private Modal volume'; #039 keeps RunPod to the open-licence corpus until real-scan policy is settled; #045 provides the budget (RunPod fallback) but its data clause defers to #046.",
+    "action": "Filed AUTH REQUEST #051 (issue #24) for the Coordinator to log. No bedroom data moved; no GPU run; $0.",
+    "box_fix": "/workspace/owner-capture and work/ were 755 (#046 requires chmod 700); set to 700 on 2026-10-17."
+  },
+  "stage1_prep": {
+    "module": "services/reconstruction/reconstruction/coverage_map.py",
+    "method": "Voxelise SfM points (1-99 pct box / 40); per voxel: distinct observing images from tracks, angular spread of viewing rays, median Laplacian variance of the observing frames. Weak = views < 5 OR spread < 10 deg OR sharpness < frame q25. 26-connected weak regions; top-down PNG heatmaps (views / spread / sharpness); well-covered camera box for stage 6.",
+    "corpus_check_winchester": {
+      "occupied_voxels": 769,
+      "weak_fraction": 0.5527,
+      "top_regions": [
+        {
+          "id": "W01",
+          "voxels": 269,
+          "mean_views": 7.9,
+          "why": {
+            "parallax": 248,
+            "views": 79,
+            "blur": 43
+          }
+        },
+        {
+          "id": "W02",
+          "voxels": 38,
+          "mean_views": 9.0,
+          "why": {
+            "parallax": 37,
+            "views": 13,
+            "blur": 1
+          }
+        },
+        {
+          "id": "W03",
+          "voxels": 33,
+          "mean_views": 7.7,
+          "why": {
+            "parallax": 33,
+            "views": 5
+          }
+        },
+        {
+          "id": "W04",
+          "voxels": 25,
+          "mean_views": 11.6,
+          "why": {
+            "parallax": 25,
+            "views": 1
+          }
+        }
+      ],
+      "runtime_s": 2.1
+    },
+    "note": "On a pan-heavy video the parallax rule dominates (Winchester W01: 248/269 voxels). The threshold is a parameter; set it on the bedroom once #051 (or a box-only run under #046) allows."
+  },
+  "stage3_prep": {
+    "module": "services/reconstruction/reconstruction/planar_proxies.py",
+    "method": "RANSAC in the up-aligned frame: floor (normal ~ up, lowest 30% heights), ceiling (top 15%), up to 6 vertical walls; least-squares refit; 2-98 pct rectangle; texture = median of the top-3 sharpest frames that see the whole rectangle within 60 deg of its normal, perspective-warped.",
+    "corpus_check_winchester": [
+      {
+        "id": "P00",
+        "label": "floor",
+        "inliers": 3829,
+        "textured": false
+      },
+      {
+        "id": "P01",
+        "label": "ceiling",
+        "inliers": 2504,
+        "textured": false
+      },
+      {
+        "id": "P02",
+        "label": "wall",
+        "inliers": 7691,
+        "textured": false
+      },
+      {
+        "id": "P03",
+        "label": "wall",
+        "inliers": 6011,
+        "textured": true
+      },
+      {
+        "id": "P04",
+        "label": "wall",
+        "inliers": 2306,
+        "textured": false
+      },
+      {
+        "id": "P05",
+        "label": "wall",
+        "inliers": 1162,
+        "textured": true
+      },
+      {
+        "id": "P06",
+        "label": "wall",
+        "inliers": 976,
+        "textured": true
+      },
+      {
+        "id": "P07",
+        "label": "wall",
+        "inliers": 783,
+        "textured": true
+      }
+    ],
+    "limits": [
+      "Whole-rectangle-in-frame + 60 deg rule leaves big or grazing planes untextured (Winchester floor/ceiling); partial-view mosaicking is a follow-up.",
+      "Door/window frames (rectangles inside walls) not implemented: need edge evidence; stage-3 follow-up.",
+      "Unity composite (planes behind splats) not started: needs the stage-3 GPU/phone cycle."
+    ]
+  },
+  "tests": "services/reconstruction/tests/test_coverage_planes.py (synthetic COLMAP room: weak corner found, full coverage when well seen, floor/ceiling/2 walls labelled and facing the room, perspective coefficients round-trip).",
+  "blocked": "Stages 2-6 on the bedroom wait for AUTH #051 (or an Owner choice to use the private Modal volume, covered by #046 but near the Modal monthly cap). Stage 4 also needs a licence check of the M1-PIPE-02 generative model: Difix3D+ is eval-only under #045 and its outputs never ship.",
+  "spend_usd": 0.0
+}

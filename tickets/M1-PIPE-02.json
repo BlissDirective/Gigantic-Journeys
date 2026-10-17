@@ -66,7 +66,9 @@
     "M1-UNITY-01",
     "M1-CAPT-03"
   ],
-  "blocked_by": [],
+  "blocked_by": [
+    "AUTH #051 (issue #24): bedroom on RunPod Secure Cloud"
+  ],
   "auth_required": [
     {
       "type": "spend",
@@ -96,7 +98,7 @@
   "branch": "ticket/M1-PIPE-02-generative-repair",
   "pr": null,
   "created": "2026-10-04",
-  "updated": "2026-10-05",
+  "updated": "2026-10-17",
   "history": [
     {
       "date": "2026-10-04",
@@ -142,6 +144,11 @@
       "date": "2026-10-05",
       "by": "gj-operator",
       "event": "Bedroom v2 (train-at-budget) shipped in internal-debug build 61 (run 37404355735; AUTH #047 artifact delete confirmed). Modal per-app bill for the phase-2a run: $1.08 (#045 total about $2.03 of $150)."
+    },
+    {
+      "date": "2026-10-17",
+      "event": "Owner approved the bedroom cleanup plan (stages 1-6) on RunPod. Gate: #046 does not cover RunPod -> filed AUTH REQUEST #051 (issue #24); no bedroom data moved. CPU prep: coverage_map.py (stage 1/6) + planar_proxies.py (stage 3) with tests, checked on corpus Winchester. Owner-capture staging re-set to chmod 700. $0.",
+      "by": "gj-operator"
     }
   ]
 }
