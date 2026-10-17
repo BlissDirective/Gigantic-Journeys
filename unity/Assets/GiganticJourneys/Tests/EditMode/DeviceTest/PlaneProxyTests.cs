@@ -33,7 +33,10 @@ namespace GiganticJourneys.Tests
             foreach (var path in SplatRoomScene.DescriptorPaths())
             {
                 var d = SplatRoomDescriptor.Parse(File.ReadAllText(path));
-                Assert.IsFalse(d.HasPlaneProxies, $"{path}: plane proxies must stay off by default");
+                Assert.IsFalse(
+                    d.HasPlaneProxies,
+                    $"{path}: plane proxies must stay off by default"
+                );
             }
         }
 
@@ -54,7 +57,10 @@ namespace GiganticJourneys.Tests
             d.planeProxiesEnabled = true;
             d.planeProxies = new[] { Quad(0f) };
             Assert.Throws<FormatException>(d.Validate);
-            d.planeProxies = new[] { new SplatRoomDescriptor.PlaneProxy { corners = new float[5] } };
+            d.planeProxies = new[]
+            {
+                new SplatRoomDescriptor.PlaneProxy { corners = new float[5] },
+            };
             Assert.Throws<FormatException>(d.Validate);
             d.planeProxies = new[] { Quad(2f) };
             Assert.DoesNotThrow(d.Validate);
