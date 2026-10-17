@@ -118,6 +118,64 @@ namespace GiganticJourneys.DeviceTest
 
         public bool HasQaStandingViewer => qaStandingLookAtHeightM > 0f;
 
+        /// <summary>
+        /// Bedroom cleanup stage 3 (M1-PIPE-02): textured planar proxies (floor / walls fitted
+        /// from the capture, <c>services/reconstruction/tools/cleanup_proxies.py</c>) drawn as
+        /// opaque cut-out quads behind the splats. The splat composite runs after the opaque pass
+        /// with ZTest Always, so splats stay on top and the planes only fill holes. Default off:
+        /// nothing is built unless <see cref="planeProxiesEnabled"/> is true. Textures load from
+        /// <c>Resources/&lt;resource&gt;-planes/&lt;texture&gt;</c>, which only the private
+        /// internal-debug package carries (AUTH #046 / #047); a missing texture falls back to
+        /// <see cref="PlaneProxy.color"/>.
+        /// </summary>
+        public bool planeProxiesEnabled;
+        public PlaneProxy[] planeProxies = new PlaneProxy[0];
+
+        public bool HasPlaneProxies =>
+            planeProxiesEnabled && planeProxies != null && planeProxies.Length > 0;
+
+        /// <summary>Resources folder of the plane textures (no extension).</summary>
+        public string PlaneTextureFolder => resource + "-planes";
+
+        /// <summary>One quad in world space: 4 corners (12 numbers, metres), texture, fallback colour.</summary>
+        [Serializable]
+        public sealed class PlaneProxy
+        {
+            public string name;
+            public string label;
+            public float[] corners = new float[12];
+            public string texture;
+            public float[] color = { 0.5f, 0.5f, 0.5f };
+
+            public Vector3[] Corners
+            {
+                get
+                {
+                    Require(corners, 12, "planeProxies.corners");
+                    var v = new Vector3[4];
+                    for (var i = 0; i < 4; i++)
+                        v[i] = new Vector3(corners[3 * i], corners[3 * i + 1], corners[3 * i + 2]);
+                    return v;
+                }
+            }
+
+            public Color Color =>
+                color != null && color.Length == 3
+                    ? new Color(color[0], color[1], color[2], 1f)
+                    : new Color(0.5f, 0.5f, 0.5f, 1f);
+
+            /// <summary>Quad area (m²) from its two triangles.</summary>
+            public float Area
+            {
+                get
+                {
+                    var c = Corners;
+                    return 0.5f * Vector3.Cross(c[1] - c[0], c[2] - c[0]).magnitude
+                        + 0.5f * Vector3.Cross(c[2] - c[0], c[3] - c[0]).magnitude;
+                }
+            }
+        }
+
         public const string CameraModeCoverage = "coverage";
         public const string CameraModeFree = "free";
 
@@ -308,6 +366,14 @@ namespace GiganticJourneys.DeviceTest
                 _ = o.Center;
                 if (!(size.x > 0f && size.y > 0f && size.z > 0f))
                     throw new FormatException($"blocker '{o.name}' needs a positive size");
+            }
+            if (planeProxiesEnabled)
+            {
+                foreach (var p in planeProxies ?? new PlaneProxy[0])
+                {
+                    if (p.Area < 1e-4f)
+                        throw new FormatException($"plane proxy '{p.name}' is degenerate");
+                }
             }
             if (IsBlocked(new Vector2(Spawn.x, Spawn.z)))
                 throw new FormatException("spawn must not be inside a blocker");
