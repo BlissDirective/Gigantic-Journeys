@@ -445,7 +445,7 @@ namespace GiganticJourneys.DeviceTest
         /// quad per plane in the opaque queue, so the ZTest-Always splat composite lands on top.
         /// No colliders (the walk area, blockers and occluders already bound the room).
         /// </summary>
-        void BuildPlaneProxies(SplatRoomDescriptor d)
+        public void BuildPlaneProxies(SplatRoomDescriptor d)
         {
             if (!d.HasPlaneProxies)
                 return;
@@ -464,9 +464,7 @@ namespace GiganticJourneys.DeviceTest
                 go.transform.SetParent(PlaneProxies, false);
                 go.AddComponent<MeshFilter>().sharedMesh = PlaneProxyMesh(p.Corners);
                 var mat = new Material(shader) { name = "PlaneProxy " + p.name };
-                var tex = string.IsNullOrEmpty(p.texture)
-                    ? null
-                    : Resources.Load<Texture2D>(d.PlaneTextureFolder + "/" + p.texture);
+                var tex = LoadPlaneTexture(d, p.texture);
                 if (tex != null)
                 {
                     mat.mainTexture = tex;
@@ -481,6 +479,34 @@ namespace GiganticJourneys.DeviceTest
             }
             Debug.Log($"{LogTag} plane proxies: {d.planeProxies.Length} ({textured} textured)");
         }
+
+        /// <summary>
+        /// A plane texture: an imported <c>Resources/&lt;resource&gt;-planes/&lt;texture&gt;</c>
+        /// Texture2D, else the PNG bytes the private package carries as the flat TextAsset
+        /// <c>&lt;resource&gt;-planes-&lt;texture&gt;.bytes</c> (the CI unpacker only accepts flat
+        /// <c>&lt;slug&gt;*.bytes</c> entries). Null when neither exists (colour fallback).
+        /// </summary>
+        public static Texture2D LoadPlaneTexture(SplatRoomDescriptor d, string texture)
+        {
+            if (string.IsNullOrEmpty(texture))
+                return null;
+            var tex = Resources.Load<Texture2D>(d.PlaneTextureFolder + "/" + texture);
+            if (tex != null)
+                return tex;
+            var png = Resources.Load<TextAsset>(PlaneTextureBytesName(d, texture));
+            if (png == null)
+                return null;
+            tex = new Texture2D(2, 2, TextureFormat.RGBA32, false)
+            {
+                name = texture,
+                wrapMode = TextureWrapMode.Clamp,
+            };
+            return tex.LoadImage(png.bytes) ? tex : null;
+        }
+
+        /// <summary>Resources path of a plane texture packed as PNG bytes (no extension).</summary>
+        public static string PlaneTextureBytesName(SplatRoomDescriptor d, string texture) =>
+            d.PlaneTextureFolder + "-" + texture;
 
         /// <summary>Quad mesh over 4 world corners; uv (0,0) at corner 0, (1,1) at corner 2.</summary>
         public static Mesh PlaneProxyMesh(Vector3[] corners)

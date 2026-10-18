@@ -419,6 +419,9 @@ namespace GiganticJourneys.EditorTools.DeviceTest
             // GJ_APPLY_RENDER_FLAGS
             r.gameObject.SetActive(true);
             loader.player.gameObject.SetActive(false);
+            // Stage-3 planar proxies (descriptor planeProxiesEnabled), as the device builds them.
+            if (descriptor.HasPlaneProxies)
+                loader.BuildPlaneProxies(descriptor);
             var cam = Camera.main;
             cam.clearFlags = CameraClearFlags.SolidColor;
             cam.backgroundColor = Arg("-gjWhiteBg") == "1" ? Color.white : Color.black;
