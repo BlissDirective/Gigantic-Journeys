@@ -154,6 +154,11 @@
       "date": "2026-10-17",
       "event": "Box-only bedroom cleanup work under #046 while #051 is pending (no GPU, $0, nothing uploaded): stage 1 coverage map (5 views / 6 deg: 21.8% weak, 23 regions, parallax-dominated, almost nothing above 1 m because the capture pitched down); stage 3 planar-proxy fit fixes (constrained refit, ceiling above cameras, fill metric, mosaic texture) -> floor kept, 6 walls dropped; Unity plane-proxy composite behind the splats (default off); stage 6 coverage camera-box proposal via tools/cleanup_proxies.py (not applied); stage 4 licence: SD-Turbo base of our fixer is Stability AI Community License -> commercial OK under USD 1M revenue after registration with attribution; Difix stays eval-only. Evidence: qa/evidence/M1-PIPE-02/bedroom-cleanup-box-stages-1-3-6.json.",
       "by": "gj-operator"
+    },
+    {
+      "date": "2026-10-18",
+      "event": "Stage 2 on Runpod Secure under AUTH #051 (blurred frames, US Secure, no volume, ephemeral key, wiped + terminated + API-verified): deblur N=5 + Splatfacto-W at 400K. FAIL: gsplat held-out 24.85/0.942/0.124 -> 19.78/0.807/0.525; Unity path 21.87 (v2 re-render) -> 19.10 dB, better on 5/29 views. Not packaged, no TestFlight; bedroom stays on v2. Spend $1.06 (balance $48.30 -> $47.24). Evidence qa/evidence/M1-PIPE-02/bedroom-stage2-deblur-appearance.json.",
+      "by": "gj-operator"
     }
   ]
 }

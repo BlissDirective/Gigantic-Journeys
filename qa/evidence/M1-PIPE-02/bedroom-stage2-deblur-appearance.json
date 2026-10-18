@@ -1,0 +1,82 @@
+{
+  "ticket": "M1-PIPE-02",
+  "item": "Bedroom cleanup stage 2: deblur (BAD-Gaussians N=5) + Splatfacto-W appearance retrain at the 400K phone budget, on Runpod Secure (AUTH #051)",
+  "date": "2026-10-18",
+  "privacy": "Metrics and text only. Training used the 274 faces-blurred frames and the saved GLOMAP model; only results.json (metrics) and the 400K splat.ply came back, into chmod-700 /workspace/owner-capture/work/cleanup/stage2b. Held-out renders stayed on the pod and were deleted before termination. One privacy-reviewed Unity-path crop (door and wall only; no faces, photos or documents) is in /workspace/gj-owner-share/bedroom-stage2-unity-before-after.jpg, not in git.",
+  "auth_051_conditions": {
+    "frames": "faces-blurred set only (launcher refuses any folder that is not blurred/ beside blur_log.json)",
+    "cloud": "Runpod Secure Cloud; datacenters US-TX-4 (attempt 1) and US-NC-1 (attempt 2), secureCloud true",
+    "volume": "volumeInGb 0 (container disk only, 60 GB); account network volumes 0 before and after",
+    "ssh": "ephemeral ed25519 key per run, deleted with the launcher's temp dir; SSH/SCP only",
+    "cleanup": "pod working data deleted (wipe rc 0) then terminated; API verify after each run: GET /pods/<id> 404, pod not listed, 0 pods and 0 network volumes on the account",
+    "returned": "results.json + splat.ply only",
+    "repo": "nothing bedroom committed (metrics + text)"
+  },
+  "runs": [
+    {
+      "pod": "setntekuvff11q",
+      "datacenter": "US-TX-4",
+      "pod_s": 550,
+      "est_usd": 0.17,
+      "result": "smoke passed (300 steps, applied_steps 300); full run lost at step 6.6k when the launcher's SSH session dropped (rc 255); pod wiped and terminated; launcher changed to run the job detached and poll"
+    },
+    {
+      "pod": "q42nnpjz1gcofz",
+      "datacenter": "US-NC-1",
+      "pod_s": 2527,
+      "est_usd": 0.77,
+      "result": "ok: smoke passed, full 30k run in 2458 s (about 85 ms/step on L40S), 0 SSH drops"
+    }
+  ],
+  "recipe": "quality-30k (bilateral grid + scale regularisation), antialiased, default densify, growth cap 400K, deblur_samples 5, appearance splatfacto-w, densify-grad-thresh 0.00016 (0.0008/5: densify statistics come from the mid-exposure render only). Same frames, SfM model, world frame and held-out views (every 8th, 29 views) as the shipped package v2.",
+  "splats": {
+    "trained": 398687,
+    "exported": 386585
+  },
+  "scores": {
+    "gsplat_heldout": {
+      "baseline_v2": {
+        "psnr": 24.85,
+        "ssim": 0.942,
+        "lpips": 0.124
+      },
+      "stage2": {
+        "psnr": 19.78,
+        "ssim": 0.807,
+        "lpips": 0.525
+      }
+    },
+    "unity_path_sh2_899_vs_gt": {
+      "refs": {
+        "v2_recorded_2026_10_06": 21.71,
+        "depth_prior_arm_2026_10_06": 22.1
+      },
+      "v2_rerendered_today": 21.867,
+      "stage2": 19.099,
+      "delta_db": -2.77,
+      "views_better": "5 of 29",
+      "per_view_delta_db_range": [
+        -5.74,
+        1.73
+      ]
+    }
+  },
+  "verdict": "FAIL. Stage 2 is worse than the shipped v2 on every metric, so it is not packaged or shipped. The bedroom stays on package v2.",
+  "diagnosis": {
+    "observed": "Held-out view 5 in the Unity path: the door and wall are soft (panel detail and the handle lost), the whole frame is tinted pink, and dark smears sit along the floor line. Edges line up with v2 to within a few pixels, so this is mostly loss of detail and colour, not a large pose shift.",
+    "hypotheses_untested": [
+      "Colour: the appearance transforms can absorb a shared colour offset, so the identity transform used at eval and on the phone is off-colour (the pink cast); the bilateral grid in quality-30k already models exposure, so the two fight.",
+      "Blur and smears: the deblur start/end offsets are both free and unregularised, so the mid-exposure pose can drift per image (unconstrained pose refinement), and averaging 5 renders lets the model stay soft wherever offsets disagree; the 1/5 densify threshold may also add low-quality splats."
+    ]
+  },
+  "proposed_fix_not_run": "Next attempt, if the Owner wants it: arms of one factor each so the cause is known: (a) appearance only with the bilateral grid off, (b) deblur only with the trajectory pinned to the recorded pose (end = -start) plus an L2 pull on the offsets and the default densify threshold. About $0.75-0.80 each on an L40S (about 45 min), well inside the $15 stop.",
+  "spend_usd": {
+    "stage2_runs_est": 0.94,
+    "balance_before": 48.3,
+    "balance_after": 47.24,
+    "billed_by_balance": 1.06,
+    "bedroom_cleanup_total_vs_hard_stop": "1.06 of 15"
+  },
+  "testflight": "not cut: the stage-2 room is a regression, and replacing the working v2 bedroom with it would only take away the Owner's current room. The dispatch script (dispatch-v7.sh, staging) is ready for a passing package.",
+  "unity_render_env": "box Unity 6000.0.84f1 batch, Vulkan lavapipe (mesa-vulkan-drivers reinstalled after a box reset; without it Unity fell back to OpenGL llvmpipe and the sort kernels failed, all-black renders)"
+}
