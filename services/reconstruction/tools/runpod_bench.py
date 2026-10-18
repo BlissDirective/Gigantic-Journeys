@@ -205,12 +205,14 @@ def local_watchdog(pod_ids: list[str], minutes: float) -> None:
 
 
 class Pod:
-    def __init__(self, gpu_type: str, key_dir: Path, max_minutes: float, disk_gb: int) -> None:
+    def __init__(
+        self, gpu_type: str, key_dir: Path, max_minutes: float, disk_gb: int, name: str = ""
+    ) -> None:
         self.gpu_type, self.key_dir = gpu_type, key_dir
         slug = gpu_type.replace("NVIDIA ", "").replace("GeForce ", "").replace(" ", "-").lower()
         self.slug = slug
         body = {
-            "name": f"gj-bench-{slug}",
+            "name": name or f"gj-bench-{slug}",
             "imageName": IMAGE,
             "cloudType": "SECURE",
             "computeType": "GPU",
