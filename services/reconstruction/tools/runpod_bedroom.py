@@ -31,6 +31,7 @@ import atexit
 import json
 import os
 import re
+import shlex
 import signal
 import stat
 import subprocess
@@ -184,20 +185,36 @@ def main(argv: list[str] | None = None) -> int:
             if setup.returncode != 0:
                 raise RuntimeError("setup failed")
             remaining = args.max_minutes * 60 - (time.monotonic() - pod.created) - 300
-            cmd = (
+            job = (
                 ". /root/gj-env.sh && cd /root/gj && python runpod_bedroom_job.py "
                 "--frames /root/gj/data/frames --sparse /root/gj/data/sparse "
                 "--out /root/results.json --ply-out /root/splat.ply "
                 f"--rate {rate} --deblur-samples {args.deblur_samples} "
                 f"--appearance {args.appearance} --smoke-steps {args.smoke_steps} "
-                f"--deadline {time.time() + remaining:.0f} > /root/job.log 2>&1; rc=$?; "
-                f"{rb.IDLE_SHUTDOWN} exit $rc"
+                f"--deadline {time.time() + remaining:.0f} > /root/job.log 2>&1; "
+                "echo $? > /root/job.rc"
             )
+            # Detached in the pod: a dropped SSH session (2026-10-18 first attempt, rc 255
+            # at step 6.6k) no longer kills the run; the launcher polls for job.rc.
+            pod.ssh(f"nohup bash -c {shlex.quote(job)} > /dev/null 2>&1 < /dev/null &")
             t1 = time.monotonic()
-            try:
-                rec["job_rc"] = pod.ssh(cmd, check=False, timeout=max(remaining, 60)).returncode
-            except subprocess.TimeoutExpired:
+            rec["job_rc"], drops = None, 0
+            while time.monotonic() - t1 < remaining:
+                time.sleep(60)
+                try:
+                    r = pod.ssh("cat /root/job.rc 2>/dev/null", check=False, timeout=60)
+                except subprocess.TimeoutExpired:
+                    drops += 1
+                    continue
+                if r.returncode == 255:
+                    drops += 1
+                elif r.stdout.strip():
+                    rec["job_rc"] = int(r.stdout.strip())
+                    break
+            rec["ssh_drops_while_polling"] = drops
+            if rec["job_rc"] is None:
                 rec["job_rc"], rec["error"] = -1, "hit the pod max runtime"
+            pod.ssh(rb.IDLE_SHUTDOWN, check=False, timeout=60)
             rec["job_s"] = round(time.monotonic() - t1, 1)
             # Log tail: metrics / tracebacks only (numbers, paths), never images.
             tail = pod.ssh("tail -c 2500 /root/job.log", check=False).stdout
