@@ -28,16 +28,45 @@ namespace GiganticJourneys.Tests
             };
 
         [Test]
-        public void CommittedDescriptors_KeepPlaneProxiesOff()
+        public void CommittedDescriptors_OnlyTheBedroomEnablesItsFloorProxy()
         {
+            // Stage 3 (2026-10-18): the bedroom ships the textured floor quad (the only plane
+            // that passed the fill / height filters); every other room keeps proxies off.
             foreach (var path in SplatRoomScene.DescriptorPaths())
             {
                 var d = SplatRoomDescriptor.Parse(File.ReadAllText(path));
-                Assert.IsFalse(
-                    d.HasPlaneProxies,
-                    $"{path}: plane proxies must stay off by default"
-                );
+                if (d.slug != "owner-room-01")
+                {
+                    Assert.IsFalse(d.HasPlaneProxies, $"{path}: plane proxies stay off");
+                    continue;
+                }
+                Assert.IsTrue(d.HasPlaneProxies, "bedroom stage-3 floor proxy");
+                Assert.AreEqual(1, d.planeProxies.Length);
+                var floor = d.planeProxies[0];
+                Assert.AreEqual("floor", floor.label);
+                Assert.AreEqual("P00-floor", floor.texture);
+                var c = floor.Corners;
+                foreach (var v in c)
+                    Assert.That(v.y, Is.InRange(-0.2f, 0.05f), "floor at room height ~0");
+                Assert.Greater(floor.Area, 4f, "spans the open floor");
             }
+        }
+
+        [Test]
+        public void PlaneTexture_PackedAsFlatBytes_AndMissingFallsBackToColour()
+        {
+            var d = Base();
+            Assert.AreEqual(
+                d.resource + "-planes-P00-floor",
+                SplatRoomLoader.PlaneTextureBytesName(d, "P00-floor")
+            );
+            StringAssert.StartsWith(
+                "GJSplatRoom/" + d.slug,
+                SplatRoomLoader.PlaneTextureBytesName(d, "P00-floor"),
+                "the CI unpacker only accepts flat <slug>* entries"
+            );
+            Assert.IsNull(SplatRoomLoader.LoadPlaneTexture(d, "no-such-texture"));
+            Assert.IsNull(SplatRoomLoader.LoadPlaneTexture(d, ""));
         }
 
         [Test]

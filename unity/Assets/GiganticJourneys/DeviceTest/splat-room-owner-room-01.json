@@ -5,9 +5,9 @@
   "splatCount": 399165,
   "credit": "Owner's own room, Owner-consented internal test capture (AUTH #046). Internal-debug builds only; faces in framed photos and reflections blurred before processing; deletable on request.",
   "license": "Private: Owner-consented internal test capture (AUTH #046); not for distribution.",
-  "packageObject": "environments/_devtest/owner-room-01/splat-room-unity-v2-400k.tar.gz",
-  "packageSha256": "3ecc3feddb8965eb68538d68626d5a00853d87e4e2366145ebcf6d58c448e942",
-  "packageBytes": 14375423,
+  "packageObject": "environments/_devtest/owner-room-01/splat-room-unity-v3-400k.tar.gz",
+  "packageSha256": "ce93929d33092659ca1bb67b5b8b92576626488859b7eff2629c5deaa6a769e5",
+  "packageBytes": 14619116,
   "position": [
     0.3647,
     1.4357,
@@ -46,11 +46,11 @@
   "cameraMin": [
     -1.9,
     0.25,
-    -1.9
+    -1.83
   ],
   "cameraMax": [
     1.56,
-    2.17,
+    1.672,
     2.15
   ],
   "orbitMinElevationDeg": -10.0,
@@ -223,6 +223,33 @@
         0.3,
         1.2,
         0.2
+      ]
+    }
+  ],
+  "planeProxiesEnabled": true,
+  "planeProxies": [
+    {
+      "name": "P00",
+      "label": "floor",
+      "corners": [
+        1.6388,
+        -0.0282,
+        1.6412,
+        -0.0262,
+        -0.0583,
+        1.7951,
+        -0.3024,
+        -0.0478,
+        -1.1914,
+        1.3626,
+        -0.0177,
+        -1.3453
+      ],
+      "texture": "P00-floor",
+      "color": [
+        0.689,
+        0.675,
+        0.657
       ]
     }
   ]
