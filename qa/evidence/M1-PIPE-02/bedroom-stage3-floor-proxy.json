@@ -1,0 +1,69 @@
+{
+  "ticket": "M1-PIPE-02",
+  "item": "bedroom cleanup stage 3 (floor planar proxy composite) + stage-6 camera box",
+  "date": "2026-10-18",
+  "privacy": "No bedroom pixels in the repo. Package v3, the floor texture and the renders stay on the box in chmod-700 staging (/workspace/owner-capture). The share image is a carpet-only crop, privacy-reviewed: no faces, people or documents.",
+  "gpu_spend_usd": 0.0,
+  "change": {
+    "descriptor": "unity/Assets/Resources/GJSplatRoom/splat-room-owner-room-01.json: planeProxiesEnabled true, one floor proxy P00 (texture P00-floor, colour fallback [0.689,0.675,0.657]), cameraMin/cameraMax from stage-6 coverage, packageObject splat-room-unity-v3-400k.tar.gz",
+    "package_v3": {
+      "object": "environments/_devtest/owner-room-01/splat-room-unity-v3-400k.tar.gz",
+      "sha256": "ce93929d33092659ca1bb67b5b8b92576626488859b7eff2629c5deaa6a769e5",
+      "bytes": 14619116,
+      "contents": "v2 splat (399,165) + owner-room-01-planes-P00-floor.bytes (PNG as TextAsset) + .meta; passes the CI unpacker's flat-name rule unchanged"
+    },
+    "loader": "SplatRoomLoader.LoadPlaneTexture falls back from a Texture2D to flat PNG bytes (TextAsset), then to the descriptor colour; pose renders build the proxies"
+  },
+  "scores": {
+    "path": "Unity on-device path (lavapipe Vulkan, SH2, 899 px, 29 held-out views) vs the left half of baseline eval_img",
+    "v2_psnr_db": 21.867,
+    "stage3_psnr_db": 21.932,
+    "delta_db": 0.065,
+    "unity_vs_gsplat_db": {
+      "v2": 25.724,
+      "stage3": 25.873
+    },
+    "views_better": 5,
+    "views_worse": 2,
+    "views_unchanged": 22,
+    "per_view_delta_db": {
+      "0": 0.0,
+      "1": 0.0,
+      "2": 0.0,
+      "3": 0.0,
+      "4": 0.0,
+      "5": 0.0,
+      "6": 0.0,
+      "7": 0.0,
+      "8": 0.0,
+      "9": 0.0,
+      "10": -0.609,
+      "11": 0.0,
+      "12": 0.0,
+      "13": 0.0,
+      "14": -0.003,
+      "15": 0.0,
+      "16": 0.0,
+      "17": 0.493,
+      "18": 0.183,
+      "19": -0.864,
+      "20": 0.098,
+      "21": 0.0,
+      "22": 0.0,
+      "23": 0.0,
+      "24": 0.0,
+      "25": 0.0,
+      "26": 0.0,
+      "27": 0.606,
+      "28": 1.986
+    }
+  },
+  "editmode_tests": "PlaneProxyTests + SplatRoomTests: 43 total, 42 passed, 0 failed, 1 ignored (LocalSplat_WhenPresent_MatchesTheDescriptor)",
+  "verdict": "PASS (small): +0.065 dB mean; the floor holes are filled (view 28 +1.99 dB). Two low floor views get worse (19 -0.86, 10 -0.61) because the proxy texture is lighter and softer than the splat carpet near the wall line.",
+  "testflight": {
+    "status": "BLOCKED",
+    "reason": "The box cannot reach the Supabase project host: TLS handshake ends with unexpected EOF (curl 35). *.supabase.co resolves to the egress gateway 198.18.0.1; supabase.com and GitHub are reachable. Package v3 is not uploaded and dispatch-v7 cannot sign URLs, so there is no internal-debug build yet. Not routed around.",
+    "resume": "PKG_NAME=splat-room-unity-v3-400k.tar.gz PKG_SHA=ce93929d... after uploading v3 (x-upsert false) and checking signed round-trip and that the public URL is denied: /workspace/owner-capture/work/dispatch-v7.sh <main sha>"
+  },
+  "next": "Blend the proxy texture toward the splat carpet near walls (or fade the proxy where splat alpha is high), then stage 4."
+}

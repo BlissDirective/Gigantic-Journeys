@@ -98,7 +98,7 @@
   "branch": "ticket/M1-PIPE-02-generative-repair",
   "pr": null,
   "created": "2026-10-04",
-  "updated": "2026-10-17",
+  "updated": "2026-10-18",
   "history": [
     {
       "date": "2026-10-04",
@@ -158,6 +158,11 @@
     {
       "date": "2026-10-18",
       "event": "Stage 2 on Runpod Secure under AUTH #051 (blurred frames, US Secure, no volume, ephemeral key, wiped + terminated + API-verified): deblur N=5 + Splatfacto-W at 400K. FAIL: gsplat held-out 24.85/0.942/0.124 -> 19.78/0.807/0.525; Unity path 21.87 (v2 re-render) -> 19.10 dB, better on 5/29 views. Not packaged, no TestFlight; bedroom stays on v2. Spend $1.06 (balance $48.30 -> $47.24). Evidence qa/evidence/M1-PIPE-02/bedroom-stage2-deblur-appearance.json.",
+      "by": "gj-operator"
+    },
+    {
+      "date": "2026-10-18",
+      "event": "Stage 3 (box only, $0): floor planar proxy on for owner-room-01 (package v3 carries the carpet texture as flat PNG bytes) + stage-6 camera box. Unity path 21.867 -> 21.932 dB (+0.065; 5 views better, 2 worse, 22 unchanged); EditMode 42/43 passed, 1 ignored. TestFlight blocked: the box cannot reach Supabase (TLS EOF), so v3 is not uploaded. Evidence qa/evidence/M1-PIPE-02/bedroom-stage3-floor-proxy.json.",
       "by": "gj-operator"
     }
   ]
