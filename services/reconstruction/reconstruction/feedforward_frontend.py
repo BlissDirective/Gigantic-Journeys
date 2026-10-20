@@ -286,8 +286,9 @@ class FeedForwardSfM:
     from them exactly as on the ARKit path (``sparse/0/points3D.txt``).
 
     ``ship_status`` other than ``"cleared"`` refuses to run unless ``internal_eval`` -- a
-    counsel-pending model (AUTH #049) may only produce internal-debug artifacts, which the
-    caller deletes after scoring (AUTH #047).
+    not-yet-cleared model may then produce internal-debug artifacts only, which the caller
+    deletes after scoring (AUTH #047). MapAnything is now "cleared"; this guards any future
+    front-end whose licence/provenance is not yet signed off.
     """
 
     def __init__(

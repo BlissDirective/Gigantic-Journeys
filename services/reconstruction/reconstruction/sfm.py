@@ -304,7 +304,7 @@ class ColmapSfM(_ColmapFrontEnd):
 # COLMAP-family mappers (what benchmark_sfm sweeps). "arkit" is SfM-free and sits
 # outside the sweep; SFM_SELECTABLE is the full set select_sfm / the config accept.
 SFM_CHOICES = ("colmap", "glomap")
-# "mapanything" = feed-forward front-end (item 6), default off, counsel-pending (AUTH #049).
+# "mapanything" = feed-forward front-end (item 6), default off, cleared to ship (AUTH #049).
 SFM_SELECTABLE = ("colmap", "glomap", "arkit", "mapanything")
 DEFAULT_SFM = "colmap"
 DEFAULT_MATCHER = "auto"
@@ -326,8 +326,9 @@ def select_sfm(
     from beside the scan's image dir.
 
     "mapanything" is the feed-forward front-end (mapanything_frontend): ARKit-conditioned
-    when the bundle has ``arkit_poses.json``. It is counsel-pending (AUTH #049), so its
-    ``run`` refuses unless ``internal_eval`` (artifacts deleted after scoring, #047).
+    when the bundle has ``arkit_poses.json``. It is cleared to ship (AUTH #049 addendum
+    2026-10-20), so its ``run`` executes in the normal pipeline; the CC-BY-NC checkpoints
+    stay refused by ``check_model_id``.
     """
     if name == "glomap":
         return GlomapSfM(use_gpu=use_gpu, matcher=matcher, max_features=max_features)

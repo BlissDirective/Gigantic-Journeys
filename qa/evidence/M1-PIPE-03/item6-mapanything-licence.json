@@ -3,8 +3,8 @@
   "item": "capture-render-quality-v1 item 6 (feed-forward front-end)",
   "date": "2026-10-06",
   "author": "gj-operator",
-  "ship_status": "BLOCKED pending counsel confirmation (AUTH #049)",
-  "code_gate": "reconstruction.mapanything_frontend.SHIP_STATUS = 'blocked-pending-counsel'; FeedForwardSfM refuses unless internal_eval=True; internal-eval artifacts are deleted after scoring (AUTH #047); MapAnything listed in licenses.COUNSEL_PENDING, not in MANIFEST",
+  "ship_status": "CLEARED to ship (AUTH #049 addendum, 2026-10-20): the Owner confirmed the apache training-data provenance",
+  "code_gate": "reconstruction.mapanything_frontend.SHIP_STATUS = 'cleared'; FeedForwardSfM runs in the normal pipeline (no internal_eval required); MapAnything now in licenses.MANIFEST (COUNSEL_PENDING emptied); the CC-BY-NC variants stay refused by check_model_id and in EXCLUDED_COMPONENTS",
   "model": {
     "id": "facebook/map-anything-apache",
     "hf_revision_pinned": "00f9c245bbcb60522d1ed7f9e9d88462c6e3f38a",
@@ -113,6 +113,12 @@
     "Do the CC BY 4.0 datasets require attribution for a model used as an internal pipeline stage?",
     "If cleared: may we set SHIP_STATUS='cleared' for internal pipeline use only (the weights are never distributed)?"
   ],
+  "owner_resolution": {
+    "date": "2026-10-20",
+    "by": "Owner",
+    "decision": "CLEARED. The apache weights train on exactly the six datasets of the megatrain_6d config: BlendedMVS / Spring / TartanAirV2-WB (CC BY 4.0), UnrealStereo4K (MIT), and ScanNet++ v2 + Mapillary MPSD. Per the MapAnything paper footnote, Meta obtained approval from the ScanNet++ and Mapillary dataset owners that permits training and model release under a permissive licence; the CC-BY-NC-only datasets feed just the non-commercial checkpoints (which stay refused). This resolves the ScanNet++/MPSD RED FLAG in findings. Logged as the AUTH #049 addendum (2026-10-20).",
+    "attribution_note": "The CC BY 4.0 datasets are used only to train a model that is an internal pipeline stage; keep the standard third-party attribution in the notices file as a precaution."
+  },
   "non_commercial_variant_policy": "facebook/map-anything and map-anything-v1 (CC-BY-NC-4.0) are never used, not even for evaluation (AUTH #049).",
   "spend_usd": 0.0
 }

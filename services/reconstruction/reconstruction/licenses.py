@@ -65,22 +65,21 @@ MANIFEST: tuple[Component, ...] = (
         "Apache-2.0",
         "per-image appearance / exposure / white balance, appearance (item 5); method only",
     ),
-)
-
-
-# Components with an allowed licence on paper but a training-data basis counsel must
-# confirm before anything they produce can ship (AUTH #049 / #050). Not in MANIFEST:
-# the pipeline may run them for internal evaluation only (artifacts deleted, #047).
-COUNSEL_PENDING: tuple[Component, ...] = (
     Component(
         "MapAnything (facebook/map-anything-apache)",
         "Apache-2.0",
-        "feed-forward front-end, sfm='mapanything' (item 6). Weights Apache-2.0, but the "
-        "training mix includes ScanNet++ v2 (non-commercial terms) and Mapillary MPSD "
-        "(unverified): blocked pending counsel; qa/evidence/M1-PIPE-03/"
-        "item6-mapanything-licence.json",
+        "feed-forward metric front-end, sfm='mapanything' (item 6). Apache-2.0 code + weights; "
+        "training-data provenance cleared by the Owner (AUTH #049 addendum 2026-10-20: six "
+        "datasets, all CC BY 4.0 / MIT or Meta owner-approved for permissive release). The "
+        "CC-BY-NC variants stay in EXCLUDED_COMPONENTS / refused by check_model_id.",
     ),
 )
+
+
+# Components with an allowed licence on paper but a training-data basis counsel must confirm
+# before anything they produce can ship (AUTH #049 / #050). MapAnything was cleared into MANIFEST
+# on 2026-10-20 (AUTH #049 addendum: Owner-confirmed provenance); the list is now empty.
+COUNSEL_PENDING: tuple[Component, ...] = ()
 
 
 def assert_commercial_safe(

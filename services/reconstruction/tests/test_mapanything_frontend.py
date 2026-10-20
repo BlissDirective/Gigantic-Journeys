@@ -96,11 +96,12 @@ def test_reconstructor_refuses_noncommercial_before_any_import(tmp_path):
     assert rec.revision == MAPANYTHING_REVISION
 
 
-def test_mapanything_is_counsel_pending_not_in_manifest():
-    assert SHIP_STATUS == "blocked-pending-counsel"
+def test_mapanything_cleared_and_in_manifest():
+    assert SHIP_STATUS == "cleared"
     names = {c.name for c in MANIFEST}
-    assert all(c.name not in names for c in COUNSEL_PENDING)
-    assert any("map-anything-apache" in c.name for c in COUNSEL_PENDING)
+    assert any("map-anything-apache" in n for n in names)  # cleared -> now in MANIFEST
+    assert COUNSEL_PENDING == ()  # nothing left pending
+    assert_commercial_safe()  # MANIFEST (incl. the Apache-2.0 MapAnything) is clean
     nc = next(n for n in EXCLUDED_COMPONENTS if n.startswith("MapAnything CC-BY-NC"))
     with pytest.raises(LicenseError):
         assert_commercial_safe((*MANIFEST, Component(nc, "Apache-2.0", "x")))
@@ -238,11 +239,18 @@ def _sfm(**kw):
     )
 
 
-def test_counsel_pending_sfm_refuses_outside_internal_eval(tmp_path):
+def test_ship_gate_refuses_noncleared_status_but_cleared_mapanything_runs(tmp_path):
     scan, _ = _scan(tmp_path)
-    with pytest.raises(ReconstructionError, match="AUTH #049"):
-        _sfm().run(scan, tmp_path / "work")
-    assert not (tmp_path / "work").exists()
+    # the gate still refuses any non-cleared status outside internal-eval
+    blocked = FeedForwardSfM(
+        lambda _d: MockFeedForward(), mapper_name="x", ship_status="blocked-pending-counsel"
+    )
+    with pytest.raises(ReconstructionError, match="internal-eval"):
+        blocked.run(scan, tmp_path / "blocked")
+    assert not (tmp_path / "blocked").exists()
+    # MapAnything is cleared (AUTH #049 addendum), so it runs in the normal pipeline
+    out = _sfm(confidence_floor=0.5).run(scan, tmp_path / "ok")
+    assert out.registered_images == 3 and out.stats["ship_status"] == "cleared"
 
 
 def test_arkit_conditioned_run_writes_gated_model(tmp_path):
@@ -253,7 +261,7 @@ def test_arkit_conditioned_run_writes_gated_model(tmp_path):
     st = out.stats
     assert st["mapper"] == "mapanything" and st["conditioned_on_arkit"] and st["metric"]
     assert st["seed_points"] == 2 and st["seed_points_raw"] == 3  # 0.25-confidence point gated
-    assert st["ship_status"] == "blocked-pending-counsel" and st["internal_eval"]
+    assert st["ship_status"] == "cleared" and st["internal_eval"]
     cams = (out.sparse_dir / "cameras.txt").read_text().splitlines()
     assert cams[-1].startswith("3 PINHOLE 960 540 900 900 480 270")
     pts = [ln for ln in (out.sparse_dir / "points3D.txt").read_text().splitlines() if ln[:1] != "#"]
@@ -282,7 +290,7 @@ def test_selector_and_config_default_off():
     assert ReconstructionConfig(sfm="mapanything").sfm == "mapanything"
     sfm = select_sfm("mapanything")
     assert isinstance(sfm, FeedForwardSfM)
-    assert sfm.ship_status == "blocked-pending-counsel" and not sfm.internal_eval
+    assert sfm.ship_status == "cleared" and not sfm.internal_eval
     assert select_sfm("mapanything", internal_eval=True).internal_eval
 
 

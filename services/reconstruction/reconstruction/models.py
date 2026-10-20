@@ -157,7 +157,7 @@ class ReconstructionConfig:
     compress_format: Format = Format.SPZ
     # "colmap" incremental; "glomap" global mapper (spike report); "arkit" = SfM-free,
     # build the model straight from ARKit metric poses (arkit_poses.ArkitSfM);
-    # "mapanything" = feed-forward front-end (item 6; counsel-pending, internal-eval only).
+    # "mapanything" = feed-forward front-end (item 6; cleared to ship, AUTH #049 addendum).
     sfm: str = "colmap"
     max_package_bytes: int = 150 * MiB
     # Render-quality knobs, both commercial-safe in gsplat (capture-render-quality-v1):

@@ -15,8 +15,8 @@ GLOMAP model already on the gj-corpus volume, and records:
 Arms: ``unconditioned`` (images + GLOMAP intrinsics) and ``pose-conditioned`` (GLOMAP poses
 as the stand-in for ARKit metric poses -- corpus video has no ARKit track).
 
-Licence: MapAnything is **counsel-pending (AUTH #049)** -> ``internal_eval=True``; every
-model/point artifact is deleted in ``finally`` (AUTH #047); only metrics JSON is kept.
+Licence: MapAnything is **cleared to ship (AUTH #049 addendum 2026-10-20)**. This eval app
+still deletes every model/point artifact in ``finally`` (AUTH #047); only metrics JSON is kept.
 GPU spend: refused unless ``--gpu-go`` (no Modal GPU in October without an Owner go-ahead).
 
     modal run services/reconstruction/mapanything_ab_app.py            # prints the estimate

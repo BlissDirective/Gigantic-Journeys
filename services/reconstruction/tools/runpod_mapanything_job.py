@@ -3,7 +3,7 @@
 Runs INSIDE a pod prepared by ``runpod_mapanything_setup.sh`` (driven by
 ``runpod_mapanything.py``). Same logic as ``mapanything_ab_app.frontend_ab`` but on
 local room dirs (``frames/`` + the GLOMAP ``sparse/`` + ``run.json`` of the corpus
-recon). Corpus (open-licence) rooms only. Internal eval (AUTH #049, counsel-pending):
+recon). Corpus (open-licence) rooms only. Eval tooling (AUTH #049, now cleared to ship):
 every artifact is deleted after scoring; only the metrics JSON leaves the pod (AUTH #047).
 """
 

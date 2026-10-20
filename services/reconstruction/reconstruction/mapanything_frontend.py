@@ -1,4 +1,4 @@
-"""MapAnything (Apache-2.0 variant) as a feed-forward front-end -- default OFF, counsel-pending.
+"""MapAnything (Apache-2.0 variant) as a feed-forward front-end -- default OFF, cleared to ship.
 
 capture-render-quality-v1 item 6. ``MapAnythingReconstructor`` implements the
 ``feedforward_frontend.FeedForwardReconstructor`` port with Meta's MapAnything, conditioned
@@ -12,10 +12,11 @@ Licence gate (AUTH #049, qa/evidence/M1-PIPE-03/item6-mapanything-licence.json):
 * Only ``facebook/map-anything-apache`` at a pinned Hub revision is accepted. The
   CC-BY-NC-4.0 variants (``facebook/map-anything``, ``facebook/map-anything-v1``) are
   refused by ``check_model_id`` -- never loaded, never used, not even for evaluation.
-* Even the Apache weights are **blocked pending counsel**: the Apache variant's training
-  mix includes ScanNet++ v2 (TUM terms of use: non-commercial research only) and Mapillary
-  MPSD (dataset terms unverified). Until counsel clears it, ``SHIP_STATUS`` keeps the SfM
-  internal-eval only, and any artifact it produced must be deleted after scoring (#047).
+* The Apache weights are **cleared to ship** (AUTH #049 addendum, 2026-10-20): the Owner
+  confirmed the apache training mix is six datasets (BlendedMVS / Spring / TartanAirV2-WB
+  CC BY 4.0, UnrealStereo4K MIT, and ScanNet++ v2 + Mapillary MPSD under Meta owner-approval
+  for permissive model release). ``SHIP_STATUS = "cleared"``, so ``FeedForwardSfM`` runs in
+  the normal pipeline without ``internal_eval``; the CC-BY-NC checkpoints stay refused.
 
 Everything model-related is imported lazily (torch / numpy / PIL / ``mapanything``, all
 only in the GPU image); the result assembly below is standard library and CI-tested.
@@ -46,8 +47,11 @@ MAPANYTHING_REVISION = "00f9c245bbcb60522d1ed7f9e9d88462c6e3f38a"
 MAPANYTHING_CODE_COMMIT = "3d10cf7a3016fc0f9bb13a071ee66c47b10be0d9"
 # CC-BY-NC-4.0 checkpoints: method-only under AUTH #049 -- never load them.
 REFUSED_MODEL_IDS = frozenset({"facebook/map-anything", "facebook/map-anything-v1"})
-# "cleared" only after counsel confirms the Apache variant's training-data basis.
-SHIP_STATUS = "blocked-pending-counsel"
+# Cleared 2026-10-20 (AUTH #049 addendum): the Owner confirmed the apache-weights training mix
+# is exactly six datasets -- BlendedMVS / Spring / TartanAirV2-WB (CC BY 4.0), UnrealStereo4K
+# (MIT), and ScanNet++ v2 + Mapillary MPSD used under Meta's owner-approval that permits training
+# and permissive model release. The CC-BY-NC datasets feed only the refused NC checkpoints.
+SHIP_STATUS = "cleared"
 MAPPER_NAME = "mapanything"
 DEFAULT_MAX_SEED_POINTS = 300_000
 # Below this camera-centre spread (metres) the centre-based Sim(3) fit is ill-posed.
@@ -282,7 +286,7 @@ def mapanything_sfm(
     intrinsics: ArkitIntrinsics | None = None,
     keep_prior_poses: bool = True,
 ) -> FeedForwardSfM:
-    """The ``sfm="mapanything"`` adapter (internal-eval only while ``SHIP_STATUS`` is pending)."""
+    """The ``sfm="mapanything"`` adapter: SHIP_STATUS cleared, runs in the normal pipeline."""
     return FeedForwardSfM(
         lambda image_dir: MapAnythingReconstructor(image_dir, keep_prior_poses=keep_prior_poses),
         mapper_name=MAPPER_NAME,
