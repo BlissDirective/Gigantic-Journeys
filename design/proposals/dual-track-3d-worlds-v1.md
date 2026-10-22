@@ -1,6 +1,6 @@
 # Proposal: Dual-track 3D playable worlds + the instant-play reframing (v1)
 
-- **Status:** DRAFT proposal for Owner review. **Not approved; nothing here changes `SPEC.md`, `ADRs/`, the agent model, or any locked doc until the AUTHs in §7 are approved.**
+- **Status:** **APPROVED in principle by the Owner, 2026-10-22.** AUTH **#053** (multi-agent team) and **#054** (SPEC §3/§4 reframe) are logged. The `AGENT_GOVERNANCE.md` (v1.2) and `SPEC.md` (v1.11) edits are **staged on the governance branch and await the Owner's sign-off on the exact wording before merge to `main`** (the two most-locked docs; "ask before implementation"). See §7 for the resolved decisions.
 - **Date:** 2026-10-21
 - **Author:** Claude Code (Coordinator)
 - **Owner trigger:** chat 2026-10-20 — "I am going to be working on this new direction, and the original video to rendered playable environment simultaneously… Using two different Grok bots, and yourself. One grok bot continues on the current video to fully playable immersive environment, the other on the 3D playable worlds and character design and environment interaction/traversal system builds." Plus the Owner's prior question on whether fully-generated playable settings and body-scan avatars are feasible, and a request to research AI-rendering feasibility honestly.
@@ -140,7 +140,15 @@ AUTH #052 (the bedroom-package Supabase relay) is **already logged and is unrela
 
 ---
 
-## 7. Open decisions for the Owner (blocking before I finalize + file the AUTHs)
+## 7. Owner decisions — RESOLVED 2026-10-22
+
+1. **Agent model → beyond two bots.** The Owner directed: *"Remove restriction completely, I will ultimately be using a full team of grok bots: two for development, several for marketing, one for sales management/accounting."* Logged as **AUTH #053**; `AGENT_GOVERNANCE.md` amended to v1.2 (team model; correctness/security invariants preserved).
+2. **v1 scope → reframe.** The Owner chose *"Make it v1 (reframe)."* Logged as **AUTH #054**; `SPEC.md` v1.11 adds §3.12 (authored world library) and repositions capture as premium.
+3. **Avatars → parametric + more variation.** The Owner chose *"Stay parametric, increase variation in curated roster/selectable avatar characteristics."* Recorded under AUTH #054 as a Track B mandate (no body-scan photoreal in v1); a `avatar_params` schema expansion, if needed, gets its own AUTH.
+4. **Tree/ticket ownership:** proceeding with the §5 split and the `WORLD`/`CHAR`/`INTX` namespaces as the default (Owner did not redirect); characters stay inside Track B unless the Owner later splits them out.
+5. **First worlds:** proceeding with ≈3–5 worlds for a first playable (SPEC §3.12); art direction/themes to be set per `design/worlds/` tickets.
+
+### Original open-decision text (for the record)
 
 1. **Agent-model amendment:** approve two standing, write-isolated Operators + Coordinator as in §5? (If yes, I draft the AGENT_GOVERNANCE amendment + the `gj-operator-b` role pack and file the AUTH.)
 2. **v1 scope:** should the **instant prebuilt-world loop become a first-class v1 surface** (SPEC §3 edit), with capture repositioned as premium — or stay a post-v1 track while capture remains the v1 core? This decides whether Track B is v1 or V-next.
